@@ -1,0 +1,43 @@
+PHASE T12B — SIMPLE PORTFOLIO FILTER VALIDATION REPORT
+================================================================================
+
+Offline only. T9 paper-live remains frozen.
+Simple rules only: max same-side, max cluster, max high-beta.
+No dynamic heat, no ML, no adaptive logic.
+
+TOP RESULTS BY RETURN
+--------------------------------------------------------------------------------
+ACT3_ATR3 | SAME5_CLUSTER2_BETA4: return=-3.18% DD=-9.61% PF=0.89 trades=136/886 avgEffCl=2.72
+ACT3_ATR3 | SAME3_CLUSTER3_BETA3: return=-4.07% DD=-10.45% PF=0.83 trades=108/886 avgEffCl=1.66
+ACT4_ATR3 | SAME3_CLUSTER3_BETA3: return=-4.38% DD=-7.72% PF=0.78 trades=97/782 avgEffCl=1.83
+ACT5_ATR3 | SAME3_CLUSTER3_BETA3: return=-4.44% DD=-7.58% PF=0.77 trades=91/670 avgEffCl=1.69
+ACT3_ATR3 | SAME4_CLUSTER3_BETA4: return=-5.62% DD=-11.05% PF=0.82 trades=148/886 avgEffCl=1.90
+ACT5_ATR3 | SAME5_CLUSTER2_BETA4: return=-5.66% DD=-9.06% PF=0.74 trades=102/670 avgEffCl=2.87
+ACT5_ATR3 | SAME4_CLUSTER2_BETA3: return=-5.91% DD=-9.14% PF=0.68 trades=88/670 avgEffCl=2.22
+ACT3_ATR3 | BASE_MAX5_ONLY: return=-5.97% DD=-11.30% PF=0.79 trades=146/886 avgEffCl=1.56
+ACT3_ATR3 | SAME4_CLUSTER2_BETA3: return=-6.02% DD=-10.69% PF=0.77 trades=131/886 avgEffCl=2.22
+ACT5_ATR3 | SAME3_CLUSTER2_BETA3: return=-6.29% DD=-7.06% PF=0.61 trades=76/670 avgEffCl=1.77
+ACT4_ATR3 | SAME4_CLUSTER2_BETA3: return=-6.70% DD=-8.95% PF=0.69 trades=104/782 avgEffCl=2.23
+ACT4_ATR3 | SAME5_CLUSTER2_BETA4: return=-6.94% DD=-10.71% PF=0.73 trades=122/782 avgEffCl=2.70
+ACT3_ATR3 | SAME3_CLUSTER2_BETA3: return=-6.97% DD=-10.59% PF=0.72 trades=121/886 avgEffCl=1.86
+ACT4_ATR3 | SAME3_CLUSTER2_BETA3: return=-7.97% DD=-9.23% PF=0.59 trades=92/782 avgEffCl=1.92
+ACT4_ATR3 | SAME4_CLUSTER3_BETA4: return=-8.09% DD=-11.17% PF=0.67 trades=120/782 avgEffCl=1.99
+ACT5_ATR3 | SAME4_CLUSTER3_BETA4: return=-9.07% DD=-11.47% PF=0.61 trades=111/670 avgEffCl=2.03
+ACT4_ATR3 | BASE_MAX5_ONLY: return=-9.40% DD=-13.00% PF=0.71 trades=157/782 avgEffCl=1.87
+ACT5_ATR3 | BASE_MAX5_ONLY: return=-13.47% DD=-16.41% PF=0.56 trades=150/670 avgEffCl=1.93
+
+BEST WITH DD <= 10%
+--------------------------------------------------------------------------------
+ACT3_ATR3 | SAME5_CLUSTER2_BETA4: return=-3.18% DD=-9.61% PF=0.89 trades=136/886
+ACT4_ATR3 | SAME3_CLUSTER3_BETA3: return=-4.38% DD=-7.72% PF=0.78 trades=97/782
+ACT5_ATR3 | SAME3_CLUSTER3_BETA3: return=-4.44% DD=-7.58% PF=0.77 trades=91/670
+ACT5_ATR3 | SAME5_CLUSTER2_BETA4: return=-5.66% DD=-9.06% PF=0.74 trades=102/670
+ACT5_ATR3 | SAME4_CLUSTER2_BETA3: return=-5.91% DD=-9.14% PF=0.68 trades=88/670
+ACT5_ATR3 | SAME3_CLUSTER2_BETA3: return=-6.29% DD=-7.06% PF=0.61 trades=76/670
+ACT4_ATR3 | SAME4_CLUSTER2_BETA3: return=-6.70% DD=-8.95% PF=0.69 trades=104/782
+ACT4_ATR3 | SAME3_CLUSTER2_BETA3: return=-7.97% DD=-9.23% PF=0.59 trades=92/782
+
+Interpretation rule:
+- If simple filters reduce DD but keep PF below 1, do NOT update T9.
+- If one filter is stable across ACT3/ACT4/ACT5 and improves DD without killing PF, it becomes a candidate.
+- Simplicity is preferred over adaptive portfolio engineering.

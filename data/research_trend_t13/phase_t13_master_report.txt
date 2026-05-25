@@ -1,0 +1,26 @@
+PHASE T13 — TIMEFRAME ARCHETYPE VALIDATION REPORT
+================================================================================
+
+Offline only. T9 paper-live remains unchanged.
+Same Donchian/EMA/ATR/Chandelier archetype across 4H/6H/8H/1D.
+Goal: isolate timeframe effect, not optimize parameters.
+
+TIMEFRAME SUMMARY
+--------------------------------------------------------------------------------
+6h: trades=776, totalR=112.37, avgR=0.145, PF=1.18, DD=-35.26, win=20.5%, bestR=15.17, trailRate=20.5%
+1d: trades=438, totalR=-24.65, avgR=-0.056, PF=0.93, DD=-85.58, win=20.3%, bestR=21.59, trailRate=20.3%
+8h: trades=851, totalR=-66.73, avgR=-0.078, PF=0.91, DD=-90.32, win=17.4%, bestR=12.66, trailRate=17.4%
+4h: trades=968, totalR=-261.87, avgR=-0.271, PF=0.68, DD=-279.03, win=16.0%, bestR=14.55, trailRate=16.0%
+
+OVERLAP SUMMARY
+--------------------------------------------------------------------------------
+1d: rawTrades=438, maxOpen=48, avgOpen=26.49, maxSameSide=47
+4h: rawTrades=968, maxOpen=65, avgOpen=37.85, maxSameSide=64
+6h: rawTrades=776, maxOpen=60, avgOpen=34.38, maxSameSide=58
+8h: rawTrades=851, maxOpen=54, avgOpen=30.93, maxSameSide=52
+
+Interpretation:
+- Prefer structural stability, not the single highest PF.
+- Too many trades may mean noise; too few trades may mean weak sample.
+- A good timeframe should show acceptable PF, DD, sample size, and lower crowding.
+- Do not update T9 until the result is confirmed with portfolio replay.

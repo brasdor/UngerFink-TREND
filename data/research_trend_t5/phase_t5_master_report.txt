@@ -1,0 +1,29 @@
+PHASE T5 — TREND PORTFOLIO REPLAY MASTER REPORT
+======================================================================
+
+Generated variants: 7
+
+SUMMARY
+----------------------------------------------------------------------
+T5_6H_ALL_max8: trades=97, skipped=768, accept=11.2%, totalR=47.64, avgR=0.491, PF=1.67, DD=-19.51, win=26.8%, assets=51
+T5_6H_ALL_max5: trades=62, skipped=803, accept=7.2%, totalR=41.06, avgR=0.662, PF=1.89, DD=-13.39, win=25.8%, assets=39
+T5_6H_LONG_max5: trades=105, skipped=211, accept=33.2%, totalR=37.49, avgR=0.357, PF=1.46, DD=-22.70, win=23.8%, assets=51
+T5_6H_ALL_max3: trades=54, skipped=811, accept=6.2%, totalR=37.04, avgR=0.686, PF=1.89, DD=-13.39, win=24.1%, assets=36
+T5_6H_SHORT_max5: trades=70, skipped=479, accept=12.8%, totalR=21.87, avgR=0.312, PF=1.41, DD=-25.24, win=22.9%, assets=40
+T5_4H_ALL_max5: trades=86, skipped=879, accept=8.9%, totalR=14.90, avgR=0.173, PF=1.25, DD=-15.29, win=31.4%, assets=46
+T5_4H_LONG_max5: trades=100, skipped=310, accept=24.4%, totalR=-0.15, avgR=-0.002, PF=1.00, DD=-25.70, win=20.0%, assets=46
+
+INTERPRETATION GUIDE
+----------------------------------------------------------------------
+Good signs:
+- Portfolio total R stays positive after max_open constraints.
+- DD falls materially compared with raw T3B.
+- Acceptance rate is not too tiny; otherwise the queue is too restrictive.
+- 6H SHORT remains strong but does not depend on only a few accepted trades.
+- Max open observed reaches the cap sometimes, but not constantly.
+
+Bad signs:
+- Positive raw edge disappears completely after portfolio constraints.
+- System accepts too few trades to be statistically useful.
+- One direction dominates so much that ALL variants are worse than side-specific variants.
+- DD remains excessive relative to total R.

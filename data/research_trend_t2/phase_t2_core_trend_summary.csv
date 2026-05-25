@@ -1,0 +1,2 @@
+phase,symbols_requested,symbols_with_data,timeframes,side_mode,donchian_entry,donchian_exit,atr_mult,ema_len,ema_slope_lookback,trades,total_R,avg_R,median_R,win_rate_pct,profit_factor,max_dd_R,best_trade_R,worst_trade_R,avg_bars_held,median_bars_held,max_bars_held,expectancy_R
+T2_CORE_TREND_ENGINE,70,69,"2h,4h",long,20,10,2.0,50,10,1485,261.5185002959057,0.17610673420599712,-0.9999999999999977,24.713804713804713,1.273842844714574,-302.2211394075577,75.39244186046513,-1.000000000000208,17.43232323232323,12.0,166,0.17610673420599712

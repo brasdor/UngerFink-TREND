@@ -1,0 +1,18 @@
+{
+    "system_name": "TREND_6H_DONCHIAN_WIDE_T9A",
+    "timestamp_utc": "2026-05-24T10:08:34.984932+00:00",
+    "status": "OK",
+    "timeframe": "6h",
+    "universe_size": 70,
+    "open_positions": 5,
+    "closed_equity_usdt": 9950.0,
+    "drawdown_pct": -0.5,
+    "portfolio_heat_pct": 1.254396984924623,
+    "reserved_margin_usdt": 869.2761856112525,
+    "signals_this_run": 0,
+    "new_closed_trades_this_run": 0,
+    "skipped_this_run": 0,
+    "errors_this_run": [],
+    "last_closed_bar_time": "2026-05-24 00:00:00+00:00",
+    "paper_only": true
+}

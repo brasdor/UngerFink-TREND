@@ -1,0 +1,30 @@
+PHASE T6 — CAPITAL & EXECUTION ENGINE V2
+======================================================================
+
+Initial capital: 10,000.00 USDT
+Risk per trade: 0.250%
+Max portfolio heat: 1.500%
+Leverage proxy: 3.00x
+Max notional per trade: 35.0% equity
+Max margin usage: 85.0% equity
+Extra execution cost: 0.000R
+Kill-switch drawdown: -35.0%
+
+VARIANT SUMMARY
+----------------------------------------------------------------------
+T5_6H_ALL_max5: trades=60/62, return=10.60%, final=11060.03, DD=-3.27%, PF_R=1.98, avgR=0.718, win=26.7%, maxHeat=1.26%
+T5_6H_ALL_max3: trades=52/54, return=9.56%, final=10956.35, DD=-3.27%, PF_R=1.98, avgR=0.752, win=25.0%, maxHeat=0.75%
+T5_6H_LONG_max5: trades=93/105, return=7.99%, final=10798.97, DD=-6.30%, PF_R=1.47, avgR=0.353, win=25.8%, maxHeat=1.26%
+T5_6H_ALL_max8: trades=50/97, return=7.51%, final=10750.70, DD=-3.59%, PF_R=1.82, avgR=0.623, win=24.0%, maxHeat=1.50%
+T5_6H_SHORT_max5: trades=67/70, return=5.84%, final=10584.42, DD=-5.88%, PF_R=1.49, avgR=0.372, win=23.9%, maxHeat=1.26%
+T5_4H_ALL_max5: trades=79/86, return=5.00%, final=10499.90, DD=-3.26%, PF_R=1.38, avgR=0.255, win=32.9%, maxHeat=1.26%
+T5_4H_LONG_max5: trades=87/100, return=-1.47%, final=9852.75, DD=-7.18%, PF_R=0.93, avgR=-0.059, win=19.5%, maxHeat=1.27%
+
+INTERPRETATION
+----------------------------------------------------------------------
+This phase does not validate live trading yet.
+It checks whether the portfolio replay can survive realistic capital constraints.
+Good signs: positive return, DD below kill-switch, PF_R > 1, heat within limits.
+Bad signs: kill-switch triggered, large skipped rate due to cash/margin, or DD too high.
+
+Next logical phase: T7 Strict Robustness on the best capital variants.

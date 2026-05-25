@@ -1,0 +1,28 @@
+PHASE T14 — REALISTIC 6H PORTFOLIO REPLAY REPORT
+================================================================================
+
+Offline only. T9 paper-live remains frozen.
+
+Validated core:
+- Timeframe: 6H
+- Archetype: Donchian breakout trend following
+- Exit: Chandelier ACT4_ATR3
+
+Portfolio assumptions:
+- Initial capital: 10000.00 USDT
+- Max open: 5
+- Risk per trade: 0.25%
+- Max heat: 1.50%
+- One position per symbol: True
+
+RESULTS
+--------------------------------------------------------------------------------
+SAME_SIDE_CAP4: return=-9.97% | DD=-12.73% | PF=0.65 | trades=142/776 | avgR=-0.293 | totalR=-41.62 | maxHeat=1.29% | maxSameSide=4
+SAME_SIDE_CAP3: return=-10.18% | DD=-13.32% | PF=0.63 | trades=137/776 | avgR=-0.309 | totalR=-42.35 | maxHeat=1.28% | maxSameSide=3
+BASE_MAX5_HEAT15: return=-13.51% | DD=-14.55% | PF=0.56 | trades=152/776 | avgR=-0.376 | totalR=-57.23 | maxHeat=1.29% | maxSameSide=5
+
+Interpretation rules:
+- If BASE is positive and DD is tolerable, do not add filters.
+- If SAME_SIDE_CAP3/4 improves DD without destroying PF, it becomes a candidate.
+- If all scenarios are weak, do not increase risk or max open.
+- Do not update T9 until confirmed by paper-live behavior.

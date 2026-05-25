@@ -1,0 +1,10 @@
+- Verify Binance data integrity
+- Use CLOSED candles only
+- No intrabar execution assumptions
+- No discretionary overrides
+- Monitor skipped signals
+- Monitor portfolio heat
+- Monitor equity only from CLOSED trades
+- Do not optimise during observation
+- Observe at least 100-200 additional trades
+- Compare live equity to historical robustness expectations

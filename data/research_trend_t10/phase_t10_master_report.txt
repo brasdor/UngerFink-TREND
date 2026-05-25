@@ -1,0 +1,20 @@
+PHASE T10 — TREND TRAILING ROBUSTNESS REPORT
+======================================================================
+
+Offline comparison only. Live T9A/T9D is unchanged.
+Core entry is unchanged; only Chandelier activation and width are compared.
+
+MAIN SUMMARY
+----------------------------------------------------------------------
+ACT5_ATR3: trades=670, totalR=151.00, avgR=0.225, PF=1.28, DD=-28.80, win=18.8%, trailRate=18.8%, bestR=15.17
+ACT3_ATR3: trades=886, totalR=146.95, avgR=0.166, PF=1.22, DD=-28.87, win=26.1%, trailRate=26.1%, bestR=15.17
+ACT4_ATR3: trades=782, totalR=128.09, avgR=0.164, PF=1.21, DD=-30.66, win=20.8%, trailRate=20.8%, bestR=15.17
+ACT2_ATR3: trades=1162, totalR=138.01, avgR=0.119, PF=1.18, DD=-38.41, win=34.2%, trailRate=34.9%, bestR=15.17
+ACT5_ATR4: trades=660, totalR=91.79, avgR=0.139, PF=1.17, DD=-38.00, win=18.9%, trailRate=18.9%, bestR=13.18
+ACT3_ATR4: trades=879, totalR=91.41, avgR=0.104, PF=1.14, DD=-33.14, win=25.8%, trailRate=26.2%, bestR=13.18
+ACT4_ATR4: trades=777, totalR=67.41, avgR=0.087, PF=1.11, DD=-34.85, win=21.0%, trailRate=21.0%, bestR=13.18
+ACT5_ATR5: trades=648, totalR=50.72, avgR=0.078, PF=1.10, DD=-41.41, win=18.8%, trailRate=19.1%, bestR=21.23
+ACT2_ATR4: trades=1100, totalR=60.75, avgR=0.055, PF=1.08, DD=-48.69, win=32.3%, trailRate=34.9%, bestR=13.18
+ACT2_ATR5: trades=1055, totalR=23.90, avgR=0.023, PF=1.03, DD=-60.45, win=29.7%, trailRate=35.2%, bestR=21.23
+ACT4_ATR5: trades=757, totalR=20.07, avgR=0.027, PF=1.03, DD=-59.29, win=20.7%, trailRate=21.1%, bestR=21.23
+ACT3_ATR5: trades=857, totalR=20.37, avgR=0.024, PF=1.03, DD=-36.25, win=24.9%, trailRate=26.5%, bestR=11.19

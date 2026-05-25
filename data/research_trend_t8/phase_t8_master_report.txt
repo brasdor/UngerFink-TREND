@@ -1,0 +1,35 @@
+PHASE T8 — PAPER LIVE BLUEPRINT
+======================================================================
+
+SYSTEM STATUS
+----------------------------------------------------------------------
+Research phase completed.
+System frozen for paper-live observation.
+
+FROZEN CORE
+----------------------------------------------------------------------
+Timeframe: 6h
+Entry: donchian_breakout
+Exit: wide_trailing
+Max open positions: 5
+Portfolio heat: 1.5%
+Risk per trade: 0.25%
+
+IMPORTANT RULE
+----------------------------------------------------------------------
+NO NEW FILTERS
+NO OPTIMISATION
+NO LIVE CAPITAL YET
+
+NEXT PHASE
+----------------------------------------------------------------------
+T9 — Binance Paper Sim Engine
+- live Binance candles
+- closed candle execution
+- persistent state
+- CSV logging
+- dashboard monitoring
+
+OBSERVATION OBJECTIVE
+----------------------------------------------------------------------
+Observe at least 100-200 additional paper trades before considering real deployment.

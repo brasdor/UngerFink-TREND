@@ -1,0 +1,57 @@
+PHASE T4 — TREND ROBUSTNESS MASTER REPORT
+============================================================
+Input: C:\Users\Jean\Desktop\UngerFink_TREND\data\research_trend_t3b\phase_t3b_wide_exit_trades.csv
+Trades loaded: 2851
+Date range: 2025-09-26 12:00:00+00:00 -> 2026-05-14 22:00:00+00:00
+Assets: 69
+
+BASELINE SUMMARY
+------------------------------------------------------------
+2h ALL: trades=1021, totalR=-150.20, avgR=-0.147, PF=0.83, DD=-394.29, win=16.2%
+2h LONG: trades=539, totalR=164.94, avgR=0.306, PF=1.39, DD=-137.29, win=22.3%
+2h SHORT: trades=482, totalR=-315.14, avgR=-0.654, PF=0.29, DD=-331.23, win=9.3%
+4h ALL: trades=965, totalR=26.83, avgR=0.028, PF=1.03, DD=-351.18, win=19.4%
+4h LONG: trades=410, totalR=128.51, avgR=0.313, PF=1.40, DD=-120.68, win=22.9%
+4h SHORT: trades=555, totalR=-101.68, avgR=-0.183, PF=0.78, DD=-294.23, win=16.8%
+6h ALL: trades=865, totalR=243.01, avgR=0.281, PF=1.37, DD=-232.33, win=24.4%
+6h LONG: trades=316, totalR=46.25, avgR=0.146, PF=1.19, DD=-102.07, win=22.8%
+6h SHORT: trades=549, totalR=196.76, avgR=0.358, PF=1.47, DD=-174.85, win=25.3%
+ALL_TF ALL: trades=2851, totalR=119.65, avgR=0.042, PF=1.05, DD=-961.87, win=19.7%
+
+KEY 6H DIAGNOSTICS
+------------------------------------------------------------
+6h ALL: trades=865, totalR=243.01, avgR=0.281, PF=1.37, DD=-232.33, win=24.4%
+6H ALL MC block10: totalR p05/p50/p95 = -28.11 / 231.24 / 511.63; prob positive=92.8%; PF p05=0.96
+6H ALL cost stress:
+  extra_cost=0.00R -> totalR=243.01, PF=1.37, DD=-232.33
+  extra_cost=0.02R -> totalR=225.71, PF=1.33, DD=-238.23
+  extra_cost=0.05R -> totalR=199.76, PF=1.29, DD=-247.20
+  extra_cost=0.10R -> totalR=156.51, PF=1.21, DD=-262.30
+  extra_cost=0.15R -> totalR=113.26, PF=1.15, DD=-277.40
+  extra_cost=0.20R -> totalR=70.01, PF=1.09, DD=-292.50
+6H ALL remove-best-assets:
+  remove top 0: totalR=243.01, PF=1.37, remaining_assets=68, removed=
+  remove top 1: totalR=201.93, PF=1.31, remaining_assets=67, removed=ZEC/USDT
+  remove top 3: totalR=140.88, PF=1.22, remaining_assets=65, removed=ZEC/USDT,TON/USDT,LUNC/USDT
+  remove top 5: totalR=102.77, PF=1.16, remaining_assets=63, removed=ZEC/USDT,TON/USDT,LUNC/USDT,VIC/USDT,JTO/USDT
+  remove top 10: totalR=43.25, PF=1.07, remaining_assets=58, removed=ZEC/USDT,TON/USDT,LUNC/USDT,VIC/USDT,JTO/USDT,SUI/USDT,ENA/USDT,ICP/USDT,TRUMP/USDT,ZBT/USDT
+6H ALL remove-best-months:
+  remove top 0: totalR=243.01, PF=1.37, remaining_months=9, removed=
+  remove top 1: totalR=97.12, PF=1.18, remaining_months=8, removed=2025-10
+  remove top 2: totalR=-46.81, PF=0.90, remaining_months=7, removed=2025-10,2026-02
+  remove top 3: totalR=-183.11, PF=0.56, remaining_months=6, removed=2025-10,2026-02,2026-05
+
+INTERPRETATION GUIDE
+------------------------------------------------------------
+Good signs:
+- MC p05 totalR remains positive or near zero.
+- PF stays above 1.0 after moderate cost stress.
+- Removing top 1-3 assets does not destroy the system.
+- First/second half and last 100/200 trades are not completely contradictory.
+- Rolling windows show multiple profitable periods, not one isolated miracle.
+
+Bad signs:
+- Result depends only on one asset or one month.
+- Extra 0.05R/trade cost turns the edge strongly negative.
+- MC p05 is deeply negative and probability of positive result is low.
+- Recent last 100/200 trades are structurally worse than historical trades.

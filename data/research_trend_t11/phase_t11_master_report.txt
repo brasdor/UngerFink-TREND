@@ -1,0 +1,39 @@
+PHASE T11 — TREND PORTFOLIO HEAT & CAPACITY REPORT
+================================================================================
+
+Offline study only. T9 paper-live remains frozen.
+T10 insight included: ACT3/4/5 with ATR3 are compared.
+Main question: can max_open / heat / risk increase without destroying DD?
+
+TOP BY RETURN WITH DD FILTER <= 15%
+--------------------------------------------------------------------------------
+ACT3_ATR3 max5 risk=0.35% heat=1.50% | return=-2.90% DD=-10.99% PF=0.92 trades=108/886 maxHeat=1.44%
+ACT3_ATR3 max8 risk=0.35% heat=1.50% | return=-2.90% DD=-10.99% PF=0.92 trades=108/886 maxHeat=1.44%
+ACT3_ATR3 max10 risk=0.35% heat=1.50% | return=-2.90% DD=-10.99% PF=0.92 trades=108/886 maxHeat=1.44%
+ACT3_ATR3 max12 risk=0.35% heat=1.50% | return=-2.90% DD=-10.99% PF=0.92 trades=108/886 maxHeat=1.44%
+ACT4_ATR3 max5 risk=0.50% heat=2.00% | return=-2.95% DD=-10.19% PF=0.94 trades=101/782 maxHeat=2.00%
+ACT4_ATR3 max8 risk=0.50% heat=2.00% | return=-2.95% DD=-10.19% PF=0.94 trades=101/782 maxHeat=2.00%
+ACT4_ATR3 max10 risk=0.50% heat=2.00% | return=-2.95% DD=-10.19% PF=0.94 trades=101/782 maxHeat=2.00%
+ACT4_ATR3 max12 risk=0.50% heat=2.00% | return=-2.95% DD=-10.19% PF=0.94 trades=101/782 maxHeat=2.00%
+ACT3_ATR3 max5 risk=0.25% heat=1.50% | return=-5.97% DD=-11.30% PF=0.79 trades=146/886 maxHeat=1.28%
+ACT3_ATR3 max5 risk=0.25% heat=2.00% | return=-5.97% DD=-11.30% PF=0.79 trades=146/886 maxHeat=1.28%
+ACT3_ATR3 max5 risk=0.25% heat=3.00% | return=-5.97% DD=-11.30% PF=0.79 trades=146/886 maxHeat=1.28%
+ACT3_ATR3 max5 risk=0.50% heat=1.50% | return=-6.45% DD=-12.48% PF=0.81 trades=82/886 maxHeat=1.50%
+ACT3_ATR3 max8 risk=0.50% heat=1.50% | return=-6.45% DD=-12.48% PF=0.81 trades=82/886 maxHeat=1.50%
+ACT3_ATR3 max10 risk=0.50% heat=1.50% | return=-6.45% DD=-12.48% PF=0.81 trades=82/886 maxHeat=1.50%
+ACT3_ATR3 max12 risk=0.50% heat=1.50% | return=-6.45% DD=-12.48% PF=0.81 trades=82/886 maxHeat=1.50%
+ACT4_ATR3 max5 risk=0.50% heat=1.50% | return=-6.57% DD=-7.71% PF=0.80 trades=80/782 maxHeat=1.50%
+ACT4_ATR3 max8 risk=0.50% heat=1.50% | return=-6.57% DD=-7.71% PF=0.80 trades=80/782 maxHeat=1.50%
+ACT4_ATR3 max10 risk=0.50% heat=1.50% | return=-6.57% DD=-7.71% PF=0.80 trades=80/782 maxHeat=1.50%
+ACT4_ATR3 max12 risk=0.50% heat=1.50% | return=-6.57% DD=-7.71% PF=0.80 trades=80/782 maxHeat=1.50%
+ACT4_ATR3 max8 risk=0.25% heat=2.00% | return=-7.19% DD=-13.25% PF=0.84 trades=203/782 maxHeat=2.00%
+ACT4_ATR3 max10 risk=0.25% heat=2.00% | return=-7.19% DD=-13.25% PF=0.84 trades=203/782 maxHeat=2.00%
+ACT4_ATR3 max12 risk=0.25% heat=2.00% | return=-7.19% DD=-13.25% PF=0.84 trades=203/782 maxHeat=2.00%
+ACT4_ATR3 max8 risk=0.25% heat=1.50% | return=-7.20% DD=-11.65% PF=0.78 trades=159/782 maxHeat=1.50%
+ACT4_ATR3 max10 risk=0.25% heat=1.50% | return=-7.20% DD=-11.65% PF=0.78 trades=159/782 maxHeat=1.50%
+ACT4_ATR3 max12 risk=0.25% heat=1.50% | return=-7.20% DD=-11.65% PF=0.78 trades=159/782 maxHeat=1.50%
+
+WARNING
+- Do not increase max open and risk exposure live from one good row.
+- Prefer stable regions across nearby max_open/heat/risk values.
+- Any live change should be incremental: one risk lever at a time.

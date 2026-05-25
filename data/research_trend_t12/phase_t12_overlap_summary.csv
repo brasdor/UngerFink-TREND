@@ -1,0 +1,4 @@
+variant,raw_trades,raw_max_simultaneous_open,avg_raw_open,avg_effective_clusters,max_raw_same_side,max_raw_cluster_count
+ACT3_ATR3,886,63,33.717514124293785,2.6230543732772955,62,38
+ACT4_ATR3,782,59,33.02176696542894,2.722967973878708,57,36
+ACT5_ATR3,670,55,29.86846038863976,2.836062999737289,53,33

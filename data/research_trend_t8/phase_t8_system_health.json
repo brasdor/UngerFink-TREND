@@ -1,0 +1,28 @@
+{
+    "system_name": "TREND_6H_DONCHIAN_WIDE",
+    "timestamp_utc": "2026-05-14T23:08:46.933708+00:00",
+    "status": "READY_FOR_PAPER_LIVE",
+    "research_complete": {
+        "T1": true,
+        "T2": true,
+        "T3": true,
+        "T4": true,
+        "T5": true,
+        "T6": true,
+        "T7": true,
+        "T8": true
+    },
+    "warnings": [
+        "Dependency on best assets still present",
+        "Recent last20 trades weaker",
+        "Sample size still limited",
+        "Paper-live observation required before production"
+    ],
+    "strengths": [
+        "Cost robustness survived",
+        "Low drawdown under realistic capital constraints",
+        "6H structure appears robust",
+        "Portfolio heat remains disciplined",
+        "Long-only structure particularly strong"
+    ]
+}
