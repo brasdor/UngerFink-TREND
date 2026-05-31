@@ -33,3 +33,5 @@ build/
 # OS
 .DS_Store
 Thumbs.db
+data/research_linregbreakout_t1/phase_t1_linregbreakout_all_trades.csv 
+data/research_prevsessionbreakout_t1/phase_t1_prevsessionbreakout_trades.csv 
