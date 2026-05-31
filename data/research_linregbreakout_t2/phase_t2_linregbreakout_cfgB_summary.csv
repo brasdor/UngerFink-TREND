@@ -1,0 +1,2 @@
+config,timeframe,filter_mode,linreg_n,linreg_mult,stop_mult,symbols,trades,total_r,avg_r,median_r,win_rate_pct,profit_factor,max_dd_r,best_trade_r,worst_trade_r,avg_bars_held,avg_mfe_r,avg_mae_r,cost_floor_pass,win_rate_gate
+B,1d,ema200_price,55,3.0,2.0,51,196,71.03644091087318,0.36243082097384277,-0.9999999999999996,26.53061224489796,1.527655849866274,-36.835097837606675,39.28250755040403,-1.000000000000001,9.576530612244898,3.0364057547381003,-1.2639719227361725,PASS,WARN

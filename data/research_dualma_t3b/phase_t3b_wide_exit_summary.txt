@@ -1,0 +1,64 @@
+======================================================================
+PHASE T3B -- EXIT ENGINEERING REPORT
+Method: DualMA | Exchange: binance_spot | Side: LONG
+======================================================================
+
+CONFIGURATION
+  Entry:  fast_ema=30, slow_ema=100
+  Filter: ema200_price (ema_regime_length=200)
+  ATR mult (initial stop): 2.0
+  Fee per side: 0.10%
+  Backtest bars: 1500
+
+T2 BASELINE
+  n_trades:       117
+  total_r:        -31.073R
+  avg_r:          -0.2656R
+  win_rate:       14.5%
+  profit_factor:  0.651
+  max_dd_r:       -40.401R
+
+GRID RESULTS SUMMARY
+  Total variants tested: 9
+  Variants passing all gates: 9
+
+  * BEST | chan_mult=3.0_act=4.0R              | total_r=348.637R | avg_r=1.5634R | win%=35.9% | PF=3.990 | dd=-64.419R
+    PASS | chan_mult=2.0_act=4.0R              | total_r=348.637R | avg_r=1.5634R | win%=35.9% | PF=3.990 | dd=-64.419R
+    PASS | chan_mult=4.0_act=4.0R              | total_r=348.487R | avg_r=1.5627R | win%=35.4% | PF=3.980 | dd=-64.561R
+    PASS | chan_mult=3.0_act=3.0R              | total_r=274.578R | avg_r=1.2313R | win%=40.4% | PF=3.494 | dd=-58.589R
+    PASS | chan_mult=2.0_act=3.0R              | total_r=274.502R | avg_r=1.2309R | win%=40.4% | PF=3.493 | dd=-58.718R
+    PASS | chan_mult=4.0_act=3.0R              | total_r=273.839R | avg_r=1.2280R | win%=40.4% | PF=3.481 | dd=-59.835R
+    PASS | chan_mult=3.0_act=2.0R              | total_r=110.039R | avg_r=0.4934R | win%=41.3% | PF=2.035 | dd=-59.351R
+    PASS | chan_mult=2.0_act=2.0R              | total_r=109.622R | avg_r=0.4916R | win%=42.6% | PF=2.035 | dd=-59.825R
+    PASS | chan_mult=4.0_act=2.0R              | total_r= 83.773R | avg_r=0.3757R | win%=39.9% | PF=1.772 | dd=-62.024R
+
+BEST VARIANT
+  Label:                  chan_mult=3.0_act=4.0R
+  chandelier_atr_mult:    3.0
+  chandelier_activate_r:  4.0R
+  n_trades:               223
+  total_r:                348.637R
+  avg_r:                  1.5634R
+  win_rate:               35.9%
+  profit_factor:          3.990
+  max_dd_r:               -64.419R
+
+GATE CHECKS (best variant)
+  §4.2 Cost floor (avg_r > 0.15R):  PASS (avg_r=1.5634R)
+  §4.1 Win rate (30-45%):                    PASS (35.9%)
+  PF > 1.0:                                  PASS (PF=3.990)
+  Beats T2 total_r (-31.07R):          PASS (total_r=348.637R)
+  DD not catastrophic (<=2x T2 dd):           PASS
+
+FROZEN CANONICAL EXIT CONFIG (after T3B)
+  CANONICAL_EXIT:           combined EMA_cross + Chandelier
+  CHANDELIER_ATR_MULT:      3.0
+  CHANDELIER_ACTIVATION:    4.0R
+
+COMPARISON vs DONCHIAN BENCHMARK
+  Donchian avg_r:    0.179R  |  DualMA T3B avg_r:   1.5634R
+  Donchian PF:       1.27    |  DualMA T3B PF:      3.990
+  Donchian total_r:  82.0R  |  DualMA T3B total_r: 348.637R
+
+  STATUS: PASS -- proceed to T4
+======================================================================

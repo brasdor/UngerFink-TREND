@@ -80,9 +80,8 @@ RISK_PER_TRADE_PCT = 0.0025
 MAX_PORTFOLIO_HEAT_PCT = 0.015   # 1.5% total open risk, e.g. 6 trades * 0.25%
 
 # Margin / notional model.
-# For spot-long only you may use LEVERAGE = 1.
-# For long+short paper simulation, a conservative isolated-margin proxy is used.
-LEVERAGE = 3.0
+# Binance Spot LONG only — no leverage, no margin.
+LEVERAGE = 1.0
 
 # Do not allow a single trade to consume too much notional/margin.
 MAX_NOTIONAL_PER_TRADE_PCT = 0.35     # max 35% of equity as notional

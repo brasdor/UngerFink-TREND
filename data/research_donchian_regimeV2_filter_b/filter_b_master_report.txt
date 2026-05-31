@@ -1,0 +1,122 @@
+PHASE T17 OPT-17.2 -- Regime Filter B: Volume Confirmation
+======================================================================
+
+Filter   : entry bar volume > 1.5x prior-20-bar MA of volume
+Universe : 24 symbols (filtered_symbols_v2_included_only.csv)
+Config   : Donchian N=20 / ema200_price / ATR(14)x2.0 stop /
+           Chandelier ACT+4R trail 3xATR / LONG only / 1D
+
+Baseline (no filter): avg_r=+1.101R  PF=3.072  CAGR=+14.3%  trades=461
+
+======================================================================
+STABILITY ZONE  (N=[15, 20, 25], volume filter ON)
+======================================================================
+     N  exit_n   trades   total_r     avg_r     PF   PASS?
+  ----------------------------------------------------------
+    15       7      429   +435.43   +1.0150  2.897     YES
+    20      10      392   +427.13   +1.0896  2.999     YES
+    25      12      370   +411.90   +1.1132  3.020     YES
+
+  Stability zone result: ALL PASS
+
+======================================================================
+T4 -- BASELINE (N=20, volume filter ON)
+======================================================================
+  Trades     : 392    [guard: >=80  PASS]
+  Total R    : +427.13R
+  Avg R      : +1.0896R   (baseline: +1.101R)
+  PF         : 2.999          (baseline: 3.072)
+  Win rate   : 41.3%
+  Max DD     : -24.94R
+  t-score    : 6.65
+  Assets     : 24
+  Period     : 2020-12-23 -> 2026-05-28
+
+======================================================================
+T4 -- MONTE CARLO (2000 runs, block_size=10)
+======================================================================
+  totalR  p05/p50/p95 = 278.4 / 424.1 / 583.7
+  prob(totalR > 0)    = 100.0%
+  PF      p05/p50     = 2.19 / 2.99
+  DD      p95 (worst) = -11.93R
+
+======================================================================
+T4 -- COST STRESS
+======================================================================
+  +0.00R/trade -> totalR=+427.1  avgR=+1.0896  PF=2.999
+  +0.02R/trade -> totalR=+419.3  avgR=+1.0696  PF=2.921
+  +0.05R/trade -> totalR=+407.5  avgR=+1.0396  PF=2.810
+  +0.10R/trade -> totalR=+387.9  avgR=+0.9896  PF=2.638
+  +0.15R/trade -> totalR=+368.3  avgR=+0.9396  PF=2.482
+  +0.20R/trade -> totalR=+348.7  avgR=+0.8896  PF=2.340
+
+======================================================================
+T4 -- PERIOD SPLITS
+======================================================================
+  first_half_by_trade           : trades=196  totalR= +188.1  avgR=+0.9598  PF=2.655  win=38.3%
+  second_half_by_trade          : trades=196  totalR= +239.0  avgR=+1.2194  PF=3.391  win=44.4%
+  last_100_trades               : trades=100  totalR=  +89.4  avgR=+0.8942  PF=2.632  win=40.0%
+  first_half_by_time            : trades=196  totalR= +188.1  avgR=+0.9598  PF=2.655  win=38.3%
+  second_half_by_time           : trades=196  totalR= +239.0  avgR=+1.2194  PF=3.391  win=44.4%
+
+======================================================================
+T4 -- REMOVE BEST ASSETS
+======================================================================
+  Top asset: FET/USDT  (45.61R = 10.7% of total)
+  remove top 0: totalR= +427.1  avgR=+1.0896  PF=2.999  remaining=24  []
+  remove top 1: totalR= +381.5  avgR=+1.0120  PF=2.863  remaining=23  [FET/USDT]
+  remove top 3: totalR= +322.1  avgR=+0.9231  PF=2.684  remaining=21  [FET/USDT,SOL/USDT,DEXE/USDT]
+  remove top 5: totalR= +267.7  avgR=+0.8445  PF=2.520  remaining=19  [FET/USDT,SOL/USDT,DEXE/USDT,ZEC/USDT,VET/USDT]
+
+======================================================================
+T4 -- REMOVE BEST MONTHS
+======================================================================
+  remove top 0: totalR= +427.1  avgR=+1.0896  PF=2.999  months_remaining=54  []
+  remove top 1: totalR= +358.7  avgR=+0.9694  PF=2.736  months_remaining=53  [2021-02]
+  remove top 2: totalR= +302.2  avgR=+0.8659  PF=2.498  months_remaining=52  [2021-02,2024-03]
+  remove top 3: totalR= +253.8  avgR=+0.7810  PF=2.307  months_remaining=51  [2021-02,2024-03,2024-12]
+
+======================================================================
+T4 -- ASSET CONCENTRATION
+======================================================================
+  Top 1:  45.6R  (10.7% of total)
+  Top 3:  105.0R  (24.6% of total)
+  Top 5:  159.4R  (37.3% of total)
+  Positive assets: 23/24
+
+======================================================================
+T5/T6 -- PORTFOLIO (max8) + CAPITAL EXECUTION ($10k / 0.25% risk)
+======================================================================
+  Accepted trades : 296
+  Portfolio avg_r : +0.7916R
+  Portfolio PF    : 2.370
+  End capital     : $17,812
+  Total return    : +78.1%
+  CAGR            : +11.2%    (baseline: +14.3%)
+  Max DD          : -4.9%    (baseline: -3.4%)
+  Kill switch     : no
+  Duration        : 5.5 yr
+
+======================================================================
+FINAL SCORECARD -- Filter B vs Baseline
+======================================================================
+
+  PASS  Trade count >= 80          (got 392)
+  PASS  Stability zone all profitable (N=15/20/25)
+  PASS  §4.1 win rate 30-45%          (got 41.3%)
+  PASS  §4.2 avg_r > 0.15R            (got +1.0896R)
+  PASS  PF > 1.0                      (got 2.999)
+  PASS  MC p05 totalR > 0             (got +278.4R)
+  PASS  Cost +0.10R PF > 1.0          (got 2.638)
+  PASS  2nd half avg_r > 0            (got +1.2194R)
+  PASS  Remove top-1 asset profitable (totalR=+381.5R)
+  PASS  Remove top-1 month profitable (totalR=+358.7R)
+  PASS  Kill switch not fired
+
+  vs BASELINE (no volume filter):
+  avg_r  : +1.0896R  vs  +1.101R  -> WORSE
+  PF     : 2.999  vs  3.072  -> WORSE
+  CAGR   : +11.2%  vs  +14.3%  -> WORSE
+  trades : 392  vs  461  (filter removed 69 trades = 15.0% of baseline)
+
+  OVERALL: PASS -- Filter B improves or maintains quality

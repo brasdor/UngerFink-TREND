@@ -1,0 +1,66 @@
+PHASE T17 OPT-17.4 -- Exit Refinement Variant C
+======================================================================
+
+Variant: Partial 50% at +4R, trail 50% with Chandelier ACT4_ATR3
+Config: {kwargs}
+
+Baseline: avg_r=+1.101R  PF=3.072  CAGR=+14.3%
+
+======================================================================
+T4 RESULTS
+======================================================================
+  Trades   : 480
+  Avg R    : +0.8184R  (baseline: +1.101R)
+  PF       : 2.532  (baseline: 3.072)
+  Win rate : 41.0%
+  t-score  : 7.57
+  Period   : 2020-12-23 -> 2026-05-28
+
+T4 -- MONTE CARLO (bs=10):
+  p05/p50/p95 = 267.7/387.7/520.9
+  prob>0=100.0%
+
+T4 -- COST STRESS:
+  +0.00R -> avgR=+0.8184  PF=2.532
+  +0.02R -> avgR=+0.7984  PF=2.462
+  +0.05R -> avgR=+0.7684  PF=2.363
+  +0.10R -> avgR=+0.7184  PF=2.210
+  +0.15R -> avgR=+0.6684  PF=2.072
+  +0.20R -> avgR=+0.6184  PF=1.946
+
+T4 -- PERIOD SPLITS:
+  first_half_by_trade           : t=240  avgR=+0.8139  PF=2.460
+  second_half_by_trade          : t=240  avgR=+0.8228  PF=2.611
+  last_100_trades               : t=100  avgR=+0.3021  PF=1.523
+  first_half_by_time            : t=240  avgR=+0.8139  PF=2.460
+  second_half_by_time           : t=240  avgR=+0.8228  PF=2.611
+
+T4 -- REMOVE BEST ASSETS:
+  remove 0: totalR= +392.8  avgR=+0.8184
+  remove 1: totalR= +361.6  avgR=+0.8017
+  remove 3: totalR= +308.4  avgR=+0.7559
+  remove 5: totalR= +267.9  avgR=+0.7125
+
+T4 -- REMOVE BEST MONTHS:
+  remove 0: totalR= +392.8  avgR=+0.8184
+  remove 1: totalR= +328.4  avgR=+0.7202
+  remove 2: totalR= +275.3  avgR=+0.6403
+  remove 3: totalR= +236.2  avgR=+0.5802
+
+T5/T6: accepted=340  CAGR=+11.0%  DD=-3.1%
+
+GATE RESULTS:
+  PASS  trades >=80 (got 480)
+  PASS  win% 30-45% (got 41.0%)
+  PASS  avg_r > 0.15R (got +0.8184R)
+  PASS  PF > 1.0 (got 2.532)
+  PASS  MC p05 > 0 (got +267.7R)
+  PASS  cost +0.10R PF > 1.0
+  PASS  2nd half avgR > 0 (got +0.8228R)
+  PASS  remove top-1 asset > 0 (got +361.6R)
+  PASS  remove top-1 month > 0 (got +328.4R)
+
+vs BASELINE:
+  avg_r: +0.8184R vs +1.101R -> WORSE
+  PF   : 2.532 vs 3.072 -> WORSE
+  CAGR : +11.0% vs +14.3% -> WORSE

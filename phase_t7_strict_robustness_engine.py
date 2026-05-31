@@ -39,9 +39,8 @@ OUTPUT_DIR = Path(
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 BEST_VARIANTS = [
-    "T5_6H_ALL_max5",
-    "T5_6H_ALL_max3",
-    "T5_6H_SHORT_max5",
+    "T5_1D_LONG_max5",   # canonical: best stats balance (T6 confirmed)
+    "T5_1D_LONG_max3",   # conservative: best per-trade quality
 ]
 
 EXTRA_COST_LEVELS = [0.00, 0.05, 0.10, 0.15]

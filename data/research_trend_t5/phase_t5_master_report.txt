@@ -1,17 +1,15 @@
 PHASE T5 — TREND PORTFOLIO REPLAY MASTER REPORT
 ======================================================================
 
-Generated variants: 7
+Generated variants: 5
 
 SUMMARY
 ----------------------------------------------------------------------
-T5_6H_ALL_max8: trades=97, skipped=768, accept=11.2%, totalR=47.64, avgR=0.491, PF=1.67, DD=-19.51, win=26.8%, assets=51
-T5_6H_ALL_max5: trades=62, skipped=803, accept=7.2%, totalR=41.06, avgR=0.662, PF=1.89, DD=-13.39, win=25.8%, assets=39
-T5_6H_LONG_max5: trades=105, skipped=211, accept=33.2%, totalR=37.49, avgR=0.357, PF=1.46, DD=-22.70, win=23.8%, assets=51
-T5_6H_ALL_max3: trades=54, skipped=811, accept=6.2%, totalR=37.04, avgR=0.686, PF=1.89, DD=-13.39, win=24.1%, assets=36
-T5_6H_SHORT_max5: trades=70, skipped=479, accept=12.8%, totalR=21.87, avgR=0.312, PF=1.41, DD=-25.24, win=22.9%, assets=40
-T5_4H_ALL_max5: trades=86, skipped=879, accept=8.9%, totalR=14.90, avgR=0.173, PF=1.25, DD=-15.29, win=31.4%, assets=46
-T5_4H_LONG_max5: trades=100, skipped=310, accept=24.4%, totalR=-0.15, avgR=-0.002, PF=1.00, DD=-25.70, win=20.0%, assets=46
+T5_1D_LONG_uncap: trades=298, skipped=0, accept=100.0%, totalR=137.93, avgR=0.463, PF=1.74, DD=-45.84, win=30.2%, assets=54
+T5_1D_LONG_max10: trades=188, skipped=110, accept=63.1%, totalR=91.10, avgR=0.485, PF=1.81, DD=-23.46, win=31.4%, assets=49
+T5_1D_LONG_max3: trades=78, skipped=220, accept=26.2%, totalR=86.70, avgR=1.112, PF=3.13, DD=-7.15, win=35.9%, assets=32
+T5_1D_LONG_max5: trades=122, skipped=176, accept=40.9%, totalR=84.43, avgR=0.692, PF=2.22, DD=-11.01, win=33.6%, assets=38
+T5_1D_LONG_max8: trades=166, skipped=132, accept=55.7%, totalR=70.83, avgR=0.427, PF=1.71, DD=-17.41, win=30.1%, assets=46
 
 INTERPRETATION GUIDE
 ----------------------------------------------------------------------
@@ -19,7 +17,7 @@ Good signs:
 - Portfolio total R stays positive after max_open constraints.
 - DD falls materially compared with raw T3B.
 - Acceptance rate is not too tiny; otherwise the queue is too restrictive.
-- 6H SHORT remains strong but does not depend on only a few accepted trades.
+- Fat-tail assets (ZEC/TRX/XRP) get accepted and are not chronically skipped.
 - Max open observed reaches the cap sometimes, but not constantly.
 
 Bad signs:

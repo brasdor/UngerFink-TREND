@@ -67,18 +67,14 @@ R_COL = "net_r"
 # T5 deliberately tests several portfolio variants.
 # Keep this grid small and interpretable.
 PORTFOLIO_VARIANTS = [
-    # Main 6H candidates
-    {"name": "T5_6H_ALL_max3",   "timeframe": "6h", "side": "ALL",   "max_open": 3, "max_long": 3, "max_short": 3},
-    {"name": "T5_6H_ALL_max5",   "timeframe": "6h", "side": "ALL",   "max_open": 5, "max_long": 5, "max_short": 5},
-    {"name": "T5_6H_ALL_max8",   "timeframe": "6h", "side": "ALL",   "max_open": 8, "max_long": 8, "max_short": 8},
-
-    # Direction split, because T4 showed 6H SHORT was very strong
-    {"name": "T5_6H_LONG_max5",  "timeframe": "6h", "side": "LONG",  "max_open": 5, "max_long": 5, "max_short": 0},
-    {"name": "T5_6H_SHORT_max5", "timeframe": "6h", "side": "SHORT", "max_open": 5, "max_long": 0, "max_short": 5},
-
-    # Benchmarks
-    {"name": "T5_4H_LONG_max5",  "timeframe": "4h", "side": "LONG",  "max_open": 5, "max_long": 5, "max_short": 0},
-    {"name": "T5_4H_ALL_max5",   "timeframe": "4h", "side": "ALL",   "max_open": 5, "max_long": 5, "max_short": 5},
+    # 1D LONG-only variants (Binance Spot: shorts disabled per T3B config)
+    # T4 confirmed ZEC/TRX/XRP are fat-tail carriers — higher max_open captures more of them
+    {"name": "T5_1D_LONG_max3",  "timeframe": "1d", "side": "LONG", "max_open": 3,  "max_long": 3,  "max_short": 0},
+    {"name": "T5_1D_LONG_max5",  "timeframe": "1d", "side": "LONG", "max_open": 5,  "max_long": 5,  "max_short": 0},
+    {"name": "T5_1D_LONG_max8",  "timeframe": "1d", "side": "LONG", "max_open": 8,  "max_long": 8,  "max_short": 0},
+    {"name": "T5_1D_LONG_max10", "timeframe": "1d", "side": "LONG", "max_open": 10, "max_long": 10, "max_short": 0},
+    # Unconstrained baseline: no position cap (upper bound on capturable R)
+    {"name": "T5_1D_LONG_uncap", "timeframe": "1d", "side": "LONG", "max_open": 99, "max_long": 99, "max_short": 0},
 ]
 
 # If multiple signals occur on the same timestamp, rank them.
@@ -468,7 +464,7 @@ def write_master_report(summary: pd.DataFrame, out_path: Path) -> None:
     lines.append("- Portfolio total R stays positive after max_open constraints.")
     lines.append("- DD falls materially compared with raw T3B.")
     lines.append("- Acceptance rate is not too tiny; otherwise the queue is too restrictive.")
-    lines.append("- 6H SHORT remains strong but does not depend on only a few accepted trades.")
+    lines.append("- Fat-tail assets (ZEC/TRX/XRP) get accepted and are not chronically skipped.")
     lines.append("- Max open observed reaches the cap sometimes, but not constantly.")
     lines.append("")
     lines.append("Bad signs:")

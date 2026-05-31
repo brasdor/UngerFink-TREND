@@ -53,23 +53,31 @@ OUT_DIR = BASE_DIR / "data" / "research_trend_t3b"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 N_ASSETS = 70
-TIMEFRAMES = ["2h", "4h", "6h"]
+
+# ── UPDATE THESE based on T2 output (phase_t2_core_trend_summary.csv) ──────
+# Set TIMEFRAMES to [T2 --timeframe], EMA_FILTER_MODE to [T2 --filter-mode],
+# DONCHIAN_ENTRY to T2 --donchian-entry, INITIAL_STOP_ATR_MULT to T2 --atr-mult.
+TIMEFRAMES = ["1d"]                 # T1→T2 confirmed: 1d only PASS + cost-check
+EMA_FILTER_MODE = "ema200_price"    # T1→T2 confirmed: EMA200 price-above (Unger §3.1)
+DONCHIAN_ENTRY = 20                 # T1 stability zone 15/20/25 all profitable (100%)
+INITIAL_STOP_ATR_MULT = 2.0        # T1 4yr confirmed: ATR×2.0 avg_r=+0.359R, pf=1.57 (T1 canonical)
+# ───────────────────────────────────────────────────────────────────────────
+
 OHLCV_LIMIT = 1500
 
-DONCHIAN_ENTRY = 20
 EMA_LEN = 50
 EMA_SLOPE_LOOKBACK = 10
+EMA_REGIME_LEN = 200   # for EMA_FILTER_MODE = "ema200_price"
 ATR_LEN = 14
-INITIAL_STOP_ATR_MULT = 2.0
 
 USE_BREAKEVEN = False
 BREAKEVEN_TRIGGER_R = 999.0  # disabled in T3B
 CHAND_ACTIVATE_R = 4.0
-CHAND_ATR_MULT = 4.0
+CHAND_ATR_MULT = 3.0          # T10 stability finding: 3.0 is most robust (was 4.0)
 CHAND_LOOKBACK = 22
 
 ALLOW_LONG = True
-ALLOW_SHORT = True
+ALLOW_SHORT = False   # Binance Spot: LONG only for paper-live; keep True for research
 
 # Conservative research costs in R. Keep small here; T4 will stress costs harder.
 COST_R_PER_TRADE = 0.02
@@ -160,9 +168,17 @@ def add_indicators(df: pd.DataFrame) -> pd.DataFrame:
     df["ema50"] = df["close"].ewm(span=EMA_LEN, adjust=False).mean()
     df["ema_slope"] = df["ema50"] - df["ema50"].shift(EMA_SLOPE_LOOKBACK)
 
+    # EMA200 price-above filter (used when EMA_FILTER_MODE == "ema200_price")
+    df["ema200"] = df["close"].ewm(span=EMA_REGIME_LEN, adjust=False).mean()
+
     # Use shifted bands so the current candle cannot define its own breakout.
     df["donchian_high_entry"] = df["high"].shift(1).rolling(DONCHIAN_ENTRY).max()
     df["donchian_low_entry"] = df["low"].shift(1).rolling(DONCHIAN_ENTRY).min()
+
+    # Turtle exit band: N//2 period. Active while Chandelier has not taken over.
+    _exit_n = max(1, DONCHIAN_ENTRY // 2)
+    df["donchian_high_exit"] = df["high"].shift(1).rolling(_exit_n).max()
+    df["donchian_low_exit"] = df["low"].shift(1).rolling(_exit_n).min()
 
     # Chandelier uses previous completed bars, updated while in trade.
     df["chand_high"] = df["high"].shift(1).rolling(CHAND_LOOKBACK).max()
@@ -189,7 +205,8 @@ def simulate_symbol_timeframe(symbol: str, timeframe: str, df: pd.DataFrame) -> 
     timeline: List[Dict] = []
 
     df = add_indicators(df)
-    warmup = max(DONCHIAN_ENTRY, EMA_LEN + EMA_SLOPE_LOOKBACK, ATR_LEN, CHAND_LOOKBACK) + 5
+    warmup = max(DONCHIAN_ENTRY, EMA_LEN + EMA_SLOPE_LOOKBACK,
+                 EMA_REGIME_LEN, ATR_LEN, CHAND_LOOKBACK) + 5
     if len(df) <= warmup + 5:
         return trades, timeline
 
@@ -284,10 +301,20 @@ def simulate_symbol_timeframe(symbol: str, timeframe: str, df: pd.DataFrame) -> 
                 if row["low"] <= current_stop:
                     exit_reason = "STOP_BE_CHAND" if pos["breakeven_active"] or pos["chandelier_active"] else "INITIAL_STOP"
                     exit_price = current_stop
+                elif not pos["chandelier_active"]:
+                    don_exit_low = row.get("donchian_low_exit", np.nan)
+                    if np.isfinite(don_exit_low) and row["close"] < don_exit_low:
+                        exit_reason = "DONCHIAN_EXIT"
+                        exit_price = row["close"]
             else:
                 if row["high"] >= current_stop:
                     exit_reason = "STOP_BE_CHAND" if pos["breakeven_active"] or pos["chandelier_active"] else "INITIAL_STOP"
                     exit_price = current_stop
+                elif not pos["chandelier_active"]:
+                    don_exit_high = row.get("donchian_high_exit", np.nan)
+                    if np.isfinite(don_exit_high) and row["close"] > don_exit_high:
+                        exit_reason = "DONCHIAN_EXIT"
+                        exit_price = row["close"]
 
             if exit_reason is not None and exit_price is not None:
                 gross_r = safe_r_multiple(side, entry, exit_price, initial_risk)
@@ -341,8 +368,17 @@ def simulate_symbol_timeframe(symbol: str, timeframe: str, df: pd.DataFrame) -> 
             if not all(np.isfinite(x) for x in [close, atr, ema_slope, dh, dl]):
                 continue
 
-            long_signal = ALLOW_LONG and close > dh and ema_slope > 0
-            short_signal = ALLOW_SHORT and close < dl and ema_slope < 0
+            # Regime filter: EMA50 slope or EMA200 price-above (set via EMA_FILTER_MODE)
+            if EMA_FILTER_MODE == "ema200_price":
+                ema200 = row.get("ema200", np.nan)
+                filter_long  = np.isfinite(ema200) and close > float(ema200)
+                filter_short = np.isfinite(ema200) and close < float(ema200)
+            else:  # ema50_slope (default)
+                filter_long  = float(ema_slope) > 0
+                filter_short = float(ema_slope) < 0
+
+            long_signal  = ALLOW_LONG  and close > dh and filter_long
+            short_signal = ALLOW_SHORT and close < dl and filter_short
 
             # If both somehow happen, skip to avoid ambiguity.
             if long_signal and short_signal:

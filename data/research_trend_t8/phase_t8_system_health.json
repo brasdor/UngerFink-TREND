@@ -1,6 +1,6 @@
 {
-    "system_name": "TREND_6H_DONCHIAN_WIDE",
-    "timestamp_utc": "2026-05-14T23:08:46.933708+00:00",
+    "system_name": "TREND_1D_DONCHIAN_WIDE",
+    "timestamp_utc": "2026-05-26T15:43:04.930922+00:00",
     "status": "READY_FOR_PAPER_LIVE",
     "research_complete": {
         "T1": true,
@@ -13,16 +13,19 @@
         "T8": true
     },
     "warnings": [
-        "Dependency on best assets still present",
-        "Recent last20 trades weaker",
-        "Sample size still limited",
+        "Fat-tail concentration: ZEC+XRP+TRX drive majority of R",
+        "December 2024 single-month concentration (~97% of edge)",
+        "max5 fails T7 remove-top-1-asset stress (-4.35R); max3 passes (+3.06R)",
+        "EMA200 filter blocks entire 2022 bear \u2014 no bear-market data in backtest",
         "Paper-live observation required before production"
     ],
     "strengths": [
-        "Cost robustness survived",
-        "Low drawdown under realistic capital constraints",
-        "6H structure appears robust",
-        "Portfolio heat remains disciplined",
-        "Long-only structure particularly strong"
+        "Cost stress passes at +0.15R/trade for both variants (Unger \u00a74.2)",
+        "max3 DD -1.78% on $10k \u2014 exceptional capital protection",
+        "MC block bootstrap: 89.6% probability positive over full sample",
+        "Remove-top-1-month now passes for both variants (Option B resolved)",
+        "Recent last-50 trades: max5 PF=4.02, max3 PF=9.24 \u2014 no degradation",
+        "EMA200 filter correctly avoided 2022 crypto bear market",
+        "1D timeframe: only TF passing both \u00a74.1 stability and \u00a74.2 cost floor"
     ]
 }

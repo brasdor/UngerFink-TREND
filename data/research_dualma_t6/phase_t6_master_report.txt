@@ -1,0 +1,43 @@
+======================================================================
+PHASE T6 -- DualMA BTC-only Capital Simulation Report
+======================================================================
+Asset:           BTC/USDT
+Variant:         DualMA_BTC_max1
+Initial capital: $10,000.00
+Risk per trade:  0.25%
+Leverage:        1.0x  (Binance Spot, no margin)
+Date range:      2023-09-15 -> 2025-10-29  (775 days)
+
+CAPITAL RESULTS
+----------------------------------------------------------------------
+  Final equity:       $22,982.35
+  Total return:       129.82%
+  CAGR:               48.02%
+  Max DD (closed eq): -0.51%
+
+TRADE STATISTICS
+----------------------------------------------------------------------
+  Trades:             5
+  Total R:            430.2382R
+  Avg R:              86.0476R
+  Win rate:           40.0%
+  Profit factor:      126.4147
+  Avg win (USDT):     $6542.93
+  Avg loss (USDT):    $-34.51
+  Expectancy/trade:   $2596.47
+  Kill-switch fired:  False
+
+COMPARISON vs DONCHIAN T6 BENCHMARK
+----------------------------------------------------------------------
+  Donchian max3: +19.43% return, -1.78% DD
+  DualMA BTC:    +129.82% return, -0.51% DD
+
+GATE CHECKS
+----------------------------------------------------------------------
+  CAGR > 0:           PASS
+  Max DD < 25%:       PASS (-0.51%)
+  PF > 1.5:           PASS (126.4147)
+
+T7: SKIPPED -- single-asset system; remove-best-asset test is N/A.
+Proceed to T8 (config freeze) if capital results are satisfactory.
+======================================================================

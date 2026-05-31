@@ -1,43 +1,37 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 """
-Phase T1 — Clean Trend Concept Discovery
-Trend Following System 2H/4H — Binance Spot
+PHASE T1 — DONCHIAN CHANNEL BREAKOUT CONCEPT DISCOVERY  (redesigned)
 
-Obiettivo:
-- Testare concetti trend-following semplici, senza overfitting.
-- Donchian breakout + EMA slope filter + ATR stop + exit semplice.
-- Usare solo candele chiuse.
-- Salvare risultati e trades in CSV.
+Unger §2.1: "The Donchian Channel is a price channel formed by two bands tracing
+the highest high and the lowest low of the last N periods, and is basically
+employed in trend-following systems."
 
-Logica base:
-LONG:
-    close > Donchian High N
-    EMA50 slope > 0
-    initial stop = entry - ATR * atr_mult
-    exit = stop oppure close < Donchian Low exit_N
+Key Unger principle: "optimizing the lookback parameter may improve the system
+but the STABILITY AROUND the chosen value is what matters."
 
-SHORT:
-    close < Donchian Low N
-    EMA50 slope < 0
-    initial stop = entry + ATR * atr_mult
-    exit = stop oppure close > Donchian High exit_N
+Changes vs. original T1
+-----------------------
+1. Timeframes: ["4h","6h","8h","1d"]  (removed 2H — too noisy per Unger §4.8)
+2. Donchian N grid: [10,15,20,25,30,40,55]  (stability analysis around N=20)
+3. Filter modes: ["ema50_slope","ema200_price"]  (tests both; Unger §3.1 recommends EMA200)
+4. Donchian exit = don_n // 2  (classic Turtle rule, not a free parameter)
+5. Universe: top 70 USDT spot symbols (consistent with T2–T14)
+6. New output: phase_t1_stability_report.txt  (canonical parameter recommendation)
 
-Nota:
-- Su Binance Spot gli short non sono eseguibili direttamente.
-- In questa fase di research li simuliamo separatamente per capire se esiste edge teorico.
-- Prima del paper/live spot reale potremo congelare solo LONG o usare short solo come informazione di regime.
+Side: LONG only (Binance Spot — no direct shorting)
 
-Author: ChatGPT per Jean
+Grid size: 4 TF × 7 N × 2 filters × 2 ATR mults = 112 combos × 70 symbols
+
+Outputs: data/research_trend_t1/
+    phase_t1_trend_discovery_trades.csv
+    phase_t1_trend_discovery_summary.csv
+    phase_t1_stability_report.txt    ← READ THIS to configure T2
 """
 
 from __future__ import annotations
 
-import argparse
-import math
 import time
-from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -47,654 +41,545 @@ import pandas as pd
 try:
     import ccxt
 except ImportError as exc:
-    raise SystemExit(
-        "Manca ccxt. Installa con:\n\n"
-        "pip install ccxt pandas numpy\n"
-    ) from exc
+    raise SystemExit("Install ccxt:  pip install ccxt pandas numpy") from exc
 
 
-# ============================================================
-# CONFIG DEFAULT
-# ============================================================
+# ─────────────────────────────────────────────────────────────────────────────
+# CONFIG
+# ─────────────────────────────────────────────────────────────────────────────
 
-DEFAULT_BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = DEFAULT_BASE_DIR / "data"
-RAW_DIR = DATA_DIR / "raw_trend_t1"
-OUT_DIR = DATA_DIR / "research_trend_t1"
+ROOT    = Path(__file__).resolve().parent
+RAW_DIR = ROOT / "data" / "raw_trend_t1"
+OUT_DIR = ROOT / "data" / "research_trend_t1"
+RAW_DIR.mkdir(parents=True, exist_ok=True)
+OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-EXCLUDED_BASES = {
-    "USDC", "BUSD", "TUSD", "USDP", "PAXG", "XAUT", "FDUSD",
-    "USDD", "DAI", "USD1", "RLUSD", "EUR", "AEUR", "EURI"
+# Timeframes — multi-day, aligned with Unger §2.1 Donchian channel approach
+TIMEFRAMES    = ["4h", "6h", "8h", "1d"]
+TF_LIMITS     = {"4h": 1500, "6h": 1200, "8h": 1000, "1d": 1500}  # Option B: ~4yr 1d history
+TF_HOURS      = {"4h": 4, "6h": 6, "8h": 8, "1d": 24}
+
+# Donchian N stability grid around the canonical N=20
+DONCHIAN_NS   = [10, 15, 20, 25, 30, 40, 55]
+# Exit = don_n // 2  (Turtle Trading canonical: 20-entry / 10-exit)
+# This is not a free parameter — it is derived from entry N.
+
+# Regime filter variants — both tested simultaneously
+FILTER_MODES  = ["ema50_slope", "ema200_price"]
+
+# Initial stop ATR multiples
+ATR_MULTS     = [2.0, 3.0]
+
+# Fixed
+EMA_SLOPE_N   = 50
+EMA_SLOPE_LB  = 10
+EMA_REGIME_N  = 200
+ATR_N         = 14
+UNIVERSE_SIZE = 70
+
+# Stability zone: N values "around" the canonical N=20
+STABILITY_ZONE_NS = [15, 20, 25]    # ±1 step from canonical
+STABILITY_PASS_PCT = 67.0           # ≥ 67% of zone combos profitable = PASS
+
+# Universe exclusions
+EXCLUDE_BASES = {
+    "USDC","BUSD","TUSD","USDP","PAXG","XAUT","FDUSD","USDD","DAI",
+    "USD1","RLUSD","EUR","AEUR","EURI","WBTC","BTTC",
 }
-
-LEVERAGED_KEYWORDS = ("UP", "DOWN", "BULL", "BEAR")
-
-DEFAULT_TIMEFRAMES = ["2h", "4h"]
-DEFAULT_LIMIT = 1200
-DEFAULT_TOP_N = 50
-
-DONCHIAN_ENTRY_LIST = [20, 40, 55]
-DONCHIAN_EXIT_LIST = [10, 20]
-ATR_MULT_LIST = [2.0, 3.0]
-EMA_LEN_LIST = [50]
-EMA_SLOPE_LOOKBACK_LIST = [5, 10]
-
-ATR_LEN = 14
-STARTING_EQUITY_R = 0.0
+LEVERAGED_KW = ("UP","DOWN","BULL","BEAR")
 
 
-# ============================================================
-# DATACLASSES
-# ============================================================
+# ─────────────────────────────────────────────────────────────────────────────
+# EXCHANGE / UNIVERSE
+# ─────────────────────────────────────────────────────────────────────────────
 
-@dataclass
-class Trade:
-    symbol: str
-    timeframe: str
-    side: str
-    concept: str
-    entry_time: str
-    exit_time: str
-    entry_price: float
-    exit_price: float
-    stop_price_initial: float
-    exit_reason: str
-    bars_held: int
-    risk_per_unit: float
-    pnl_R: float
-    donchian_entry: int
-    donchian_exit: int
-    atr_mult: float
-    ema_len: int
-    ema_slope_lookback: int
+def _init_exchange() -> "ccxt.binance":
+    return ccxt.binance({
+        "enableRateLimit": True,
+        "options": {"defaultType": "spot", "adjustForTimeDifference": True},
+    })
 
 
-@dataclass
-class SummaryRow:
-    concept: str
-    timeframe: str
-    side_mode: str
-    donchian_entry: int
-    donchian_exit: int
-    atr_mult: float
-    ema_len: int
-    ema_slope_lookback: int
-    symbols_tested: int
-    trades: int
-    total_R: float
-    avg_R: float
-    median_R: float
-    win_rate_pct: float
-    profit_factor: float
-    max_dd_R: float
-    best_trade_R: float
-    worst_trade_R: float
-    avg_bars_held: float
-    expectancy_R: float
-
-
-# ============================================================
-# UTILS
-# ============================================================
-
-def ensure_dirs() -> None:
-    RAW_DIR.mkdir(parents=True, exist_ok=True)
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-
-
-def safe_symbol_filename(symbol: str, timeframe: str) -> str:
-    return symbol.replace("/", "_").replace(":", "_") + f"_{timeframe}.csv"
-
-
-def is_good_spot_usdt_symbol(symbol: str, market: Dict) -> bool:
-    if not market.get("spot", False):
+def _is_valid(symbol: str, market: dict) -> bool:
+    if not market.get("spot") or not market.get("active", True):
         return False
-    if not market.get("active", True):
+    if not symbol.endswith("/USDT") or ":" in symbol:
         return False
-    if not symbol.endswith("/USDT"):
+    base = str(market.get("base", "")).upper()
+    if base in EXCLUDE_BASES:
         return False
-    if ":" in symbol:
+    if any(base.endswith(kw) for kw in LEVERAGED_KW):
         return False
-
-    base = market.get("base", "")
-    if base in EXCLUDED_BASES:
-        return False
-
-    upper_base = base.upper()
-    for kw in LEVERAGED_KEYWORDS:
-        # evita token leveraged tipo BTCUP, ETHDOWN ecc.
-        if upper_base.endswith(kw):
-            return False
-
     return True
 
 
-def init_exchange() -> "ccxt.binance":
-    exchange = ccxt.binance({
-        "enableRateLimit": True,
-        "options": {
-            "defaultType": "spot",
-            "adjustForTimeDifference": True,
-        },
-    })
-    return exchange
-
-
-def get_top_usdt_spot_symbols(exchange: "ccxt.binance", top_n: int) -> List[str]:
-    print("Loading Binance markets...")
+def get_universe(exchange: "ccxt.binance") -> List[str]:
+    print("Loading Binance markets and tickers...")
     markets = exchange.load_markets()
-
-    print("Loading Binance tickers...")
     tickers = exchange.fetch_tickers()
-
     rows = []
-    for symbol, market in markets.items():
-        if not is_good_spot_usdt_symbol(symbol, market):
+    for sym, m in markets.items():
+        if not _is_valid(sym, m):
             continue
-
-        ticker = tickers.get(symbol, {})
-        quote_volume = ticker.get("quoteVolume")
-        if quote_volume is None or not np.isfinite(quote_volume):
-            quote_volume = 0.0
-
-        rows.append((symbol, float(quote_volume)))
-
-    rows = sorted(rows, key=lambda x: x[1], reverse=True)
-    symbols = [s for s, _ in rows[:top_n]]
-
-    print(f"Selected {len(symbols)} USDT spot symbols:")
-    print(", ".join(symbols))
+        qv = float(tickers.get(sym, {}).get("quoteVolume") or 0)
+        if np.isfinite(qv):
+            rows.append((sym, qv))
+    rows.sort(key=lambda x: x[1], reverse=True)
+    symbols = [s for s, _ in rows[:UNIVERSE_SIZE]]
+    print(f"Selected {len(symbols)} USDT spot symbols.")
     return symbols
 
 
-def fetch_ohlcv_cached(
-    exchange: "ccxt.binance",
-    symbol: str,
-    timeframe: str,
-    limit: int,
-    refresh: bool = False,
-) -> Optional[pd.DataFrame]:
-    path = RAW_DIR / safe_symbol_filename(symbol, timeframe)
+# ─────────────────────────────────────────────────────────────────────────────
+# OHLCV
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _safe_fname(symbol: str, tf: str) -> str:
+    return symbol.replace("/", "_").replace(":", "_") + f"_{tf}.csv"
+
+
+def fetch_cached(exchange: "ccxt.binance", symbol: str, tf: str,
+                 refresh: bool = False) -> Optional[pd.DataFrame]:
+    path = RAW_DIR / _safe_fname(symbol, tf)
+    limit = TF_LIMITS[tf]
 
     if path.exists() and not refresh:
         try:
             df = pd.read_csv(path)
             df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
-            return df
-        except Exception as exc:
-            print(f"[WARN] Could not read cache {path}: {exc}. Refetching...")
+            return df if len(df) >= 200 else None
+        except Exception:
+            pass
 
-    try:
-        ohlcv = exchange.fetch_ohlcv(symbol, timeframe=timeframe, limit=limit)
-        time.sleep(exchange.rateLimit / 1000.0)
-    except Exception as exc:
-        print(f"[WARN] fetch failed for {symbol} {timeframe}: {exc}")
+    for attempt in range(3):
+        try:
+            raw = exchange.fetch_ohlcv(symbol, timeframe=tf, limit=limit)
+            time.sleep(exchange.rateLimit / 1000.0)
+            break
+        except Exception as e:
+            last_err = e
+            time.sleep(0.5 * (attempt + 1))
+    else:
+        print(f"  [WARN] {symbol} {tf}: {last_err}")
         return None
 
-    if not ohlcv or len(ohlcv) < 200:
-        print(f"[WARN] insufficient candles for {symbol} {timeframe}")
+    if not raw or len(raw) < 200:
         return None
 
-    df = pd.DataFrame(
-        ohlcv,
-        columns=["timestamp_ms", "open", "high", "low", "close", "volume"],
-    )
+    df = pd.DataFrame(raw, columns=["timestamp_ms","open","high","low","close","volume"])
     df["timestamp"] = pd.to_datetime(df["timestamp_ms"], unit="ms", utc=True)
-    df = df[["timestamp", "open", "high", "low", "close", "volume"]].copy()
-
-    # Closed candles only:
-    # Binance often returns the currently forming candle as the last row.
-    # We drop the last row for strict research consistency.
+    df = df[["timestamp","open","high","low","close","volume"]].copy()
+    # Drop the last (currently forming) candle
     df = df.iloc[:-1].reset_index(drop=True)
-
     df.to_csv(path, index=False)
     return df
 
 
-def add_indicators(
-    df: pd.DataFrame,
-    donchian_entry: int,
-    donchian_exit: int,
-    ema_len: int,
-    ema_slope_lookback: int,
-) -> pd.DataFrame:
+# ─────────────────────────────────────────────────────────────────────────────
+# INDICATORS
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _add_indicators(df: pd.DataFrame, don_n: int) -> pd.DataFrame:
     d = df.copy()
+    don_exit = max(don_n // 2, 5)
 
-    prev_close = d["close"].shift(1)
-    tr1 = d["high"] - d["low"]
-    tr2 = (d["high"] - prev_close).abs()
-    tr3 = (d["low"] - prev_close).abs()
-    tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
-    d["atr"] = tr.rolling(ATR_LEN).mean()
+    # ATR (fixed at ATR_N=14)
+    pc = d["close"].shift(1)
+    tr = pd.concat([d["high"]-d["low"], (d["high"]-pc).abs(), (d["low"]-pc).abs()], axis=1).max(axis=1)
+    d["atr"] = tr.rolling(ATR_N).mean()
 
-    d["ema"] = d["close"].ewm(span=ema_len, adjust=False).mean()
-    d["ema_slope"] = d["ema"] - d["ema"].shift(ema_slope_lookback)
+    # Donchian entry bands (shifted — no lookahead)
+    d["don_high"]     = d["high"].shift(1).rolling(don_n).max()
+    d["don_low"]      = d["low"].shift(1).rolling(don_n).min()
 
-    # Shifted Donchian levels:
-    # Entry on close crossing above/below levels known before current candle close.
-    d["donchian_high_entry"] = d["high"].shift(1).rolling(donchian_entry).max()
-    d["donchian_low_entry"] = d["low"].shift(1).rolling(donchian_entry).min()
+    # Donchian exit band (N//2 — Turtle Trading canonical)
+    d["don_low_exit"] = d["low"].shift(1).rolling(don_exit).min()
 
-    d["donchian_high_exit"] = d["high"].shift(1).rolling(donchian_exit).max()
-    d["donchian_low_exit"] = d["low"].shift(1).rolling(donchian_exit).min()
+    # EMA50 slope filter (ema50_slope mode)
+    d["ema50"]        = d["close"].ewm(span=EMA_SLOPE_N, adjust=False).mean()
+    d["ema_slope"]    = d["ema50"] - d["ema50"].shift(EMA_SLOPE_LB)
 
-    return d
+    # EMA200 price filter (ema200_price mode)
+    d["ema200"]       = d["close"].ewm(span=EMA_REGIME_N, adjust=False).mean()
+
+    return d, don_exit
 
 
-def backtest_symbol(
-    df: pd.DataFrame,
-    symbol: str,
-    timeframe: str,
-    donchian_entry: int,
-    donchian_exit: int,
-    atr_mult: float,
-    ema_len: int,
-    ema_slope_lookback: int,
-    side_mode: str,
-) -> List[Trade]:
-    """
-    side_mode: "long", "short", "both"
-    """
-    d = add_indicators(
-        df=df,
-        donchian_entry=donchian_entry,
-        donchian_exit=donchian_exit,
-        ema_len=ema_len,
-        ema_slope_lookback=ema_slope_lookback,
-    )
+def _filter_ok(row: pd.Series, filter_mode: str) -> bool:
+    """Return True if the regime filter allows a LONG entry on this bar."""
+    if filter_mode == "ema50_slope":
+        es = float(row.get("ema_slope", np.nan))
+        return np.isfinite(es) and es > 0
+    # ema200_price
+    e200 = float(row.get("ema200", np.nan))
+    close = float(row.get("close", np.nan))
+    return np.isfinite(e200) and np.isfinite(close) and close > e200
 
-    trades: List[Trade] = []
-    position = None
 
-    for i in range(len(d)):
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKTESTER (single symbol)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _backtest(sym: str, df: pd.DataFrame, don_n: int, filter_mode: str,
+              atr_mult: float) -> list[dict]:
+    d, don_exit = _add_indicators(df, don_n)
+
+    # Warmup: need enough bars for all indicators
+    warmup = max(don_n, don_exit, EMA_SLOPE_N + EMA_SLOPE_LB, EMA_REGIME_N, ATR_N) + 5
+
+    pos = None
+    trades = []
+
+    for i in range(warmup, len(d)):
         row = d.iloc[i]
-
-        if not np.isfinite(row["atr"]) or row["atr"] <= 0:
-            continue
-        if not np.isfinite(row["ema_slope"]):
-            continue
-        if not np.isfinite(row["donchian_high_entry"]) or not np.isfinite(row["donchian_low_entry"]):
-            continue
-        if not np.isfinite(row["donchian_high_exit"]) or not np.isfinite(row["donchian_low_exit"]):
-            continue
-
-        ts = row["timestamp"]
-        close = float(row["close"])
-        high = float(row["high"])
-        low = float(row["low"])
         atr = float(row["atr"])
-
-        if position is None:
-            allow_long = side_mode in ("long", "both")
-            allow_short = side_mode in ("short", "both")
-
-            long_signal = (
-                allow_long
-                and close > float(row["donchian_high_entry"])
-                and float(row["ema_slope"]) > 0
-            )
-            short_signal = (
-                allow_short
-                and close < float(row["donchian_low_entry"])
-                and float(row["ema_slope"]) < 0
-            )
-
-            # In caso rarissimo di doppio segnale, non entra.
-            if long_signal and not short_signal:
-                entry_price = close
-                risk_per_unit = atr * atr_mult
-                stop_price = entry_price - risk_per_unit
-                position = {
-                    "side": "long",
-                    "entry_idx": i,
-                    "entry_time": ts,
-                    "entry_price": entry_price,
-                    "stop_initial": stop_price,
-                    "risk_per_unit": risk_per_unit,
-                }
-
-            elif short_signal and not long_signal:
-                entry_price = close
-                risk_per_unit = atr * atr_mult
-                stop_price = entry_price + risk_per_unit
-                position = {
-                    "side": "short",
-                    "entry_idx": i,
-                    "entry_time": ts,
-                    "entry_price": entry_price,
-                    "stop_initial": stop_price,
-                    "risk_per_unit": risk_per_unit,
-                }
-
+        if not np.isfinite(atr) or atr <= 0:
             continue
 
-        # Manage open position
-        side = position["side"]
-        entry_price = position["entry_price"]
-        stop_initial = position["stop_initial"]
-        risk_per_unit = position["risk_per_unit"]
-        bars_held = i - position["entry_idx"]
+        close = float(row["close"])
+        high  = float(row["high"])
+        low   = float(row["low"])
+        t     = row["timestamp"]
+        dh    = row.get("don_high")
+        dl    = row.get("don_low")
+        dl_ex = row.get("don_low_exit")
 
-        exit_price = None
-        exit_reason = None
+        if not all(np.isfinite(float(x)) for x in [dh, dl, dl_ex]):
+            continue
 
-        if side == "long":
-            # Stop check first, conservative assumption.
-            if low <= stop_initial:
-                exit_price = stop_initial
-                exit_reason = "initial_stop"
-            elif close < float(row["donchian_low_exit"]):
-                exit_price = close
-                exit_reason = "donchian_exit"
+        if pos is not None:
+            # Exit conditions: initial stop OR Donchian exit
+            if low <= pos["stop"]:
+                r = (pos["stop"] - pos["entry"]) / pos["risk"]
+                trades.append(_make_trade(sym, pos, t, pos["stop"], r,
+                                          "initial_stop", don_n, don_exit,
+                                          filter_mode, atr_mult))
+                pos = None
+                continue
+            elif close < float(dl_ex):
+                r = (close - pos["entry"]) / pos["risk"]
+                trades.append(_make_trade(sym, pos, t, close, r,
+                                          "donchian_exit", don_n, don_exit,
+                                          filter_mode, atr_mult))
+                pos = None
+                continue
 
-            if exit_price is not None:
-                pnl_R = (exit_price - entry_price) / risk_per_unit
-                trades.append(Trade(
-                    symbol=symbol,
-                    timeframe=timeframe,
-                    side=side,
-                    concept="donchian_ema_clean",
-                    entry_time=str(position["entry_time"]),
-                    exit_time=str(ts),
-                    entry_price=entry_price,
-                    exit_price=float(exit_price),
-                    stop_price_initial=stop_initial,
-                    exit_reason=exit_reason,
-                    bars_held=bars_held,
-                    risk_per_unit=risk_per_unit,
-                    pnl_R=float(pnl_R),
-                    donchian_entry=donchian_entry,
-                    donchian_exit=donchian_exit,
-                    atr_mult=atr_mult,
-                    ema_len=ema_len,
-                    ema_slope_lookback=ema_slope_lookback,
-                ))
-                position = None
-
-        elif side == "short":
-            if high >= stop_initial:
-                exit_price = stop_initial
-                exit_reason = "initial_stop"
-            elif close > float(row["donchian_high_exit"]):
-                exit_price = close
-                exit_reason = "donchian_exit"
-
-            if exit_price is not None:
-                pnl_R = (entry_price - exit_price) / risk_per_unit
-                trades.append(Trade(
-                    symbol=symbol,
-                    timeframe=timeframe,
-                    side=side,
-                    concept="donchian_ema_clean",
-                    entry_time=str(position["entry_time"]),
-                    exit_time=str(ts),
-                    entry_price=entry_price,
-                    exit_price=float(exit_price),
-                    stop_price_initial=stop_initial,
-                    exit_reason=exit_reason,
-                    bars_held=bars_held,
-                    risk_per_unit=risk_per_unit,
-                    pnl_R=float(pnl_R),
-                    donchian_entry=donchian_entry,
-                    donchian_exit=donchian_exit,
-                    atr_mult=atr_mult,
-                    ema_len=ema_len,
-                    ema_slope_lookback=ema_slope_lookback,
-                ))
-                position = None
+        if pos is None:
+            long_signal = close > float(dh) and _filter_ok(row, filter_mode)
+            if long_signal:
+                risk = atr * atr_mult
+                if risk > 0:
+                    pos = dict(entry_time=t, entry=close,
+                               stop=close - risk, risk=risk)
 
     return trades
 
 
-def compute_max_drawdown_r(r_values: List[float]) -> float:
-    if not r_values:
-        return 0.0
-    equity = np.cumsum(r_values)
-    peak = np.maximum.accumulate(equity)
-    dd = equity - peak
-    return float(dd.min())
+def _make_trade(sym, pos, exit_time, exit_px, net_r, reason,
+                don_n, don_exit, filter_mode, atr_mult):
+    return {
+        "symbol":       sym,
+        "side":         "LONG",
+        "filter_mode":  filter_mode,
+        "don_n":        don_n,
+        "don_exit_n":   don_exit,
+        "atr_mult":     atr_mult,
+        "entry_time":   pos["entry_time"],
+        "exit_time":    exit_time,
+        "entry_price":  pos["entry"],
+        "exit_price":   float(exit_px),
+        "initial_stop": pos["entry"] - pos["risk"],
+        "initial_risk": pos["risk"],
+        "net_r":        float(net_r),
+        "exit_reason":  reason,
+    }
 
 
-def profit_factor(r_values: List[float]) -> float:
-    wins = [x for x in r_values if x > 0]
-    losses = [x for x in r_values if x < 0]
-    gross_profit = sum(wins)
-    gross_loss = abs(sum(losses))
-    if gross_loss == 0:
-        return float("inf") if gross_profit > 0 else 0.0
-    return float(gross_profit / gross_loss)
+# ─────────────────────────────────────────────────────────────────────────────
+# STATS HELPERS
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _pf(r: np.ndarray) -> float:
+    r = r[np.isfinite(r)]
+    g = r[r > 0].sum(); l = -r[r < 0].sum()
+    return float(g / l) if l > 1e-12 else (float("inf") if g > 0 else 0.0)
 
 
-def summarize_trades(
-    trades: List[Trade],
-    timeframe: str,
-    side_mode: str,
-    donchian_entry: int,
-    donchian_exit: int,
-    atr_mult: float,
-    ema_len: int,
-    ema_slope_lookback: int,
-    symbols_tested: int,
-) -> SummaryRow:
-    r = [t.pnl_R for t in trades]
-    n = len(r)
+def _dd(r: np.ndarray) -> float:
+    if not len(r): return 0.0
+    eq = np.cumsum(r)
+    return float((eq - np.maximum.accumulate(eq)).min())
 
-    if n == 0:
-        return SummaryRow(
-            concept="donchian_ema_clean",
-            timeframe=timeframe,
-            side_mode=side_mode,
-            donchian_entry=donchian_entry,
-            donchian_exit=donchian_exit,
-            atr_mult=atr_mult,
-            ema_len=ema_len,
-            ema_slope_lookback=ema_slope_lookback,
-            symbols_tested=symbols_tested,
-            trades=0,
-            total_R=0.0,
-            avg_R=0.0,
-            median_R=0.0,
-            win_rate_pct=0.0,
-            profit_factor=0.0,
-            max_dd_R=0.0,
-            best_trade_R=0.0,
-            worst_trade_R=0.0,
-            avg_bars_held=0.0,
-            expectancy_R=0.0,
+
+def _stats(trades: list[dict]) -> dict:
+    if not trades:
+        return dict(trades=0, total_r=0.0, avg_r=0.0, pf=0.0,
+                    max_dd_r=0.0, win_rate_pct=0.0, median_r=0.0)
+    r = np.array([t["net_r"] for t in trades], dtype=float)
+    r = r[np.isfinite(r)]
+    if not len(r):
+        return dict(trades=0, total_r=0.0, avg_r=0.0, pf=0.0,
+                    max_dd_r=0.0, win_rate_pct=0.0, median_r=0.0)
+    return dict(
+        trades=len(r), total_r=float(r.sum()), avg_r=float(r.mean()),
+        median_r=float(np.median(r)), pf=_pf(r), max_dd_r=_dd(r),
+        win_rate_pct=float((r > 0).mean() * 100),
+    )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# STABILITY ANALYSIS
+# ─────────────────────────────────────────────────────────────────────────────
+
+def stability_analysis(grid: pd.DataFrame) -> pd.DataFrame:
+    """
+    For each (timeframe, filter_mode, atr_mult) group:
+    - Count % of STABILITY_ZONE_NS combos that are profitable (PF > 1.0)
+    - Rank groups by zone stability %
+    """
+    rows = []
+    for (tf, fm, am), g in grid.groupby(["timeframe","filter_mode","atr_mult"]):
+        zone = g[g["don_n"].isin(STABILITY_ZONE_NS)]
+        total_zone  = len(zone)
+        pf_gt1      = int((zone["pf"] > 1.0).sum())
+        avg_r_pos   = int((zone["avg_r"] > 0).sum())
+        strong      = int(((zone["pf"] > 1.2) & (zone["avg_r"] > 0.05)).sum())
+        pct         = 100.0 * pf_gt1 / max(total_zone, 1)
+
+        # Stats for canonical N=20 specifically
+        can20 = g[g["don_n"] == 20]
+        can_trades   = int(can20["trades"].sum()) if not can20.empty else 0
+        can_avg_r    = float(can20["avg_r"].mean()) if not can20.empty else 0.0
+        can_pf       = float(can20["pf"].mean()) if not can20.empty else 0.0
+        can_dd       = float(can20["max_dd_r"].mean()) if not can20.empty else 0.0
+
+        rows.append(dict(
+            timeframe=tf, filter_mode=fm, atr_mult=am,
+            zone_total=total_zone, zone_pf_gt1=pf_gt1,
+            zone_avg_r_positive=avg_r_pos, zone_strong=strong,
+            zone_stability_pct=round(pct, 1),
+            stability_verdict="PASS" if pct >= STABILITY_PASS_PCT else (
+                "WARN" if pct >= 40 else "FAIL"),
+            can_n20_trades=can_trades, can_n20_avg_r=round(can_avg_r, 4),
+            can_n20_pf=round(can_pf, 3), can_n20_max_dd_r=round(can_dd, 2),
+        ))
+
+    return pd.DataFrame(rows).sort_values(
+        ["zone_stability_pct","can_n20_pf"], ascending=False
+    ).reset_index(drop=True)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# REPORT WRITER
+# ─────────────────────────────────────────────────────────────────────────────
+
+def write_report(grid: pd.DataFrame, sa: pd.DataFrame) -> None:
+    lines = [
+        "PHASE T1 — DONCHIAN CHANNEL BREAKOUT CONCEPT DISCOVERY",
+        "=" * 80,
+        "",
+        "Unger §2.1: entry on Donchian channel breakout.",
+        "Unger §3.1: EMA200 price-above filter as regime gate.",
+        "Stability principle: edge must be consistent AROUND the chosen N, not just AT it.",
+        "",
+        f"Grid: {len(TIMEFRAMES)} timeframes × {len(DONCHIAN_NS)} Donchian N × "
+        f"{len(FILTER_MODES)} filters × {len(ATR_MULTS)} ATR mults = "
+        f"{len(TIMEFRAMES)*len(DONCHIAN_NS)*len(FILTER_MODES)*len(ATR_MULTS)} combos",
+        f"Stability zone: N ∈ {STABILITY_ZONE_NS}  (PASS threshold: ≥{STABILITY_PASS_PCT:.0f}%)",
+        "",
+        "═" * 80,
+        "STABILITY RANKING — best (TF, filter) combos by zone stability",
+        "═" * 80,
+    ]
+
+    for _, row in sa.head(10).iterrows():
+        verdict = row["stability_verdict"]
+        lines.append(
+            f"  [{verdict:4s}] TF={row['timeframe']:3s}  filter={row['filter_mode']:14s}  "
+            f"ATR×{row['atr_mult']:.1f}  "
+            f"zone={row['zone_pf_gt1']}/{row['zone_total']} profitable "
+            f"({row['zone_stability_pct']:.0f}%)  "
+            f"N=20→ trades={row['can_n20_trades']}  avg_r={row['can_n20_avg_r']:+.4f}  "
+            f"pf={row['can_n20_pf']:.2f}  dd={row['can_n20_max_dd_r']:+.2f}"
         )
 
-    return SummaryRow(
-        concept="donchian_ema_clean",
-        timeframe=timeframe,
-        side_mode=side_mode,
-        donchian_entry=donchian_entry,
-        donchian_exit=donchian_exit,
-        atr_mult=atr_mult,
-        ema_len=ema_len,
-        ema_slope_lookback=ema_slope_lookback,
-        symbols_tested=symbols_tested,
-        trades=n,
-        total_R=float(np.sum(r)),
-        avg_R=float(np.mean(r)),
-        median_R=float(np.median(r)),
-        win_rate_pct=float(100.0 * np.mean([x > 0 for x in r])),
-        profit_factor=profit_factor(r),
-        max_dd_R=compute_max_drawdown_r(r),
-        best_trade_R=float(np.max(r)),
-        worst_trade_R=float(np.min(r)),
-        avg_bars_held=float(np.mean([t.bars_held for t in trades])),
-        expectancy_R=float(np.mean(r)),
-    )
-
-
-def write_csvs(all_trades: List[Trade], summary_rows: List[SummaryRow]) -> None:
-    trades_path = OUT_DIR / "phase_t1_trend_discovery_trades.csv"
-    summary_path = OUT_DIR / "phase_t1_trend_discovery_summary.csv"
-
-    trades_df = pd.DataFrame([asdict(t) for t in all_trades])
-    summary_df = pd.DataFrame([asdict(s) for s in summary_rows])
-
-    if not trades_df.empty:
-        trades_df = trades_df.sort_values(["timeframe", "symbol", "entry_time"]).reset_index(drop=True)
-    if not summary_df.empty:
-        summary_df = summary_df.sort_values(
-            ["timeframe", "total_R", "profit_factor", "trades"],
-            ascending=[True, False, False, False],
-        ).reset_index(drop=True)
-
-    trades_df.to_csv(trades_path, index=False)
-    summary_df.to_csv(summary_path, index=False)
-
-    print("\nSaved:")
-    print(f"  Trades : {trades_path}")
-    print(f"  Summary: {summary_path}")
-
-    if not summary_df.empty:
-        print("\nTop 10 configurations by total_R:")
-        cols = [
-            "timeframe", "side_mode", "donchian_entry", "donchian_exit",
-            "atr_mult", "ema_slope_lookback", "trades", "total_R",
-            "avg_R", "profit_factor", "max_dd_R"
+    # Best candidate
+    best = sa.iloc[0] if not sa.empty else None
+    if best is not None:
+        lines += [
+            "",
+            "─" * 80,
+            "RECOMMENDED CANONICAL CONFIGURATION",
+            "─" * 80,
+            f"  Timeframe:    {best['timeframe']}",
+            f"  Filter mode:  {best['filter_mode']}",
+            f"  Donchian N:   20  (stability zone: {best['zone_stability_pct']:.0f}% pass)",
+            f"  ATR mult:     {best['atr_mult']:.1f}",
+            f"  Donchian exit: {20 // 2} (= N // 2)",
+            "",
+            "  → Use these values in T2 command:",
+            f"  python phase_t2_core_trend_engine.py "
+            f"--timeframe {best['timeframe']} "
+            f"--filter-mode {best['filter_mode']} "
+            f"--donchian-entry 20 --atr-mult {best['atr_mult']:.1f}",
         ]
-        print(summary_df[cols].head(10).to_string(index=False))
 
+    # Per-TF detail
+    lines += ["", "═" * 80, "DONCHIAN N SENSITIVITY PER TIMEFRAME + FILTER", "═" * 80]
 
-def run(args: argparse.Namespace) -> None:
-    ensure_dirs()
-
-    exchange = init_exchange()
-
-    symbols = get_top_usdt_spot_symbols(exchange, top_n=args.top_n)
-
-    # Load/cache data first
-    data: Dict[Tuple[str, str], pd.DataFrame] = {}
-    for timeframe in args.timeframes:
-        print(f"\n=== Fetch/cache candles timeframe={timeframe} ===")
-        for idx, symbol in enumerate(symbols, start=1):
-            print(f"[{idx}/{len(symbols)}] {symbol} {timeframe}")
-            df = fetch_ohlcv_cached(
-                exchange=exchange,
-                symbol=symbol,
-                timeframe=timeframe,
-                limit=args.limit,
-                refresh=args.refresh,
+    for (tf, fm, am), g in grid.groupby(["timeframe","filter_mode","atr_mult"]):
+        g_sorted = g.sort_values("don_n")
+        lines += [f"", f"  TF={tf}  filter={fm}  ATR×{am:.1f}"]
+        for _, row in g_sorted.iterrows():
+            n = int(row["don_n"])
+            star = " ← STABILITY ZONE" if n in STABILITY_ZONE_NS else ""
+            can  = " ← CANONICAL"      if n == 20 else ""
+            sign = "[+]" if row["pf"] > 1.0 and row["avg_r"] > 0 else "[-]"
+            lines.append(
+                f"    {sign} N={n:2d}  exit={n//2:2d}  trades={int(row['trades']):4d}  "
+                f"avg_r={row['avg_r']:+.3f}  pf={row['pf']:.2f}  "
+                f"dd={row['max_dd_r']:+.2f}{star}{can}"
             )
-            if df is None or len(df) < 250:
-                continue
-            data[(symbol, timeframe)] = df
 
-    all_trades: List[Trade] = []
-    summary_rows: List[SummaryRow] = []
+    lines += [
+        "",
+        "═" * 80,
+        "INTERPRETATION (Unger §2.1 methodology)",
+        "═" * 80,
+        "",
+        f"  PASS  (stability ≥ {STABILITY_PASS_PCT:.0f}%): Edge is robust. Use recommended config in T2.",
+        "  WARN  (stability 40–67%): Edge exists but parameter-sensitive. Consider widening N.",
+        "  FAIL  (stability < 40%):  Edge is fragile. Do NOT proceed. Consider §2.6 (ATR gate).",
+        "",
+        "  Win rate check (Unger §4.1): a healthy TF system has win rate 30–45%.",
+        "  A win rate above 55% is suspicious — likely overfitting or holding losers.",
+        "",
+        "  Cost check (Unger §4.2): avg_r must be > 0.15R to cover Binance taker fees.",
+        "  If avg_r < 0.15R on the recommended combo, the edge is too thin for live trading.",
+        "",
+        "  T9A paper-live remains FROZEN regardless of T1 findings.",
+        "  T1 findings feed T2 → T3B → T4–T8 → new paper config (separate from T9A).",
+    ]
 
-    side_modes = []
-    if args.long:
-        side_modes.append("long")
-    if args.short:
-        side_modes.append("short")
-    if args.both:
-        side_modes.append("both")
-
-    if not side_modes:
-        side_modes = ["long", "short", "both"]
-
-    for timeframe in args.timeframes:
-        symbols_with_data = [s for s in symbols if (s, timeframe) in data]
-        print(f"\n=== Backtest timeframe={timeframe}, symbols={len(symbols_with_data)} ===")
-
-        for side_mode in side_modes:
-            for donchian_entry in DONCHIAN_ENTRY_LIST:
-                for donchian_exit in DONCHIAN_EXIT_LIST:
-                    if donchian_exit >= donchian_entry:
-                        continue
-                    for atr_mult in ATR_MULT_LIST:
-                        for ema_len in EMA_LEN_LIST:
-                            for ema_slope_lookback in EMA_SLOPE_LOOKBACK_LIST:
-                                combo_trades: List[Trade] = []
-
-                                for symbol in symbols_with_data:
-                                    df = data[(symbol, timeframe)]
-                                    trades = backtest_symbol(
-                                        df=df,
-                                        symbol=symbol,
-                                        timeframe=timeframe,
-                                        donchian_entry=donchian_entry,
-                                        donchian_exit=donchian_exit,
-                                        atr_mult=atr_mult,
-                                        ema_len=ema_len,
-                                        ema_slope_lookback=ema_slope_lookback,
-                                        side_mode=side_mode,
-                                    )
-                                    combo_trades.extend(trades)
-
-                                all_trades.extend(combo_trades)
-                                summary_rows.append(summarize_trades(
-                                    trades=combo_trades,
-                                    timeframe=timeframe,
-                                    side_mode=side_mode,
-                                    donchian_entry=donchian_entry,
-                                    donchian_exit=donchian_exit,
-                                    atr_mult=atr_mult,
-                                    ema_len=ema_len,
-                                    ema_slope_lookback=ema_slope_lookback,
-                                    symbols_tested=len(symbols_with_data),
-                                ))
-
-                                print(
-                                    f"{timeframe} {side_mode:5s} "
-                                    f"DE={donchian_entry:2d} DX={donchian_exit:2d} "
-                                    f"ATR={atr_mult:.1f} slope={ema_slope_lookback:2d} "
-                                    f"trades={len(combo_trades):4d} "
-                                    f"R={sum(t.pnl_R for t in combo_trades):8.2f}"
-                                )
-
-    write_csvs(all_trades=all_trades, summary_rows=summary_rows)
+    (OUT_DIR / "phase_t1_stability_report.txt").write_text("\n".join(lines), encoding="utf-8")
 
 
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Phase T1 — Clean Trend Concept Discovery for Binance Spot"
-    )
-    parser.add_argument(
-        "--top-n",
-        type=int,
-        default=DEFAULT_TOP_N,
-        help=f"Numero massimo di simboli USDT spot da testare. Default: {DEFAULT_TOP_N}",
-    )
-    parser.add_argument(
-        "--limit",
-        type=int,
-        default=DEFAULT_LIMIT,
-        help=f"Numero candele richieste da Binance. Default: {DEFAULT_LIMIT}",
-    )
-    parser.add_argument(
-        "--timeframes",
-        nargs="+",
-        default=DEFAULT_TIMEFRAMES,
-        help='Timeframe da testare. Esempio: --timeframes 2h 4h',
-    )
-    parser.add_argument(
-        "--refresh",
-        action="store_true",
-        help="Riscarica i dati anche se già presenti in cache.",
-    )
-    parser.add_argument(
-        "--long",
-        action="store_true",
-        help="Testa solo long.",
-    )
-    parser.add_argument(
-        "--short",
-        action="store_true",
-        help="Testa solo short teorici.",
-    )
-    parser.add_argument(
-        "--both",
-        action="store_true",
-        help="Testa long+short nello stesso motore.",
-    )
-    return parser.parse_args()
+# ─────────────────────────────────────────────────────────────────────────────
+# MAIN
+# ─────────────────────────────────────────────────────────────────────────────
+
+def main(refresh: bool = False) -> int:
+    print("=" * 80)
+    print("PHASE T1 — DONCHIAN CHANNEL BREAKOUT CONCEPT DISCOVERY")
+    print("=" * 80)
+    print(f"Timeframes:    {TIMEFRAMES}")
+    print(f"Donchian N:    {DONCHIAN_NS}  (exit = N // 2)")
+    print(f"Filter modes:  {FILTER_MODES}")
+    print(f"ATR mults:     {ATR_MULTS}")
+    print(f"Universe:      top {UNIVERSE_SIZE} USDT spot symbols")
+    print()
+
+    exchange = _init_exchange()
+    symbols  = get_universe(exchange)
+
+    # Fetch and cache OHLCV for all symbols × timeframes
+    data: Dict[Tuple[str, str], pd.DataFrame] = {}
+    for tf in TIMEFRAMES:
+        print(f"\n=== Fetching {tf} candles ===")
+        for idx, sym in enumerate(symbols, 1):
+            print(f"  [{idx:3d}/{len(symbols)}] {sym}", end="  ")
+            df = fetch_cached(exchange, sym, tf, refresh=refresh)
+            if df is not None and len(df) >= max(EMA_REGIME_N + EMA_SLOPE_LB + 10, 250):
+                data[(sym, tf)] = df
+                print(f"OK ({len(df)} bars)")
+            else:
+                print("SKIP")
+
+    # Run grid sweep
+    all_trades: list[dict] = []
+    summary_rows: list[dict] = []
+    total_combos = len(TIMEFRAMES) * len(DONCHIAN_NS) * len(FILTER_MODES) * len(ATR_MULTS)
+    done = 0
+
+    for tf in TIMEFRAMES:
+        symbols_with_data = [s for s in symbols if (s, tf) in data]
+        if not symbols_with_data:
+            print(f"\nWARN: no data for {tf}, skipping.")
+            continue
+        print(f"\n=== Backtesting {tf} ({len(symbols_with_data)} symbols) ===")
+
+        for don_n in DONCHIAN_NS:
+            for fm in FILTER_MODES:
+                for am in ATR_MULTS:
+                    combo_trades: list[dict] = []
+                    for sym in symbols_with_data:
+                        combo_trades.extend(_backtest(sym, data[(sym, tf)], don_n, fm, am))
+
+                    # Tag with timeframe
+                    for t in combo_trades:
+                        t["timeframe"] = tf
+
+                    s = _stats(combo_trades)
+                    row = dict(timeframe=tf, don_n=don_n, don_exit_n=don_n//2,
+                               filter_mode=fm, atr_mult=am, symbols=len(symbols_with_data))
+                    row.update(s)
+                    summary_rows.append(row)
+                    all_trades.extend(combo_trades)
+                    done += 1
+
+                    print(
+                        f"  [{done:3d}/{total_combos}] TF={tf} N={don_n:2d} "
+                        f"exit={don_n//2:2d} {fm:14s} ATR×{am:.1f}  "
+                        f"trades={s['trades']:4d}  avg_r={s['avg_r']:+.3f}  pf={s['pf']:.2f}"
+                    )
+
+    if not summary_rows:
+        print("ERROR: no trades produced. Check data / exchange connectivity.")
+        return 1
+
+    grid = pd.DataFrame(summary_rows)
+
+    # Stability analysis
+    sa = stability_analysis(grid)
+    print("\n=== STABILITY RANKING (top 5) ===")
+    cols = ["timeframe","filter_mode","atr_mult","zone_stability_pct",
+            "stability_verdict","can_n20_avg_r","can_n20_pf"]
+    print(sa[cols].head(5).to_string(index=False))
+
+    # Write outputs
+    trades_df = pd.DataFrame(all_trades)
+    if not trades_df.empty:
+        trades_df["entry_time"] = pd.to_datetime(trades_df["entry_time"], utc=True, errors="coerce")
+        trades_df["exit_time"]  = pd.to_datetime(trades_df["exit_time"],  utc=True, errors="coerce")
+        trades_df = trades_df.sort_values(["timeframe","entry_time","symbol"]).reset_index(drop=True)
+
+    trades_df.to_csv(OUT_DIR / "phase_t1_trend_discovery_trades.csv", index=False)
+    grid.to_csv(OUT_DIR / "phase_t1_trend_discovery_summary.csv", index=False)
+    sa.to_csv(OUT_DIR / "phase_t1_stability_ranking.csv", index=False)
+    write_report(grid, sa)
+
+    if not sa.empty:
+        best = sa.iloc[0]
+        print(f"\nRECOMMENDED: TF={best['timeframe']}  filter={best['filter_mode']}  "
+              f"N=20  ATR×{best['atr_mult']:.1f}  "
+              f"stability={best['zone_stability_pct']:.0f}%  "
+              f"verdict={best['stability_verdict']}")
+        print(f"\nRun T2 with:")
+        print(f"  python phase_t2_core_trend_engine.py "
+              f"--timeframe {best['timeframe']} "
+              f"--filter-mode {best['filter_mode']} "
+              f"--donchian-entry 20 --atr-mult {best['atr_mult']:.1f}")
+
+    print("\n[OK] phase_t1_trend_discovery_trades.csv")
+    print("[OK] phase_t1_trend_discovery_summary.csv")
+    print("[OK] phase_t1_stability_ranking.csv")
+    print("[OK] phase_t1_stability_report.txt  ← READ THIS before running T2")
+    return 0
 
 
 if __name__ == "__main__":
-    args = parse_args()
-    run(args)
+    import argparse
+    p = argparse.ArgumentParser()
+    p.add_argument("--refresh", action="store_true", help="Re-download OHLCV even if cached")
+    args = p.parse_args()
+    raise SystemExit(main(refresh=args.refresh))

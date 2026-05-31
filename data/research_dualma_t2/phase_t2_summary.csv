@@ -1,0 +1,2 @@
+method,timeframe,fast_ema,slow_ema,filter_mode,atr_mult,total_trades,symbols_traded,winners,losers,win_rate_pct,avg_r,total_r,profit_factor,max_dd_r
+DualMA,1d,30,100,ema200_price,2.0,117,50,17,100,14.53,-0.2656,-31.0735,0.6506,-40.4012

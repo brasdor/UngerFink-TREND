@@ -1,0 +1,223 @@
+PHASE T1 -- KeltnerLong Concept Discovery
+================================================================================
+
+Entry:   Close > EMA(N) + ATR(N)*keltner_mult  (upper band, shifted 1 bar)
+Filter:  ema200_price: close > EMA200
+         ema50_slope:  EMA50[i] > EMA50[i-1]
+Stop:    entry - ATR(N)*stop_mult
+Exit:    low<=stop  OR  close<EMA(N)  (midline cross-under)
+
+Exchange:        Binance Spot (LONG only)
+Timeframe:       1d
+Keltner N grid:  [10, 15, 20, 25, 30, 40, 55]
+Keltner mults:   [1.5, 2.0, 2.5, 3.0]
+Stop mults:      [2.0, 3.0]
+Filter modes:    ['ema200_price', 'ema50_slope']
+Total combos:    112
+Symbols:         63
+Backtest bars:   1500  (~4yr on 1D)
+
+Section 4.2 cost floor:  avg_r > 0.15R  (Binance Spot)
+Stability zone:  canonical N +/-1 grid step, PASS if >=67%
+
+================================================================================
+STABILITY RANKING  (best canonical N per config, sorted by stability)
+================================================================================
+  [PASS] ema200_price    km=3.0 sm=2.0  N=15 zone=[10, 15, 20] stab=3/3 (100%)  avg_r=+0.4168  pf=1.67  win%=25.7%  CF-PASS
+  [PASS] ema200_price    km=2.5 sm=2.0  N=15 zone=[10, 15, 20] stab=3/3 (100%)  avg_r=+0.3492  pf=1.57  win%=27.6%  CF-PASS
+  [PASS] ema200_price    km=3.0 sm=3.0  N=15 zone=[10, 15, 20] stab=3/3 (100%)  avg_r=+0.3374  pf=1.75  win%=30.4%  CF-PASS
+  [PASS] ema200_price    km=2.5 sm=3.0  N=15 zone=[10, 15, 20] stab=3/3 (100%)  avg_r=+0.2460  pf=1.55  win%=29.8%  CF-PASS
+  [PASS] ema200_price    km=2.0 sm=2.0  N=15 zone=[10, 15, 20] stab=3/3 (100%)  avg_r=+0.2250  pf=1.39  win%=26.7%  CF-PASS
+  [PASS] ema200_price    km=1.5 sm=2.0  N=15 zone=[10, 15, 20] stab=3/3 (100%)  avg_r=+0.1842  pf=1.36  win%=26.8%  CF-PASS
+  [PASS] ema200_price    km=2.0 sm=3.0  N=15 zone=[10, 15, 20] stab=3/3 (100%)  avg_r=+0.1750  pf=1.43  win%=28.1%  CF-PASS
+  [PASS] ema200_price    km=1.5 sm=3.0  N=15 zone=[10, 15, 20] stab=3/3 (100%)  avg_r=+0.1414  pf=1.40  win%=27.7%  CF-FAIL
+  [WARN] ema50_slope     km=1.5 sm=3.0  N=10 zone=[10, 15]     stab=1/2 (50%)  avg_r=-0.0142  pf=0.95  win%=29.5%  CF-FAIL
+  [WARN] ema50_slope     km=1.5 sm=2.0  N=10 zone=[10, 15]     stab=1/2 (50%)  avg_r=-0.0277  pf=0.94  win%=29.1%  CF-FAIL
+  [WARN] ema50_slope     km=3.0 sm=3.0  N=10 zone=[10, 15]     stab=1/2 (50%)  avg_r=-0.0510  pf=0.87  win%=27.5%  CF-FAIL
+  [WARN] ema50_slope     km=2.5 sm=3.0  N=10 zone=[10, 15]     stab=1/2 (50%)  avg_r=-0.0716  pf=0.82  win%=27.5%  CF-FAIL
+  [WARN] ema50_slope     km=3.0 sm=2.0  N=10 zone=[10, 15]     stab=1/2 (50%)  avg_r=-0.0872  pf=0.85  win%=26.0%  CF-FAIL
+  [WARN] ema50_slope     km=2.5 sm=2.0  N=10 zone=[10, 15]     stab=1/2 (50%)  avg_r=-0.0919  pf=0.83  win%=26.6%  CF-FAIL
+  [FAIL] ema50_slope     km=2.0 sm=3.0  N=15 zone=[10, 15, 20] stab=0/3 (0%)  avg_r=-0.0000  pf=1.00  win%=26.6%  CF-FAIL
+  [FAIL] ema50_slope     km=2.0 sm=2.0  N=15 zone=[10, 15, 20] stab=0/3 (0%)  avg_r=-0.0070  pf=0.99  win%=25.8%  CF-FAIL
+
+--------------------------------------------------------------------------------
+RECOMMENDED CANONICAL CONFIGURATION (pending your review)
+--------------------------------------------------------------------------------
+  Timeframe:    1d
+  Filter mode:  ema200_price
+  Keltner N:    15
+  Keltner mult: 3.0
+  Stop mult:    2.0
+  Stability:    zone=[10, 15, 20]  3/3 profitable (100%  PASS)
+  Section 4.2 gate (avg_r > 0.15R): PASS (0.4168R)
+  Trades (canonical N): 167
+  Win rate:     25.7%
+
+  !! PROCEED TO T2 -- awaiting human review.
+
+================================================================================
+KELTNER N SENSITIVITY (all configs)
+================================================================================
+
+--- Filter: ema200_price ---
+
+  km=1.5 sm=2.0
+    [+] N=10  trades= 415  avg_r=+0.048  pf=1.11  dd=-52.73  win%=27.5%
+    [+] N=15  trades= 388  avg_r=+0.184  pf=1.36  dd=-43.11  win%=26.8% [CF PASS]
+    [+] N=20  trades= 368  avg_r=+0.156  pf=1.29  dd=-36.71  win%=26.9% [CF PASS]
+    [+] N=25  trades= 353  avg_r=+0.162  pf=1.29  dd=-38.69  win%=27.2% [CF PASS]
+    [+] N=30  trades= 354  avg_r=+0.123  pf=1.21  dd=-48.21  win%=26.0%
+    [+] N=40  trades= 357  avg_r=+0.080  pf=1.12  dd=-55.11  win%=21.8%
+    [+] N=55  trades= 353  avg_r=+0.036  pf=1.05  dd=-66.20  win%=19.5%
+
+  km=1.5 sm=3.0
+    [+] N=10  trades= 409  avg_r=+0.034  pf=1.11  dd=-34.56  win%=27.9%
+    [+] N=15  trades= 372  avg_r=+0.141  pf=1.40  dd=-28.57  win%=27.7%
+    [+] N=20  trades= 347  avg_r=+0.122  pf=1.32  dd=-24.87  win%=28.5%
+    [+] N=25  trades= 332  avg_r=+0.118  pf=1.29  dd=-27.24  win%=29.2%
+    [+] N=30  trades= 329  avg_r=+0.093  pf=1.21  dd=-34.68  win%=28.0%
+    [+] N=40  trades= 324  avg_r=+0.072  pf=1.15  dd=-35.50  win%=24.4%
+    [+] N=55  trades= 322  avg_r=+0.023  pf=1.04  dd=-46.67  win%=21.7%
+
+  km=2.0 sm=2.0
+    [+] N=10  trades= 284  avg_r=+0.099  pf=1.20  dd=-36.68  win%=26.4%
+    [+] N=15  trades= 292  avg_r=+0.225  pf=1.39  dd=-38.66  win%=26.7% [CF PASS]
+    [+] N=20  trades= 303  avg_r=+0.117  pf=1.19  dd=-38.95  win%=25.4%
+    [+] N=25  trades= 301  avg_r=+0.126  pf=1.20  dd=-43.93  win%=25.2%
+    [+] N=30  trades= 303  avg_r=+0.107  pf=1.16  dd=-46.92  win%=24.8%
+    [+] N=40  trades= 308  avg_r=+0.087  pf=1.13  dd=-54.14  win%=21.1%
+    [+] N=55  trades= 309  avg_r=+0.029  pf=1.04  dd=-71.14  win%=20.4%
+
+  km=2.0 sm=3.0
+    [+] N=10  trades= 281  avg_r=+0.056  pf=1.16  dd=-28.38  win%=26.7%
+    [+] N=15  trades= 281  avg_r=+0.175  pf=1.43  dd=-26.58  win%=28.1% [CF PASS]
+    [+] N=20  trades= 280  avg_r=+0.108  pf=1.25  dd=-24.35  win%=27.5%
+    [+] N=25  trades= 278  avg_r=+0.100  pf=1.22  dd=-28.44  win%=28.4%
+    [+] N=30  trades= 277  avg_r=+0.095  pf=1.20  dd=-32.80  win%=27.4%
+    [+] N=40  trades= 279  avg_r=+0.073  pf=1.14  dd=-35.47  win%=23.7%
+    [+] N=55  trades= 275  avg_r=+0.020  pf=1.03  dd=-46.90  win%=23.6%
+
+  km=2.5 sm=2.0
+    [+] N=10  trades= 200  avg_r=+0.065  pf=1.12  dd=-34.91  win%=28.0%
+    [+] N=15  trades= 214  avg_r=+0.349  pf=1.57  dd=-27.36  win%=27.6% [CF PASS]
+    [+] N=20  trades= 246  avg_r=+0.102  pf=1.15  dd=-43.49  win%=26.4%
+    [+] N=25  trades= 257  avg_r=+0.069  pf=1.10  dd=-54.37  win%=23.3%
+    [+] N=30  trades= 250  avg_r=+0.124  pf=1.18  dd=-45.25  win%=24.0%
+    [+] N=40  trades= 268  avg_r=+0.081  pf=1.11  dd=-56.77  win%=19.8%
+    [+] N=55  trades= 267  avg_r=+0.051  pf=1.07  dd=-61.69  win%=19.1%
+
+  km=2.5 sm=3.0
+    [+] N=10  trades= 197  avg_r=+0.037  pf=1.10  dd=-26.94  win%=29.4%
+    [+] N=15  trades= 205  avg_r=+0.246  pf=1.55  dd=-22.10  win%=29.8% [CF PASS]
+    [+] N=20  trades= 231  avg_r=+0.081  pf=1.17  dd=-28.26  win%=29.0%
+    [+] N=25  trades= 231  avg_r=+0.078  pf=1.15  dd=-30.04  win%=27.7%
+    [+] N=30  trades= 224  avg_r=+0.087  pf=1.16  dd=-33.29  win%=27.7%
+    [+] N=40  trades= 242  avg_r=+0.033  pf=1.06  dd=-42.06  win%=22.7%
+    [-] N=55  trades= 239  avg_r=-0.011  pf=0.98  dd=-51.23  win%=21.8%
+
+  km=3.0 sm=2.0
+    [+] N=10  trades= 138  avg_r=+0.046  pf=1.08  dd=-38.41  win%=26.1%
+    [+] N=15  trades= 167  avg_r=+0.417  pf=1.67  dd=-19.96  win%=25.7% [CF PASS]
+    [+] N=20  trades= 188  avg_r=+0.167  pf=1.25  dd=-38.83  win%=24.5% [CF PASS]
+    [+] N=25  trades= 203  avg_r=+0.124  pf=1.18  dd=-42.95  win%=23.2%
+    [+] N=30  trades= 220  avg_r=+0.047  pf=1.06  dd=-51.72  win%=20.9%
+    [+] N=40  trades= 225  avg_r=+0.147  pf=1.20  dd=-52.97  win%=18.7%
+    [+] N=55  trades= 238  avg_r=+0.052  pf=1.07  dd=-60.39  win%=19.3%
+
+  km=3.0 sm=3.0
+    [+] N=10  trades= 137  avg_r=+0.050  pf=1.13  dd=-24.04  win%=28.5%
+    [+] N=15  trades= 158  avg_r=+0.337  pf=1.76  dd=-16.01  win%=30.4% [CF PASS]
+    [+] N=20  trades= 173  avg_r=+0.166  pf=1.34  dd=-24.43  win%=28.3% [CF PASS]
+    [+] N=25  trades= 188  avg_r=+0.097  pf=1.18  dd=-28.67  win%=27.7%
+    [+] N=30  trades= 197  avg_r=+0.031  pf=1.05  dd=-38.73  win%=25.4%
+    [+] N=40  trades= 202  avg_r=+0.084  pf=1.14  dd=-37.74  win%=21.8%
+    [+] N=55  trades= 205  avg_r=+0.008  pf=1.01  dd=-49.58  win%=22.4%
+
+--- Filter: ema50_slope ---
+
+  km=1.5 sm=2.0
+    [-] N=10  trades= 815  avg_r=-0.028  pf=0.94  dd=-88.78  win%=29.1%
+    [+] N=15  trades= 768  avg_r=+0.002  pf=1.00  dd=-92.93  win%=26.6%
+    [-] N=20  trades= 719  avg_r=-0.042  pf=0.92  dd=-113.66  win%=25.2%
+    [-] N=25  trades= 681  avg_r=-0.056  pf=0.90  dd=-122.27  win%=23.6%
+    [-] N=30  trades= 640  avg_r=-0.073  pf=0.87  dd=-127.61  win%=22.8%
+    [-] N=40  trades= 592  avg_r=-0.103  pf=0.84  dd=-139.27  win%=19.3%
+    [-] N=55  trades= 530  avg_r=-0.149  pf=0.78  dd=-152.15  win%=15.3%
+
+  km=1.5 sm=3.0
+    [-] N=10  trades= 806  avg_r=-0.014  pf=0.95  dd=-55.46  win%=29.5%
+    [+] N=15  trades= 749  avg_r=+0.010  pf=1.03  dd=-59.04  win%=27.1%
+    [-] N=20  trades= 698  avg_r=-0.021  pf=0.94  dd=-72.80  win%=25.8%
+    [-] N=25  trades= 659  avg_r=-0.036  pf=0.91  dd=-79.77  win%=24.4%
+    [-] N=30  trades= 615  avg_r=-0.049  pf=0.88  dd=-85.43  win%=23.7%
+    [-] N=40  trades= 564  avg_r=-0.080  pf=0.83  dd=-95.67  win%=20.2%
+    [-] N=55  trades= 502  avg_r=-0.118  pf=0.77  dd=-107.95  win%=16.3%
+
+  km=2.0 sm=2.0
+    [-] N=10  trades= 555  avg_r=-0.048  pf=0.90  dd=-76.11  win%=27.6%
+    [-] N=15  trades= 554  avg_r=-0.007  pf=0.99  dd=-83.46  win%=25.8%
+    [-] N=20  trades= 537  avg_r=-0.082  pf=0.87  dd=-103.90  win%=23.5%
+    [-] N=25  trades= 523  avg_r=-0.096  pf=0.85  dd=-121.28  win%=22.2%
+    [-] N=30  trades= 511  avg_r=-0.117  pf=0.82  dd=-132.11  win%=21.1%
+    [-] N=40  trades= 482  avg_r=-0.123  pf=0.82  dd=-139.37  win%=17.6%
+    [-] N=55  trades= 439  avg_r=-0.164  pf=0.78  dd=-145.38  win%=16.4%
+
+  km=2.0 sm=3.0
+    [-] N=10  trades= 550  avg_r=-0.035  pf=0.90  dd=-53.16  win%=27.8%
+    [-] N=15  trades= 541  avg_r=-0.000  pf=1.00  dd=-59.33  win%=26.6%
+    [-] N=20  trades= 514  avg_r=-0.060  pf=0.86  dd=-74.36  win%=24.5%
+    [-] N=25  trades= 501  avg_r=-0.081  pf=0.83  dd=-84.16  win%=23.6%
+    [-] N=30  trades= 483  avg_r=-0.089  pf=0.81  dd=-89.75  win%=22.4%
+    [-] N=40  trades= 448  avg_r=-0.103  pf=0.80  dd=-97.18  win%=19.0%
+    [-] N=55  trades= 399  avg_r=-0.136  pf=0.77  dd=-102.57  win%=18.5%
+
+  km=2.5 sm=2.0
+    [-] N=10  trades= 353  avg_r=-0.092  pf=0.83  dd=-62.81  win%=26.6%
+    [+] N=15  trades= 384  avg_r=+0.028  pf=1.04  dd=-69.75  win%=25.3%
+    [-] N=20  trades= 408  avg_r=-0.133  pf=0.80  dd=-112.25  win%=22.1%
+    [-] N=25  trades= 413  avg_r=-0.163  pf=0.77  dd=-123.68  win%=19.6%
+    [-] N=30  trades= 395  avg_r=-0.144  pf=0.80  dd=-118.49  win%=18.7%
+    [-] N=40  trades= 401  avg_r=-0.164  pf=0.78  dd=-131.75  win%=15.2%
+    [-] N=55  trades= 364  avg_r=-0.143  pf=0.82  dd=-120.74  win%=15.7%
+
+  km=2.5 sm=3.0
+    [-] N=10  trades= 349  avg_r=-0.072  pf=0.82  dd=-47.64  win%=27.5%
+    [+] N=15  trades= 373  avg_r=+0.016  pf=1.03  dd=-52.69  win%=26.5%
+    [-] N=20  trades= 389  avg_r=-0.101  pf=0.80  dd=-75.37  win%=23.9%
+    [-] N=25  trades= 383  avg_r=-0.123  pf=0.77  dd=-80.87  win%=22.2%
+    [-] N=30  trades= 364  avg_r=-0.135  pf=0.76  dd=-86.50  win%=20.9%
+    [-] N=40  trades= 368  avg_r=-0.172  pf=0.72  dd=-102.62  win%=17.4%
+    [-] N=55  trades= 323  avg_r=-0.161  pf=0.76  dd=-95.56  win%=18.0%
+
+  km=3.0 sm=2.0
+    [-] N=10  trades= 231  avg_r=-0.087  pf=0.85  dd=-53.47  win%=26.0%
+    [+] N=15  trades= 272  avg_r=+0.056  pf=1.09  dd=-48.09  win%=22.8%
+    [-] N=20  trades= 295  avg_r=-0.124  pf=0.83  dd=-84.55  win%=19.7%
+    [-] N=25  trades= 301  avg_r=-0.132  pf=0.82  dd=-88.39  win%=18.9%
+    [-] N=30  trades= 323  avg_r=-0.210  pf=0.73  dd=-108.39  win%=15.8%
+    [-] N=40  trades= 318  avg_r=-0.104  pf=0.87  dd=-107.12  win%=14.8%
+    [-] N=55  trades= 304  avg_r=-0.124  pf=0.85  dd=-103.17  win%=16.1%
+
+  km=3.0 sm=3.0
+    [-] N=10  trades= 229  avg_r=-0.051  pf=0.87  dd=-32.77  win%=27.5%
+    [+] N=15  trades= 262  avg_r=+0.067  pf=1.14  dd=-37.07  win%=26.0%
+    [-] N=20  trades= 275  avg_r=-0.066  pf=0.88  dd=-55.18  win%=22.5%
+    [-] N=25  trades= 282  avg_r=-0.115  pf=0.81  dd=-64.95  win%=21.6%
+    [-] N=30  trades= 295  avg_r=-0.192  pf=0.70  dd=-84.92  win%=19.0%
+    [-] N=40  trades= 288  avg_r=-0.139  pf=0.80  dd=-85.63  win%=17.4%
+    [-] N=55  trades= 264  avg_r=-0.155  pf=0.78  dd=-84.82  win%=18.6%
+
+================================================================================
+INTERPRETATION
+================================================================================
+
+  PASS (>=67%): Keltner breakout edge is robust -- proceed to T2.
+  WARN (40-67%): Edge exists but parameter-sensitive -- review before T2.
+  FAIL (<40%):  No consistent breakout edge.  Do NOT proceed.
+
+  Cost floor: avg_r > 0.15R (Binance Spot).
+  Win rate 30-50% typical for breakout trend-following.
+  Note: ema50_slope is more permissive than ema200_price.
+  Note: higher keltner_mult = fewer signals, higher breakout quality.
+
+  !! STOP HERE -- do not proceed to T2 until human review.

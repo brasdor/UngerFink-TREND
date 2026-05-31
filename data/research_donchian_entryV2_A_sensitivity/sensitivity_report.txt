@@ -1,0 +1,100 @@
+PHASE T17 OPT-17.3 -- Variant A Limit Pullback Sensitivity Analysis
+========================================================================
+
+Grid     : 5 depths x 4 windows = 20 combos
+Canonical: depth=0.25xATR  window=2 bars
+Baseline : avg_r=+1.1011R  PF=3.072  CAGR=+14.3%
+Improve? : avg_r > baseline AND PF > baseline
+
+========================================================================
+FULL GRID (rows=cancel_window, cols=pullback_depth)
+========================================================================
+
+  avg_r (baseline=+1.101R):
+   win\dep  0.10xATR  0.25xATR  0.50xATR  0.75xATR  1.00xATR
+  --------------------------------------------------------------
+         1bars   +1.0751    +1.1536*   +1.0450    +1.2119*   +0.9300 
+         2bars   +1.0680    +1.1212*   +0.9455    +1.0443    +1.1593*  <- canonical
+         3bars   +1.0846    +1.0485    +0.9933    +0.9865    +1.1210*
+         5bars   +1.0700    +1.0428    +0.9816    +0.9120    +1.1274*
+
+  (* = beats baseline avg_r of +1.101R)
+
+  PF (baseline=3.072):
+   win\dep  0.10xATR   0.25xATR   0.50xATR   0.75xATR   1.00xATR 
+  --------------------------------------------------------------
+         1bars     3.084*     3.240*     3.056      3.605*     2.944 
+         2bars     3.092*     3.240*     2.845      3.105*     3.440*  <- canonical
+         3bars     3.131*     3.042      2.960      3.030      3.542*
+         5bars     3.084*     3.033      2.927      2.833      3.549*
+
+  (* = beats baseline PF of 3.072)
+
+  CAGR % (baseline=+14.3%):
+   win\dep  0.10xATR  0.25xATR  0.50xATR  0.75xATR  1.00xATR
+  --------------------------------------------------------------
+         1bars     +11.6%      +12.5%      +10.8%       +9.0%       +5.5% 
+         2bars     +12.6%      +13.2%      +10.6%      +10.0%       +9.6%   <- canonical
+         3bars     +13.0%      +13.4%      +12.5%      +11.0%      +12.0% 
+         5bars     +12.2%      +12.7%      +13.3%      +10.3%      +13.6% 
+
+  (* = beats baseline CAGR of +14.3%)
+
+  Trade count (baseline=461):
+   win\dep  0.10xATR  0.25xATR  0.50xATR  0.75xATR  1.00xATR
+  --------------------------------------------------------------
+         1bars        362         322         263         190         129 
+         2bars        389         366         317         269         218   <- canonical
+         3bars        404         392         352         307         269 
+         5bars        416         407         379         351         316 
+
+  MC p05 totalR (baseline=+347.7R):
+   win\dep  0.10xATR  0.25xATR  0.50xATR  0.75xATR  1.00xATR
+  --------------------------------------------------------------
+         1bars    +250.4R*    +232.8R*    +154.7R*    +123.3R*     +49.7R*
+         2bars    +256.3R*    +259.0R*    +161.9R*    +147.6R*    +117.2R*  <- canonical
+         3bars    +278.3R*    +255.0R*    +204.7R*    +160.2R*    +164.0R*
+         5bars    +282.5R*    +261.8R*    +213.2R*    +161.8R*    +189.1R*
+
+  (* = MC p05 > 0)
+
+========================================================================
+IMPROVEMENT MAP (avg_r > baseline AND PF > baseline)
+========================================================================
+
+   win\dep  0.10xATR  0.25xATR  0.50xATR  0.75xATR  1.00xATR
+  --------------------------------------------------------------
+         1bars  [  NO ]    [ YES ]    [  NO ]    [ YES ]    [  NO ]  
+         2bars  [  NO ]    [CANON]    [  NO ]    [  NO ]    [ YES ]  
+         3bars  [  NO ]    [  NO ]    [  NO ]    [  NO ]    [ YES ]  
+         5bars  [  NO ]    [  NO ]    [  NO ]    [  NO ]    [ YES ]  
+
+========================================================================
+STABILITY CHECK (Unger §2.1 applied to entry params)
+========================================================================
+
+  Canonical    : depth=0.25xATR, window=2 bars
+  Canonical improves? : YES
+
+  Adjacent cells (8 total — 3x3 neighbourhood minus canonical):
+    depth=0.10xATR  window=1bars  avg_r=+1.0751  PF=3.084  [no     ]
+    depth=0.10xATR  window=2bars  avg_r=+1.0680  PF=3.092  [no     ]
+    depth=0.10xATR  window=3bars  avg_r=+1.0846  PF=3.131  [no     ]
+    depth=0.25xATR  window=1bars  avg_r=+1.1536  PF=3.240  [IMPROVE]
+    depth=0.25xATR  window=3bars  avg_r=+1.0485  PF=3.042  [no     ]
+    depth=0.50xATR  window=1bars  avg_r=+1.0450  PF=3.056  [no     ]
+    depth=0.50xATR  window=2bars  avg_r=+0.9455  PF=2.845  [no     ]
+    depth=0.50xATR  window=3bars  avg_r=+0.9933  PF=2.960  [no     ]
+
+  Adjacent improving   : 1 / 8  (12.5%)
+  Threshold            : >= 67%
+  Beats avg_r only     : 1 / 8
+
+  STABILITY VERDICT: FAIL -- parameter peak, reject Variant A
+
+========================================================================
+RECOMMENDATION
+========================================================================
+
+  Stability FAILED: only 12.5% of adjacent cells improve.
+  The (0.25xATR, 2-bar) result is a parameter peak -- do NOT adopt Variant A.

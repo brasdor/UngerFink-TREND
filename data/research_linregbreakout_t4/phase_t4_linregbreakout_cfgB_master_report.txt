@@ -1,0 +1,93 @@
+PHASE T4 -- LinearRegressionBreakout Config B ROBUSTNESS MASTER REPORT
+======================================================================
+
+Method:  LinearRegressionBreakout (LinReg(N) + mult*StdErr(N) upper band)
+Config:  N=55 / mult=3.0 / sm=2.0 / exit: close < LinReg(N) (midline)
+Note:    T3B found chandelier DEGRADES performance; T2 midline exit is canonical.
+Input:   C:\Users\Jean\UngerFink-TREND\data\research_linregbreakout_t2\phase_t2_linregbreakout_cfgB_trades.csv
+Trades:  196
+Assets:  51
+Range:   2024-05-26 00:00:00+00:00 -> 2026-05-10 00:00:00+00:00
+
+======================================================================
+BASELINE SUMMARY
+======================================================================
+  1d ALL: trades=196, totalR=71.04, avgR=0.362, PF=1.53, DD=-41.01, win=26.5%
+  1d LONG: trades=196, totalR=71.04, avgR=0.362, PF=1.53, DD=-41.01, win=26.5%
+  ALL_TF ALL: trades=196, totalR=71.04, avgR=0.362, PF=1.53, DD=-41.01, win=26.5%
+
+======================================================================
+MONTE CARLO (1d ALL, block_size=10)
+======================================================================
+  totalR p05/p50/p95 = -50.78 / 63.41 / 209.41
+  prob(totalR>0)     = 80.7%
+  PF p05/p50/p95     = 0.66 / 1.47 / 2.70
+  DD p95 (worst)     = -20.58R
+
+======================================================================
+COST STRESS (1d ALL)
+======================================================================
+  +0.00R/trade -> totalR=71.04  avgR=0.362  PF=1.53  DD=-41.01
+  +0.02R/trade -> totalR=67.12  avgR=0.342  PF=1.49  DD=-42.07
+  +0.05R/trade -> totalR=61.24  avgR=0.312  PF=1.43  DD=-43.66
+  +0.10R/trade -> totalR=51.44  avgR=0.262  PF=1.35  DD=-46.31
+  +0.15R/trade -> totalR=41.64  avgR=0.212  PF=1.27  DD=-48.96
+  +0.20R/trade -> totalR=31.84  avgR=0.162  PF=1.19  DD=-51.61
+
+======================================================================
+PERIOD SPLITS (1d ALL)
+======================================================================
+  first_half_by_trade_count          : trades= 98  totalR= +87.33  avgR=+0.891  PF=2.33  win=30.6%
+  second_half_by_trade_count         : trades= 98  totalR= -16.29  avgR=-0.166  PF=0.76  win=22.4%
+  last_100_trades                    : trades=100  totalR= -18.29  avgR=-0.183  PF=0.74  win=22.0%
+  last_200_trades                    : trades=196  totalR= +71.04  avgR=+0.362  PF=1.53  win=26.5%
+  first_half_by_time                 : trades= 98  totalR= +87.33  avgR=+0.891  PF=2.33  win=30.6%
+  second_half_by_time                : trades= 98  totalR= -16.29  avgR=-0.166  PF=0.76  win=22.4%
+
+======================================================================
+REMOVE BEST ASSETS (1d ALL)
+======================================================================
+  Note: XRP/USDT = 42.40R / 71.04R total = 59.7% concentration (pre-flagged T2).
+  Key question: does removing top-1 invert the system?
+  remove top 0: totalR= +71.04  avgR=+0.362  PF=1.53  remaining=51  removed=[]
+  remove top 1: totalR= +28.63  avgR=+0.149  PF=1.21  remaining=50  removed=[XRP/USDT]
+  remove top 3: totalR= -10.57  avgR=-0.057  PF=0.92  remaining=48  removed=[XRP/USDT,ALGO/USDT,ADA/USDT]
+  remove top 5: totalR= -28.38  avgR=-0.157  PF=0.78  remaining=46  removed=[XRP/USDT,ALGO/USDT,ADA/USDT,AMP/USDT,ASR/USDT]
+  remove top 10: totalR= -55.04  avgR=-0.344  PF=0.54  remaining=41  removed=[XRP/USDT,ALGO/USDT,ADA/USDT,AMP/USDT,ASR/USDT,LINK/USDT,SUI/USDT,DOGE/USDT,LTC/USDT,ANKR/USDT]
+
+======================================================================
+REMOVE BEST MONTHS (1d ALL)
+======================================================================
+  remove top 0: totalR= +71.04  avgR=+0.362  PF=1.53  months_remaining=23  removed=[]
+  remove top 1: totalR= -58.45  avgR=-0.385  PF=0.49  months_remaining=22  removed=[2024-12]
+  remove top 2: totalR= -72.43  avgR=-0.510  PF=0.34  months_remaining=21  removed=[2024-12,2025-08]
+  remove top 3: totalR= -75.87  avgR=-0.607  PF=0.26  months_remaining=20  removed=[2024-12,2025-08,2025-07]
+
+======================================================================
+ASSET CONCENTRATION (1d ALL)
+======================================================================
+  Top asset: XRP/USDT  (42.40R, 59.7% of total)
+  Top 3:     81.61R  (114.9% of total)
+  Top 5:     99.41R  (139.9% of total)
+  Top 10:    126.08R  (177.5% of total)
+  Positive assets: 22 / 51
+  Negative assets: 29 / 51
+
+======================================================================
+INTERPRETATION GUIDE
+======================================================================
+
+  PROCEED TO T5 if:
+  - MC p05 totalR remains positive (or near zero)
+  - PF stays > 1.0 after moderate cost stress (+0.10R)
+  - Removing top 1-3 assets leaves system profitable
+  - First/second half both positive (no structural decay)
+
+  HALT / REVIEW if:
+  - Removing XRP/USDT (top-1) inverts the system (total_r < 0)
+  - MC p05 deeply negative
+  - Recent last-100/200 trades sharply worse (decay)
+  - Cost stress +0.10R destroys edge
+
+  XRP/USDT concentration note: 59.7% is significant.
+  If remaining symbols stay profitable after top-1 removal -> diversified edge exists.

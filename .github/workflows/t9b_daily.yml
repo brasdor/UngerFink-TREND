@@ -1,0 +1,111 @@
+name: T9B Daily Paper Trading
+
+# Runs daily at 08:00 UTC -- 8 hours after the previous 1D candle closed at midnight.
+# Also triggerable manually from the GitHub Actions tab (workflow_dispatch).
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    inputs:
+      run_date:
+        description: 'Date to run (YYYY-MM-DD). Leave blank to use yesterday.'
+        required: false
+        default: ''
+
+jobs:
+  t9b-daily:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # needed to push committed output files back
+      issues: write     # needed to create signal issues
+
+    steps:
+      # ------------------------------------------------------------------
+      # 1. Checkout the full repo (depth 0 required for clean push)
+      # ------------------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # ------------------------------------------------------------------
+      # 2. Python setup with pip cache
+      # ------------------------------------------------------------------
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # ------------------------------------------------------------------
+      # 3. Install dependencies
+      # ------------------------------------------------------------------
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # ------------------------------------------------------------------
+      # 4. Run the T9B paper engine
+      #    --notify produces a compact summary at the bottom of the log.
+      #    If a specific date was provided via workflow_dispatch, use it.
+      # ------------------------------------------------------------------
+      - name: Run T9B paper engine
+        id: engine
+        run: |
+          if [ -n "${{ github.event.inputs.run_date }}" ]; then
+            echo "Running for specified date: ${{ github.event.inputs.run_date }}"
+            python phase_t9b_donchian_universev2_paper_engine.py \
+              --date "${{ github.event.inputs.run_date }}" \
+              --notify
+          else
+            echo "Running for yesterday (default)"
+            python phase_t9b_donchian_universev2_paper_engine.py --notify
+          fi
+
+      # ------------------------------------------------------------------
+      # 5. Print daily summary (also writes to log for phone browsing)
+      # ------------------------------------------------------------------
+      - name: Print daily summary
+        run: python t9b_daily_summary.py
+
+      # ------------------------------------------------------------------
+      # 6. Commit updated output files back to the repository.
+      #    Changes accumulate over time so you can browse history on GitHub.
+      #    The state.json and CSVs are the persistent record.
+      # ------------------------------------------------------------------
+      - name: Commit output files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Stage the persistent output files (not the OHLCV cache)
+          git add --force \
+            data/t9b_paper/state.json \
+            data/t9b_paper/open_positions.csv \
+            data/t9b_paper/signals_today.csv \
+            data/t9b_paper/equity_curve.csv \
+            data/t9b_paper/daily_log.csv \
+            || true
+
+          # Only commit if there are staged changes
+          if git diff --cached --quiet; then
+            echo "No output file changes to commit."
+          else
+            TODAY=$(date -u +%Y-%m-%d)
+            git commit -m "T9B: daily update ${TODAY} [skip ci]"
+            git pull --rebase origin ${{ github.ref_name }} || true
+            git push origin ${{ github.ref_name }}
+          fi
+
+      # ------------------------------------------------------------------
+      # 7. Create a GitHub issue for each new signal fired today.
+      #    The script reads signals_today.csv and daily_log.csv.
+      #    Uses the automatically provided GITHUB_TOKEN -- no secrets needed.
+      # ------------------------------------------------------------------
+      - name: Create issues for new signals
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python .github/scripts/create_signal_issues.py

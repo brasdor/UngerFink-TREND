@@ -1,0 +1,121 @@
+PHASE T17 OPT-17.2 -- Regime Filter D: Multi-TF Weekly EMA200 Level
+======================================================================
+
+Filter   : daily close > weekly EMA(200) level (forward-filled)
+           Combined with existing daily close > daily EMA(200) filter.
+Universe : 24 symbols / 1D / Donchian N=20 / ATR×2.0 / Chandelier ACT4
+Baseline : avg_r=+1.101R  PF=3.072  CAGR=+14.3%  trades=461
+
+======================================================================
+WEEKLY EMA200 LEVEL DIAGNOSTICS
+======================================================================
+  Week rule        : W-FRI (Friday-end)
+  EMA valid from   : 2024-03-15  (~200-week warmup)
+  Valid daily bars : 18,347
+  Bars above level : 5,357  (29.2%)
+  Note: Bars before warmup date = NaN → blocked at entry.
+
+======================================================================
+STABILITY ZONE
+======================================================================
+     N  exit_n   trades   total_r     avg_r     PF  PASS?
+  ----------------------------------------------------------
+    15       7      131    +27.78   +0.2121  1.359  YES
+    20      10      109    +29.76   +0.2731  1.462  YES
+    25      12       98    +36.75   +0.3750  1.624  YES
+
+  Stability zone: ALL PASS
+
+======================================================================
+T4 -- BASELINE (N=20)
+======================================================================
+  Trades   : 109  [guard >=80: PASS]
+  Total R  : +29.76R
+  Avg R    : +0.2731R  (baseline: +1.101R)
+  PF       : 1.462  (baseline: 3.072)
+  Win rate : 32.1%
+  Max DD   : -10.39R
+  t-score  : 1.31
+  Period   : 2024-04-05 -> 2026-05-28
+
+======================================================================
+T4 -- MONTE CARLO (2000 runs, block=10)
+======================================================================
+  totalR p05/p50/p95  = -6.2 / 29.9 / 65.1
+  prob(totalR > 0)    = 91.7%
+  PF p05/p50          = 0.91 / 1.47
+  DD p95 (worst)      = -6.67R
+
+======================================================================
+T4 -- COST STRESS
+======================================================================
+  +0.00R -> totalR=+29.8  avgR=+0.2731  PF=1.462
+  +0.02R -> totalR=+27.6  avgR=+0.2531  PF=1.419
+  +0.05R -> totalR=+24.3  avgR=+0.2231  PF=1.357
+  +0.10R -> totalR=+18.9  avgR=+0.1731  PF=1.262
+  +0.15R -> totalR=+13.4  avgR=+0.1231  PF=1.177
+  +0.20R -> totalR=+8.0  avgR=+0.0731  PF=1.100
+
+======================================================================
+T4 -- PERIOD SPLITS
+======================================================================
+  first_half_by_trade           : t= 54  totalR=   +4.7  avgR=+0.0879  PF=1.142  win=27.8%
+  second_half_by_trade          : t= 55  totalR=  +25.0  avgR=+0.4549  PF=1.805  win=36.4%
+  last_100_trades               : t=100  totalR=  +38.1  avgR=+0.3810  PF=1.680  win=35.0%
+  first_half_by_time            : t= 55  totalR=   +3.7  avgR=+0.0681  PF=1.109  win=27.3%
+  second_half_by_time           : t= 54  totalR=  +26.0  avgR=+0.4818  PF=1.865  win=37.0%
+
+======================================================================
+T4 -- REMOVE BEST ASSETS
+======================================================================
+  Top: ZEC/USDT (17.72R = 59.6%)
+  remove top 0: totalR=  +29.8  avgR=+0.2731  PF=1.462  []
+  remove top 1: totalR=  +12.0  avgR=+0.1180  PF=1.196  [ZEC/USDT]
+  remove top 3: totalR=   -2.4  avgR=-0.0285  PF=0.956  [ZEC/USDT,TRX/USDT,DEXE/USDT]
+  remove top 5: totalR=   -8.4  avgR=-0.1173  PF=0.825  [ZEC/USDT,TRX/USDT,DEXE/USDT,BTC/USDT,AVAX/USDT]
+
+======================================================================
+T4 -- REMOVE BEST MONTHS
+======================================================================
+  remove top 0: totalR=  +29.8  avgR=+0.2731  PF=1.462  []
+  remove top 1: totalR=  +15.1  avgR=+0.1713  PF=1.290  [2024-12]
+  remove top 2: totalR=   +1.2  avgR=+0.0148  PF=1.024  [2024-12,2026-04]
+  remove top 3: totalR=   -7.2  avgR=-0.0891  PF=0.854  [2024-12,2026-04,2025-11]
+
+======================================================================
+T5/T6 -- max8 PORTFOLIO
+======================================================================
+  Accepted : 96
+  avg_r    : +0.3521R
+  PF       : 1.632
+  CAGR     : +3.9%  (baseline: +14.3%)
+  Max DD   : -2.6%  (baseline: -3.4%)
+  Kill sw  : no
+  Duration : 2.2 yr
+
+======================================================================
+FINAL SCORECARD
+======================================================================
+
+  PASS  Trade count >=80 (got 109)
+  PASS  Stability zone all profitable
+  PASS  §4.1 win rate 30-45% (got 32.1%)
+  PASS  §4.2 avg_r > 0.15R (got +0.2731R)
+  PASS  PF > 1.0 (got 1.462)
+  FAIL  MC p05 > 0 (got -6.2R)
+  PASS  Cost +0.10R PF > 1.0 (got 1.262)
+  PASS  2nd-half avg_r > 0 (got +0.4549R)
+  PASS  Remove top-1 asset > 0 (got +12.0R)
+  PASS  Remove top-1 month > 0 (got +15.1R)
+  PASS  Kill switch not fired
+
+  vs BASELINE:
+  avg_r  : +0.2731R vs +1.101R -> WORSE
+  PF     : 1.462 vs 3.072 -> WORSE
+  CAGR   : +3.9% vs +14.3% -> WORSE
+  trades : 109 vs 461 (removed 352 = 76.4%)
+
+  STRUCTURAL NOTE: 200-week warmup blocks 2020-05 to 2024-03.
+  Active signal window: ~2 years (2024-03 to 2026-05).
+
+  OVERALL: FAIL -- one or more gates failed

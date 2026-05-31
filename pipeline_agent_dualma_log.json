@@ -1,0 +1,46 @@
+[
+  {
+    "phase": "T3B",
+    "status": "PASS",
+    "analysis": {
+      "best_variant": "chan_mult=3.0_act=4.0R",
+      "chandelier_atr_mult": 3.0,
+      "chandelier_activate_r": 4.0,
+      "total_r": 348.637,
+      "avg_r": 1.5634,
+      "win_rate_pct": 35.9,
+      "profit_factor": 3.990,
+      "max_dd_r": -64.419,
+      "variants_tested": 9,
+      "variants_passing": 9,
+      "concentration_warning": "BTC/USDT = 123.4% of total R"
+    }
+  },
+  {
+    "phase": "T4",
+    "status": "HALT",
+    "decision": "HALT — user decision at human review checkpoint",
+    "analysis": {
+      "trades": 223,
+      "assets": 60,
+      "baseline_total_r": 348.64,
+      "baseline_avg_r": 1.563,
+      "baseline_pf": 3.99,
+      "baseline_win_rate_pct": 35.9,
+      "mc_block10_p05": -89.28,
+      "mc_block10_p50": 327.66,
+      "mc_block10_p95": 933.70,
+      "mc_prob_positive": 0.873,
+      "mc_pf_p05": 0.25,
+      "cost_stress_020_total_r": 304.04,
+      "cost_stress_020_pf": 2.96,
+      "remove_top1_total_r": -81.60,
+      "remove_top1_pf": 0.28,
+      "remove_top1_asset": "BTC/USDT",
+      "remove_top2_months_total_r": -72.66,
+      "period_split_first_half_pf": 2.89,
+      "period_split_second_half_pf": 4.69,
+      "halt_reason": "Fatal BTC concentration: BTC/USDT = 430R of 348R total. Removing BTC yields totalR=-81.6R, PF=0.28. Other 59 assets collectively lose. System is not a diversified trend portfolio — it is a BTC position. Not viable for T9B paper trading."
+    }
+  }
+]

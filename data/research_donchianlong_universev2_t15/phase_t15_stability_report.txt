@@ -1,0 +1,19 @@
+T15 -- DonchianLong_UniverseV2 Parameter Stability
+============================================================
+
+Test: N=[15, 20, 25] on 24-symbol universe.
+Gate: ALL three N values must show avg_r > 0 AND PF > 1.0.
+Canonical: N=20 (frozen config).
+
+     N  Trades    avg_r     PF   win%   total_r  PASS
+  ----------------------------------------------------
+    15     538  +0.9150  2.708  38.3%   +492.29  PASS
+    20     461  +1.1011  3.072  41.2%   +507.60  PASS
+    25     423  +1.1520  3.171  41.6%   +487.31  PASS
+
+OVERALL T15: PASS -- all N values stable
+
+Interpretation:
+  PASS: canonical N=20 is not a local optimum;
+        adjacent N values also produce positive edge.
+  FAIL: would indicate curve-fitting -- N=20 cherry-picked.

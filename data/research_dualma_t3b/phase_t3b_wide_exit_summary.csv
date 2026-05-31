@@ -1,0 +1,10 @@
+label,chandelier_atr_mult,chandelier_activate_r,n_trades,total_r,avg_r,win_rate,profit_factor,max_dd_r,beats_t2_total_r,passes_cost_floor,passes_pf,passes_win_rate,not_catastrophic_dd,overall_pass,is_best,win_rate_msg
+chan_mult=3.0_act=4.0R,3.0,4.0,223,348.6367,1.5634,35.87,3.9899,-64.4192,True,True,True,True,True,True,True,
+chan_mult=2.0_act=4.0R,2.0,4.0,223,348.6365,1.5634,35.87,3.9899,-64.4195,True,True,True,True,True,True,False,
+chan_mult=4.0_act=4.0R,4.0,4.0,223,348.4871,1.5627,35.43,3.9797,-64.5612,True,True,True,True,True,True,False,
+chan_mult=3.0_act=3.0R,3.0,3.0,223,274.5779,1.2313,40.36,3.4935,-58.5892,True,True,True,True,True,True,False,
+chan_mult=2.0_act=3.0R,2.0,3.0,223,274.5017,1.2309,40.36,3.4928,-58.7179,True,True,True,True,True,True,False,
+chan_mult=4.0_act=3.0R,4.0,3.0,223,273.8385,1.228,40.36,3.4805,-59.8353,True,True,True,True,True,True,False,
+chan_mult=3.0_act=2.0R,3.0,2.0,223,110.0386,0.4934,41.26,2.0353,-59.3507,True,True,True,True,True,True,False,
+chan_mult=2.0_act=2.0R,2.0,2.0,223,109.6216,0.4916,42.6,2.0346,-59.8251,True,True,True,True,True,True,False,
+chan_mult=4.0_act=2.0R,4.0,2.0,223,83.7734,0.3757,39.91,1.7721,-62.0241,True,True,True,True,True,True,False,

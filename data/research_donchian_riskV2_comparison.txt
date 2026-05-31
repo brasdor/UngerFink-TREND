@@ -1,0 +1,36 @@
+PHASE T17.5 -- RISK SIZING COMPARISON TABLE
+======================================================================
+Config:  DonchianLong_UniverseV2_ExitV2 (frozen ExitV2)
+Input:   C2_trades.csv / max8 portfolio cap / 24 symbols
+Capital: $10,000 / Kill-switch: -35% / MC: 5000 runs
+Date:    2026-05-30
+
+[!] ALL RESULTS THEORETICAL
+    Implementation order: 0.25% -> 0.50% -> 0.75% (never jump)
+    Each step requires T9B paper confirmation before going live
+
+Variant           Risk/trade  T6 Ret%     T6 DD%    Kill-sw       MC p05DD(bs50)   MC prob+(bs50)   Flags             
+----------------  ----------  ----------  --------  ------------  ---------------  ---------------  ------------------
+Baseline (0.25%)  0.250%      111.9       -4.44     no            —                —                reference         
+Variant A         0.500%      295.66      -8.7      no            -14.75           100.0%           DD>-15%           
+Variant B         0.750%      577.03      -12.79    no            -21.38           100.0%           DD>-15%           
+Variant C         0.289%      119.88      -4.06     no            -7.03            100.0%           OK                
+Variant D         2.000%      4536.9      -30.85    no            -36.11           94.7%            DD>-15%           
+
+Column definitions:
+  T6 Ret%    : total return on $10k over full backtest
+  T6 DD%     : max closed-equity drawdown in T6 simulation
+  Kill-sw    : whether -35% DD kill-switch fires in T6
+  MC p05DD   : 5th-percentile max drawdown across 5000 MC runs (block=50)
+  MC prob+   : fraction of 5000 MC runs with positive return (block=50)
+  Flags      : OK / KILL-SWITCH / DD>-15%
+
+Variant C sizing formula:
+  risk_pct = 0.25% × (median_ATR% / current_ATR%)  capped at 2%
+  median_ATR% = 0.0642
+
+Variant D Kelly formula:
+  f = (edge/odds) × 0.25  = (1.3167/5.4200) × 0.25 = 0.0200
+  edge = avg_r = 1.3167R  |  odds = avg_win/avg_loss = 5.4200
+
+⚠️  Do not apply any risk sizing increase until T9B has been running ≥3 months.

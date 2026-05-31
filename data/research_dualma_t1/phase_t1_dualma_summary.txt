@@ -1,0 +1,151 @@
+PHASE T1 — DUAL MA CROSSOVER CONCEPT DISCOVERY
+================================================================================
+
+Method:    Fast EMA crosses above Slow EMA (LONG only, Binance Spot)
+Exit:      Fast EMA crosses below Slow EMA (while no Chandelier)
+           OR initial ATR stop hit
+           OR Chandelier trailing stop (activates at +4R, trails 3×ATR)
+Filter:    ema200_price (close > EMA200)  or  ema50_slope (EMA50 slope > 0)
+
+Grid:      1 TF × 15 pairs × 2 filters × 2 ATR mults = 60 combos
+Timeframe: 1d  Bars: ~1500 (~4 years)
+
+Donchian benchmark:  avg_r=+0.179R  PF=1.27
+§4.2 cost floor:     avg_r > 0.15R  (Binance Spot taker fees)
+Stability threshold: ≥67% of zone combos profitable
+
+NOTE — ema200_price filter circularity:
+  When slow_ema=200, the filter EMA and the slow_ema are the same indicator.
+  The crossover condition (fast > EMA200) already captures the uptrend regime.
+  The independent EMA200 filter is computed separately but will be near-identical.
+  Affected combos: 4 (10/200, 20/200, 30/200, 50/200). Not a disqualifier.
+
+════════════════════════════════════════════════════════════════════════════════
+STABILITY RANKING — top 10 combos by zone stability + avg_r
+════════════════════════════════════════════════════════════════════════════════
+  [PASS] §4.2✓  EMA10/200  ema50_slope     ATR×2.0  zone=3/3 (100%)  trades= 121  avg_r=+0.7095  pf=2.10  dd=-17.59  win%=24.8
+  [PASS] §4.2✓  EMA30/100  ema200_price    ATR×2.0  zone=5/5 (100%)  trades= 116  avg_r=+0.5730  pf=1.83  dd=-12.49  win%=24.1
+  [PASS] §4.2✓  EMA10/150  ema50_slope     ATR×2.0  zone=4/4 (100%)  trades= 156  avg_r=+0.5604  pf=1.87  dd=-19.00  win%=21.2
+  [PASS] §4.2✓  EMA20/100  ema200_price    ATR×2.0  zone=5/5 (100%)  trades= 135  avg_r=+0.5052  pf=1.72  dd=-11.56  win%=22.2
+  [PASS] §4.2✓  EMA50/200  ema50_slope     ATR×2.0  zone=3/3 (100%)  trades=  80  avg_r=+0.4615  pf=1.62  dd=-12.25  win%=21.2
+  [PASS] §4.2✓  EMA50/200  ema200_price    ATR×2.0  zone=3/3 (100%)  trades=  81  avg_r=+0.4510  pf=1.61  dd=-12.65  win%=21.0
+  [PASS] §4.2✓  EMA20/200  ema50_slope     ATR×3.0  zone=4/4 (100%)  trades= 101  avg_r=+0.4049  pf=1.63  dd=-10.93  win%=19.8
+  [PASS] §4.2✓  EMA10/200  ema50_slope     ATR×3.0  zone=3/3 (100%)  trades= 120  avg_r=+0.3807  pf=1.71  dd=-12.87  win%=20.8
+  [PASS] §4.2✓  EMA20/100  ema200_price    ATR×3.0  zone=5/5 (100%)  trades= 135  avg_r=+0.3710  pf=1.65  dd=-10.96  win%=23.0
+  [PASS] §4.2✓  EMA10/200  ema200_price    ATR×2.0  zone=3/3 (100%)  trades= 182  avg_r=+0.3463  pf=1.52  dd=-23.37  win%=19.8
+
+────────────────────────────────────────────────────────────────────────────────
+RECOMMENDED CANONICAL CONFIGURATION
+────────────────────────────────────────────────────────────────────────────────
+  Timeframe:        1d
+  Fast EMA:         10
+  Slow EMA:         200
+  Filter mode:      ema50_slope
+  ATR mult:         2.0
+  Zone stability:   100%  (3/3 profitable)
+  Trades:           121
+  Avg R:            +0.7095R  [Donchian: +0.179R]
+  PF:               2.10  [Donchian: 1.27]
+  Win rate:         24.8%  [healthy: 30-45%]
+  Max DD R:         -17.59R
+
+  T1 GATE: PASS — stability PASS + §4.2 cost floor PASS
+  Do NOT proceed to T2 until user confirms this config.
+
+════════════════════════════════════════════════════════════════════════════════
+FULL GRID — ALL 60 COMBOS BY (FILTER, ATR_MULT)
+════════════════════════════════════════════════════════════════════════════════
+
+  filter=ema200_price  ATR×2.0
+    [+]        EMA10/ 50  trades= 175  avg_r=+0.099  pf=1.14  dd=-30.56  win=16.6%
+    [+] §4.2✓  EMA20/ 50  trades= 130  avg_r=+0.172  pf=1.22  dd=-27.41  win=17.7%
+    [+] §4.2✓  EMA30/ 50  trades= 123  avg_r=+0.212  pf=1.27  dd=-18.87  win=18.7%
+    [+]        EMA10/100  trades= 155  avg_r=+0.144  pf=1.20  dd=-24.93  win=17.4%
+    [+] §4.2✓  EMA20/100  trades= 135  avg_r=+0.505  pf=1.72  dd=-11.56  win=22.2%
+    [+] §4.2✓  EMA30/100  trades= 116  avg_r=+0.573  pf=1.83  dd=-12.49  win=24.1%
+    [+]        EMA50/100  trades= 104  avg_r=+0.110  pf=1.14  dd=-21.15  win=16.3%
+    [+] §4.2✓  EMA10/150  trades= 195  avg_r=+0.335  pf=1.49  dd=-27.02  win=18.5%
+    [+]        EMA20/150  trades= 137  avg_r=+0.137  pf=1.18  dd=-16.99  win=19.0%
+    [+] §4.2✓  EMA30/150  trades= 115  avg_r=+0.326  pf=1.43  dd=-19.86  win=18.3%
+    [+] §4.2✓  EMA50/150  trades=  89  avg_r=+0.191  pf=1.24  dd=-16.58  win=18.0%
+    [+] §4.2✓  EMA10/200  trades= 182  avg_r=+0.346  pf=1.52  dd=-23.37  win=19.8%
+    [+]        EMA20/200  trades= 124  avg_r=+0.042  pf=1.05  dd=-26.40  win=15.3%
+    [+]        EMA30/200  trades= 109  avg_r=+0.078  pf=1.10  dd=-25.06  win=16.5%
+    [+] §4.2✓  EMA50/200  trades=  81  avg_r=+0.451  pf=1.61  dd=-12.65  win=21.0%
+
+  filter=ema200_price  ATR×3.0
+    [+]        EMA10/ 50  trades= 175  avg_r=+0.014  pf=1.02  dd=-29.34  win=18.3%
+    [+] §4.2✓  EMA20/ 50  trades= 129  avg_r=+0.328  pf=1.54  dd=-11.45  win=24.8%
+    [+] §4.2✓  EMA30/ 50  trades= 122  avg_r=+0.213  pf=1.33  dd=-13.09  win=21.3%
+    [+] §4.2✓  EMA10/100  trades= 154  avg_r=+0.209  pf=1.36  dd=-13.39  win=19.5%
+    [+] §4.2✓  EMA20/100  trades= 135  avg_r=+0.371  pf=1.65  dd=-10.96  win=23.0%
+    [+] §4.2✓  EMA30/100  trades= 116  avg_r=+0.224  pf=1.36  dd=-11.12  win=19.8%
+    [+] §4.2✓  EMA50/100  trades= 104  avg_r=+0.217  pf=1.31  dd=-17.25  win=20.2%
+    [+]        EMA10/150  trades= 194  avg_r=+0.143  pf=1.26  dd=-25.25  win=16.5%
+    [+]        EMA20/150  trades= 137  avg_r=+0.108  pf=1.17  dd=-19.15  win=17.5%
+    [+] §4.2✓  EMA30/150  trades= 115  avg_r=+0.286  pf=1.45  dd=-13.62  win=19.1%
+    [+] §4.2✓  EMA50/150  trades=  89  avg_r=+0.258  pf=1.35  dd=-13.39  win=19.1%
+    [+]        EMA10/200  trades= 181  avg_r=+0.128  pf=1.23  dd=-24.92  win=16.0%
+    [+] §4.2✓  EMA20/200  trades= 124  avg_r=+0.224  pf=1.34  dd=-15.90  win=16.9%
+    [+] §4.2✓  EMA30/200  trades= 109  avg_r=+0.161  pf=1.24  dd=-16.84  win=16.5%
+    [+] §4.2✓  EMA50/200  trades=  81  avg_r=+0.211  pf=1.30  dd=-14.58  win=17.3%
+
+  filter=ema50_slope  ATR×2.0
+    [-]        EMA10/ 50  trades= 200  avg_r=-0.296  pf=0.60  dd=-80.92  win=11.0%
+    [-]        EMA20/ 50  trades= 306  avg_r=-0.306  pf=0.62  dd=-130.33  win=11.8%
+    [-]        EMA30/ 50  trades= 260  avg_r=-0.123  pf=0.84  dd=-64.31  win=14.2%
+    [+]        EMA10/100  trades= 236  avg_r=+0.038  pf=1.05  dd=-41.98  win=18.6%
+    [+] §4.2✓  EMA20/100  trades= 175  avg_r=+0.365  pf=1.53  dd=-10.79  win=20.6%
+    [+] §4.2✓  EMA30/100  trades= 145  avg_r=+0.392  pf=1.57  dd=-18.75  win=21.4%
+    [+]        EMA50/100  trades= 110  avg_r=+0.056  pf=1.07  dd=-27.44  win=15.5%
+    [+] §4.2✓  EMA10/150  trades= 156  avg_r=+0.560  pf=1.87  dd=-19.00  win=21.2%
+    [+] §4.2✓  EMA20/150  trades= 127  avg_r=+0.165  pf=1.22  dd=-14.20  win=18.9%
+    [+] §4.2✓  EMA30/150  trades= 111  avg_r=+0.340  pf=1.45  dd=-18.17  win=18.0%
+    [+] §4.2✓  EMA50/150  trades=  89  avg_r=+0.204  pf=1.26  dd=-17.13  win=18.0%
+    [+] §4.2✓  EMA10/200  trades= 121  avg_r=+0.710  pf=2.10  dd=-17.59  win=24.8%
+    [+] §4.2✓  EMA20/200  trades= 101  avg_r=+0.250  pf=1.33  dd=-17.14  win=18.8%
+    [+]        EMA30/200  trades=  96  avg_r=+0.133  pf=1.17  dd=-19.30  win=17.7%
+    [+] §4.2✓  EMA50/200  trades=  80  avg_r=+0.462  pf=1.62  dd=-12.25  win=21.2%
+
+  filter=ema50_slope  ATR×3.0
+    [-]        EMA10/ 50  trades= 197  avg_r=-0.269  pf=0.53  dd=-64.83  win=10.2%
+    [-]        EMA20/ 50  trades= 299  avg_r=-0.195  pf=0.70  dd=-88.30  win=14.4%
+    [-]        EMA30/ 50  trades= 253  avg_r=-0.054  pf=0.92  dd=-40.00  win=17.8%
+    [+]        EMA10/100  trades= 233  avg_r=+0.030  pf=1.05  dd=-23.76  win=18.5%
+    [+] §4.2✓  EMA20/100  trades= 171  avg_r=+0.252  pf=1.47  dd=-13.00  win=21.1%
+    [+]        EMA30/100  trades= 143  avg_r=+0.109  pf=1.18  dd=-14.69  win=17.5%
+    [+] §4.2✓  EMA50/100  trades= 110  avg_r=+0.172  pf=1.25  dd=-20.76  win=19.1%
+    [+] §4.2✓  EMA10/150  trades= 155  avg_r=+0.306  pf=1.59  dd=-13.98  win=19.4%
+    [+]        EMA20/150  trades= 127  avg_r=+0.119  pf=1.19  dd=-15.76  win=17.3%
+    [+] §4.2✓  EMA30/150  trades= 111  avg_r=+0.282  pf=1.45  dd=-13.38  win=18.9%
+    [+] §4.2✓  EMA50/150  trades=  89  avg_r=+0.274  pf=1.38  dd=-13.39  win=19.1%
+    [+] §4.2✓  EMA10/200  trades= 120  avg_r=+0.381  pf=1.71  dd=-12.87  win=20.8%
+    [+] §4.2✓  EMA20/200  trades= 101  avg_r=+0.405  pf=1.63  dd=-10.93  win=19.8%
+    [+] §4.2✓  EMA30/200  trades=  96  avg_r=+0.235  pf=1.34  dd=-13.66  win=17.7%
+    [+] §4.2✓  EMA50/200  trades=  80  avg_r=+0.216  pf=1.31  dd=-14.58  win=17.5%
+
+════════════════════════════════════════════════════════════════════════════════
+INTERPRETATION (Unger §2.1 + §4.2 + §4.1)
+════════════════════════════════════════════════════════════════════════════════
+
+  PASS (stability ≥67% AND avg_r > 0.15R):
+    → Proceed to T2 after user confirms canonical config.
+
+  PASS stability but §4.2 FAIL (avg_r ≤ 0.15R):
+    → STOP. Edge too thin. MA crossover lag is the structural cause.
+    → Do not proceed to T2. Archive and move to next method.
+
+  NO stability PASS:
+    → STOP. No stable zone found. DualMA does not work on this universe at 1D.
+    → Consider: different exit logic, relaxed stability zone, or abandon method.
+
+  §4.1 Win rate (healthy: 30-45%):
+    DualMA may show win rates above 45% due to lagged exit (smaller losers cut).
+    Win rate > 55% is suspicious — may indicate overfitting or short hold times.
+
+  Key risk vs Donchian:
+    MA crossover is lagged — enters after the move starts, exits after it reverses.
+    Expected lower avg_r than Donchian breakout. §4.2 is the most likely failure.
+
+  T9A paper-live remains FROZEN.
+  Do NOT proceed to T2 without user review of this report.

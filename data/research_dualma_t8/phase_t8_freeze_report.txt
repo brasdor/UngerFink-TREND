@@ -1,0 +1,50 @@
+======================================================================
+PHASE T8 -- DualMA BTC-only FREEZE REPORT
+======================================================================
+Decision: FROZEN
+
+FROZEN CONFIG
+----------------------------------------------------------------------
+  Asset:                 BTC/USDT (single-asset variant)
+  Entry:                 EMA30 x EMA100 crossover + EMA200 filter
+  Initial stop:          ATR(14) x 2.0
+  Exit:                  MA cross (pre-chandelier) OR chandelier stop
+  Chandelier activation: MFE >= 4.0R
+  Chandelier mult:       3.0 x ATR(14)
+  Risk per trade:        0.25%
+  Max concurrent:        1
+  Exchange:              Binance Spot, LONG only, 1x leverage
+
+T5 PORTFOLIO RESULTS (R)
+----------------------------------------------------------------------
+  n_trades:      5
+  total_r:       430.2382R
+  avg_r:         86.0476R
+  win_rate:      40.0%
+  profit_factor: 160.1598
+  max_dd_r:      -2.0609R
+
+T6 CAPITAL RESULTS ($10k, 0.25% risk)
+----------------------------------------------------------------------
+  Final equity:   $22,982.35
+  Total return:   129.82%
+  CAGR:           48.02%
+  Max DD:         -0.51%
+
+T7: N/A -- single-asset system
+
+GATE CHECKS
+----------------------------------------------------------------------
+  Cost floor (avg_r > 0.15R): PASS (86.0476R)
+  PF > 1.5:                   PASS (160.1598)
+  Win rate (25-50%):          PASS (40.0%)
+  CAGR > 0:                   PASS (48.02%)
+  Max DD < 35%:               PASS (-0.51%)
+
+OVERALL: FROZEN
+
+NOTE: This is a single-asset BTC-only strategy.
+T4 full-universe DualMA was halted due to BTC concentration.
+This variant is intentionally a BTC trend-following filter,
+not a diversified portfolio. Evaluate accordingly for T9B paper trading.
+======================================================================

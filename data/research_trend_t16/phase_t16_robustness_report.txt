@@ -1,0 +1,62 @@
+PHASE T16 — ROBUSTNESS COMPLETION
+================================================================================
+
+Three robustness tests missing from T4/T7, now completed per Unger §4.7.
+
+Canonical trade input:  293 trades
+Timeframe:              1d
+Canonical params:       Donchian N=20, filter=ema200_price
+Exits:                  Chandelier ACT4_ATR3
+
+1. MONTE CARLO TRADE SHUFFLING
+----------------------------------------
+   Runs: 2000, seed=42
+
+   total_r          baseline=+52.346  MC_p10=+52.346  MC_p50=+52.346  MC_p90=+52.346  above_p25=NO
+   avg_r            baseline=+0.179  MC_p10=+0.179  MC_p50=+0.179  MC_p90=+0.179  above_p25=NO
+   pf               baseline=+1.273  MC_p10=+1.273  MC_p50=+1.273  MC_p90=+1.273  above_p25=NO
+   max_dd_r         baseline=-48.164  MC_p10=-47.174  MC_p50=-33.493  MC_p90=-23.852  above_p25=NO
+   win_rate         baseline=+0.246  MC_p10=+0.246  MC_p50=+0.246  MC_p90=+0.246  above_p25=NO
+
+   PASS criteria: baseline total_R above MC_p25 AND baseline max_dd_R above
+   MC_p25 (i.e., better drawdown than 75% of random orderings).
+   → Sequential ordering not needed for the edge to be real.
+
+2. DATA PERTURBATION STRESS
+----------------------------------------
+   Gaussian noise added to OHLCV price columns.
+
+   BASELINE              trades= 293  avg_r=+0.179  pf=1.27  dd=-27.07  avg_r_vs_base=+0.0%
+   NOISE_0.5pct          trades= 292  avg_r=+0.146  pf=1.22  dd=-23.25  avg_r_vs_base=-18.3%
+   NOISE_1.0pct          trades= 288  avg_r=+0.104  pf=1.15  dd=-22.84  avg_r_vs_base=-42.0%
+   NOISE_2.0pct          trades= 294  avg_r=-0.093  pf=0.87  dd=-40.20  avg_r_vs_base=-152.0%
+   NOISE_5.0pct          trades= 277  avg_r=-0.440  pf=0.42  dd=-122.17  avg_r_vs_base=-346.0%
+
+   PASS criteria: avg_R and PF remain positive under 2% noise.
+   WARN: degradation > 50% at 1% noise = signal is fragile.
+   FAIL: avg_R turns negative under 1% noise = likely overfit.
+
+3. SLIPPAGE STRESS
+----------------------------------------
+   Extra cost subtracted from each trade's net_R.
+
+   0.00R/trade   avg_r=+0.179  pf=1.27  dd=-48.16  trades_positive=25%
+   0.05R/trade   avg_r=+0.129  pf=1.19  dd=-52.56  trades_positive=23%
+   0.10R/trade   avg_r=+0.079  pf=1.11  dd=-56.96  trades_positive=22%
+   0.15R/trade   avg_r=+0.029  pf=1.04  dd=-61.36  trades_positive=22%
+   0.20R/trade   avg_r=-0.021  pf=0.97  dd=-65.76  trades_positive=21%
+   0.30R/trade   avg_r=-0.121  pf=0.86  dd=-74.56  trades_positive=19%
+   0.40R/trade   avg_r=-0.221  pf=0.77  dd=-86.31  trades_positive=19%
+
+   Realistic cost for 1D crypto on Binance Spot: ≈ 0.05–0.10R per trade
+   (taker fees, no leverage). System must survive at least 0.10R extra.
+   FAIL if avg_R ≤ 0 at 0.10R extra cost.
+
+INTERPRETATION SUMMARY
+----------------------------------------
+  MC PASS + Pert PASS + Slip PASS: edge is robust — proceed to T17/T18.
+  Any FAIL: do NOT deploy. Diagnose root cause before T17/T18.
+  'WARN' on one test only: note, document, monitor in paper-live.
+
+  T9A paper-live remains frozen regardless of T16 outcome.
+  These tests validate the RESEARCH edge, not the live config.

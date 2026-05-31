@@ -1,0 +1,75 @@
+========================================================================
+PHASE T1 -- LinearRegressionBreakout Concept Discovery
+========================================================================
+Timeframes tested: ['1d', '4h', '8h']
+N grid:            [10, 15, 20, 25, 30, 40, 55]
+mult grid:         [1.0, 1.5, 2.0, 2.5, 3.0]
+stop_mult grid:    [2.0, 3.0]
+Filter modes:      ['ema200_price', 'linreg_slope_positive']
+Cost floor:        avg_r > 0.15R  (Binance Spot)
+Stability gate:    >= 67.0% of zone combos profitable
+
+------------------------------------------------------------------------
+TIMEFRAME: 1d  (53 symbols, 140 param combos)
+------------------------------------------------------------------------
+  PASS combos: 10 / 20
+
+  Top PASS combos by best_avg_r:
+    fm=ema200_price              mult=3.0  sm=2.0  N=55  avg_r=+0.4021R  zone=100%  trades=195  [PASS/PASS]
+    fm=linreg_slope_positive     mult=3.0  sm=2.0  N=55  avg_r=+0.3206R  zone=100%  trades=151  [PASS/PASS]
+    fm=ema200_price              mult=2.5  sm=2.0  N=40  avg_r=+0.2844R  zone=100%  trades=269  [PASS/PASS]
+    fm=ema200_price              mult=2.0  sm=2.0  N=55  avg_r=+0.2741R  zone=100%  trades=297  [PASS/PASS]
+    fm=ema200_price              mult=3.0  sm=3.0  N=55  avg_r=+0.2573R  zone=100%  trades=183  [PASS/PASS]
+    fm=linreg_slope_positive     mult=3.0  sm=3.0  N=55  avg_r=+0.1941R  zone=100%  trades=142  [PASS/PASS]
+    fm=ema200_price              mult=2.5  sm=3.0  N=55  avg_r=+0.1914R  zone=100%  trades=233  [PASS/PASS]
+    fm=ema200_price              mult=2.0  sm=3.0  N=55  avg_r=+0.1908R  zone=100%  trades=275  [PASS/PASS]
+    fm=ema200_price              mult=1.5  sm=2.0  N=55  avg_r=+0.1879R  zone=100%  trades=364  [PASS/PASS]
+    fm=linreg_slope_positive     mult=1.5  sm=2.0  N=40  avg_r=+0.1551R  zone=100%  trades=481  [PASS/PASS]
+
+  FAIL summary (stability or cost gate):
+    fm=linreg_slope_positive     mult=1.0  sm=2.0  N=40  avg_r=+0.1366R  zone=100%  [PASS/FAIL]
+    fm=ema200_price              mult=1.0  sm=2.0  N=55  avg_r=+0.1348R  zone=100%  [PASS/FAIL]
+    fm=ema200_price              mult=1.5  sm=3.0  N=55  avg_r=+0.1333R  zone=100%  [PASS/FAIL]
+    fm=linreg_slope_positive     mult=2.5  sm=2.0  N=55  avg_r=+0.1150R  zone=100%  [PASS/FAIL]
+    fm=ema200_price              mult=1.0  sm=3.0  N=55  avg_r=+0.1068R  zone=100%  [PASS/FAIL]
+
+------------------------------------------------------------------------
+TIMEFRAME: 4h  (67 symbols, 140 param combos)
+------------------------------------------------------------------------
+  No combos passed stability + cost floor gate
+
+  FAIL summary (stability or cost gate):
+    fm=ema200_price              mult=2.0  sm=2.0  N=55  avg_r=+0.0625R  zone=100%  [PASS/FAIL]
+    fm=ema200_price              mult=2.0  sm=3.0  N=55  avg_r=+0.0605R  zone=100%  [PASS/FAIL]
+    fm=ema200_price              mult=2.5  sm=3.0  N=55  avg_r=+0.0517R  zone=100%  [PASS/FAIL]
+    fm=ema200_price              mult=3.0  sm=2.0  N=30  avg_r=+0.0495R  zone=100%  [PASS/FAIL]
+    fm=ema200_price              mult=1.5  sm=2.0  N=55  avg_r=+0.0492R  zone=100%  [PASS/FAIL]
+
+------------------------------------------------------------------------
+TIMEFRAME: 8h  (63 symbols, 140 param combos)
+------------------------------------------------------------------------
+  No combos passed stability + cost floor gate
+
+  FAIL summary (stability or cost gate):
+    fm=linreg_slope_positive     mult=1.5  sm=2.0  N=40  avg_r=+0.0452R  zone=100%  [PASS/FAIL]
+    fm=linreg_slope_positive     mult=2.0  sm=3.0  N=40  avg_r=+0.0425R  zone=100%  [PASS/FAIL]
+    fm=linreg_slope_positive     mult=2.0  sm=2.0  N=40  avg_r=+0.0420R  zone=67%  [FAIL/FAIL]
+    fm=linreg_slope_positive     mult=1.5  sm=3.0  N=40  avg_r=+0.0405R  zone=100%  [PASS/FAIL]
+    fm=linreg_slope_positive     mult=1.0  sm=2.0  N=30  avg_r=+0.0393R  zone=100%  [PASS/FAIL]
+
+========================================================================
+RECOMMENDED CANONICAL CONFIG (best overall PASS)
+========================================================================
+  Timeframe:    1d
+  Filter:       ema200_price
+  N (canonical):55
+  LinReg mult:  3.0
+  Stop mult:    2.0
+  Avg R/trade:  +0.4021R
+  Total R:      +78.41R
+  Trades:       195
+  Zone PASS:    100%
+
+  NOTE: Review stability ranking CSV before locking T2 config.
+  Do NOT proceed to T2 without human review.
+========================================================================

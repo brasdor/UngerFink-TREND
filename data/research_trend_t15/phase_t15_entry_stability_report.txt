@@ -1,0 +1,59 @@
+PHASE T15 — ENTRY PARAMETER STABILITY STUDY
+================================================================================
+
+Unger principle: pick parameters by stability around chosen value, not by
+best single value.  This study stress-tests the frozen Donchian N.
+
+Canonical config: Donchian N=20, filter=ema200_price (fixed)
+Exits frozen at:  Donchian N//2 fallback + Chandelier ACT4_ATR3
+Timeframe:        1d
+
+CANONICAL COMBO STATS
+----------------------------------------
+  Trades:         293
+  Avg R:          +0.1787
+  Profit factor:  1.27
+  Max drawdown R: -31.41
+  Win rate:       24.6%
+
+STABILITY ZONE (don_n∈{15,20,25} — ±1 step from canonical N=20)
+----------------------------------------
+  Total combos in zone:  3
+  PF > 1.0:              3 / 3  (100%)
+  Avg R > 0:             3 / 3
+  Strong (PF>1.2, avgR>0.05): 2 / 3
+
+FULL GRID
+----------------------------------------
+  Total combos:   7
+  PF > 1.0:       7 / 7  (100%)
+
+DONCHIAN N SWEEP  (filter=ema200_price fixed, exit=Donchian N//2 + Chandelier)
+------------------------------------------------------------
+  don_n= 10  trades= 444  avg_r=+0.029  pf=1.05  dd=-59.74
+  don_n= 15  trades= 355  avg_r=+0.068  pf=1.10  dd=-46.14
+  don_n= 20  trades= 293  avg_r=+0.179  pf=1.27  dd=-31.41 ← CANONICAL
+  don_n= 25  trades= 276  avg_r=+0.178  pf=1.26  dd=-32.49
+  don_n= 30  trades= 253  avg_r=+0.241  pf=1.34  dd=-24.64
+  don_n= 40  trades= 228  avg_r=+0.295  pf=1.41  dd=-23.05
+  don_n= 55  trades= 192  avg_r=+0.232  pf=1.31  dd=-22.91
+
+COST CHECK (Unger §4.2 — avg trade must exceed fees)
+----------------------------------------
+  Average fee cost per trade (in R): 0.016R
+  Avg net R after fee:               -0.009R
+  Symbols where avg_R > fee_R:       19/54
+  Symbols with positive net R after fee: 19/54
+
+INTERPRETATION RULES (Unger §2.1)
+----------------------------------------
+  PASS: stability_pct >= 67% in the zone AND canonical avg_R > 0.
+  WARN: stability_pct 40-67% — edge exists but parameter sensitivity is high.
+  FAIL: stability_pct < 40% — current parameters may be overfit.
+
+  If PASS: freeze canonical params, proceed to T16 robustness completion.
+  If WARN: consider widening Donchian N to the most stable value in the zone.
+  If FAIL: do NOT tune. Retire Donchian and evaluate §2.6 (T18) or §2.4 (ORB).
+
+  Do NOT update T9A based on this study alone.
+  T9A paper-live remains frozen until T16+T17+T18 are all reviewed.

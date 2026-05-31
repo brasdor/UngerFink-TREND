@@ -1,0 +1,200 @@
+PHASE T1 — DONCHIAN CHANNEL BREAKOUT CONCEPT DISCOVERY
+================================================================================
+
+Unger §2.1: entry on Donchian channel breakout.
+Unger §3.1: EMA200 price-above filter as regime gate.
+Stability principle: edge must be consistent AROUND the chosen N, not just AT it.
+
+Grid: 4 timeframes × 7 Donchian N × 2 filters × 2 ATR mults = 112 combos
+Stability zone: N ∈ [15, 20, 25]  (PASS threshold: ≥67%)
+
+════════════════════════════════════════════════════════════════════════════════
+STABILITY RANKING — best (TF, filter) combos by zone stability
+════════════════════════════════════════════════════════════════════════════════
+  [PASS] TF=1d   filter=ema200_price    ATR×2.0  zone=3/3 profitable (100%)  N=20→ trades=288  avg_r=+0.3586  pf=1.57  dd=-32.88
+  [PASS] TF=1d   filter=ema200_price    ATR×3.0  zone=3/3 profitable (100%)  N=20→ trades=268  avg_r=+0.2418  pf=1.47  dd=-20.68
+  [PASS] TF=4h   filter=ema200_price    ATR×3.0  zone=3/3 profitable (100%)  N=20→ trades=466  avg_r=+0.0657  pf=1.13  dd=-32.02
+  [PASS] TF=1d   filter=ema50_slope     ATR×2.0  zone=3/3 profitable (100%)  N=20→ trades=338  avg_r=+0.0859  pf=1.12  dd=-93.79
+  [PASS] TF=1d   filter=ema50_slope     ATR×3.0  zone=3/3 profitable (100%)  N=20→ trades=311  avg_r=+0.0361  pf=1.06  dd=-67.12
+  [PASS] TF=8h   filter=ema200_price    ATR×2.0  zone=3/3 profitable (100%)  N=20→ trades=336  avg_r=+0.0061  pf=1.01  dd=-54.54
+  [FAIL] TF=4h   filter=ema200_price    ATR×2.0  zone=1/3 profitable (33%)  N=20→ trades=525  avg_r=+0.0389  pf=1.06  dd=-58.03
+  [FAIL] TF=4h   filter=ema50_slope     ATR×3.0  zone=1/3 profitable (33%)  N=20→ trades=482  avg_r=+0.0141  pf=1.03  dd=-45.09
+  [FAIL] TF=8h   filter=ema200_price    ATR×3.0  zone=1/3 profitable (33%)  N=20→ trades=314  avg_r=-0.0382  pf=0.92  dd=-46.54
+  [FAIL] TF=6h   filter=ema50_slope     ATR×3.0  zone=1/3 profitable (33%)  N=20→ trades=411  avg_r=-0.0446  pf=0.91  dd=-49.21
+
+────────────────────────────────────────────────────────────────────────────────
+RECOMMENDED CANONICAL CONFIGURATION
+────────────────────────────────────────────────────────────────────────────────
+  Timeframe:    1d
+  Filter mode:  ema200_price
+  Donchian N:   20  (stability zone: 100% pass)
+  ATR mult:     2.0
+  Donchian exit: 10 (= N // 2)
+
+  → Use these values in T2 command:
+  python phase_t2_core_trend_engine.py --timeframe 1d --filter-mode ema200_price --donchian-entry 20 --atr-mult 2.0
+
+════════════════════════════════════════════════════════════════════════════════
+DONCHIAN N SENSITIVITY PER TIMEFRAME + FILTER
+════════════════════════════════════════════════════════════════════════════════
+
+  TF=1d  filter=ema200_price  ATR×2.0
+    [+] N=10  exit= 5  trades= 453  avg_r=+0.096  pf=1.17  dd=-39.58
+    [+] N=15  exit= 7  trades= 358  avg_r=+0.236  pf=1.37  dd=-42.50 ← STABILITY ZONE
+    [+] N=20  exit=10  trades= 288  avg_r=+0.359  pf=1.57  dd=-32.88 ← STABILITY ZONE ← CANONICAL
+    [+] N=25  exit=12  trades= 269  avg_r=+0.327  pf=1.49  dd=-38.05 ← STABILITY ZONE
+    [+] N=30  exit=15  trades= 243  avg_r=+0.526  pf=1.75  dd=-37.89
+    [+] N=40  exit=20  trades= 212  avg_r=+0.402  pf=1.56  dd=-41.62
+    [+] N=55  exit=27  trades= 177  avg_r=+0.322  pf=1.42  dd=-53.89
+
+  TF=1d  filter=ema200_price  ATR×3.0
+    [+] N=10  exit= 5  trades= 438  avg_r=+0.070  pf=1.17  dd=-29.34
+    [+] N=15  exit= 7  trades= 338  avg_r=+0.147  pf=1.29  dd=-28.41 ← STABILITY ZONE
+    [+] N=20  exit=10  trades= 268  avg_r=+0.242  pf=1.47  dd=-20.68 ← STABILITY ZONE ← CANONICAL
+    [+] N=25  exit=12  trades= 245  avg_r=+0.236  pf=1.44  dd=-22.25 ← STABILITY ZONE
+    [+] N=30  exit=15  trades= 217  avg_r=+0.397  pf=1.69  dd=-21.15
+    [+] N=40  exit=20  trades= 186  avg_r=+0.296  pf=1.50  dd=-22.35
+    [+] N=55  exit=27  trades= 151  avg_r=+0.226  pf=1.34  dd=-36.13
+
+  TF=1d  filter=ema50_slope  ATR×2.0
+    [-] N=10  exit= 5  trades= 465  avg_r=-0.037  pf=0.94  dd=-79.50
+    [+] N=15  exit= 7  trades= 396  avg_r=+0.064  pf=1.10  dd=-95.09 ← STABILITY ZONE
+    [+] N=20  exit=10  trades= 338  avg_r=+0.086  pf=1.12  dd=-93.79 ← STABILITY ZONE ← CANONICAL
+    [+] N=25  exit=12  trades= 317  avg_r=+0.084  pf=1.12  dd=-91.06 ← STABILITY ZONE
+    [+] N=30  exit=15  trades= 296  avg_r=+0.191  pf=1.26  dd=-90.86
+    [+] N=40  exit=20  trades= 254  avg_r=+0.122  pf=1.16  dd=-84.86
+    [+] N=55  exit=27  trades= 212  avg_r=+0.055  pf=1.07  dd=-94.34
+
+  TF=1d  filter=ema50_slope  ATR×3.0
+    [-] N=10  exit= 5  trades= 448  avg_r=-0.029  pf=0.93  dd=-54.35
+    [+] N=15  exit= 7  trades= 372  avg_r=+0.027  pf=1.05  dd=-67.74 ← STABILITY ZONE
+    [+] N=20  exit=10  trades= 311  avg_r=+0.036  pf=1.06  dd=-67.12 ← STABILITY ZONE ← CANONICAL
+    [+] N=25  exit=12  trades= 287  avg_r=+0.041  pf=1.07  dd=-63.59 ← STABILITY ZONE
+    [+] N=30  exit=15  trades= 265  avg_r=+0.116  pf=1.19  dd=-62.87
+    [+] N=40  exit=20  trades= 223  avg_r=+0.067  pf=1.11  dd=-56.03
+    [-] N=55  exit=27  trades= 185  avg_r=-0.022  pf=0.97  dd=-70.09
+
+  TF=4h  filter=ema200_price  ATR×2.0
+    [-] N=10  exit= 5  trades= 762  avg_r=-0.064  pf=0.89  dd=-92.20
+    [-] N=15  exit= 7  trades= 616  avg_r=-0.024  pf=0.96  dd=-70.77 ← STABILITY ZONE
+    [+] N=20  exit=10  trades= 525  avg_r=+0.039  pf=1.06  dd=-58.03 ← STABILITY ZONE ← CANONICAL
+    [-] N=25  exit=12  trades= 479  avg_r=-0.012  pf=0.98  dd=-70.60 ← STABILITY ZONE
+    [-] N=30  exit=15  trades= 431  avg_r=-0.134  pf=0.82  dd=-81.41
+    [-] N=40  exit=20  trades= 368  avg_r=-0.120  pf=0.84  dd=-85.03
+    [-] N=55  exit=27  trades= 303  avg_r=-0.162  pf=0.79  dd=-87.86
+
+  TF=4h  filter=ema200_price  ATR×3.0
+    [-] N=10  exit= 5  trades= 730  avg_r=-0.041  pf=0.90  dd=-59.93
+    [+] N=15  exit= 7  trades= 562  avg_r=+0.007  pf=1.02  dd=-40.53 ← STABILITY ZONE
+    [+] N=20  exit=10  trades= 466  avg_r=+0.066  pf=1.13  dd=-32.02 ← STABILITY ZONE ← CANONICAL
+    [+] N=25  exit=12  trades= 429  avg_r=+0.029  pf=1.05  dd=-40.93 ← STABILITY ZONE
+    [-] N=30  exit=15  trades= 381  avg_r=-0.092  pf=0.85  dd=-64.56
+    [-] N=40  exit=20  trades= 323  avg_r=-0.072  pf=0.88  dd=-65.41
+    [-] N=55  exit=27  trades= 258  avg_r=-0.096  pf=0.85  dd=-57.13
+
+  TF=4h  filter=ema50_slope  ATR×2.0
+    [-] N=10  exit= 5  trades= 714  avg_r=-0.062  pf=0.89  dd=-83.91
+    [-] N=15  exit= 7  trades= 604  avg_r=-0.067  pf=0.89  dd=-79.74 ← STABILITY ZONE
+    [-] N=20  exit=10  trades= 531  avg_r=-0.014  pf=0.98  dd=-70.66 ← STABILITY ZONE ← CANONICAL
+    [-] N=25  exit=12  trades= 494  avg_r=-0.069  pf=0.90  dd=-80.04 ← STABILITY ZONE
+    [-] N=30  exit=15  trades= 450  avg_r=-0.133  pf=0.82  dd=-86.58
+    [-] N=40  exit=20  trades= 406  avg_r=-0.167  pf=0.78  dd=-100.13
+    [-] N=55  exit=27  trades= 334  avg_r=-0.222  pf=0.72  dd=-108.33
+
+  TF=4h  filter=ema50_slope  ATR×3.0
+    [-] N=10  exit= 5  trades= 685  avg_r=-0.046  pf=0.89  dd=-60.59
+    [-] N=15  exit= 7  trades= 558  avg_r=-0.024  pf=0.95  dd=-53.70 ← STABILITY ZONE
+    [+] N=20  exit=10  trades= 482  avg_r=+0.014  pf=1.03  dd=-45.09 ← STABILITY ZONE ← CANONICAL
+    [-] N=25  exit=12  trades= 447  avg_r=-0.022  pf=0.96  dd=-54.86 ← STABILITY ZONE
+    [-] N=30  exit=15  trades= 406  avg_r=-0.100  pf=0.83  dd=-70.12
+    [-] N=40  exit=20  trades= 354  avg_r=-0.097  pf=0.84  dd=-76.10
+    [-] N=55  exit=27  trades= 287  avg_r=-0.148  pf=0.78  dd=-72.14
+
+  TF=6h  filter=ema200_price  ATR×2.0
+    [+] N=10  exit= 5  trades= 488  avg_r=+0.096  pf=1.17  dd=-35.97
+    [+] N=15  exit= 7  trades= 412  avg_r=+0.126  pf=1.22  dd=-30.33 ← STABILITY ZONE
+    [-] N=20  exit=10  trades= 371  avg_r=-0.074  pf=0.89  dd=-55.21 ← STABILITY ZONE ← CANONICAL
+    [-] N=25  exit=12  trades= 333  avg_r=-0.075  pf=0.89  dd=-57.82 ← STABILITY ZONE
+    [-] N=30  exit=15  trades= 292  avg_r=-0.051  pf=0.93  dd=-55.01
+    [-] N=40  exit=20  trades= 255  avg_r=-0.074  pf=0.90  dd=-49.33
+    [-] N=55  exit=27  trades= 230  avg_r=-0.188  pf=0.75  dd=-66.11
+
+  TF=6h  filter=ema200_price  ATR×3.0
+    [+] N=10  exit= 5  trades= 455  avg_r=+0.097  pf=1.25  dd=-18.25
+    [+] N=15  exit= 7  trades= 382  avg_r=+0.107  pf=1.25  dd=-21.12 ← STABILITY ZONE
+    [-] N=20  exit=10  trades= 339  avg_r=-0.074  pf=0.86  dd=-47.54 ← STABILITY ZONE ← CANONICAL
+    [-] N=25  exit=12  trades= 299  avg_r=-0.060  pf=0.89  dd=-44.78 ← STABILITY ZONE
+    [-] N=30  exit=15  trades= 263  avg_r=-0.044  pf=0.92  dd=-40.59
+    [-] N=40  exit=20  trades= 224  avg_r=-0.061  pf=0.90  dd=-38.31
+    [-] N=55  exit=27  trades= 201  avg_r=-0.163  pf=0.74  dd=-46.55
+
+  TF=6h  filter=ema50_slope  ATR×2.0
+    [+] N=10  exit= 5  trades= 564  avg_r=+0.100  pf=1.20  dd=-31.40
+    [+] N=15  exit= 7  trades= 494  avg_r=+0.100  pf=1.19  dd=-43.90 ← STABILITY ZONE
+    [-] N=20  exit=10  trades= 444  avg_r=-0.064  pf=0.90  dd=-68.16 ← STABILITY ZONE ← CANONICAL
+    [-] N=25  exit=12  trades= 408  avg_r=-0.067  pf=0.90  dd=-72.57 ← STABILITY ZONE
+    [-] N=30  exit=15  trades= 367  avg_r=-0.064  pf=0.90  dd=-82.18
+    [-] N=40  exit=20  trades= 325  avg_r=-0.116  pf=0.84  dd=-81.01
+    [-] N=55  exit=27  trades= 278  avg_r=-0.195  pf=0.73  dd=-85.88
+
+  TF=6h  filter=ema50_slope  ATR×3.0
+    [+] N=10  exit= 5  trades= 535  avg_r=+0.098  pf=1.28  dd=-16.66
+    [+] N=15  exit= 7  trades= 468  avg_r=+0.080  pf=1.21  dd=-27.93 ← STABILITY ZONE
+    [-] N=20  exit=10  trades= 411  avg_r=-0.045  pf=0.91  dd=-49.21 ← STABILITY ZONE ← CANONICAL
+    [-] N=25  exit=12  trades= 373  avg_r=-0.044  pf=0.91  dd=-51.46 ← STABILITY ZONE
+    [-] N=30  exit=15  trades= 335  avg_r=-0.049  pf=0.90  dd=-56.18
+    [-] N=40  exit=20  trades= 287  avg_r=-0.087  pf=0.85  dd=-56.48
+    [-] N=55  exit=27  trades= 241  avg_r=-0.147  pf=0.75  dd=-61.12
+
+  TF=8h  filter=ema200_price  ATR×2.0
+    [+] N=10  exit= 5  trades= 459  avg_r=+0.141  pf=1.28  dd=-23.09
+    [+] N=15  exit= 7  trades= 370  avg_r=+0.125  pf=1.23  dd=-37.68 ← STABILITY ZONE
+    [+] N=20  exit=10  trades= 336  avg_r=+0.006  pf=1.01  dd=-54.54 ← STABILITY ZONE ← CANONICAL
+    [+] N=25  exit=12  trades= 314  avg_r=+0.016  pf=1.03  dd=-63.61 ← STABILITY ZONE
+    [-] N=30  exit=15  trades= 287  avg_r=-0.085  pf=0.88  dd=-74.18
+    [-] N=40  exit=20  trades= 249  avg_r=-0.024  pf=0.97  dd=-73.10
+    [-] N=55  exit=27  trades= 204  avg_r=-0.122  pf=0.85  dd=-68.08
+
+  TF=8h  filter=ema200_price  ATR×3.0
+    [+] N=10  exit= 5  trades= 444  avg_r=+0.081  pf=1.22  dd=-16.89
+    [+] N=15  exit= 7  trades= 352  avg_r=+0.061  pf=1.15  dd=-33.82 ← STABILITY ZONE
+    [-] N=20  exit=10  trades= 314  avg_r=-0.038  pf=0.92  dd=-46.54 ← STABILITY ZONE ← CANONICAL
+    [-] N=25  exit=12  trades= 294  avg_r=-0.052  pf=0.90  dd=-57.29 ← STABILITY ZONE
+    [-] N=30  exit=15  trades= 267  avg_r=-0.118  pf=0.79  dd=-66.07
+    [-] N=40  exit=20  trades= 232  avg_r=-0.068  pf=0.89  dd=-68.51
+    [-] N=55  exit=27  trades= 189  avg_r=-0.149  pf=0.79  dd=-65.20
+
+  TF=8h  filter=ema50_slope  ATR×2.0
+    [-] N=10  exit= 5  trades= 551  avg_r=-0.025  pf=0.95  dd=-71.78
+    [-] N=15  exit= 7  trades= 453  avg_r=-0.051  pf=0.91  dd=-88.38 ← STABILITY ZONE
+    [-] N=20  exit=10  trades= 409  avg_r=-0.144  pf=0.78  dd=-106.01 ← STABILITY ZONE ← CANONICAL
+    [-] N=25  exit=12  trades= 385  avg_r=-0.132  pf=0.81  dd=-108.99 ← STABILITY ZONE
+    [-] N=30  exit=15  trades= 359  avg_r=-0.227  pf=0.68  dd=-123.42
+    [-] N=40  exit=20  trades= 325  avg_r=-0.173  pf=0.76  dd=-119.69
+    [-] N=55  exit=27  trades= 263  avg_r=-0.241  pf=0.70  dd=-104.42
+
+  TF=8h  filter=ema50_slope  ATR×3.0
+    [-] N=10  exit= 5  trades= 534  avg_r=-0.021  pf=0.94  dd=-50.44
+    [-] N=15  exit= 7  trades= 433  avg_r=-0.052  pf=0.88  dd=-65.85 ← STABILITY ZONE
+    [-] N=20  exit=10  trades= 382  avg_r=-0.141  pf=0.72  dd=-86.71 ← STABILITY ZONE ← CANONICAL
+    [-] N=25  exit=12  trades= 358  avg_r=-0.143  pf=0.74  dd=-91.10 ← STABILITY ZONE
+    [-] N=30  exit=15  trades= 328  avg_r=-0.197  pf=0.66  dd=-96.63
+    [-] N=40  exit=20  trades= 293  avg_r=-0.148  pf=0.76  dd=-94.01
+    [-] N=55  exit=27  trades= 238  avg_r=-0.219  pf=0.69  dd=-87.80
+
+════════════════════════════════════════════════════════════════════════════════
+INTERPRETATION (Unger §2.1 methodology)
+════════════════════════════════════════════════════════════════════════════════
+
+  PASS  (stability ≥ 67%): Edge is robust. Use recommended config in T2.
+  WARN  (stability 40–67%): Edge exists but parameter-sensitive. Consider widening N.
+  FAIL  (stability < 40%):  Edge is fragile. Do NOT proceed. Consider §2.6 (ATR gate).
+
+  Win rate check (Unger §4.1): a healthy TF system has win rate 30–45%.
+  A win rate above 55% is suspicious — likely overfitting or holding losers.
+
+  Cost check (Unger §4.2): avg_r must be > 0.15R to cover Binance taker fees.
+  If avg_r < 0.15R on the recommended combo, the edge is too thin for live trading.
+
+  T9A paper-live remains FROZEN regardless of T1 findings.
+  T1 findings feed T2 → T3B → T4–T8 → new paper config (separate from T9A).

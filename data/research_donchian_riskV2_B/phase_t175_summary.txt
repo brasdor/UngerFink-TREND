@@ -1,0 +1,27 @@
+PHASE T17.5 — RISK SIZING VARIANT B
+====================================================
+STATUS: THEORETICAL — requires T9B ≥3 months before implementation
+Date:   2026-05-30
+
+Variant description:
+  Fixed 0.75% per trade (3× baseline)
+
+T6 Capital Simulation ($10,000)
+--------------------------------------------
+  Final equity : $ 67,703.16
+  Total return :  +577.03%
+  Max DD       :   -12.79%
+  Kill-switch  : no
+
+T16 Monte Carlo (5000 runs, block bootstrap)
+--------------------------------------------
+    bs    p05_ret    p50_ret    p95_ret    p05_DD   prob+   kill%
+     1     +264.1%     +838.3%    +2995.4%     -14.0%     100.0%    0.0%
+     5     +175.2%     +820.2%    +4026.2%     -21.9% ⚠️  100.0%    0.0%
+    10     +107.8%     +602.0%    +3465.6%     -25.1% ⚠️  99.8%    0.3%
+    20      +68.9%     +381.4%    +2026.7%     -25.5% ⚠️  99.6%    0.4%
+    50      +83.9%     +277.1%     +984.9%     -21.4% ⚠️  100.0%    0.0%
+
+⚠️  MC p05 DD EXCEEDS -15% — significant tail risk
+
+⚠️  THEORETICAL — implement only after T9B ≥3 months

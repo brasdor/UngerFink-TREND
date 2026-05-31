@@ -1,0 +1,66 @@
+PHASE T17 OPT-17.4 -- Exit Refinement Variant D
+======================================================================
+
+Variant: Time backstop at 60 calendar days
+Config: {kwargs}
+
+Baseline: avg_r=+1.101R  PF=3.072  CAGR=+14.3%
+
+======================================================================
+T4 RESULTS
+======================================================================
+  Trades   : 462
+  Avg R    : +1.1134R  (baseline: +1.101R)
+  PF       : 3.091  (baseline: 3.072)
+  Win rate : 41.1%
+  t-score  : 7.29
+  Period   : 2020-12-23 -> 2026-05-28
+
+T4 -- MONTE CARLO (bs=10):
+  p05/p50/p95 = 352.9/510.1/676.8
+  prob>0=100.0%
+
+T4 -- COST STRESS:
+  +0.00R -> avgR=+1.1134  PF=3.091
+  +0.02R -> avgR=+1.0934  PF=3.009
+  +0.05R -> avgR=+1.0634  PF=2.892
+  +0.10R -> avgR=+1.0134  PF=2.713
+  +0.15R -> avgR=+0.9634  PF=2.550
+  +0.20R -> avgR=+0.9134  PF=2.401
+
+T4 -- PERIOD SPLITS:
+  first_half_by_trade           : t=231  avgR=+1.1473  PF=3.112
+  second_half_by_trade          : t=231  avgR=+1.0795  PF=3.069
+  last_100_trades               : t=100  avgR=+0.5724  PF=2.020
+  first_half_by_time            : t=232  avgR=+1.1380  PF=3.088
+  second_half_by_time           : t=230  avgR=+1.0885  PF=3.095
+
+T4 -- REMOVE BEST ASSETS:
+  remove 0: totalR= +514.4  avgR=+1.1134
+  remove 1: totalR= +466.1  avgR=+1.0521
+  remove 3: totalR= +397.8  avgR=+0.9944
+  remove 5: totalR= +344.6  avgR=+0.9365
+
+T4 -- REMOVE BEST MONTHS:
+  remove 0: totalR= +514.4  avgR=+1.1134
+  remove 1: totalR= +438.1  avgR=+0.9980
+  remove 2: totalR= +367.3  avgR=+0.8893
+  remove 3: totalR= +308.0  avgR=+0.7917
+
+T5/T6: accepted=322  CAGR=+14.4%  DD=-4.1%
+
+GATE RESULTS:
+  PASS  trades >=80 (got 462)
+  PASS  win% 30-45% (got 41.1%)
+  PASS  avg_r > 0.15R (got +1.1134R)
+  PASS  PF > 1.0 (got 3.091)
+  PASS  MC p05 > 0 (got +352.9R)
+  PASS  cost +0.10R PF > 1.0
+  PASS  2nd half avgR > 0 (got +1.0795R)
+  PASS  remove top-1 asset > 0 (got +466.1R)
+  PASS  remove top-1 month > 0 (got +438.1R)
+
+vs BASELINE:
+  avg_r: +1.1134R vs +1.101R -> BETTER
+  PF   : 3.091 vs 3.072 -> BETTER
+  CAGR : +14.4% vs +14.3% -> BETTER

@@ -1,0 +1,133 @@
+PHASE T17 STEP C -- DonchianLong_UniverseV2 Master Report
+======================================================================
+
+Universe:  24 symbols (tightened Step B filter)
+Config:    Donchian N=20 / ema200_price / ATR(14)x2.0 / Chandelier ACT+4R trail 3xATR
+Data:      2020-05-20 -> 2026-05-29 (≈6 years per symbol)
+
+BASELINE (original 64-sym, ~4yr): avg_r=+0.179R  PF=1.27  CAGR=+19%  DD=-1.78% (max3)
+
+======================================================================
+T4 -- BASELINE SUMMARY
+======================================================================
+  Trades:     461
+  Total R:    +507.60R
+  Avg R:      +1.1011R   (baseline: +0.179R)
+  PF:         3.072   (baseline: 1.27)
+  Win rate:   41.2%
+  Max DD:     -22.48R
+  t-score:    7.33
+  Assets:     24
+  Period:     2020-12-23 -> 2026-05-28
+
+======================================================================
+T4 -- MONTE CARLO (2000 runs, block_size=10)
+======================================================================
+  totalR  p05/p50/p95 = 347.7 / 508.7 / 664.9
+  prob(totalR > 0)    = 100.0%
+  PF      p05/p50     = 2.31 / 3.08
+  DD      p95 (worst) = -11.46R
+
+======================================================================
+T4 -- COST STRESS
+======================================================================
+  +0.00R/trade -> totalR=+507.6  avgR=+1.1011  PF=3.072
+  +0.02R/trade -> totalR=+498.4  avgR=+1.0811  PF=2.990
+  +0.05R/trade -> totalR=+484.6  avgR=+1.0511  PF=2.874
+  +0.10R/trade -> totalR=+461.5  avgR=+1.0011  PF=2.695
+  +0.15R/trade -> totalR=+438.5  avgR=+0.9511  PF=2.533
+  +0.20R/trade -> totalR=+415.4  avgR=+0.9011  PF=2.385
+
+======================================================================
+T4 -- PERIOD SPLITS
+======================================================================
+  first_half_by_trade           : trades=230  totalR= +259.5  avgR=+1.1284  PF=3.062  win=41.3%
+  second_half_by_trade          : trades=231  totalR= +248.1  avgR=+1.0739  PF=3.082  win=41.1%
+  last_100_trades               : trades=100  totalR=  +58.2  avgR=+0.5824  PF=2.057  win=36.0%
+  first_half_by_time            : trades=233  totalR= +263.0  avgR=+1.1288  PF=3.064  win=41.2%
+  second_half_by_time           : trades=228  totalR= +244.6  avgR=+1.0727  PF=3.081  win=41.2%
+
+======================================================================
+T4 -- REMOVE BEST ASSETS
+======================================================================
+  Top asset: FET/USDT  (43.64R = 8.6% of total)
+  remove top 0: totalR= +507.6  avgR=+1.1011  PF=3.072  remaining=24  []
+  remove top 1: totalR= +464.0  avgR=+1.0497  PF=2.989  remaining=23  [FET/USDT]
+  remove top 3: totalR= +395.6  avgR=+0.9916  PF=2.852  remaining=21  [FET/USDT,SOL/USDT,ZEC/USDT]
+  remove top 5: totalR= +342.5  avgR=+0.9333  PF=2.764  remaining=19  [FET/USDT,SOL/USDT,ZEC/USDT,VET/USDT,ZRX/USDT]
+
+======================================================================
+T4 -- REMOVE BEST MONTHS
+======================================================================
+  remove top 0: totalR= +507.6  avgR=+1.1011  PF=3.072  months_remaining=54  []
+  remove top 1: totalR= +431.4  avgR=+0.9848  PF=2.812  months_remaining=53  [2021-02]
+  remove top 2: totalR= +360.5  avgR=+0.8750  PF=2.581  months_remaining=52  [2021-02,2024-03]
+  remove top 3: totalR= +302.2  avgR=+0.7809  PF=2.399  months_remaining=51  [2021-02,2024-03,2021-09]
+
+======================================================================
+T4 -- ASSET CONCENTRATION
+======================================================================
+  Top 1:  43.6R  (8.6% of total)
+  Top 3:  112.0R  (22.1% of total)
+  Top 5:  165.1R  (32.5% of total)
+  Positive assets: 24/24
+
+======================================================================
+T5 -- PORTFOLIO VARIANTS
+======================================================================
+  Variant   Accepted  TotalR    AvgR     PF     DD_R     Win% 
+  max3           168   +159.71  +0.9506  2.769    -9.93  40.5%
+  max5           251   +191.33  +0.7623  2.333   -13.34  37.1%
+  max8           318   +294.58  +0.9263  2.695   -13.75  39.0%
+  uncap          461   +507.60  +1.1011  3.072   -19.48  41.2%
+
+======================================================================
+T6 -- CAPITAL EXECUTION ($10,000 / 0.25% risk / 1.0x leverage)
+======================================================================
+  max3    : $   14,823  return=+48.2%  CAGR=+7.5%  DD=-2.5%  kill=no  (5.5yr)
+  max5    : $   16,020  return=+60.2%  CAGR=+9.0%  DD=-3.3%  kill=no  (5.5yr)
+  max8    : $   20,663  return=+106.6%  CAGR=+14.3%  DD=-3.4%  kill=no  (5.5yr)
+  uncap   : $   34,992  return=+249.9%  CAGR=+25.9%  DD=-4.8%  kill=no  (5.5yr)
+  baseline: CAGR=+19.0%  DD=-1.78%  kill=no  (max3, 4yr)
+
+======================================================================
+T7 -- ASSET ROBUSTNESS (remove top-1 symbol, max3 portfolio)
+======================================================================
+  Removed:  FET/USDT  (43.6R)
+  Accepted: 169  total_r=+118.09  avgR=+0.6987  PF=2.271
+  CAGR=+5.5%  DD=-3.1%
+
+======================================================================
+T8 -- FINAL SCORECARD  (DonchianLong_UniverseV2 vs Baseline)
+======================================================================
+
+  METHOD:          DonchianLong_UniverseV2
+  UNIVERSE:        24 symbols (tightened filter: avg_r>0, trades>=15, top_month<60%, total_r>0)
+  DATA RANGE:      2020-05-20 -> 2026-05-29  (~6 years)
+  TRADES (T5 max3):168
+  WIN RATE:        40.5%       [gate: 30-45%]
+  AVG R:           +0.9506R     [gate: >0.15R]
+  PF:              2.769          [gate: >1.0]
+  MAX DD (R):      -9.93R
+  MAX DD (%):      -2.5%      (baseline: -1.78%)
+  CAGR:            +7.5%          (baseline: +19.0%)
+  MC P05 TOTAL R:  +347.7R       [gate: >0]
+  COST +0.10R PF:  2.695          [gate: >1.0]
+  2ND HALF AVG R:  +1.0739R     [gate: >0]
+  KILL SWITCH:     no
+
+  GATE RESULTS:
+  PASS  §4.1 win rate 30-45%  (got 40.5%)
+  PASS  §4.2 avg_r > 0.15R    (got +0.9506R)
+  PASS  MC p05 total_r > 0    (got +347.7R)
+  PASS  Cost +0.10R PF > 1.0  (got 2.695)
+  PASS  Remove top-1 asset profitable  (totalR=+464.0R)
+  PASS  Remove top-1 month profitable  (totalR=+431.4R)
+  PASS  2nd half avg_r > 0    (got +1.0739R)
+  PASS  Kill switch not fired
+
+  vs BASELINE:
+  avg_r:   +0.9506R  vs  +0.179R  -> BETTER
+  PF:      2.769  vs  1.27  -> BETTER
+  CAGR:    +7.5%  vs  +19.0%  -> WORSE
+  Max DD%: -2.5%  vs  -1.78%  -> WORSE (larger DD)

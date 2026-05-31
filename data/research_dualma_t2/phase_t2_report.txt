@@ -1,0 +1,68 @@
+======================================================================
+PHASE T2 — DUALMA CORE ENGINE REPORT
+Generated: 2026-05-27T10:56:06.726931+00:00
+======================================================================
+
+── CANONICAL CONFIG ─────────────────────────────────────────────
+  Method:            DualMA
+  Exchange:          binance_spot
+  Side:              LONG
+  Timeframe:         1d
+  Fast EMA:          30
+  Slow EMA:          100
+  Filter mode:       ema200_price
+  Regime EMA:        200
+  ATR period:        14
+  ATR mult (stop):   2.0
+  Fee/side:          0.001
+  Backtest bars:     1500
+  Exit logic:        Simple: (1) low <= initial_stop → exit at stop. (2) fast_ema_current < slow_ema_current on close → exit at close. No chandelier in T2.
+
+── AGGREGATE METRICS ────────────────────────────────────────────
+  Total trades:      117
+  Symbols traded:    50
+  Win rate:          14.53%
+  Avg R per trade:   -0.2656R
+  Total R:           -31.0735R
+  Profit factor:     0.651
+  Max DD (R):        -40.4012R
+  Winners:           17
+  Losers:            100
+
+── CONCENTRATION (§4.7) ─────────────────────────────────────────
+  Top-1 asset:       N/A
+  Top-1 R:           0.0000R
+  Top-1 % of total:  0.0%
+  Top-3 % of total:  0.0%
+  Concentration flag:False
+
+── GATE CHECKS ──────────────────────────────────────────────────
+  FAIL — win rate 14.5% below 30% floor
+  FAIL — avg_r=-0.2656R at or below cost floor 0.15R
+  FLAG — profit factor 0.651 below 1.0
+  PASS — top-1 asset 0.0% of total R (<= 50%)
+  FAIL
+
+  *** OVERALL: FAIL ***
+
+── WIN RATE NOTE ────────────────────────────────────────────────
+Win rate 24.1% is below the 30-45% healthy range. Entire grid shows 15-25% win rates — structural to this crypto universe. Same pattern as Donchian (24.6%). Fat-tail structure: large infrequent winners. Must verify in T4 block bootstrap that edge is not just 1-2 events. Per T1 selection rationale: win rate gate is noted but not a hard STOP for this universe.
+
+── BENCHMARK COMPARISON (vs Donchian frozen) ────────────────────
+  Donchian avg_r:    +0.179R   DualMA avg_r: -0.2656R
+  Donchian PF:       1.27       DualMA PF:    0.651
+  Donchian total R:  82.0R     DualMA total: -31.0735R
+
+── TOP 10 ASSETS BY TOTAL R ─────────────────────────────────────
+  XRP/USDT         trades=  5  total_r=+10.90  avg_r=+2.1809  win=20.0%  pf=3.93
+  SUI/USDT         trades=  4  total_r=+9.88  avg_r=+2.4712  win=25.0%  pf=4.25
+  DOGE/USDT        trades=  3  total_r=+5.10  avg_r=+1.7013  win=33.3%  pf=3.52
+  BCH/USDT         trades=  3  total_r=+1.34  avg_r=+0.4480  win=66.7%  pf=2.33
+  TRX/USDT         trades=  6  total_r=+1.16  avg_r=+0.1927  win=16.7%  pf=1.25
+  ALGO/USDT        trades=  2  total_r=+1.15  avg_r=+0.5745  win=50.0%  pf=2.14
+  AMP/USDT         trades=  1  total_r=+0.73  avg_r=+0.7347  win=100.0%  pf=inf
+  BTC/USDT         trades=  4  total_r=+0.57  avg_r=+0.1416  win=25.0%  pf=1.21
+  ASR/USDT         trades=  2  total_r=+0.29  avg_r=+0.1464  win=50.0%  pf=1.29
+  ADA/USDT         trades=  3  total_r=-0.12  avg_r=-0.0385  win=33.3%  pf=0.93
+
+======================================================================

@@ -23,26 +23,27 @@ This phase DOES:
 - prepare portfolio/system health monitoring
 - export live-ready configuration files
 
-Current frozen core:
---------------------
+Current frozen core (T1→T7, 4-year backtest):
+----------------------------------------------
 Timeframe:
-    6H
+    1D
 
 Entry:
-    Donchian breakout
-
-Filter:
-    trend structure from current engine
+    Donchian breakout N=20, EMA200 price-above filter
 
 Exit:
-    wide trailing
+    Donchian N//2 (10) while MFE < 4R
+    Chandelier trailing (ATR×3.0, 22-bar) once MFE ≥ 4R
+    Initial stop: ATR×2.0
 
 Portfolio:
-    max5
-    low heat
+    max3 (preferred — passes T7 remove-top-1-asset)
+    max5 (alternative — marginally fails, known concentration)
+    heat cap 1.5%, risk 0.25% per trade
 
 Execution:
     closed candles only
+    Binance Spot LONG only (no leverage, no shorts)
 
 This is NOT yet the Binance live engine.
 That comes in T9.
@@ -69,7 +70,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 # ============================================================
 
 FROZEN_CONFIG = {
-    "system_name": "TREND_6H_DONCHIAN_WIDE",
+    "system_name": "TREND_1D_DONCHIAN_WIDE",
     "version": "T8_FROZEN",
     "created_utc": datetime.now(timezone.utc).isoformat(),
 
@@ -81,26 +82,37 @@ FROZEN_CONFIG = {
     "universe_size": 70,
 
     # --------------------------------------------------------
-    # CORE LOGIC
+    # CORE LOGIC (T1→T7 confirmed, 4-year backtest)
     # --------------------------------------------------------
-    "timeframe": "6h",
+    "timeframe": "1d",
     "entry_logic": "donchian_breakout",
-    "exit_logic": "wide_trailing",
+    "entry_donchian_n": 20,
+    "filter_mode": "ema200_price",          # price > EMA200 (Unger §3.1)
+    "initial_stop_atr_mult": 2.0,           # ATR×2.0 (T1 4yr canonical)
+    "exit_logic": "donchian_n2_then_chandelier",
+    "exit_donchian_n": 10,                  # N//2 Turtle rule
+    "chandelier_activate_r": 4.0,           # Chandelier only after +4R MFE
+    "chandelier_atr_mult": 3.0,             # T10 stability: 3.0 most robust
+    "chandelier_lookback": 22,
     "closed_candles_only": True,
+    "allow_short": False,                   # Binance Spot LONG only
 
     # --------------------------------------------------------
-    # PORTFOLIO
+    # PORTFOLIO — two validated variants
     # --------------------------------------------------------
-    "max_open_positions": 5,
+    "preferred_variant": "max3",            # passes T7 remove-top-1-asset (+3.06R)
+    "alternative_variant": "max5",          # marginally fails remove-top-1, known concentration
+    "max_open_positions": 3,                # preferred (max3)
     "portfolio_heat_pct": 1.5,
     "risk_per_trade_pct": 0.25,
     "long_only_preferred": True,
 
     # --------------------------------------------------------
-    # CAPITAL
+    # CAPITAL (Binance Spot — no leverage, no margin)
     # --------------------------------------------------------
     "initial_capital_usdt": 10000,
-    "leverage_proxy": 3.0,
+    "leverage_proxy": 1.0,
+    "max_notional_pct": 35.0,
     "max_margin_usage_pct": 85,
 
     # --------------------------------------------------------
@@ -152,17 +164,20 @@ HEALTH_TEMPLATE = {
         "T8": True,
     },
     "warnings": [
-        "Dependency on best assets still present",
-        "Recent last20 trades weaker",
-        "Sample size still limited",
+        "Fat-tail concentration: ZEC+XRP+TRX drive majority of R",
+        "December 2024 single-month concentration (~97% of edge)",
+        "max5 fails T7 remove-top-1-asset stress (-4.35R); max3 passes (+3.06R)",
+        "EMA200 filter blocks entire 2022 bear — no bear-market data in backtest",
         "Paper-live observation required before production",
     ],
     "strengths": [
-        "Cost robustness survived",
-        "Low drawdown under realistic capital constraints",
-        "6H structure appears robust",
-        "Portfolio heat remains disciplined",
-        "Long-only structure particularly strong",
+        "Cost stress passes at +0.15R/trade for both variants (Unger §4.2)",
+        "max3 DD -1.78% on $10k — exceptional capital protection",
+        "MC block bootstrap: 89.6% probability positive over full sample",
+        "Remove-top-1-month now passes for both variants (Option B resolved)",
+        "Recent last-50 trades: max5 PF=4.02, max3 PF=9.24 — no degradation",
+        "EMA200 filter correctly avoided 2022 crypto bear market",
+        "1D timeframe: only TF passing both §4.1 stability and §4.2 cost floor",
     ]
 }
 
@@ -239,12 +254,18 @@ report_lines.append("System frozen for paper-live observation.")
 report_lines.append("")
 report_lines.append("FROZEN CORE")
 report_lines.append("-" * 70)
-report_lines.append(f"Timeframe: {FROZEN_CONFIG['timeframe']}")
-report_lines.append(f"Entry: {FROZEN_CONFIG['entry_logic']}")
-report_lines.append(f"Exit: {FROZEN_CONFIG['exit_logic']}")
-report_lines.append(f"Max open positions: {FROZEN_CONFIG['max_open_positions']}")
-report_lines.append(f"Portfolio heat: {FROZEN_CONFIG['portfolio_heat_pct']}%")
-report_lines.append(f"Risk per trade: {FROZEN_CONFIG['risk_per_trade_pct']}%")
+report_lines.append(f"Timeframe:           {FROZEN_CONFIG['timeframe']}")
+report_lines.append(f"Entry:               {FROZEN_CONFIG['entry_logic']} N={FROZEN_CONFIG['entry_donchian_n']}")
+report_lines.append(f"Filter:              {FROZEN_CONFIG['filter_mode']}")
+report_lines.append(f"Initial stop:        ATR x {FROZEN_CONFIG['initial_stop_atr_mult']}")
+report_lines.append(f"Exit (MFE < 4R):     Donchian N={FROZEN_CONFIG['exit_donchian_n']} close")
+report_lines.append(f"Exit (MFE >= 4R):    Chandelier ATR x {FROZEN_CONFIG['chandelier_atr_mult']}, lookback={FROZEN_CONFIG['chandelier_lookback']}")
+report_lines.append(f"Preferred variant:   {FROZEN_CONFIG['preferred_variant']} (max_open={FROZEN_CONFIG['max_open_positions']})")
+report_lines.append(f"Alternative:         {FROZEN_CONFIG['alternative_variant']} (max_open=5)")
+report_lines.append(f"Portfolio heat:      {FROZEN_CONFIG['portfolio_heat_pct']}%")
+report_lines.append(f"Risk per trade:      {FROZEN_CONFIG['risk_per_trade_pct']}%")
+report_lines.append(f"Leverage:            {FROZEN_CONFIG['leverage_proxy']}x (Binance Spot — no margin)")
+report_lines.append(f"Shorts:              DISABLED (Binance Spot LONG only)")
 report_lines.append("")
 report_lines.append("IMPORTANT RULE")
 report_lines.append("-" * 70)

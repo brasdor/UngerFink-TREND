@@ -562,45 +562,45 @@ def write_master_report(
         lines.append(fmt_row(row))
     lines.append("")
 
-    lines.append("KEY 6H DIAGNOSTICS")
+    lines.append("KEY 1D DIAGNOSTICS")
     lines.append("-" * 60)
-    b6 = baseline[(baseline["timeframe"] == "6h") & (baseline["side"] == "ALL")]
-    if not b6.empty:
-        lines.append(fmt_row(b6.iloc[0]))
+    b1 = baseline[(baseline["timeframe"] == "1d") & (baseline["side"] == "ALL")]
+    if not b1.empty:
+        lines.append(fmt_row(b1.iloc[0]))
 
-    mc6 = mc[(mc["timeframe"] == "6h") & (mc["side"] == "ALL") & (mc["block_size"] == 10)]
-    if not mc6.empty:
-        r = mc6.iloc[0]
+    mc1 = mc[(mc["timeframe"] == "1d") & (mc["side"] == "ALL") & (mc["block_size"] == 10)]
+    if not mc1.empty:
+        r = mc1.iloc[0]
         lines.append(
-            f"6H ALL MC block10: totalR p05/p50/p95 = "
+            f"1D ALL MC block10: totalR p05/p50/p95 = "
             f"{r['total_r_p05']:.2f} / {r['total_r_p50']:.2f} / {r['total_r_p95']:.2f}; "
             f"prob positive={r['prob_total_r_positive']:.1%}; "
             f"PF p05={r['pf_p05']:.2f}"
         )
 
-    c6 = cost[(cost["timeframe"] == "6h") & (cost["side"] == "ALL")]
-    if not c6.empty:
-        lines.append("6H ALL cost stress:")
-        for _, r in c6.iterrows():
+    c1 = cost[(cost["timeframe"] == "1d") & (cost["side"] == "ALL")]
+    if not c1.empty:
+        lines.append("1D ALL cost stress:")
+        for _, r in c1.iterrows():
             lines.append(
                 f"  extra_cost={r['extra_cost_r_per_trade']:.2f}R -> "
                 f"totalR={r['total_r']:.2f}, PF={r['profit_factor']:.2f}, DD={r['max_dd_r']:.2f}"
             )
 
-    ra6 = rem_assets[(rem_assets["timeframe"] == "6h") & (rem_assets["side"] == "ALL")]
-    if not ra6.empty:
-        lines.append("6H ALL remove-best-assets:")
-        for _, r in ra6.iterrows():
+    ra1 = rem_assets[(rem_assets["timeframe"] == "1d") & (rem_assets["side"] == "ALL")]
+    if not ra1.empty:
+        lines.append("1D ALL remove-best-assets:")
+        for _, r in ra1.iterrows():
             lines.append(
                 f"  remove top {int(r['removed_top_assets_n'])}: "
                 f"totalR={r['total_r']:.2f}, PF={r['profit_factor']:.2f}, "
                 f"remaining_assets={int(r['assets_remaining'])}, removed={r['removed_assets']}"
             )
 
-    rm6 = rem_months[(rem_months["timeframe"] == "6h") & (rem_months["side"] == "ALL")]
-    if not rm6.empty:
-        lines.append("6H ALL remove-best-months:")
-        for _, r in rm6.iterrows():
+    rm1 = rem_months[(rem_months["timeframe"] == "1d") & (rem_months["side"] == "ALL")]
+    if not rm1.empty:
+        lines.append("1D ALL remove-best-months:")
+        for _, r in rm1.iterrows():
             lines.append(
                 f"  remove top {int(r['removed_top_months_n'])}: "
                 f"totalR={r['total_r']:.2f}, PF={r['profit_factor']:.2f}, "

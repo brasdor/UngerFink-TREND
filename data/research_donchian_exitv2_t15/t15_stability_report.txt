@@ -1,0 +1,16 @@
+T15 -- Entry Parameter Stability (ExitV2: ACT=6R, trail=5.0x)
+=================================================================
+
+Fixed exit params : ACT=6R  trail=5.0x ATR
+Baseline ref      : avg_r=+1.1011R  PF=3.072
+
+     N  exit_n   trades   total_r     avg_r     PF   win%      t  profitable   bl?
+  ---------------------------------------------------------------------------
+    15       7      478   +573.24   +1.1993  3.228  36.8%   4.71         YES   YES
+    20      10      400   +604.47   +1.5112  3.830  39.8%   4.87         YES   YES <-- canonical
+    25      12      362   +592.54   +1.6369  4.092  40.3%   4.94         YES   YES
+
+  ALL N PROFITABLE: YES -- T15 PASS
+
+  Gate: all of N=[15, 20, 25] must have avg_r > 0 AND total_r > 0
+  Result: PASS

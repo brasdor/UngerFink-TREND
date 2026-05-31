@@ -8,12 +8,18 @@ System frozen for paper-live observation.
 
 FROZEN CORE
 ----------------------------------------------------------------------
-Timeframe: 6h
-Entry: donchian_breakout
-Exit: wide_trailing
-Max open positions: 5
-Portfolio heat: 1.5%
-Risk per trade: 0.25%
+Timeframe:           1d
+Entry:               donchian_breakout N=20
+Filter:              ema200_price
+Initial stop:        ATR x 2.0
+Exit (MFE < 4R):     Donchian N=10 close
+Exit (MFE >= 4R):    Chandelier ATR x 3.0, lookback=22
+Preferred variant:   max3 (max_open=3)
+Alternative:         max5 (max_open=5)
+Portfolio heat:      1.5%
+Risk per trade:      0.25%
+Leverage:            1.0x (Binance Spot — no margin)
+Shorts:              DISABLED (Binance Spot LONG only)
 
 IMPORTANT RULE
 ----------------------------------------------------------------------

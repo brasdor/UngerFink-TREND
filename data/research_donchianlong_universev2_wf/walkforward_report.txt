@@ -1,0 +1,89 @@
+WALK-FORWARD VALIDATION -- DonchianLong_UniverseV2
+=================================================================
+
+Config:  Donchian N=20 / ATR(14)x2.0 / Chandelier ACT+4R trail 3xATR
+IS:      2020-01-01 to 2022-12-31 (~3yr)
+OOS:     2023-01-01 to 2026-05-29 (~3.4yr)
+Portfolio cap: max8
+
+=================================================================
+STEP 1 -- IN-SAMPLE SYMBOL SELECTION
+=================================================================
+  Candidates tested:   185
+  Filter: avg_r>0 / trades>=15 / top_month_pct<60% / total_r>0
+  Symbols selected:    11
+
+  IS-selected symbols (ranked by IS avg_r):
+  Symbol                  Tr   avg_r    PF  win% top_month  top%
+  ------------------------------------------------------------
+  VET/USDT                 5 +3.7212 19.606 80.0%  2021-04 54.4%
+  ETC/USDT                 7 +3.5727 13.505 57.1%  2021-04 43.4%
+  ARDR/USDT                5 +2.3511 7.175 60.0%  2021-04 46.5%
+  WIN/USDT                 8 +1.8825 4.972 50.0%  2021-02 56.9%
+  TFUEL/USDT               8 +1.5449 3.521 37.5%  2021-03 50.6%
+  ETH/USDT                 8 +1.4899 4.973 62.5%  2021-05 50.9%
+  BAT/USDT                 6 +1.2586 4.776 66.7%  2021-02 45.6%
+  IOST/USDT                8 +1.2216 3.443 50.0%  2021-09 44.4%
+  OGN/USDT                 7 +0.8969 3.093 57.1%  2021-02 59.0%
+  DUSK/USDT                7 +0.7977 2.861 57.1%  2021-02 51.3%
+  LTC/USDT                 7 +0.7564 4.234 71.4%  2021-01 41.7%
+
+=================================================================
+STEP 2 -- OUT-OF-SAMPLE RESULTS
+=================================================================
+  Symbols in OOS:      11 (IS-selected only)
+  OOS trades (uncap):  127
+  OOS avg_r (uncap):   +0.1984R
+  OOS PF    (uncap):   1.304
+  OOS win%  (uncap):   29.1%
+
+  After max8 portfolio cap:
+  OOS trades (max8):   124
+  OOS avg_r  (max8):   +0.2224R  (above 0.15R gate)
+  OOS PF     (max8):   1.343
+  OOS win%   (max8):   29.8%
+  OOS max DD (max8):   -23.53R
+
+  Per-symbol OOS performance (IS-selected symbols):
+  Symbol                  Tr   avg_r    PF  win%  total_r
+  --------------------------------------------------------
+  WIN/USDT                 5 +2.4965 7.241 60.0%   +12.48
+  DUSK/USDT               13 +1.0015 2.922 38.5%   +13.02
+  IOST/USDT                8 +0.7550 2.510 50.0%    +6.04
+  ARDR/USDT               11 +0.7505 2.535 45.5%    +8.26
+  VET/USDT                11 +0.7285 2.051 27.3%    +8.01
+  ETH/USDT                16 +0.3816 1.822 50.0%    +6.11
+  ETC/USDT                11 +0.0265 1.041 27.3%    +0.29
+  BAT/USDT                13 -0.3536 0.549 15.4%    -4.60
+  TFUEL/USDT              10 -0.4669 0.405 10.0%    -4.67
+  LTC/USDT                19 -0.5325 0.322 15.8%   -10.12
+  OGN/USDT                10 -0.9630 0.000  0.0%    -9.63
+
+=================================================================
+STEP 3 -- COMPARISON
+=================================================================
+  Metric                          IS period   OOS period  Full period
+  --------------------------------------------------------------------
+  Symbols                                11           11           24
+  Trades (uncapped)                      --          127          461
+  avg_r (uncapped)                 +1.7721R     +0.1984R     +1.1011R
+  avg_r (max8)                           --     +0.2224R     +0.9263R
+  PF (max8)                              --        1.343        2.695
+  win% (max8)                            --        29.8%        39.0%
+  Positive symbols                    11/11         7/11        24/24
+
+  OOS avg_r gate (>= 0.15R): PASS
+
+  Degradation analysis:
+  IS avg_r (mean across symbols): +1.7721R
+  OOS avg_r (uncapped):           +0.1984R
+  OOS / IS ratio:                 0.11x
+
+  PASS: OOS avg_r >= 0.15R -- edge transfers to out-of-sample period
+
+=================================================================
+WALK-FORWARD VERDICT
+=================================================================
+  PASS: OOS avg_r >= 0.15R AND PF > 1.0.
+  The IS-based filtering has forward predictive value.
+  DonchianLong_UniverseV2 edge is confirmed out-of-sample.

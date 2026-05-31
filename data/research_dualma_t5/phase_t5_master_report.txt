@@ -1,0 +1,31 @@
+======================================================================
+PHASE T5 -- DualMA BTC-only Portfolio Report
+======================================================================
+Variant:       DualMA_BTC_max1
+Asset:         BTC/USDT
+Cap:           max1 concurrent (single asset)
+Exit config:   chandelier_atr_mult=3.0, chandelier_activate_r=4.0R
+Trades input:  5
+Accepted:      5
+Skipped:       0
+Date range:    2023-09-15 00:00:00+00:00 -> 2025-10-29 00:00:00+00:00
+
+PORTFOLIO METRICS (R)
+----------------------------------------------------------------------
+  total_r:        430.2382R
+  avg_r:          86.0476R
+  win_rate:       40.0%
+  profit_factor:  160.1598
+  max_dd_r:       -2.0609R
+  losing_streak:  2
+  t_score:        1.3927
+
+GATE CHECKS
+----------------------------------------------------------------------
+  Cost floor (avg_r > 0.15R): PASS (86.0476R)
+  PF > 1.0:                   PASS (160.1598)
+  Win rate (30-45%):          PASS (40.0%)
+
+NOTE: T7 skipped -- single-asset system; remove-best-asset test is N/A.
+Proceed to T6 (capital simulation) if gates pass.
+======================================================================

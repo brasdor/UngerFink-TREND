@@ -1,0 +1,16 @@
+# T9B Donchian Paper Engine -- runtime dependencies
+# Generated: 2026-05-31
+# Usage: pip install -r requirements.txt
+
+# Core numerics
+numpy>=1.26.0
+pandas>=2.2.0
+
+# Exchange data (Binance public OHLCV -- no API key required for paper trading)
+ccxt>=4.3.0
+
+# HTTP (also pulled in by ccxt, pinned explicitly for reliability)
+requests>=2.31.0
+
+# Environment config (for future secrets management if needed)
+python-dotenv>=1.0.0

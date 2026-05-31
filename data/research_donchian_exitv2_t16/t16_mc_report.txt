@@ -1,0 +1,18 @@
+T16 -- Monte Carlo Stress (Extended, ExitV2: ACT=6R, trail=5.0x)
+=================================================================
+
+Canonical N=20  |  trades=400  avg_r=+1.5112R  PF=3.830
+MC runs per block: 5000  |  RNG seed: 42
+
+    block  p05_totalR  p50_totalR  p95_totalR   prob>0   PF_p05    DD_p95   gate
+  ------------------------------------------------------------------------
+        1      +412.4      +596.8      +823.0   100.0%    2.854     -8.31R   PASS
+        5      +367.0      +594.6      +866.1   100.0%    2.623    -11.53R   PASS
+       10      +319.7      +591.4      +902.2   100.0%    2.389    -13.39R   PASS
+       20      +275.5      +587.4      +985.0   100.0%    2.177    -15.28R   PASS
+       50      +200.5      +583.0     +1060.0   100.0%    1.830    -18.69R   PASS
+
+  ALL BLOCK SIZES p05 > 0: YES -- T16 PASS
+
+  Gate: p05 totalR > 0 at ALL block sizes [1, 5, 10, 20, 50]
+  Result: PASS

@@ -1,0 +1,93 @@
+[
+  {
+    "phase": "T1",
+    "status": "HALTED_BY_USER",
+    "analysis": {
+      "phase": "T1",
+      "method": "MeanReversionRSI",
+      "system_type": "MEAN REVERSION",
+      "gate_pass": false,
+      "gate_results": {
+        "stability": "NA -- no combinations generated minimum 100 trades",
+        "win_rate": "NA -- no valid combinations to evaluate",
+        "cost_floor": "NA -- no valid combinations to evaluate",
+        "concentration": "NA -- no valid combinations to evaluate",
+        "system_specific": "CRITICAL: 12960 combinations tested, ZERO reached 100 trade threshold -- mean reversion strategy fundamentally broken on this dataset/timeframe"
+      },
+      "canonical_config": {
+        "timeframe": "UNKNOWN",
+        "filter_mode": "UNKNOWN",
+        "param": "UNKNOWN",
+        "atr_mult": "UNKNOWN",
+        "notes": "No valid configuration exists -- system generates insufficient signals"
+      },
+      "key_findings": [
+        "CATASTROPHIC FAILURE: 12960 parameter combinations tested, none generated >=100 trades",
+        "Mean reversion RSI strategy is incompatible with current dataset or timeframe selection",
+        "Likely causes: (1) RSI oversold threshold too extreme, (2) EMA200 filter blocking all entries, (3) timeframe too short for MR signals, (4) crypto volatility incompatible with RSI mean reversion"
+      ],
+      "warnings": [
+        "HALT REQUIRED: System cannot proceed without trade generation",
+        "Diagnostic needed: Check if EMA200 filter is rejecting all RSI signals (compare no-filter vs filter performance)",
+        "Timeframe issue: MR on daily crypto may need looser RSI thresholds (try RSI<40 instead of RSI<30)",
+        "Dataset period may be too short for meaningful MR signal accumulation on 4-6 crypto assets"
+      ],
+      "decision": "HALT",
+      "decision_reason": "Zero valid combinations exist -- fundamental strategy incompatibility with market/timeframe requires diagnostic investigation before proceeding",
+      "next_phase_inputs": {
+        "diagnostic_required": true,
+        "test_without_ema200": true,
+        "try_looser_rsi_threshold": "30->40",
+        "verify_timeframe": "check if hourly would generate signals",
+        "verify_dataset": "2020-2026 crypto may lack sufficient MR setups on daily TF"
+      }
+    },
+    "stdout_tail": ".\nProgress: 10000/12960 combinations tested...\nProgress: 10100/12960 combinations tested...\nProgress: 10200/12960 combinations tested...\nProgress: 10300/12960 combinations tested...\nProgress: 10400/12960 combinations tested...\nProgress: 10500/12960 combinations tested...\nProgress: 10600/12960 combinations tested...\nProgress: 10700/12960 combinations tested...\nProgress: 10800/12960 combinations tested...\nProgress: 10900/12960 combinations tested...\nProgress: 11000/12960 combinations tested...\nProgress: 11100/12960 combinations tested...\nProgress: 11200/12960 combinations tested...\nProgress: 11300/12960 combinations tested...\nProgress: 11400/12960 combinations tested...\nProgress: 11500/12960 combinations tested...\nProgress: 11600/12960 combinations tested...\nProgress: 11700/12960 combinations tested...\nProgress: 11800/12960 combinations tested...\nProgress: 11900/12960 combinations tested...\nProgress: 12000/12960 combinations tested...\nProgress: 12100/12960 combinations tested...\nProgress: 12200/12960 combinations tested...\nProgress: 12300/12960 combinations tested...\nProgress: 12400/12960 combinations tested...\nProgress: 12500/12960 combinations tested...\nProgress: 12600/12960 combinations tested...\nProgress: 12700/12960 combinations tested...\nProgress: 12800/12960 combinations tested...\nProgress: 12900/12960 combinations tested...\n\nCompleted testing 12960 combinations.\n\nCombinations with >= 100 trades: 0\n\nFAIL: No combinations meet minimum trade count threshold.\nT1 GATE: FAIL\n"
+  },
+  {
+    "phase": "T1",
+    "status": "HALTED_BY_USER",
+    "analysis": {
+      "phase": "T1",
+      "method": "MeanReversionRSI",
+      "system_type": "MEAN REVERSION",
+      "gate_pass": false,
+      "gate_results": {
+        "stability": "NA -- no stability ranking file found, cannot verify \u00a72.1 (>=67% profitable zones)",
+        "win_rate": "NA -- no summary statistics available to verify 50-80% range",
+        "cost_floor": "NA -- no avg_r data available to verify >0.1R floor",
+        "concentration": "NA -- no asset-level breakdown available",
+        "system_specific": "CRITICAL: Cannot verify EMA200 filter necessity or 2022 bear market performance without data"
+      },
+      "canonical_config": {
+        "timeframe": "UNKNOWN",
+        "filter_mode": "UNKNOWN",
+        "param": "UNKNOWN",
+        "atr_mult": "UNKNOWN",
+        "notes": "No configuration data available from T1 execution"
+      },
+      "key_findings": [
+        "Phase T1 execution failed or produced no output files",
+        "Missing phase_t1_stability_ranking.csv prevents \u00a72.1 gate check verification",
+        "Missing phase_t1_summary.txt prevents all statistical gate checks",
+        "Cannot proceed to T2 without baseline performance metrics"
+      ],
+      "warnings": [
+        "BLOCKING: No output files generated - script may have crashed or not executed",
+        "BLOCKING: All gate checks return NA - cannot verify system viability",
+        "CRITICAL: For mean reversion on crypto, EMA200 filter and 2022 performance are essential safety checks that cannot be performed"
+      ],
+      "decision": "HALT",
+      "decision_reason": "T1 phase produced no analyzable output files - execution failure requires investigation before proceeding",
+      "next_phase_inputs": {
+        "action_required": "DEBUG_T1_EXECUTION",
+        "required_files": [
+          "phase_t1_stability_ranking.csv",
+          "phase_t1_summary.txt"
+        ],
+        "cannot_proceed_until": "T1 generates valid backtest results with stability zones and performance statistics"
+      }
+    },
+    "stdout_tail": ""
+  }
+]

@@ -1,0 +1,43 @@
+PHASE T18 — VOLATILITY EXPANSION GATE
+================================================================================
+
+Unger §2.6: enter Donchian breakout only after an ATR contraction phase.
+'Low ATR → squeeze → expansion' is the intended trade profile.
+
+ATR percentile window: 50 bars
+Symbols tested:        64
+Timeframe:             1d
+Regime filter:         EMA200 price-above (T8 canonical — T1 4yr confirmed)
+
+RESULTS
+--------------------------------------------------------------------------------
+  VAR_BASE     (ATR_rank<nan%)     trades= 293  avg_r=+0.1787  pf=1.27  dd=-31.41  win%=24.6  filter%=0  ← CURRENT T9A
+  VAR_P33      (ATR_rank<33.0%)    trades=  82  avg_r=-0.0025  pf=1.00  dd=-21.37  win%=28.0  filter%=87
+  VAR_P20      (ATR_rank<20.0%)    trades=  52  avg_r=-0.0990  pf=0.82  dd=-15.86  win%=25.0  filter%=92
+  VAR_P50      (ATR_rank<50.0%)    trades= 108  avg_r=-0.1807  pf=0.71  dd=-35.14  win%=24.1  filter%=81
+
+  'filter_rate_pct' = percentage of raw signals blocked by the ATR gate.
+  A high filter rate (>60%) means the gate is very restrictive.
+
+TRADE PROFILE CHECK (Unger §4.1)
+----------------------------------------
+  A healthy TF system has: win_rate 30-45% and avg_winner / avg_loser > 2:1.
+  The ATR gate should improve avg_R while keeping win_rate in this range.
+
+Best variant by PF: VAR_BASE  (trades=293, avg_r=+0.1787, pf=1.27)
+
+DECISION RULES
+----------------------------------------
+  UPGRADE baseline with ATR gate: if any gate variant improves PF ≥ 0.15
+  AND keeps trade count ≥ 50% of baseline AND avg_R improves.
+
+  PASS with CAUTION: if trades < 50% of baseline, the sample is too thin
+  to trust the improvement — the gate may be over-filtering.
+
+  FAIL: if no gate variant beats VAR_BASE — the squeeze-breakout pattern
+  is not present in this crypto universe. Do not add the gate.
+
+  IMPORTANT: even if a gate variant looks better here, it must survive T16
+  (Monte Carlo + data perturbation) before it can be considered for T9A.
+
+  T9A paper-live remains frozen.

@@ -1,0 +1,24 @@
+T16 -- DonchianLong_UniverseV2 Full Monte Carlo
+============================================================
+
+Input:    T5 max8 canonical trades  (n=318)
+Runs:     5000 per block size
+Blocks:   [1, 5, 10, 20, 50]
+Gate:     p05 total_r > 0 for ALL block sizes
+
+    bs       p05       p50       p95    dd_p95  pf_p05  prob_pos  GATE
+  --------------------------------------------------------------------
+     1    +202.0    +293.4    +390.9     -7.76   2.097    100.0%  PASS
+     5    +189.7    +291.9    +399.8     -9.52   2.022    100.0%  PASS
+    10    +180.3    +292.3    +412.4    -10.34   1.966    100.0%  PASS
+    20    +170.3    +292.9    +423.1    -11.16   1.910    100.0%  PASS
+    50    +148.1    +289.9    +447.0    -12.29   1.790    100.0%  PASS
+
+OVERALL T16: PASS -- p05 > 0 for all block sizes
+
+Interpretation:
+  p05 total_r > 0 at all block sizes confirms the edge is not
+  an artefact of trade ordering. The worst-case 5th percentile
+  of reshuffled trades remains profitable.
+  If p05 is positive at large block sizes (bs=20, 50), the edge
+  is robust to clustered market regimes -- not just isolated wins.

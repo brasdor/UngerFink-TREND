@@ -1,0 +1,2 @@
+variant,asset,initial_capital,final_equity,total_return_pct,cagr_pct,max_dd_pct,n_trades,total_r,avg_r,win_rate_pct,profit_factor,avg_win_pnl,avg_los_pnl,expectancy_usdt,date_start,date_end,total_days,kill_switch_fired
+DualMA_BTC_max1,BTC/USDT,10000.0,22982.35,129.8235,48.0204,-0.5146,5,430.2382,86.0476,40.0,126.4147,6542.9321,-34.5051,2596.4697,2023-09-15 00:00:00+00:00,2025-10-29 00:00:00+00:00,775,False

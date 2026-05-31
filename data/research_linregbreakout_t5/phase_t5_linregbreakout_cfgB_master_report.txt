@@ -1,0 +1,30 @@
+PHASE T5 -- LinearRegressionBreakout Config B PORTFOLIO REPLAY MASTER REPORT
+======================================================================
+
+Method:  LinReg(55) + 3.0*StdErr breakout  /  midline exit  /  1D LONG
+T2 baseline (no portfolio filter): trades=196  totalR=71.04  avgR=0.3624  PF=1.528
+T4 note:  Second-half decay and Dec-2024 concentration flagged.
+          T5 portfolio constraints reduce XRP/ALGO/ADA over-exposure.
+
+======================================================================
+VARIANT SUMMARY
+======================================================================
+  T5_LINREG_B_uncap        : trades=196  skip=  0  accept=100%  totalR= +71.04  avgR=+0.362  PF=1.53  DD=-41.01  win=26.5%  assets=51
+  T5_LINREG_B_max10        : trades=143  skip= 53  accept=73%  totalR= +19.78  avgR=+0.138  PF=1.19  DD=-34.01  win=23.1%  assets=46
+  T5_LINREG_B_max5         : trades=115  skip= 81  accept=59%  totalR=  -4.10  avgR=-0.036  PF=0.95  DD=-29.97  win=20.0%  assets=42
+  T5_LINREG_B_max8         : trades=136  skip= 60  accept=69%  totalR=  -5.15  avgR=-0.038  PF=0.95  DD=-34.01  win=21.3%  assets=44
+  T5_LINREG_B_max3         : trades= 95  skip=101  accept=48%  totalR= -16.64  avgR=-0.175  PF=0.77  DD=-26.97  win=16.8%  assets=40
+
+======================================================================
+INTERPRETATION GUIDE
+======================================================================
+
+  PROCEED TO T6 if:
+  - At least one capped variant (max_open <= 10) retains meaningful positive R
+  - Portfolio DD materially less than uncapped raw DD
+  - Acceptance rate > 50% (queue not chronically blocked)
+
+  CONCERN if:
+  - All capped variants erase the edge (XRP/ALGO/ADA always take the slots)
+  - Acceptance rate very low (< 40%) at realistic caps
+  - avg_r degrades sharply when constrained (concentration not diversified)

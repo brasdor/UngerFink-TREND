@@ -1,0 +1,122 @@
+PHASE T17 OPT-17.2 -- Regime Filter A: BTC Dominance Proxy Slope
+======================================================================
+
+Filter   : 7-day log-price slope of BTC/USDT < 0
+           (proxy for BTC dominance declining → alts gaining)
+Universe : 24 symbols / 1D / Donchian N=20 / ATR×2.0 / Chandelier ACT4
+
+Baseline : avg_r=+1.101R  PF=3.072  CAGR=+14.3%  trades=461
+
+======================================================================
+BTC SLOPE DIAGNOSTICS
+======================================================================
+  BTC bars with slope computed : 2194
+  Bars with slope < 0 (enter)  : 1017  (46.4%)
+  Bars with slope >= 0 (skip)  : 1177  (53.6%)
+  Avg slope when < 0  : -0.008732 log-return/day
+  Avg slope when >= 0 : 0.009350 log-return/day
+
+======================================================================
+STABILITY ZONE
+======================================================================
+     N  exit_n   trades   total_r     avg_r     PF  PASS?
+  ----------------------------------------------------------
+    15       7      212    +71.19   +0.3358  1.529  YES
+    20      10      191    +81.65   +0.4275  1.660  YES
+    25      12      176    +69.47   +0.3947  1.600  YES
+
+  Stability zone: ALL PASS
+
+======================================================================
+T4 -- BASELINE (N=20)
+======================================================================
+  Trades   : 191  [guard >=80: PASS]
+  Total R  : +81.65R
+  Avg R    : +0.4275R  (baseline: +1.101R)
+  PF       : 1.660  (baseline: 3.072)
+  Win rate : 29.3%
+  Max DD   : -29.43R
+  t-score  : 2.13
+  Period   : 2021-01-15 -> 2026-05-28
+
+======================================================================
+T4 -- MONTE CARLO (2000 runs, block=10)
+======================================================================
+  totalR p05/p50/p95 = 10.5 / 81.9 / 152.4
+  prob(totalR > 0)   = 97.5%
+  PF p05/p50         = 1.08 / 1.66
+  DD p95 (worst)     = -12.44R
+
+======================================================================
+T4 -- COST STRESS
+======================================================================
+  +0.00R -> totalR=+81.7  avgR=+0.4275  PF=1.660
+  +0.02R -> totalR=+77.8  avgR=+0.4075  PF=1.616
+  +0.05R -> totalR=+72.1  avgR=+0.3775  PF=1.553
+  +0.10R -> totalR=+62.6  avgR=+0.3275  PF=1.456
+  +0.15R -> totalR=+53.0  avgR=+0.2775  PF=1.368
+  +0.20R -> totalR=+43.5  avgR=+0.2275  PF=1.288
+
+======================================================================
+T4 -- PERIOD SPLITS
+======================================================================
+  first_half_by_trade           : t= 95  totalR=  +40.8  avgR=+0.4292  PF=1.641  win=27.4%
+  second_half_by_trade          : t= 96  totalR=  +40.9  avgR=+0.4258  PF=1.679  win=31.2%
+  last_100_trades               : t=100  totalR=  +36.9  avgR=+0.3688  PF=1.575  win=30.0%
+  first_half_by_time            : t= 96  totalR=  +39.8  avgR=+0.4143  PF=1.616  win=27.1%
+  second_half_by_time           : t= 95  totalR=  +41.9  avgR=+0.4408  PF=1.708  win=31.6%
+
+======================================================================
+T4 -- REMOVE BEST ASSETS
+======================================================================
+  Top: ZEC/USDT (19.23R = 23.6%)
+  remove top 0: totalR=  +81.7  avgR=+0.4275  PF=1.660  []
+  remove top 1: totalR=  +62.4  avgR=+0.3547  PF=1.539  [ZEC/USDT]
+  remove top 3: totalR=  +32.0  avgR=+0.2191  PF=1.314  [ZEC/USDT,TRX/USDT,NEAR/USDT]
+  remove top 5: totalR=   +9.8  avgR=+0.0764  PF=1.108  [ZEC/USDT,TRX/USDT,NEAR/USDT,SOL/USDT,DEXE/USDT]
+
+======================================================================
+T4 -- REMOVE BEST MONTHS
+======================================================================
+  remove top 0: totalR=  +81.7  avgR=+0.4275  PF=1.660  []
+  remove top 1: totalR=  +58.0  avgR=+0.3240  PF=1.494  [2021-04]
+  remove top 2: totalR=  +39.9  avgR=+0.2372  PF=1.361  [2021-04,2021-09]
+  remove top 3: totalR=  +23.0  avgR=+0.1409  PF=1.208  [2021-04,2021-09,2021-02]
+
+======================================================================
+T5/T6 -- max8 PORTFOLIO
+======================================================================
+  Accepted : 187
+  avg_r    : +0.3944R
+  PF       : 1.606
+  CAGR     : +3.4%  (baseline: +14.3%)
+  Max DD   : -6.9%  (baseline: -3.4%)
+  Kill sw  : no
+  Duration : 5.4 yr
+
+======================================================================
+FINAL SCORECARD
+======================================================================
+
+  PASS  Trade count >=80 (got 191)
+  PASS  Stability zone all profitable
+  FAIL  §4.1 win rate 30-45% (got 29.3%)
+  PASS  §4.2 avg_r > 0.15R (got +0.4275R)
+  PASS  PF > 1.0 (got 1.660)
+  PASS  MC p05 > 0 (got +10.5R)
+  PASS  Cost +0.10R PF > 1.0 (got 1.456)
+  PASS  2nd-half avg_r > 0 (got +0.4258R)
+  PASS  Remove top-1 asset > 0 (got +62.4R)
+  PASS  Remove top-1 month > 0 (got +58.0R)
+  PASS  Kill switch not fired
+
+  vs BASELINE:
+  avg_r  : +0.4275R vs +1.101R -> WORSE
+  PF     : 1.660 vs 3.072 -> WORSE
+  CAGR   : +3.4% vs +14.3% -> WORSE
+  trades : 191 vs 461 (removed 270 = 58.6%)
+
+  NOTE: Proxy quality — 7-day BTC price slope is a directional approximation
+  of BTC dominance. BTC.D also depends on alt market caps (not captured here).
+
+  OVERALL: FAIL -- one or more gates failed

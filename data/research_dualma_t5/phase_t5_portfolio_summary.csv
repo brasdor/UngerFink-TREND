@@ -1,0 +1,2 @@
+variant,asset,n_trades,total_r,avg_r,win_rate_pct,profit_factor,max_dd_r,losing_streak,std_r,t_score,date_start,date_end,skipped_signals
+DualMA_BTC_max1,BTC/USDT,5,430.2382,86.0476,40.0,160.1598,-2.0609,2,138.153,1.3927,2023-09-15 00:00:00+00:00,2025-10-29 00:00:00+00:00,0

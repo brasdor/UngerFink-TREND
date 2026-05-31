@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python phase_t17_step_b_donchian_backtest.py)",
+      "Bash(python -c ' *)",
+      "Bash(python phase_t17_step_c_donchian_v2_pipeline.py)",
+      "Bash(python phase_t15_t16_donchian_v2_validation.py)",
+      "Bash(python phase_t17_walkforward_validation.py)",
+      "Bash(python phase_t17_opt172_filter_b_volume.py)",
+      "Bash(python phase_t17_opt172_filter_c_atr_percentile.py)",
+      "Bash(python phase_t17_opt172_filter_d_multitf.py)",
+      "Bash(python phase_t17_opt172_filter_d_revised.py)",
+      "Bash(python phase_t17_opt172_filter_a_btcdom.py)",
+      "Bash(python phase_t17_opt173_entry_refinement.py)",
+      "Bash(python phase_t17_opt173_varA_sensitivity.py)",
+      "Bash(python phase_t17_opt174_exit_refinement.py)",
+      "Bash(python phase_t17_opt174_exit_combined.py)",
+      "Bash(python phase_t17_exitv2_t15_t16_validation.py)",
+      "Bash(rm \"C:\\\\Users\\\\Jean\\\\UngerFink-TREND\\\\phase_t1_meanreversionrsi_concept_discovery.py\")",
+      "Bash(python pipeline_agent.py --method MeanReversionRSI --start-phase T1 --mean-reversion)",
+      "Bash(python phase_t1_meanreversionrsi_concept_discovery.py)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\Jean\\UngerFink-TREND"
+    ]
+  }
+}

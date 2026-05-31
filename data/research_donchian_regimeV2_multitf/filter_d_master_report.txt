@@ -1,0 +1,137 @@
+PHASE T17 OPT-17.2 -- Regime Filter D: Multi-Timeframe Weekly EMA200
+======================================================================
+
+Filter   : weekly close > weekly EMA(200)
+Universe : 24 symbols (filtered_symbols_v2_included_only.csv)
+Config   : Donchian N=20 / ema200_price / ATR(14)x2.0 stop /
+           Chandelier ACT+4R trail 3xATR / LONG only / 1D
+
+Baseline (no filter): avg_r=+1.101R  PF=3.072  CAGR=+14.3%  trades=461
+
+======================================================================
+WEEKLY EMA200 GATE DIAGNOSTICS
+======================================================================
+  Weekly EMA valid from (earliest) : 2024-03-17
+  Weekly EMA valid from (latest)   : 2025-05-18
+  Warmup bars blocked (all symbols): 33,529
+  Valid bars (after warmup)        : 18,299
+  Valid bars with signal=True      : 5,317  (29.1%)
+  Note: 200-week warmup (~3.8yr) blocks all pre-2024-03 entries.
+        Only ~2 years of signal data are active.
+
+======================================================================
+STABILITY ZONE  (N=[15, 20, 25], weekly EMA200 filter ON)
+======================================================================
+     N  exit_n   trades   total_r     avg_r     PF   PASS?
+  ----------------------------------------------------------
+    15       7      112    +19.67   +0.1756  1.295     YES
+    20      10       91    +26.88   +0.2953  1.511     YES
+    25      12       80    +33.86   +0.4233  1.718     YES
+
+  Stability zone result: ALL PASS
+
+======================================================================
+T4 -- BASELINE (N=20, weekly EMA200 filter ON)
+======================================================================
+  Trades     : 91    [guard: >=80  PASS]
+  Total R    : +26.88R
+  Avg R      : +0.2953R   (baseline: +1.101R)
+  PF         : 1.511          (baseline: 3.072)
+  Win rate   : 33.0%
+  Max DD     : -9.74R
+  t-score    : 1.32
+  Assets     : 18
+  Period     : 2024-04-05 -> 2026-05-28
+
+======================================================================
+T4 -- MONTE CARLO (2000 runs, block_size=10)
+======================================================================
+  totalR  p05/p50/p95 = -3.4 / 26.7 / 60.6
+  prob(totalR > 0)    = 92.5%
+  PF      p05/p50     = 0.94 / 1.51
+  DD      p95 (worst) = -6.53R
+
+======================================================================
+T4 -- COST STRESS
+======================================================================
+  +0.00R/trade -> totalR=+26.9  avgR=+0.2953  PF=1.511
+  +0.02R/trade -> totalR=+25.1  avgR=+0.2753  PF=1.466
+  +0.05R/trade -> totalR=+22.3  avgR=+0.2453  PF=1.401
+  +0.10R/trade -> totalR=+17.8  avgR=+0.1953  PF=1.303
+  +0.15R/trade -> totalR=+13.2  avgR=+0.1453  PF=1.214
+  +0.20R/trade -> totalR=+8.7  avgR=+0.0953  PF=1.133
+
+======================================================================
+T4 -- PERIOD SPLITS
+======================================================================
+  first_half_by_trade           : trades= 45  totalR=   -0.8  avgR=-0.0184  PF=0.971  win=24.4%
+  second_half_by_trade          : trades= 46  totalR=  +27.7  avgR=+0.6022  PF=2.151  win=41.3%
+  last_100_trades               : trades= 91  totalR=  +26.9  avgR=+0.2953  PF=1.511  win=33.0%
+  first_half_by_time            : trades= 46  totalR=   -1.6  avgR=-0.0340  PF=0.947  win=23.9%
+  second_half_by_time           : trades= 45  totalR=  +28.4  avgR=+0.6320  PF=2.219  win=42.2%
+
+======================================================================
+T4 -- REMOVE BEST ASSETS
+======================================================================
+  Top asset: ZEC/USDT  (13.48R = 50.2% of total)
+  remove top 0: totalR=  +26.9  avgR=+0.2953  PF=1.511  remaining=18  []
+  remove top 1: totalR=  +13.4  avgR=+0.1594  PF=1.270  remaining=17  [ZEC/USDT]
+  remove top 3: totalR=   -1.1  avgR=-0.0160  PF=0.975  remaining=15  [ZEC/USDT,TRX/USDT,DEXE/USDT]
+  remove top 5: totalR=   -7.9  avgR=-0.1583  PF=0.763  remaining=13  [ZEC/USDT,TRX/USDT,DEXE/USDT,JST/USDT,BTC/USDT]
+
+======================================================================
+T4 -- REMOVE BEST MONTHS
+======================================================================
+  remove top 0: totalR=  +26.9  avgR=+0.2953  PF=1.511  months_remaining=23  []
+  remove top 1: totalR=  +13.0  avgR=+0.1515  PF=1.255  months_remaining=22  [2026-04]
+  remove top 2: totalR=   -0.7  avgR=-0.0100  PF=0.983  months_remaining=21  [2026-04,2024-12]
+  remove top 3: totalR=  -10.2  avgR=-0.1451  PF=0.762  months_remaining=20  [2026-04,2024-12,2025-11]
+
+======================================================================
+T4 -- ASSET CONCENTRATION
+======================================================================
+  Top 1:  13.5R  (50.2% of total)
+  Top 3:  27.9R  (104.0% of total)
+  Top 5:  34.8R  (129.5% of total)
+  Positive assets: 11/18
+
+======================================================================
+T5/T6 -- PORTFOLIO (max8) + CAPITAL EXECUTION ($10k / 0.25% risk)
+======================================================================
+  Accepted trades : 85
+  Portfolio avg_r : +0.3335R
+  Portfolio PF    : 1.596
+  End capital     : $10,721
+  Total return    : +7.2%
+  CAGR            : +3.3%    (baseline: +14.3%)
+  Max DD          : -2.4%    (baseline: -3.4%)
+  Kill switch     : no
+  Duration        : 2.2 yr
+
+======================================================================
+FINAL SCORECARD -- Filter D vs Baseline
+======================================================================
+
+  PASS  Trade count >= 80          (got 91)
+  PASS  Stability zone all profitable (N=15/20/25)
+  PASS  §4.1 win rate 30-45%          (got 33.0%)
+  PASS  §4.2 avg_r > 0.15R            (got +0.2953R)
+  PASS  PF > 1.0                      (got 1.511)
+  FAIL  MC p05 totalR > 0             (got -3.4R)
+  PASS  Cost +0.10R PF > 1.0          (got 1.303)
+  PASS  2nd half avg_r > 0            (got +0.6022R)
+  PASS  Remove top-1 asset profitable (totalR=+13.4R)
+  PASS  Remove top-1 month profitable (totalR=+13.0R)
+  PASS  Kill switch not fired
+
+  vs BASELINE (no weekly filter):
+  avg_r  : +0.2953R  vs  +1.101R  -> WORSE
+  PF     : 1.511  vs  3.072  -> WORSE
+  CAGR   : +3.3%  vs  +14.3%  -> WORSE
+  trades : 91  vs  461  (filter removed 370 trades = 80.3% of baseline)
+
+  STRUCTURAL NOTE: 200-week warmup blocks ~3.8 years of data.
+  Results reflect ~2 years of active signal (2024-03 to 2026-05).
+  CAGR comparison should be read with this context in mind.
+
+  OVERALL: FAIL -- one or more gates failed

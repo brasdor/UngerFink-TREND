@@ -1,0 +1,109 @@
+PHASE T17 OPT-17.3 -- Entry Refinement Variant B
+======================================================================
+
+Variant  : Price confirmation (next bar close > breakout level)
+Universe : 24 symbols / 1D / N=20 / ATR×2.0 / Chandelier ACT4
+
+Baseline : avg_r=+1.101R  PF=3.072  CAGR=+14.3%  trades=461
+
+Note: Signal at close[i] > don_upper[i]. Enter at close[i+1] only if close[i+1] > don_upper[i]. One-bar confirmation window, no fill = skip.
+
+======================================================================
+STABILITY ZONE
+======================================================================
+     N  exit_n   trades   total_r     avg_r     PF  PASS?
+  ----------------------------------------------------------
+    15       7      439   +372.68   +0.8489  2.612  YES
+    20      10      388   +355.54   +0.9163  2.710  YES
+    25      12      372   +336.68   +0.9051  2.621  YES
+
+  Stability: ALL PASS
+
+======================================================================
+T4 -- BASELINE (N=20)
+======================================================================
+  Trades   : 388  [guard >=80: PASS]
+  Total R  : +355.54R
+  Avg R    : +0.9163R  (ref: +1.101R)
+  PF       : 2.710  (ref: 3.072)
+  Win rate : 39.7%
+  Max DD   : -21.50R
+  t-score  : 6.06
+  Period   : 2020-12-23 -> 2026-05-28
+
+======================================================================
+T4 -- MONTE CARLO (2000 runs, block=10)
+======================================================================
+  totalR p05/p50/p95 = 237.2 / 355.9 / 477.5
+  prob(>0)           = 100.0%
+  PF p05/p50         = 2.06 / 2.71
+  DD p95             = -11.00R
+
+======================================================================
+T4 -- COST STRESS
+======================================================================
+  +0.00R -> totalR=+355.5  avgR=+0.9163  PF=2.710
+  +0.02R -> totalR=+347.8  avgR=+0.8963  PF=2.635
+  +0.05R -> totalR=+336.1  avgR=+0.8663  PF=2.530
+  +0.10R -> totalR=+316.7  avgR=+0.8163  PF=2.368
+  +0.15R -> totalR=+297.3  avgR=+0.7663  PF=2.221
+  +0.20R -> totalR=+277.9  avgR=+0.7163  PF=2.088
+
+======================================================================
+T4 -- PERIOD SPLITS
+======================================================================
+  first_half_by_trade           : t=194  totalR= +190.9  avgR=+0.9842  PF=2.851
+  second_half_by_trade          : t=194  totalR= +164.6  avgR=+0.8484  PF=2.571
+  last_100_trades               : t=100  totalR=  +70.5  avgR=+0.7055  PF=2.342
+  first_half_by_time            : t=194  totalR= +190.9  avgR=+0.9842  PF=2.851
+  second_half_by_time           : t=194  totalR= +164.6  avgR=+0.8484  PF=2.571
+
+======================================================================
+T4 -- REMOVE BEST ASSETS
+======================================================================
+  remove 0: totalR= +355.5  avgR=+0.9163  []
+  remove 1: totalR= +314.7  avgR=+0.8436  [FET/USDT]
+  remove 3: totalR= +257.1  avgR=+0.7767  [FET/USDT,SOL/USDT,TRX/USDT]
+  remove 5: totalR= +215.2  avgR=+0.7148  [FET/USDT,SOL/USDT,TRX/USDT,VET/USDT,ADA/USDT]
+
+======================================================================
+T4 -- REMOVE BEST MONTHS
+======================================================================
+  remove 0: totalR= +355.5  avgR=+0.9163  []
+  remove 1: totalR= +300.1  avgR=+0.8178  [2021-02]
+  remove 2: totalR= +246.8  avgR=+0.7195  [2021-02,2021-09]
+  remove 3: totalR= +196.5  avgR=+0.6239  [2021-02,2021-09,2024-03]
+
+======================================================================
+T5/T6 -- max8 PORTFOLIO
+======================================================================
+  Accepted : 277
+  avg_r    : +0.8642R  PF: 2.623
+  CAGR     : +11.5%  (ref: +14.3%)
+  Max DD   : -4.3%  (ref: -3.4%)
+  Kill sw  : no
+  Duration : 5.4 yr
+
+======================================================================
+FINAL SCORECARD
+======================================================================
+
+  PASS  Trade count >=80 (got 388)
+  PASS  Stability zone all profitable
+  PASS  §4.1 win rate 30-45% (got 39.7%)
+  PASS  §4.2 avg_r > 0.15R (got +0.9163R)
+  PASS  PF > 1.0 (got 2.710)
+  PASS  MC p05 > 0 (got +237.2R)
+  PASS  Cost +0.10R PF > 1.0 (got 2.368)
+  PASS  2nd-half avg_r > 0 (got +0.8484R)
+  PASS  Remove top-1 asset > 0 (got +314.7R)
+  PASS  Remove top-1 month > 0 (got +300.1R)
+  PASS  Kill switch not fired
+
+  vs BASELINE:
+  avg_r : +0.9163R vs +1.101R -> WORSE
+  PF    : 2.710 vs 3.072 -> WORSE
+  CAGR  : +11.5% vs +14.3% -> WORSE
+  trades: 388 vs 461 (delta: -73)
+
+  OVERALL: PASS -- all gates cleared

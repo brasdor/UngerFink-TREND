@@ -1,0 +1,67 @@
+PHASE T3B -- KeltnerLong Wide-Exit / Chandelier Engineering
+================================================================================
+
+T2 canonical:   ema200_price / N=15 / km=3.0 / sm=2.0
+T2 baseline:    trades=167  avg_r=+0.4168R  PF=1.666  total_r=+69.61R
+
+Chan activate grid: [1.0, 1.5, 2.0, 2.5, 3.0]
+Chan ATR-mult grid: [2.0, 2.5, 3.0]
+Total combos:       15
+Symbols:            63
+
+Exit priority:
+  1. low <= initial_stop
+  2. chandelier active AND low <= chan_stop
+  3. chandelier inactive AND close < EMA(N)  (midline)
+  Chandelier updated AFTER exit checks.
+
+================================================================================
+VARIANT RANKING  (sorted by total_r)
+================================================================================
+  act=3.0R  cm=2.0  trades= 181  total_r= +38.68R  avg_r=+0.2137R (-0.2031 vs T2)  pf=1.356 (-0.310 vs T2)  win%=29.3%  chan_act%=23%
+  act=2.5R  cm=2.0  trades= 184  total_r= +36.23R  avg_r=+0.1969R (-0.2199 vs T2)  pf=1.336 (-0.330 vs T2)  win%=31.0%  chan_act%=28%
+  act=2.5R  cm=2.5  trades= 181  total_r= +30.38R  avg_r=+0.1679R (-0.2489 vs T2)  pf=1.280 (-0.386 vs T2)  win%=30.4%  chan_act%=28%
+  act=2.5R  cm=3.0  trades= 178  total_r= +30.16R  avg_r=+0.1694R (-0.2474 vs T2)  pf=1.281 (-0.385 vs T2)  win%=29.8%  chan_act%=28%
+  act=3.0R  cm=3.0  trades= 177  total_r= +27.36R  avg_r=+0.1546R (-0.2622 vs T2)  pf=1.256 (-0.410 vs T2)  win%=28.8%  chan_act%=23%
+  act=1.5R  cm=2.0  trades= 189  total_r= +26.57R  avg_r=+0.1406R (-0.2762 vs T2)  pf=1.250 (-0.416 vs T2)  win%=37.6%  chan_act%=38%
+  act=3.0R  cm=2.5  trades= 180  total_r= +25.92R  avg_r=+0.1440R (-0.2728 vs T2)  pf=1.240 (-0.426 vs T2)  win%=29.4%  chan_act%=23%
+  act=2.0R  cm=2.0  trades= 187  total_r= +22.72R  avg_r=+0.1215R (-0.2953 vs T2)  pf=1.210 (-0.456 vs T2)  win%=33.2%  chan_act%=32%
+  act=1.0R  cm=2.0  trades= 191  total_r= +22.68R  avg_r=+0.1188R (-0.2980 vs T2)  pf=1.236 (-0.430 vs T2)  win%=40.8%  chan_act%=50%
+  act=2.0R  cm=3.0  trades= 179  total_r= +16.94R  avg_r=+0.0946R (-0.3222 vs T2)  pf=1.158 (-0.508 vs T2)  win%=30.7%  chan_act%=31%
+  act=2.0R  cm=2.5  trades= 184  total_r= +14.88R  avg_r=+0.0809R (-0.3359 vs T2)  pf=1.137 (-0.529 vs T2)  win%=32.6%  chan_act%=32%
+  act=1.0R  cm=3.0  trades= 180  total_r= +12.11R  avg_r=+0.0673R (-0.3495 vs T2)  pf=1.112 (-0.554 vs T2)  win%=28.9%  chan_act%=48%
+  act=1.0R  cm=2.5  trades= 186  total_r= +12.02R  avg_r=+0.0646R (-0.3522 vs T2)  pf=1.116 (-0.550 vs T2)  win%=31.7%  chan_act%=49%
+  act=1.5R  cm=3.0  trades= 180  total_r= +11.77R  avg_r=+0.0654R (-0.3514 vs T2)  pf=1.109 (-0.557 vs T2)  win%=29.4%  chan_act%=36%
+  act=1.5R  cm=2.5  trades= 185  total_r= +11.63R  avg_r=+0.0629R (-0.3539 vs T2)  pf=1.107 (-0.559 vs T2)  win%=34.1%  chan_act%=37%
+
+--------------------------------------------------------------------------------
+BEST COMBO (highest total_r)
+--------------------------------------------------------------------------------
+  Chan activation:  3.0R
+  Chan ATR mult:    2.0
+  Trades:           181
+  Total R:          +38.68R  (-30.93R vs T2)
+  Avg R/trade:      +0.2137R  (-0.2031R vs T2)
+  Profit factor:    1.356  (-0.310 vs T2)
+  Win rate:         29.3%
+  Max DD (R):       -11.60R
+  Avg MFE:          +1.952R
+  Chan activated %: 23.2%
+  Sec 4.2 gate:     PASS (0.2137R > 0.15R)
+
+  !! REVIEW BEFORE T4 -- awaiting human review.
+
+================================================================================
+T3B INTERPRETATION
+================================================================================
+
+  Goal: chandelier stop should capture more of large trending moves
+  vs. the midline cross-under exit used in T2.
+
+  Lower activation R = more trades get chandelier (wider net)
+  Higher activation R = only strong trends get chandelier (tighter quality filter)
+  Lower chan_mult = tighter trailing stop (captures less but gives less back)
+  Higher chan_mult = looser trailing stop (captures more, but gives more back)
+
+  PROCEED TO T4 if best combo avg_r > T2 baseline.
+  DO NOT PROCEED if all combos regress vs T2.

@@ -1,0 +1,47 @@
+{
+    "method_name": "DualMA",
+    "timeframes": ["1d"],
+    "fast_ema": 30,
+    "slow_ema": 100,
+    "filter_mode": "ema200_price",
+    "atr_mult": 2.0,
+    "chandelier_activate_r": 4.0,
+    "chandelier_atr_mult": 3.0,
+    "atr_period": 14,
+    "ema_regime_length": 200,
+    "ema_slope_n": 50,
+    "ema_slope_lookback": 10,
+    "fee_per_side": 0.001,
+    "allow_short": false,
+    "asset_universe": "70 USDT spot symbols on Binance",
+    "exchange": "binance_spot",
+    "leverage": 1.0,
+    "risk_per_trade": 0.0025,
+    "max_concurrent": [3, 5],
+    "backtest_bars": 1500,
+    "side": "LONG",
+    "cost_floor_r": 0.15,
+
+    "entry_logic": "Fast EMA (span=fast_ema) crosses above Slow EMA (span=slow_ema) on bar close. Crossover = fast_ema_prev <= slow_ema_prev AND fast_ema_current > slow_ema_current. Enter at close of the crossover bar.",
+    "exit_logic_t2": "Simple: (1) low <= initial_stop → exit at stop. (2) fast_ema_current < slow_ema_current on close → exit at close. No chandelier in T2.",
+    "exit_logic_t3b_onward": "Combined: (1) low <= stop [initial or chandelier, from START of candle] → exit at stop. (2) IF chandelier NOT yet active: fast_ema < slow_ema on close → exit at close. (3) AFTER all exit checks pass: if mfe >= chandelier_activate_r, update chandelier stop = highest_high - chandelier_atr_mult * atr.",
+    "chandelier_sequencing_rule": "CRITICAL BUG TO AVOID: chandelier stop must be updated AFTER all exit checks, never before. The stop checked in step 1 must use the stop value from the START of the candle. Updating chandelier before the stop check causes premature exits on the activation candle itself.",
+
+    "ohlcv_cache_primary": "data/research_trend_t15/ohlcv_cache",
+    "ohlcv_cache_fallback": "data/research_dualma_t1/ohlcv_cache",
+    "ohlcv_load_instructions": "Check ohlcv_cache_primary first (T15 1D data). If empty, check ohlcv_cache_fallback. If both empty, download from Binance ccxt. CSV format: columns=[timestamp,open,high,low,close,volume], timestamp in ms. File naming: BTC_USDT_1d.csv etc.",
+
+    "output_file_convention": "Use exact filenames from the pipeline document specification. Do NOT prefix filenames with the method name. E.g. use 'phase_t2_summary.csv' not 'phase_t2_dualma_summary.csv'.",
+    "output_root_template": "data/research_dualma_t{phase_number}/",
+
+    "donchian_benchmark_avg_r": 0.179,
+    "donchian_benchmark_pf": 1.27,
+    "donchian_benchmark_total_r": 82.0,
+    "donchian_benchmark_max_dd_pct": -1.78,
+
+    "t1_selection_rationale": "EMA30/EMA100 chosen over auto-recommended EMA10/200: 5-combo zone vs 3-combo corner zone, ema200_price filter matches Donchian pipeline (no circularity), lower drawdown -12.49R vs -17.59R. T1 gate: PASS, zone 100% (5/5), avg_r=+0.573R, PF=1.83, win%=24.1%.",
+    "win_rate_note": "Win rate 24.1% is below the 30-45% healthy range. Entire grid shows 15-25% win rates — structural to this crypto universe. Same pattern as Donchian (24.6%). Fat-tail structure: large infrequent winners. Must verify in T4 block bootstrap that edge is not just 1-2 events.",
+
+    "exclude_bases": ["USDC","BUSD","TUSD","USDP","PAXG","XAUT","FDUSD","USDD","DAI","USD1","RLUSD","EUR","AEUR","WBTC","BTTC"],
+    "exclude_leveraged_keywords": ["UP/","DOWN/","BULL/","BEAR/","3L/","3S/"]
+}
