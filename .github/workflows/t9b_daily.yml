@@ -80,7 +80,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Stage the persistent output files (not the OHLCV cache)
+          # Stage paper trading outputs (accumulate over time)
           git add --force \
             data/t9b_paper/state.json \
             data/t9b_paper/open_positions.csv \
@@ -88,6 +88,12 @@ jobs:
             data/t9b_paper/equity_curve.csv \
             data/t9b_paper/daily_log.csv \
             || true
+
+          # Stage updated OHLCV cache (one new row per symbol per day).
+          # These files live in data/universe/ohlcv_1d/ which IS tracked in git.
+          # The committed cache is how the engine gets data on the next run
+          # without hitting Binance.com (which blocks US-based servers).
+          git add --force data/universe/ohlcv_1d/ || true
 
           # Only commit if there are staged changes
           if git diff --cached --quiet; then

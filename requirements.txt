@@ -6,8 +6,11 @@
 numpy>=1.26.0
 pandas>=2.2.0
 
-# Exchange data (Binance public OHLCV -- no API key required for paper trading)
+# Exchange data -- geo-unrestricted sources only (binance.com blocked on US servers)
+#   binanceus  : US-compliant Binance exchange, works from GitHub Actions (US)
+#   yfinance   : Yahoo Finance fallback, universal, no restrictions
 ccxt>=4.3.0
+yfinance>=0.2.40
 
 # HTTP (also pulled in by ccxt, pinned explicitly for reliability)
 requests>=2.31.0

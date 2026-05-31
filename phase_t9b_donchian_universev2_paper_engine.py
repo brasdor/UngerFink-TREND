@@ -19,19 +19,27 @@ Frozen config (2026-05-30):
   Leverage    : 1.0x  (Binance Spot, LONG only)
   Side        : LONG only
 
-OHLCV priority order per symbol:
-  1. data/ohlcv_extended/{sym}_1d_extended.csv   (Task 3 extended history)
-  2. data/t9b_paper/ohlcv_cache/{sym}_1d.csv     (engine local cache)
-  3. data/research_trend_t15/ohlcv_cache/{sym}_1d.csv
-  4. data/research_trend_t13/ohlcv_cache/{sym}_1d.csv
-  5. Download from Binance via ccxt and save to local cache
+OHLCV data strategy (works from GitHub Actions / US-based servers):
+  1. Load committed historical cache: data/universe/ohlcv_1d/{sym}_1d.csv
+     This file is tracked in git and checked out with the repo.
+     It covers 2020-present for all 24 symbols.
+  2. Append latest 10 bars using a geo-unrestricted source:
+       a. Binance US (binanceus) -- works from US servers (GitHub Actions)
+       b. yfinance (Yahoo Finance) -- universal fallback, no restrictions
+  3. Save updated file back to data/universe/ohlcv_1d/ so the GitHub Actions
+     commit step accumulates the cache one row per day.
+  4. Use --no-download to skip live fetch (read committed cache only).
+
+  Binance.com (the global exchange) is NOT used -- it returns HTTP 451
+  from US-based servers. Only binanceus or yfinance is called for live data.
 
 Usage:
   python phase_t9b_donchian_universev2_paper_engine.py
-      --date 2026-05-31    run for a specific date (default: today)
-      --backfill           replay from freeze date (2026-05-30) to today
-      --no-download        skip Binance refresh (use cached data only)
+      --date 2026-05-31    run for a specific date (default: yesterday)
+      --backfill           replay from freeze date (2026-05-30) through yesterday
+      --no-download        use committed cache only, no live API calls
       --reset              wipe state.json and restart from $10,000
+      --notify             print compact notification summary after run
 
 Output files (data/t9b_paper/):
   state.json            persistent engine state (positions, equity)
@@ -96,13 +104,10 @@ MIN_BARS_REQUIRED = EMA_N + DONCHIAN_ENTRY_N + 5   # minimum bars to compute ind
 
 ROOT         = Path.cwd()
 DATA_DIR     = ROOT / "data" / "t9b_paper"
-CACHE_DIR    = DATA_DIR / "ohlcv_cache"
 STATE_PATH   = DATA_DIR / "state.json"
 
-UNIVERSE_CSV       = ROOT / "data" / "universe" / "filtered_symbols_v2_included_only.csv"
-OHLCV_EXTENDED_DIR = ROOT / "data" / "ohlcv_extended"
-T15_CACHE_DIR      = ROOT / "data" / "research_trend_t15" / "ohlcv_cache"
-T13_CACHE_DIR      = ROOT / "data" / "research_trend_t13" / "ohlcv_cache"
+UNIVERSE_CSV     = ROOT / "data" / "universe" / "filtered_symbols_v2_included_only.csv"
+COMMITTED_CACHE  = ROOT / "data" / "universe" / "ohlcv_1d"   # tracked in git
 
 OPEN_POS_CSV  = DATA_DIR / "open_positions.csv"
 SIGNALS_CSV   = DATA_DIR / "signals_today.csv"
@@ -110,7 +115,14 @@ EQUITY_CSV    = DATA_DIR / "equity_curve.csv"
 DAILY_LOG_CSV = DATA_DIR / "daily_log.csv"
 
 DATA_DIR.mkdir(parents=True, exist_ok=True)
-CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+# Per-run in-memory cache: symbol -> full parsed DataFrame.
+# Populated on first access; persists for the whole script run.
+# Avoids hitting the live API more than once per symbol per execution.
+_SESSION_OHLCV: dict = {}
+
+# Set to True when --no-download is passed; skips all live API calls.
+_SKIP_LIVE_FETCH: bool = False
 
 
 # =============================================================================
@@ -244,37 +256,64 @@ def add_indicators(df: pd.DataFrame) -> pd.DataFrame:
 
 def load_ohlcv(symbol: str, up_to_date: Optional[date] = None) -> pd.DataFrame:
     """
-    Load 1D OHLCV for a symbol from the first available source.
-    Clips to up_to_date (inclusive) to prevent lookahead in backfill mode.
+    Load 1D OHLCV for a symbol.
+
+    First call per symbol per session:
+      1. Read committed historical cache (data/universe/ohlcv_1d/ -- in git)
+      2. Fetch last 10 bars via a geo-unrestricted source (binanceus -> yfinance)
+      3. Merge, deduplicate, save back to committed cache (one extra row per day)
+
+    Subsequent calls for the same symbol reuse the in-memory session cache.
+
+    up_to_date slicing: clips to that date for backfill mode (no lookahead).
+    _SKIP_LIVE_FETCH=True (--no-download) reads committed cache only.
     """
-    safe = safe_sym(symbol)
+    global _SESSION_OHLCV
 
-    # Priority search list
-    candidates = [
-        OHLCV_EXTENDED_DIR / f"{safe}_1d_extended.csv",
-        CACHE_DIR           / f"{safe}_1d.csv",
-        T15_CACHE_DIR       / f"{safe}_1d.csv",
-        T13_CACHE_DIR       / f"{safe}_1d.csv",
-    ]
+    if symbol not in _SESSION_OHLCV:
+        safe        = safe_sym(symbol)
+        cache_path  = COMMITTED_CACHE / f"{safe}_1d.csv"
 
-    raw: Optional[pd.DataFrame] = None
-    for path in candidates:
-        if path.exists():
+        # Load committed historical base
+        raw_base: Optional[pd.DataFrame] = None
+        if cache_path.exists():
             try:
-                raw = pd.read_csv(path)
-                break
-            except Exception:
-                continue
+                raw_base = pd.read_csv(cache_path)
+            except Exception as exc:
+                print(f"  [WARN] {symbol}: could not read committed cache -- {exc}")
 
-    if raw is None:
-        raw = _download_from_binance(symbol)
+        # Fetch latest bars (geo-unrestricted, skipped when --no-download)
+        raw_live: Optional[pd.DataFrame] = None
+        if not _SKIP_LIVE_FETCH:
+            raw_live = _fetch_latest_bars(symbol, n_bars=10)
 
-    if raw is None or raw.empty:
-        return pd.DataFrame()
+        # Parse each source individually (they may have different column formats:
+        # committed cache uses ISO 'time' strings; live sources use ms 'timestamp').
+        # Merging raw before parsing causes mixed-column overflow errors.
+        df_base = _parse_ohlcv(raw_base) if raw_base is not None else pd.DataFrame()
+        df_live = _parse_ohlcv(raw_live) if raw_live is not None else pd.DataFrame()
 
-    df = _parse_ohlcv(raw)
-    if df.empty:
-        return df
+        if not df_base.empty and not df_live.empty:
+            merged = (
+                pd.concat([df_base, df_live], ignore_index=True)
+                .drop_duplicates("time")
+                .sort_values("time")
+                .reset_index(drop=True)
+            )
+        elif not df_base.empty:
+            merged = df_base
+        elif not df_live.empty:
+            merged = df_live
+        else:
+            merged = pd.DataFrame()
+
+        # Save back to committed cache if live data was fetched
+        if not merged.empty and raw_live is not None and cache_path.parent.exists():
+            _save_committed_cache(merged, cache_path)
+
+        _SESSION_OHLCV[symbol] = merged
+
+    df = _SESSION_OHLCV[symbol]
 
     if up_to_date is not None:
         df = df[df["time"].dt.date <= up_to_date].copy()
@@ -282,11 +321,18 @@ def load_ohlcv(symbol: str, up_to_date: Optional[date] = None) -> pd.DataFrame:
     return df.reset_index(drop=True)
 
 
+def _save_committed_cache(df: pd.DataFrame, path: Path) -> None:
+    """Save a parsed DataFrame to the committed cache in ISO-date string format."""
+    out = df[["time", "open", "high", "low", "close", "volume"]].copy()
+    out["time"] = out["time"].dt.strftime("%Y-%m-%d %H:%M:%S+00:00")
+    out.to_csv(path, index=False)
+
+
 def _parse_ohlcv(raw: pd.DataFrame) -> pd.DataFrame:
     """Normalise a raw OHLCV DataFrame to standard columns with UTC timestamps."""
     df = raw.copy()
 
-    # Timestamp column
+    # Detect and parse timestamp column (handles ms-integer or ISO-string formats)
     if "timestamp" in df.columns:
         df["time"] = pd.to_datetime(
             pd.to_numeric(df["timestamp"], errors="coerce"),
@@ -310,90 +356,147 @@ def _parse_ohlcv(raw: pd.DataFrame) -> pd.DataFrame:
     return df[["time", "open", "high", "low", "close", "volume"]].reset_index(drop=True)
 
 
-def _download_from_binance(symbol: str) -> Optional[pd.DataFrame]:
-    """Download last LIMIT_BARS 1D candles from Binance; cache to local engine cache."""
+# ---------------------------------------------------------------------------
+# Live data fetchers (geo-unrestricted)
+# ---------------------------------------------------------------------------
+
+def _fetch_latest_bars(symbol: str, n_bars: int = 10) -> Optional[pd.DataFrame]:
+    """
+    Fetch the latest n_bars 1D candles from a geo-unrestricted source.
+
+    Fallback chain:
+      1. Binance US (ccxt binanceus) -- works FROM US servers (GitHub Actions).
+         binanceus.com is the US-compliant exchange; not geo-blocked for US IPs.
+      2. yfinance (Yahoo Finance) -- universal fallback, BTC-USD format.
+
+    Returns a raw DataFrame or None if both fail.
+    Binance.com (global) is intentionally NOT used -- it returns HTTP 451 from US IPs.
+    """
+    raw = _try_binanceus(symbol, n_bars)
+    if raw is not None and not raw.empty:
+        return raw
+
+    raw = _try_yfinance(symbol, n_bars)
+    return raw  # None if both failed
+
+
+def _try_binanceus(symbol: str, n_bars: int) -> Optional[pd.DataFrame]:
+    """Fetch from Binance US using ccxt. Same symbol/format as Binance.com."""
     try:
         import ccxt  # type: ignore
     except ImportError:
-        print(f"[WARN] ccxt not installed; cannot download {symbol}")
         return None
 
-    exchange = ccxt.binance({
-        "enableRateLimit": True,
-        "options": {"defaultType": "spot"},
-    })
+    try:
+        exchange = ccxt.binanceus({
+            "enableRateLimit": True,
+            "options": {"defaultType": "spot"},
+        })
+        ohlcv = exchange.fetch_ohlcv(symbol, "1d", limit=n_bars)
+        if not ohlcv:
+            return None
+        time.sleep(SLEEP_SEC)
+        return pd.DataFrame(
+            ohlcv,
+            columns=["timestamp", "open", "high", "low", "close", "volume"],
+        )
+    except Exception as exc:
+        print(f"    [binanceus] {symbol}: {exc}")
+        return None
 
-    safe       = safe_sym(symbol)
-    cache_path = CACHE_DIR / f"{safe}_1d.csv"
 
-    for attempt in range(1, MAX_RETRIES + 1):
-        try:
-            ohlcv = exchange.fetch_ohlcv(symbol, "1d", limit=LIMIT_BARS)
-            if not ohlcv:
-                return None
-            raw = pd.DataFrame(
-                ohlcv,
-                columns=["timestamp", "open", "high", "low", "close", "volume"],
-            )
-            raw.to_csv(cache_path, index=False)
-            time.sleep(SLEEP_SEC)
-            return raw
-        except Exception as exc:
-            print(f"  [WARN] {symbol} download attempt {attempt}/{MAX_RETRIES}: {exc}")
-            time.sleep(0.5 * attempt)
-    return None
+def _try_yfinance(symbol: str, n_bars: int) -> Optional[pd.DataFrame]:
+    """
+    Fetch from Yahoo Finance via yfinance.
+    Converts BTC/USDT -> BTC-USD. Prices in USD ~ USDT for signal purposes.
+    """
+    try:
+        import yfinance as yf  # type: ignore
+    except ImportError:
+        return None
+
+    base   = symbol.split("/")[0]
+    yf_sym = f"{base}-USD"
+
+    try:
+        # period="30d" gives more than enough bars; we take the last n_bars
+        hist = yf.download(
+            yf_sym,
+            period="30d",
+            interval="1d",
+            progress=False,
+            auto_adjust=True,
+            raise_errors=False,   # suppress download exceptions; returns empty instead
+        )
+        if hist is None or hist.empty:
+            return None
+
+        hist = hist.tail(n_bars).reset_index()
+
+        # Flatten multi-level columns if present (yfinance >= 0.2 can return them)
+        if isinstance(hist.columns, pd.MultiIndex):
+            hist.columns = [c[0].lower() if c[1] == "" else c[0].lower()
+                            for c in hist.columns]
+        else:
+            hist.columns = [str(c).lower() for c in hist.columns]
+
+        # Rename date -> time
+        if "date" in hist.columns:
+            hist.rename(columns={"date": "time"}, inplace=True)
+        elif "datetime" in hist.columns:
+            hist.rename(columns={"datetime": "time"}, inplace=True)
+
+        hist["time"] = pd.to_datetime(hist["time"], utc=True, errors="coerce")
+        hist["timestamp"] = (hist["time"].astype(np.int64) // 1_000_000).astype(int)
+
+        for col in ["open", "high", "low", "close", "volume"]:
+            if col not in hist.columns:
+                hist[col] = np.nan
+
+        return hist[["timestamp", "open", "high", "low", "close", "volume"]].copy()
+
+    except Exception as exc:
+        print(f"    [yfinance] {symbol}: {exc}")
+        return None
 
 
 def refresh_ohlcv_cache(symbols: List[str]) -> None:
     """
-    Download the latest 1D bars for all symbols into the local engine cache.
-    Skips symbols whose cache was updated today or yesterday.
+    Pre-fetch latest bars for all symbols into the committed cache.
+    Skips symbols whose committed cache already has data through yesterday.
+    No-op when _SKIP_LIVE_FETCH is True (--no-download mode).
     """
-    try:
-        import ccxt  # type: ignore
-    except ImportError:
-        print("[WARN] ccxt not installed; skipping cache refresh")
+    if _SKIP_LIVE_FETCH:
+        print("[DATA] --no-download set; using committed cache only")
         return
 
-    exchange = ccxt.binance({
-        "enableRateLimit": True,
-        "options": {"defaultType": "spot"},
-    })
-    today = date.today()
+    yesterday = date.today() - timedelta(days=1)
+    n_updated = 0
 
-    print(f"[DATA] Refreshing 1D OHLCV cache for {len(symbols)} symbols...")
-    n_refreshed = 0
+    print(f"[DATA] Updating committed OHLCV cache for {len(symbols)} symbols...")
 
     for sym in symbols:
         safe       = safe_sym(sym)
-        cache_path = CACHE_DIR / f"{safe}_1d.csv"
+        cache_path = COMMITTED_CACHE / f"{safe}_1d.csv"
 
-        # Skip if already current
+        # Skip if cache already covers yesterday
         if cache_path.exists():
             try:
-                ts_raw = pd.read_csv(cache_path, usecols=["timestamp"]).iloc[-1]["timestamp"]
-                last_date = pd.Timestamp(int(ts_raw), unit="ms", tz="UTC").date()
-                if last_date >= today - timedelta(days=1):
+                last_row  = pd.read_csv(cache_path, usecols=["time"]).iloc[-1]["time"]
+                last_date = pd.to_datetime(last_row, utc=True).date()
+                if last_date >= yesterday:
                     continue
             except Exception:
                 pass
 
-        for attempt in range(1, MAX_RETRIES + 1):
-            try:
-                ohlcv = exchange.fetch_ohlcv(sym, "1d", limit=LIMIT_BARS)
-                if ohlcv:
-                    pd.DataFrame(
-                        ohlcv,
-                        columns=["timestamp", "open", "high", "low", "close", "volume"],
-                    ).to_csv(cache_path, index=False)
-                    n_refreshed += 1
-                time.sleep(SLEEP_SEC)
-                break
-            except Exception as exc:
-                print(f"  [WARN] {sym} attempt {attempt}: {exc}")
-                time.sleep(0.5 * attempt)
+        # Clear session cache so load_ohlcv re-fetches
+        _SESSION_OHLCV.pop(sym, None)
+        df = load_ohlcv(sym)   # triggers live fetch + saves to committed cache
+        if not df.empty:
+            n_updated += 1
+        time.sleep(SLEEP_SEC)
 
-    print(f"[DATA] Refreshed {n_refreshed}/{len(symbols)} symbol caches")
+    print(f"[DATA] Updated {n_updated}/{len(symbols)} symbol caches")
 
 
 # =============================================================================
@@ -1048,11 +1151,12 @@ def main() -> int:
         run_dates = [yesterday]
         print(f"[MODE] Yesterday (default): {yesterday}")
 
-    # Refresh OHLCV cache unless suppressed
-    if not args.no_download:
-        refresh_ohlcv_cache(symbols)
-    else:
-        print("[DATA] --no-download set; using cached data only")
+    # Propagate --no-download flag to the global fetch-control
+    global _SKIP_LIVE_FETCH
+    _SKIP_LIVE_FETCH = args.no_download
+
+    # Refresh committed cache (appends latest bars via binanceus/yfinance)
+    refresh_ohlcv_cache(symbols)
 
     print()
 
