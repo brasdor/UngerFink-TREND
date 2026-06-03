@@ -1,0 +1,105 @@
+======================================================================
+Phase T4 -- MeanReversionRSI Robustness Engine
+Config: rsi14/os25/time_exit=20/atr3/no_filter/1D
+Benchmark: avg_r=0.309R  PF=2.81  total_r=76.5R
+======================================================================
+
+
+======================================================================
+  1. BASELINE SUMMARY
+======================================================================
+  Trades    : 248
+  Win rate  : 61.7%   (gate 50-70%: OK)
+  Avg R     : +0.3086R  (gate >0.10R: OK)
+  Total R   : +76.54R
+  Prof Fac  : 2.81   (gate >1.0: OK)
+  Max DD R  : 9.89R
+  Std R     : 0.9793R
+  t-score   : 4.96   (significant (>=2.0))
+  Gate      : PASS
+
+======================================================================
+  2. YEAR-BY-YEAR (2021-2026)
+======================================================================
+   Year      N     WR%      AvgR    TotalR    MaxDD     PF  Note
+   2021      9   55.6%   +0.130R    +1.17R    1.75R   1.67  
+   2022     60   58.3%   +0.377R   +22.60R    5.16R   3.35  <<< BEAR MARKET
+   2023     51   56.9%   +0.344R   +17.54R    6.21R   2.56  
+   2024     51   82.4%   +0.485R   +24.74R    3.51R   5.73  
+   2025     40   52.5%   +0.254R   +10.15R    2.78R   2.89  
+   2026     37   56.8%   +0.009R    +0.34R    7.78R   1.04  (partial year)
+
+======================================================================
+  3. PERIOD SPLITS
+======================================================================
+  Count-half 1 (2021-05-19 - 2024-04-13):
+    n=124  avg_r=+0.3470R  PF=2.90  total=+43.03R  PASS
+  Count-half 2 (2024-04-13 - 2026-04-19):
+    n=124  avg_r=+0.2703R  PF=2.71  total=+33.52R  PASS  
+  Time-half 1 (2021-05-19 - 2024-04-13):
+    n=130  avg_r=+0.3421R  PF=2.96  total=+44.48R  PASS
+  Time-half 2 (2024-04-23 - 2026-04-19):
+    n=118  avg_r=+0.2717R  PF=2.64  total=+32.06R  PASS  
+  Last 100 trades (2024-07-05 - 2026-04-19):
+    n=100  avg_r=+0.2919R  PF=2.93  total=+29.19R  PASS  
+
+======================================================================
+  4. ASSET CONCENTRATION (§4.7)
+======================================================================
+  Top- 1:  13.4% of total R  (HBAR_USDT)  OK
+  Top- 3:  30.4% of total R  (HBAR_USDT, APT_USDT, LPT_USDT)  OK
+  Top- 5:  44.1% of total R  (HBAR_USDT, APT_USDT, LPT_USDT...)  OK
+  Top-10:  64.0% of total R  (HBAR_USDT, APT_USDT, LPT_USDT...)  FLAG
+
+======================================================================
+  5. REMOVE BEST ASSETS
+======================================================================
+  Remove top-1 (HBAR_USDT):
+    n=242  avg_r=+0.2740R  PF=2.61  total=+66.31R  OK
+  Remove top-3 (HBAR_USDT, APT_USDT, LPT_USDT):
+    n=226  avg_r=+0.2356R  PF=2.38  total=+53.25R  OK
+  Remove top-5 (HBAR_USDT, APT_USDT, LPT_USDT):
+    n=211  avg_r=+0.2027R  PF=2.14  total=+42.78R  OK
+
+======================================================================
+  6. REMOVE BEST MONTHS
+======================================================================
+  Remove top-1 months (2022-12):
+    n=240  avg_r=+0.2349R  PF=2.36  total=+56.38R  OK
+  Remove top-2 months (2022-12, 2024-08):
+    n=222  avg_r=+0.1814R  PF=1.97  total=+40.28R  OK
+  Remove top-3 months (2022-12, 2024-08, 2023-06):
+    n=206  avg_r=+0.1402R  PF=1.74  total=+28.87R  OK
+
+======================================================================
+  7. COST STRESS TEST
+======================================================================
+   ExtraCost      AvgR      PF    TotalR  Gate
+       +0.00R  +0.3086R    2.81   +76.54R  PASS
+       +0.02R  +0.2886R    2.62   +71.58R  PASS
+       +0.05R  +0.2586R    2.36   +64.14R  PASS
+       +0.10R  +0.2086R    1.99   +51.74R  PASS
+       +0.15R  +0.1586R    1.68   +39.34R  PASS
+       +0.20R  +0.1086R    1.43   +26.94R  PASS
+
+======================================================================
+  8. BLOCK BOOTSTRAP MONTE CARLO (2000 runs)
+======================================================================
+   BlkSz    p05_TotR    p50_TotR    p95_TotR    Prob+   PF_p05  MC_pass
+       1     +51.65R     +75.93R    +102.47R  100.0%     2.05  OK
+       3     +42.52R     +74.65R    +110.17R  100.0%     1.82  OK
+       5     +39.59R     +76.83R    +120.12R  100.0%     1.75  OK
+      10     +34.80R     +77.67R    +129.05R  100.0%     1.66  OK
+      20     +33.76R     +75.24R    +125.18R   99.9%     1.67  OK
+
+======================================================================
+  9. CRITICAL FLAGS SUMMARY
+======================================================================
+  [PASS] MC p05 total R > 0 (all block sizes)          p05=+51.65R (bs=1)
+  [PASS] Remove top-1 asset: avg_r remains > 0.10R     avg_r=+0.2740R
+  [PASS] Remove top-1 month: avg_r remains > 0.10R     avg_r=+0.2349R
+  [PASS] Second half (count) avg_r >= 0                avg_r=+0.2703R
+  [PASS] 2022 bear year total R > 0                    total_r=+22.60R
+  [PASS] 2026 partial year not deeply negative         total_r=+0.34R
+
+  Critical checks overall : ALL PASS

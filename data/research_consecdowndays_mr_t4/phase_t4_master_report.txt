@@ -1,0 +1,89 @@
+
+======================================================================
+  1. BASELINE SUMMARY
+======================================================================
+  Trades    : 179
+  Win rate  : 51.4%  (gate 50-70%: OK)
+  Avg R     : +0.4696R  (gate >0.10R: OK)
+  Total R   : +84.05R
+  Prof Fac  : 2.31
+  Max DD R  : 16.41R
+  t-score   : 3.63  (significant >=2.0)
+  Gate      : PASS
+
+======================================================================
+  2. YEAR-BY-YEAR (bull specialist framing)
+======================================================================
+   Year      N     WR%      AvgR    TotalR       DD     PF  Note
+   2021     41   63.4%   +0.900R   +36.88R    5.30R   4.95  <<< BULL YEAR
+   2022      4    0.0%   -0.805R    -3.22R    2.22R   0.00  <<< BEAR  <<< WEAK
+   2023     26   34.6%   -0.296R    -7.69R   11.52R   0.40    <<< WEAK
+   2024     64   60.9%   +0.902R   +57.74R    4.63R   4.30  <<< BULL YEAR
+   2025     41   41.5%   -0.067R    -2.73R    8.00R   0.86    <<< WEAK
+   2026      3   33.3%   +1.023R    +3.07R    1.00R   3.16  
+
+======================================================================
+  3. REMOVE BEST YEAR (key test for bull-specialist system)
+======================================================================
+  Remove 2021 (+36.9R removed):  n=138  avg_r=+0.3418R  PF=1.86  total=+47.17R  FAIL
+  Remove 2024 (+57.7R removed):  n=115  avg_r=+0.2288R  PF=1.56  total=+26.31R  FAIL
+
+======================================================================
+  4. PERIOD SPLITS
+======================================================================
+  Count-half 1 (2021-01-27 - 2024-02-23):
+    n=89  avg_r=+0.5255R  PF=2.67  total=+46.77R  PASS
+  Count-half 2 (2024-03-11 - 2026-04-18):
+    n=90  avg_r=+0.4142R  PF=2.03  total=+37.28R  FAIL  
+  Time-half 1 (2021-01-27 - 2024-03-11):
+    n=90  avg_r=+0.5086R  PF=2.58  PASS
+  Time-half 2 (2024-03-16 - 2026-04-18):
+    n=89  avg_r=+0.4301R  PF=2.08  FAIL  
+
+======================================================================
+  5. REMOVE BEST ASSETS
+======================================================================
+  Remove top-1 (ZEC_USDT):
+    n=169  avg_r=+0.4154R  PF=2.16  PASS
+  Remove top-3 (ZEC_USDT, TRX_USDT, DOGE_USDT):
+    n=156  avg_r=+0.3218R  PF=1.89  PASS
+  Remove top-5 (ZEC_USDT, TRX_USDT, DOGE_USDT):
+    n=145  avg_r=+0.2564R  PF=1.69  FAIL
+
+======================================================================
+  6. REMOVE BEST MONTHS
+======================================================================
+  Remove top-1 months (2021-03):
+    n=168  avg_r=+0.3321R  PF=1.87  FAIL
+  Remove top-2 months (2021-03, 2024-11):
+    n=162  avg_r=+0.1874R  PF=1.47  FAIL
+  Remove top-3 months (2021-03, 2024-11, 2024-02):
+    n=156  avg_r=+0.1071R  PF=1.26  FAIL
+
+======================================================================
+  7. BLOCK BOOTSTRAP MC (2000 runs)
+======================================================================
+   BlkSz        p05        p50        p95    Prob+   PF_p05  MC
+       1    +45.52R    +83.18R   +122.64R  100.0%     1.63  OK
+       5    +31.09R    +82.81R   +139.17R   99.7%     1.43  OK
+      10    +23.75R    +81.19R   +147.69R   99.4%     1.31  OK
+      20    +17.43R    +73.15R   +135.97R   98.5%     1.21  OK
+
+======================================================================
+  8. CRITICAL FLAGS
+======================================================================
+  [PASS] MC p05 > 0 (all block sizes)                  p05=+45.52R (bs=1)
+  [PASS] Remove top-1 asset: avg_r > 0.10R             avg_r=+0.4154R
+  [PASS] Remove top-1 month: avg_r > 0.10R             avg_r=+0.3321R
+  [PASS] Second half avg_r >= 0                        avg_r=+0.4142R
+  [PASS] 2022 bear year total R > -20R                 total_r=-3.22R
+  [PASS] Remove 2021: system does NOT invert           avg_r=+0.3418R
+  [PASS] Remove 2024: system does NOT invert           avg_r=+0.2288R
+
+  Critical checks: ALL PASS
+
+  --- Bull-Specialist Context ---
+  Positive years total R : +97.69R
+  Negative years total R : -13.64R
+  Bull/Bear R ratio      : 7.2x
+  2021+2024 combined R   : +94.62R  (113% of total)

@@ -1,0 +1,19 @@
+Phase T2 -- RSIMeanReversionShort (full 4H history)
+Config: RSI(10)>75/ema200_below/hold15/atr2.0/4H/SHORT
+
+Trades    : 590
+Win rate  : 40.8%
+Avg R     : 0.3996R
+Total R   : 235.79R
+Max DD R  : 42.11R
+PF        : 1.72
+
+Year-by-Year:
+  2021  n=  32  wr= 53.1%  avg_r=+0.050R  total=  +1.59R
+  2022  n= 120  wr= 46.7%  avg_r=+0.168R  total= +20.21R
+  2023  n= 111  wr= 31.5%  avg_r=-0.149R  total= -16.52R
+  2024  n=  73  wr= 24.7%  avg_r=-0.293R  total= -21.38R
+  2025  n= 162  wr= 46.9%  avg_r=+1.322R  total=+214.24R
+  2026  n=  92  wr= 42.4%  avg_r=+0.409R  total= +37.64R
+
+T2 GATE: FAIL

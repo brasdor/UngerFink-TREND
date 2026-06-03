@@ -1,0 +1,45 @@
+=================================================================
+Phase T2 -- BollingerBandMR Core Engine
+Timeframe : 1d
+Config    : bb10/std2.0/hold15/atr3.0/ema200_price_above
+Symbols   : 52 loaded / 52 universe
+=================================================================
+
+Overall Results:
+  Trades    : 435
+  Win rate  : 51.3%
+  Avg R     : 0.1278R
+  Total R   : 55.61R
+  Max DD R  : 39.94R
+  Prof Fac  : 1.49
+  Avg bars  : 13.9
+
+Year-by-Year:
+  2021  n= 118  wr= 63.6%  avg_r=+0.498R  total= +58.76R  dd=10.52R
+  2022  n=  12  wr= 16.7%  avg_r=-0.399R  total=  -4.79R  dd=4.32R <<< BEAR
+  2023  n=  46  wr= 54.3%  avg_r=+0.078R  total=  +3.58R  dd=7.38R
+  2024  n= 170  wr= 47.1%  avg_r=-0.024R  total=  -4.16R  dd=39.94R
+  2025  n=  79  wr= 46.8%  avg_r=+0.024R  total=  +1.91R  dd=8.75R
+  2026  n=  10  wr= 40.0%  avg_r=+0.031R  total=  +0.31R  dd=1.63R
+
+Asset Concentration (top 10):
+     symbol  n  win_rate  avg_r  total_r
+  DOGE_USDT 14    0.4286 1.7243    24.14
+   SOL_USDT 19    0.5263 0.4112     7.81
+   TRX_USDT 22    0.6364 0.3278     7.21
+   BNB_USDT 23    0.6087 0.2492     5.73
+   BTC_USDT 28    0.5357 0.1469     4.11
+   ZEN_USDT  8    0.5000 0.4513     3.61
+   BCH_USDT 16    0.5625 0.2233     3.57
+PENDLE_USDT 10    0.7000 0.3249     3.25
+   SUI_USDT  8    0.6250 0.3575     2.86
+  LINK_USDT 10    0.7000 0.2700     2.70
+  Top-1 share: 43.4%
+
+Gate Checks:
+  S4.1 win rate : 51.3%  PASS
+  S4.2 avg_r    : 0.1278R  PASS
+  S4.7 conc     : DOGE_USDT 43.4%  PASS
+  Bear 2022     : -4.79R  PASS
+
+T2 GATE: PASS

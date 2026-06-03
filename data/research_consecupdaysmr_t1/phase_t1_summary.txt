@@ -1,0 +1,2 @@
+ConsecUpDays MR Short T1 -- FAIL
+No combos pass WR 50-70% AND avg_r > 0.15R

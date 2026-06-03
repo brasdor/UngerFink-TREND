@@ -18,7 +18,9 @@
       "Bash(python phase_t17_exitv2_t15_t16_validation.py)",
       "Bash(rm \"C:\\\\Users\\\\Jean\\\\UngerFink-TREND\\\\phase_t1_meanreversionrsi_concept_discovery.py\")",
       "Bash(python pipeline_agent.py --method MeanReversionRSI --start-phase T1 --mean-reversion)",
-      "Bash(python phase_t1_meanreversionrsi_concept_discovery.py)"
+      "Bash(python phase_t1_meanreversionrsi_concept_discovery.py)",
+      "Bash(sed 's/_1d.csv//')",
+      "Bash(python phase_universe_filter_meanreversionrsi.py)"
     ],
     "additionalDirectories": [
       "C:\\Users\\Jean\\UngerFink-TREND"

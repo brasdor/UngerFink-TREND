@@ -1,0 +1,20 @@
+Phase T2 -- RSIMeanReversionShort
+Config: RSI(10)>75 / ema200_price_below / hold15bars / atr2.0 / 4h
+
+Trades    : 113
+Win rate  : 54.9%
+Avg R     : 0.2768R
+Total R   : 31.28R
+Max DD R  : 15.93R
+PF        : 1.63
+
+Year-by-Year:
+  2025  n=   2  wr=100.0%  avg_r=+1.070R  total=  +2.14R
+  2026  n= 111  wr= 54.1%  avg_r=+0.263R  total= +29.14R
+
+§4.1 win rate : PASS
+§4.2 avg_r    : PASS
+§4.7 conc     : SOL_USDT 12.9% PASS
+Bear 2022     : N/A
+
+T2 GATE: PASS

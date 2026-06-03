@@ -1,0 +1,51 @@
+
+================================================================
+PHASE T8 -- MeanReversionRSI 1D  FINAL SCORECARD
+Generated: 2026-06-01 08:39 UTC
+================================================================
+
+FROZEN CONFIG SUMMARY
+---------------------
+System       : MeanReversionRSI
+Timeframe    : 1D
+Entry        : RSI(14) < 25  (no EMA200 filter)
+Exit         : Time exit after 20 bars  [Variant E]
+Safety stop  : ATR(14) x 3.0 below entry
+Portfolio    : max 10 concurrent  /  0.25% risk/trade
+Universe     : 52 symbols (Binance Spot)
+
+PIPELINE GATE SUMMARY (T1 - T7)
+---------------------------------
+T1  Concept Discovery     : PASS  (175 stable combos, stability=1.00)
+T2  Core Engine           : PASS  (win_rate=61.7%, avg_r=+0.285R, 2022=+9.45R)
+T3MR Exit Engineering     : PASS  (Variant E best: avg_r=+0.309R, PF=2.81)
+T4  Robustness            : PASS  (MC p05=+33.8R, all 6 critical checks pass)
+T5  Portfolio Filter      : PASS  (max10 canonical: avg_r=+0.285R, DD=8.04R)
+T6  Capital Engine        : PASS  (see T6 scorecard)
+T7  Asset Robustness      : PASS  (remove HBAR: system survives)
+
+KEY METRICS (T5 max10, T6 capital)
+-------------------------------------
+Avg R/trade  : +0.285R
+Win rate     : 57.4%
+PF           : 2.37
+Max DD       : ~8%
+t-score      : 4.96  (highly significant)
+2022 bear    : POSITIVE (+19.4R on max10)
+
+CAVEATS (mandatory monitoring)
+--------------------------------
+1. 2026 partial year is near-zero -- monitor for regime change.
+2. 2024 win rate 82.4% is anomalously high -- expect reversion.
+3. max10 cap intentionally skips bear-market simultaneous entries.
+4. EMA200 filter rejected -- do not re-add without full T1 re-run.
+5. Time exit only (Variant E) -- do not add RSI exit without T3MR re-run.
+
+CORRELATION WITH DONCHIAN LONG
+---------------------------------
+MR enters on weakness; Donchian enters on strength.
+Structural negative correlation -- portfolio combination improves Sharpe.
+DonchianLong: CAGR +16.0%, max DD -4.4%.
+MeanReversionRSI: lower CAGR, lower DD, negative correlation benefit.
+
+STATUS: FROZEN FOR PAPER TRADING

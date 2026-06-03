@@ -1,0 +1,10 @@
+T6+T7 Combined Scorecard
+=================================================================
+
+T6 (full max10):   CAGR=+2.65%  DD=1.99%  gate=PASS
+T7 (no HBAR):      CAGR=+2.38%  DD=1.82%  gate=PASS
+
+DonchianLong ref:  CAGR=+16.0%  DD=-4.4%
+
+Note: MR and Donchian are structurally uncorrelated.
+Portfolio combination improves Sharpe ratio.

@@ -1560,6 +1560,63 @@ Every run produces `pipeline_agent_{method}_log.json` with:
 
 ---
 
+## 19. RESEARCH BACKLOG — PENDING AFTER CURRENT MR INVESTIGATIONS
+
+### 19A. IntradayVolatilityBreakout (Trend Following, 4H)
+
+**What it is:**
+Price breaks above the highest high of the last N 4H bars, but ONLY when the
+market has been in a low-volatility compression phase (ATR percentile < 30th
+of trailing window). This is distinct from Donchian (1D channel, no volatility
+filter) — this system specifically exploits the volatility expansion that
+follows a compression squeeze.
+
+Theoretical basis: Markets alternate between compression (consolidation) and
+expansion (trending). Entering at the start of an expansion after confirmed
+compression should improve signal quality vs. entering any channel breakout.
+
+The ATR percentile < 30th filter means: only fire when current ATR(14) is in
+the bottom 30% of its trailing 252-bar distribution (approximately 1 year on 4H).
+
+```
+METHOD_NAME:        IntradayVolatilityBreakout
+ENTRY_LOGIC:        close > highest_high(N, 4H bars) AND ATR(14) < ATR_percentile_30th
+                    Compression filter: ATR14 / ATR14.rolling(252).quantile(0.30)
+                    Entry fires only in low-volatility compression zone
+TIMEFRAME:          4H (native intraday logic — not expanding from 1D)
+PARAM_GRID:
+    n_bars:         [10, 15, 20, 30, 40]  (4H channel breakout window)
+    atr_pct:        [0.20, 0.30, 0.40]    (compression threshold: bottom X%)
+    atr_lookback:   [126, 252, 504]       (rolling window for percentile: ~3mo/6mo/1yr)
+STABILITY_ZONE:     n_bars +/- 1 step AND atr_pct +/- 0.10 step
+                    PASS if >= 67% of zone profitable
+FILTER_MODES:       ["ema200_price", "none"]
+ATR_MULTS:          [2.0, 3.0]
+EXIT_LOGIC:         Same Chandelier architecture as Donchian
+                    ACT=4R, trail=3xATR OR Donchian N//2 lower channel
+ASSET_UNIVERSE:     60-symbol crypto universe
+EXCHANGE:           Binance Futures (USD-M) — 4H intraday on Futures
+LEVERAGE:           1.0 to start
+RISK_PER_TRADE:     0.0025 (0.25%)
+COST_FLOOR_R:       0.15R (Futures, higher than 1D Spot threshold)
+BACKTEST_BARS:      8760 (4H x ~4yr equivalent)
+SIDE:               LONG only initially
+
+Key distinction vs Donchian:
+  Donchian 1D: breakout of any N-day high regardless of volatility context
+  IntradayVol: breakout of N-4H-bar high ONLY when coming out of compression
+  Expected: fewer signals, better signal quality, higher avg_r per trade
+  Risk: low-ATR periods may precede continued consolidation, not expansion
+  T18 lesson: Donchian T18 FAILED ATR gate because Donchian's best trades are
+  in HIGH-ATR expansionary markets. IntradayVol uses ATR gate differently:
+  entry in LOW-ATR zone but expecting subsequent expansion — test separately.
+
+STATUS:             PENDING — after current MR investigations complete
+PRIORITY:           LOW — run only after RSI MR 1D T9B confirms (Sep 2026)
+```
+
+---
+
 ---
 
 ## 18. DEPLOYMENT ROADMAP
