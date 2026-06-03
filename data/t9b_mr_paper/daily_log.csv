@@ -1,0 +1,2 @@
+run_date,event,symbol,detail,entry_price,stop,risk_amount,equity
+2026-05-01,ENTRY,SAGA/USDT,"RSI=24.2  price=0.01714  stop=0.011592  risk=$25.00  bars_to_exit=20  equity=$10,000.00",0.01714,0.01159197,25.0,10000.0

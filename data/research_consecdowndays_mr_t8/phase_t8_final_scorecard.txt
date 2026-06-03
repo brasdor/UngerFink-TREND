@@ -1,0 +1,55 @@
+
+================================================================
+PHASE T8 -- ConsecDownDaysMR 1D  FINAL SCORECARD
+Generated: 2026-06-02 10:17 UTC
+================================================================
+
+FROZEN CONFIG SUMMARY
+---------------------
+System       : ConsecDownDaysMR
+Type         : BULL SPECIALIST (pairs with RSI MR Long)
+Timeframe    : 1D
+Entry        : 5 consecutive down closes AND close > EMA(200)
+Exit         : Time exit after 20 bars  [Variant E]
+Safety stop  : ATR(14) x 2.0 below entry
+Portfolio    : uncapped  /  0.25% risk/trade
+Universe     : 52 symbols (Binance Spot)
+
+PIPELINE GATE SUMMARY (T1 - T7)
+---------------------------------
+T1  Concept Discovery     : PASS  (31 stable combos, stability=1.00, EMA200 +40%)
+T2  Core Engine           : PASS  (win_rate=51.4%, avg_r=+0.470R)
+T3MR Exit Engineering     : PASS  (Variant E: time exit 20 bars)
+T4  Robustness            : PASS  (MC p05=+17.4R, remove-year tests pass)
+T5  Portfolio Filter      : PASS  (uncapped canonical, cap rarely binding)
+T6  Capital Engine        : PASS  (CAGR=+4.03%, max DD=4.03%)
+T7  Asset Robustness      : PASS  (remove ZEC: system survives)
+
+KEY METRICS
+-----------
+Avg R/trade  : +0.470R
+Win rate     : 51.4%
+PF           : 2.31
+CAGR         : +4.03%  (0.25% risk)
+Max DD       : 4.03%
+t-score      : 3.63  (significant)
+Bull/Bear R  : 7.2x  (positive years vs negative)
+
+YEAR-BY-YEAR (T6 verified at $10k, 0.25% risk)
+-------------------------------------------------
+2021:  +$960   (41 trades, WR 63.4%, +0.90R avg)  <<< BULL
+2022:  -$88    ( 4 trades, WR  0.0%, -0.80R avg)  <<< BEAR (filter active)
+2023: -$208    (26 trades, WR 34.6%, -0.30R avg)
+2024: +$1,644  (64 trades, WR 60.9%, +0.90R avg)  <<< BULL
+2025:  -$86    (41 trades, WR 41.5%, -0.07R avg)
+2026:  +$93    ( 3 trades, WR 33.3%, +1.02R avg)  (partial)
+
+CAVEATS
+-------
+1. BULL SPECIALIST: negative in bear/neutral years by design.
+2. 2023 and 2025 are negative -- pair with RSI MR Long to offset.
+3. EMA200 filter is MANDATORY -- do not remove without full T1 re-run.
+4. Month concentration risk: top-2 months removal drops below gate.
+5. Raise risk to 1.0% only after T9B >= 3 months confirmation.
+
+STATUS: T15+T16 PENDING, THEN T9B PAPER TRADING

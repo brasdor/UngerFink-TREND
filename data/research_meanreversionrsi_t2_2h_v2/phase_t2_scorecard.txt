@@ -1,0 +1,46 @@
+=================================================================
+Phase T2 -- MeanReversionRSI 2H v2 (oversold fix)
+Timeframe : 2h
+Config    : rsi14/os20/exit55/atr3.0/t10/filter=none
+Fix       : os raised 15 -> 20 (WR was 70.4%, above MR ceiling)
+Symbols   : 52 loaded / 52 universe
+=================================================================
+
+Overall Results:
+  Trades    : 1485
+  Win rate  : 59.3%
+  Avg R     : 0.0873R
+  Total R   : 129.67R
+  Max DD R  : 46.32R
+  Prof Fac  : 1.35
+  Avg bars  : 8.8
+
+Year-by-Year:
+  2021  n= 145  wr= 60.7%  avg_r=-0.007R  total=  -1.06R  dd=19.71R
+  2022  n= 303  wr= 57.1%  avg_r=+0.092R  total= +27.86R  dd=16.40R <<< BEAR
+  2023  n= 239  wr= 64.0%  avg_r=+0.076R  total= +18.16R  dd=11.92R
+  2024  n= 393  wr= 52.9%  avg_r=+0.012R  total=  +4.53R  dd=46.32R
+  2025  n= 304  wr= 65.8%  avg_r=+0.217R  total= +65.92R  dd=14.52R
+  2026  n= 101  wr= 57.4%  avg_r=+0.141R  total= +14.27R  dd=8.21R
+
+Asset Concentration (top 10):
+     symbol  n  win_rate  avg_r  total_r
+   DOT_USDT 36    0.6944 0.2523     9.08
+   TRX_USDT 46    0.6087 0.1910     8.78
+  DASH_USDT 44    0.6364 0.1895     8.34
+   SOL_USDT 23    0.6087 0.3303     7.60
+PENDLE_USDT 28    0.6786 0.2641     7.39
+   WLD_USDT 26    0.6538 0.2634     6.85
+RENDER_USDT 12    0.8333 0.5539     6.65
+   CHZ_USDT 35    0.6857 0.1842     6.45
+   ADA_USDT 31    0.6774 0.2038     6.32
+   ALT_USDT 21    0.7143 0.2596     5.45
+  Top-1 share: 7.0%
+
+Gate Checks:
+  S4.1 win rate : 59.3%  PASS
+  S4.2 avg_r    : 0.0873R  FAIL
+  S4.7 conc     : DOT_USDT 7.0%  PASS
+  Bear 2022     : +27.86R  PASS
+
+T2 GATE: FAIL

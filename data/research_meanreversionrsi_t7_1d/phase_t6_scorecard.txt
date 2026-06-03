@@ -1,0 +1,24 @@
+Phase T6 Scorecard -- MR-1D max10 (no HBAR)
+Config: rsi14/os25/time_exit=20/atr3/no_filter/1D  max10  $10k  0.25%risk
+
+Initial capital : $10,000.00
+Final equity    : $11,239.50
+Total return    : +12.4%
+CAGR            : +2.38%
+Max DD %        : 1.82%
+Max DD $        : $207.71
+Kill-switch     : not fired
+Avg R           : +0.2595R
+Win rate        : 58.0%
+PF              : 2.30
+
+Year-by-Year P&L:
+ year  n  pnl_usd     avg_r  win_rate
+ 2021  9    29.20  0.130067  0.555556
+ 2022 44   368.65  0.330457  0.545455
+ 2023 36   345.33  0.364731  0.611111
+ 2024 39   406.08  0.381341  0.769231
+ 2025 39   225.26  0.205715  0.512821
+ 2026 14  -135.07 -0.340893  0.285714
+
+OVERALL GATE: PASS

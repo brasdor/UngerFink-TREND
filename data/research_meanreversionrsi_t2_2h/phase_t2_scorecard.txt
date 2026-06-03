@@ -1,0 +1,45 @@
+=================================================================
+Phase T2 -- MeanReversionRSI Core Engine
+Timeframe : 2h
+Config    : rsi14/os15/exit50/atr3.0/t10/filter=none
+Symbols   : 52 loaded / 52 universe
+=================================================================
+
+Overall Results:
+  Trades    : 355
+  Win rate  : 70.4%
+  Avg R     : 0.1965R
+  Total R   : 69.75R
+  Max DD R  : 7.48R
+  Prof Fac  : 2.25
+  Avg bars  : 9.2
+
+Year-by-Year:
+  2021  n=  31  wr= 71.0%  avg_r=+0.108R  total=  +3.35R  dd=3.17R
+  2022  n=  80  wr= 66.2%  avg_r=+0.136R  total= +10.89R  dd=6.33R <<< BEAR
+  2023  n=  64  wr= 68.8%  avg_r=+0.099R  total=  +6.35R  dd=4.67R
+  2024  n=  85  wr= 67.1%  avg_r=+0.130R  total= +11.03R  dd=4.45R
+  2025  n=  79  wr= 78.5%  avg_r=+0.435R  total= +34.33R  dd=1.37R
+  2026  n=  16  wr= 75.0%  avg_r=+0.237R  total=  +3.80R  dd=1.02R
+
+Asset Concentration (top 10):
+   symbol  n  win_rate  avg_r  total_r
+ATOM_USDT  9    0.8889 0.7037     6.33
+ XRP_USDT 10    1.0000 0.5597     5.60
+AVAX_USDT 10    0.8000 0.5363     5.36
+ UNI_USDT 10    0.9000 0.3767     3.77
+DOGE_USDT 10    0.9000 0.3710     3.71
+ TRX_USDT 10    0.6000 0.3570     3.57
+ ICP_USDT  7    0.7143 0.5063     3.54
+ GRT_USDT  9    0.8889 0.3466     3.12
+ ZEC_USDT  7    0.8571 0.4253     2.98
+ SOL_USDT  3    1.0000 0.9948     2.98
+  Top-1 share: 9.1%
+
+Gate Checks:
+  §4.1 win rate : 70.4%  FAIL
+  §4.2 avg_r    : 0.1965R  PASS
+  §4.7 conc     : ATOM_USDT 9.1%  PASS
+  Bear 2022     : +10.89R  PASS
+
+T2 GATE: FAIL

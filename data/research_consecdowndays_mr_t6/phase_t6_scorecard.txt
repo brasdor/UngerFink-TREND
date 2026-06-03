@@ -1,0 +1,12 @@
+T6 Scorecard -- ConsecDownDays (cap=uncapped)
+Config: consec5/ema200/hold20/atr2/1D
+
+Final equity : $12,316.47
+Total return : +23.2%
+CAGR         : +4.03%
+Max DD %     : 4.03%
+Kill-switch  : not fired
+Avg R        : +0.4696R
+PF           : 2.31
+
+T6 Gate: PASS

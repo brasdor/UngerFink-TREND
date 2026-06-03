@@ -1,0 +1,36 @@
+Stochastic Oscillator MR Long -- T1 Concept Discovery
+Config: 1D | stoch_n x oversold x smooth_d x hold x atr x filter
+MR gates: WR 50-70%, avg_r > 0.10R, stability >= 0.67
+Early halt: 2021 <= 60% | >=4 pos years | 2022 >= -10R
+
+Grid: 640 combos
+Stable (gate pass): 6
+After early halt: HALT=5 FLAG=0 PASS=1
+T1 OVERALL: PASS
+
+Stable combos:
+ stoch_n  oversold  smooth_d  hold_bars  atr_mult        filter_mode  num_trades  win_rate  avg_r     pf  stability  total_r
+       5        10         3         10       2.0 ema200_price_above         127    0.5039 0.1493 1.5366     1.0000    18.96
+       5        10         3         15       2.0 ema200_price_above         122    0.5000 0.1352 1.4106     1.0000    16.49
+      10        10         1         10       2.0 ema200_price_above         553    0.5063 0.1242 1.3900     1.0000    68.69
+       7        10         1         10       2.0 ema200_price_above         657    0.5175 0.1126 1.3662     1.0000    73.98
+      10        15         1         10       2.0 ema200_price_above         770    0.5039 0.1100 1.3364     1.0000    84.71
+      10        10         3         20       3.0               none         913    0.5071 0.1344 1.4441     0.7917   122.67
+
+avg_r heatmap (%K, smooth_d=1):
+oversold     10     15     20     25
+stoch_n                             
+5         0.106  0.110  0.104  0.104
+7         0.080  0.097  0.097  0.088
+10        0.075  0.082  0.069  0.046
+14        0.058  0.050  0.041  0.052
+20       -0.039 -0.020  0.044  0.008
+
+avg_r heatmap (%D, smooth_d=3):
+oversold     10     15     20     25
+stoch_n                             
+5         0.101  0.081  0.076  0.072
+7         0.051  0.059  0.055  0.063
+10        0.067  0.006  0.061  0.077
+14        0.034  0.010  0.049  0.049
+20       -0.024 -0.036 -0.004  0.007

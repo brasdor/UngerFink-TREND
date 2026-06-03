@@ -1,0 +1,9 @@
+T3MR ConsecDownDaysMR Exit Engineering
+Config: consec5/ema200/hold20/atr2.0
+T2 Baseline: avg_r=0.4696R  PF=2.31
+
+variant                            description   n  win_rate  avg_r   pf  max_dd_r  total_r  avg_bars  y2022_total wr_gate avgr_gate  beats_t2
+      A                  RSI(14) exit above 50 193    0.7565 0.1707 1.98      4.48    32.94      10.2        -6.60    FAIL      PASS     False
+      C Combined: RSI>50 OR ATR stop OR time20 195    0.7077 0.1543 1.85      3.68    30.09       5.5        -3.22    FAIL      PASS     False
+      E       Time exit 20 bars (T2 canonical) 179    0.5140 0.4696 2.31      6.29    84.05      17.0        -3.22    PASS      PASS     False
+      F                      Time exit 25 bars 176    0.4943 0.6666 2.70      4.94   117.32      20.5        -3.39    FAIL      PASS      True

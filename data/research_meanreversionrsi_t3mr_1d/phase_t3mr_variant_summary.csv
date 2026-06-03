@@ -1,0 +1,6 @@
+variant,description,n,win_rate,avg_r,pf,max_dd_r,total_r,avg_bars,y2022_total,y2022_wr,wr_gate,avgr_gate,bear_gate,overall
+A,RSI exit only,216,0.6991,0.2679,2.6,3.51,57.86,28.2,8.15,0.615,PASS,PASS,PASS,BEATS T2
+B,ATR stop only,88,0.0,-1.0,0.0,87.0,-88.0,180.4,-30.0,0.0,FAIL,FAIL,FAIL,FAIL
+C,Combined (T2 canonical),259,0.6332,0.2233,2.16,3.33,57.84,15.7,9.45,0.597,PASS,PASS,PASS,PASS
+D,Profit target +1.0R OR ATR stop,259,0.6139,0.1762,1.89,4.14,45.64,17.0,5.69,0.581,PASS,PASS,PASS,PASS
+E,Time exit only (20 bars),248,0.6169,0.3086,2.81,4.31,76.54,20.0,22.6,0.583,PASS,PASS,PASS,BEATS T2

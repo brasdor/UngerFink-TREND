@@ -1,0 +1,29 @@
+BollingerBandMR T1 -- 1d+2h+4h
+Grid: 1440  Viable: 16  Stable: 10
+
+EMA200 no_filter avg_r: 0.2728R (6 combos)
+EMA200 ema_filter avg_r: 0.1503R (10 combos)
+
+Top 20 stable combos:
+timeframe        filter_mode  bb_n  std_mult  hold_bars  atr_mult  num_trades  win_rate  avg_r  profit_factor  max_dd_r  stability  total_r
+       1d ema200_price_above    10       2.0         15       3.0         435    0.5126 0.1278         1.4904     11.66     1.0000    55.61
+       4h               none    25       3.0         15       4.0         202    0.5495 0.1050         1.4132      3.75     1.0000    21.21
+       4h ema200_price_above    25       2.0         10       2.0         163    0.5092 0.1812         1.5886      5.92     0.8889    29.53
+       1d ema200_price_above    15       2.5         15       4.0         118    0.5085 0.1374         1.6332      6.11     0.8889    16.21
+       1d ema200_price_above    20       2.0         10       3.0         288    0.5069 0.1028         1.4613      9.20     0.8889    29.60
+       4h               none    15       3.0         15       2.0         144    0.5347 0.4787         2.1183      4.00     0.8333    68.94
+       4h               none    15       3.0         15       3.0         144    0.5833 0.3248         2.0382      4.37     0.8333    46.77
+       4h               none    15       3.0         15       4.0         144    0.6250 0.2763         2.2347      2.88     0.8333    39.78
+       1d ema200_price_above    25       2.0         10       3.0         212    0.5613 0.1336         1.6774      4.92     0.7778    28.32
+       1d ema200_price_above    25       2.0         10       4.0         210    0.5667 0.1042         1.7041      3.68     0.7778    21.88
+
+avg_r heatmap:
+std_mult    1.5    2.0    2.5    3.0
+bb_n                                
+10        0.102  0.112 -0.089  0.000
+15        0.046  0.090  0.100 -0.066
+20        0.005  0.044 -0.072  0.004
+25       -0.004  0.133 -0.043  0.115
+30       -0.049  0.034 -0.085  0.267
+
+T1 GATE: PASS

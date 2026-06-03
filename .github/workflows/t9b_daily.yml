@@ -47,21 +47,37 @@ jobs:
         run: pip install -r requirements.txt
 
       # ------------------------------------------------------------------
-      # 4. Run the T9B paper engine
-      #    --notify produces a compact summary at the bottom of the log.
-      #    If a specific date was provided via workflow_dispatch, use it.
+      # 4a. Run Donchian T9B paper engine
       # ------------------------------------------------------------------
-      - name: Run T9B paper engine
-        id: engine
+      - name: Run T9B Donchian paper engine
+        id: engine_donchian
         run: |
           if [ -n "${{ github.event.inputs.run_date }}" ]; then
-            echo "Running for specified date: ${{ github.event.inputs.run_date }}"
+            echo "Donchian: running for ${{ github.event.inputs.run_date }}"
             python phase_t9b_donchian_universev2_paper_engine.py \
               --date "${{ github.event.inputs.run_date }}" \
               --notify
           else
-            echo "Running for yesterday (default)"
+            echo "Donchian: running for yesterday"
             python phase_t9b_donchian_universev2_paper_engine.py --notify
+          fi
+
+      # ------------------------------------------------------------------
+      # 4b. Run MeanReversionRSI T9B paper engine
+      #     Runs AFTER Donchian so OHLCV cache is already warm for shared
+      #     symbols (BTC, ETH, etc.); MR-only symbols fetched here.
+      # ------------------------------------------------------------------
+      - name: Run T9B MeanReversionRSI paper engine
+        id: engine_mr
+        run: |
+          if [ -n "${{ github.event.inputs.run_date }}" ]; then
+            echo "MR: running for ${{ github.event.inputs.run_date }}"
+            python phase_t9b_meanreversion_paper_engine.py \
+              --date "${{ github.event.inputs.run_date }}" \
+              --notify
+          else
+            echo "MR: running for yesterday"
+            python phase_t9b_meanreversion_paper_engine.py --notify
           fi
 
       # ------------------------------------------------------------------
@@ -71,16 +87,14 @@ jobs:
         run: python t9b_daily_summary.py
 
       # ------------------------------------------------------------------
-      # 6. Commit updated output files back to the repository.
-      #    Changes accumulate over time so you can browse history on GitHub.
-      #    The state.json and CSVs are the persistent record.
+      # 6. Commit all output files back to the repository.
       # ------------------------------------------------------------------
       - name: Commit output files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Stage paper trading outputs (accumulate over time)
+          # Donchian outputs
           git add --force \
             data/t9b_paper/state.json \
             data/t9b_paper/open_positions.csv \
@@ -89,13 +103,18 @@ jobs:
             data/t9b_paper/daily_log.csv \
             || true
 
-          # Stage updated OHLCV cache (one new row per symbol per day).
-          # These files live in data/universe/ohlcv_1d/ which IS tracked in git.
-          # The committed cache is how the engine gets data on the next run
-          # without hitting Binance.com (which blocks US-based servers).
+          # MeanReversionRSI outputs
+          git add --force \
+            data/t9b_mr_paper/state.json \
+            data/t9b_mr_paper/open_positions.csv \
+            data/t9b_mr_paper/signals_today.csv \
+            data/t9b_mr_paper/equity_curve.csv \
+            data/t9b_mr_paper/daily_log.csv \
+            || true
+
+          # Shared OHLCV cache (both engines read/write here -- one extra row per symbol per day)
           git add --force data/universe/ohlcv_1d/ || true
 
-          # Only commit if there are staged changes
           if git diff --cached --quiet; then
             echo "No output file changes to commit."
           else
@@ -106,9 +125,7 @@ jobs:
           fi
 
       # ------------------------------------------------------------------
-      # 7. Create a GitHub issue for each new signal fired today.
-      #    The script reads signals_today.csv and daily_log.csv.
-      #    Uses the automatically provided GITHUB_TOKEN -- no secrets needed.
+      # 7. Create GitHub issues for new signals (both engines)
       # ------------------------------------------------------------------
       - name: Create issues for new signals
         env:

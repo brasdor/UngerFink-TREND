@@ -1,0 +1,24 @@
+Phase T2 -- ConsecDownDaysMR
+Config: consec_n=6 / hold=20 / atr=2.0 / filter=none
+
+Trades    : 428
+Win rate  : 50.0%
+Avg R     : 0.4179R
+Total R   : 178.88R
+Max DD R  : 37.41R
+PF        : 2.05
+
+Year-by-Year:
+  2021  n=  30  wr= 60.0%  avg_r=+0.600R  total= +17.99R  dd=3.15R
+  2022  n=  81  wr= 45.7%  avg_r=+0.006R  total=  +0.47R  dd=11.54R  <<< BEAR
+  2023  n=  41  wr= 58.5%  avg_r=+0.649R  total= +26.62R  dd=4.31R
+  2024  n= 105  wr= 46.7%  avg_r=+0.863R  total= +90.59R  dd=37.41R
+  2025  n= 124  wr= 58.1%  avg_r=+0.425R  total= +52.74R  dd=18.21R
+  2026  n=  47  wr= 29.8%  avg_r=-0.203R  total=  -9.54R  dd=22.99R
+
+§4.1 win rate : PASS
+§4.2 avg_r    : PASS
+§4.7 conc     : ZEC_USDT 10.5% PASS
+Bear 2022     : +0.47R  PASS
+
+T2 GATE: PASS

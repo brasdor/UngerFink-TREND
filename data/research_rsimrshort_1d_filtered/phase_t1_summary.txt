@@ -1,0 +1,2 @@
+RSI MR Short 1D | filter=ema200_price_below
+T1 GATE: FAIL

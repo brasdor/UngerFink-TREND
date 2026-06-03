@@ -1,0 +1,54 @@
+======================================================================
+Phase T3MR -- MeanReversionRSI Exit Engineering
+Timeframe : 1d  |  Config: rsi14/os25/exit50/atr3.0/t20
+T2 Baseline: avg_r=0.2233R  PF=2.16  WR=63.3%
+======================================================================
+
+variant                     description   n  win_rate   avg_r   pf  max_dd_r  total_r  avg_bars  y2022_total  y2022_wr wr_gate avgr_gate bear_gate  overall
+      A                   RSI exit only 216    0.6991  0.2679 2.60      3.51    57.86      28.2         8.15     0.615    PASS      PASS      PASS BEATS T2
+      B                   ATR stop only  88    0.0000 -1.0000 0.00     87.00   -88.00     180.4       -30.00     0.000    FAIL      FAIL      FAIL     FAIL
+      C         Combined (T2 canonical) 259    0.6332  0.2233 2.16      3.33    57.84      15.7         9.45     0.597    PASS      PASS      PASS     PASS
+      D Profit target +1.0R OR ATR stop 259    0.6139  0.1762 1.89      4.14    45.64      17.0         5.69     0.581    PASS      PASS      PASS     PASS
+      E        Time exit only (20 bars) 248    0.6169  0.3086 2.81      4.31    76.54      20.0        22.60     0.583    PASS      PASS      PASS BEATS T2
+
+Year-by-year per variant:
+
+Variant A -- RSI exit only:
+  2021  n=   6  wr= 50.0%  avg_r=-0.170R  total=  -1.02R  dd=1.49R
+  2022  n=  52  wr= 61.5%  avg_r=+0.157R  total=  +8.15R  dd=2.31R <<< BEAR
+  2023  n=  41  wr= 68.3%  avg_r=+0.240R  total=  +9.86R  dd=2.31R
+  2024  n=  47  wr= 87.2%  avg_r=+0.592R  total= +27.83R  dd=0.78R
+  2025  n=  34  wr= 70.6%  avg_r=+0.163R  total=  +5.54R  dd=3.42R
+  2026  n=  36  wr= 63.9%  avg_r=+0.209R  total=  +7.51R  dd=1.65R
+
+Variant B -- ATR stop only:
+  2021  n=   6  wr=  0.0%  avg_r=-1.000R  total=  -6.00R  dd=5.00R
+  2022  n=  30  wr=  0.0%  avg_r=-1.000R  total= -30.00R  dd=29.00R <<< BEAR
+  2023  n=  10  wr=  0.0%  avg_r=-1.000R  total= -10.00R  dd=9.00R
+  2024  n=  20  wr=  0.0%  avg_r=-1.000R  total= -20.00R  dd=19.00R
+  2025  n=  18  wr=  0.0%  avg_r=-1.000R  total= -18.00R  dd=17.00R
+  2026  n=   4  wr=  0.0%  avg_r=-1.000R  total=  -4.00R  dd=3.00R
+
+Variant C -- Combined (T2 canonical):
+  2021  n=   9  wr= 55.6%  avg_r=+0.015R  total=  +0.13R  dd=0.88R
+  2022  n=  62  wr= 59.7%  avg_r=+0.152R  total=  +9.45R  dd=2.15R <<< BEAR
+  2023  n=  56  wr= 62.5%  avg_r=+0.261R  total= +14.61R  dd=2.54R
+  2024  n=  51  wr= 82.4%  avg_r=+0.514R  total= +26.21R  dd=1.83R
+  2025  n=  42  wr= 57.1%  avg_r=+0.239R  total= +10.02R  dd=1.35R
+  2026  n=  39  wr= 53.8%  avg_r=-0.066R  total=  -2.58R  dd=4.93R
+
+Variant D -- Profit target +1.0R OR ATR stop:
+  2021  n=   9  wr= 55.6%  avg_r=+0.110R  total=  +0.99R  dd=0.88R
+  2022  n=  62  wr= 58.1%  avg_r=+0.092R  total=  +5.69R  dd=2.52R <<< BEAR
+  2023  n=  56  wr= 57.1%  avg_r=+0.236R  total= +13.22R  dd=4.26R
+  2024  n=  51  wr= 80.4%  avg_r=+0.385R  total= +19.64R  dd=1.83R
+  2025  n=  42  wr= 57.1%  avg_r=+0.248R  total= +10.41R  dd=1.35R
+  2026  n=  39  wr= 53.8%  avg_r=-0.111R  total=  -4.31R  dd=6.57R
+
+Variant E -- Time exit only (20 bars):
+  2021  n=   9  wr= 55.6%  avg_r=+0.130R  total=  +1.17R  dd=0.88R
+  2022  n=  60  wr= 58.3%  avg_r=+0.377R  total= +22.60R  dd=3.03R <<< BEAR
+  2023  n=  51  wr= 56.9%  avg_r=+0.344R  total= +17.54R  dd=6.10R
+  2024  n=  51  wr= 82.4%  avg_r=+0.485R  total= +24.74R  dd=0.98R
+  2025  n=  40  wr= 52.5%  avg_r=+0.254R  total= +10.15R  dd=1.22R
+  2026  n=  37  wr= 56.8%  avg_r=+0.009R  total=  +0.34R  dd=2.32R

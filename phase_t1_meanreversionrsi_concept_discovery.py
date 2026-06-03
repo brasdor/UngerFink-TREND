@@ -73,7 +73,7 @@ SYMBOLS = [
     "ZEC_USDT",  "ZEN_USDT",
 ]
 
-MAX_BARS = {"1d": 1500, "4h": 6000, "6h": 4000, "8h": 3000}
+MAX_BARS = {"1d": 1500, "4h": 6000, "6h": 4000, "8h": 3000, "2h": 17520}
 MIN_BARS = 200
 
 # rsi_n=[2,3] dropped after 1D review — near-worthless on crypto MR

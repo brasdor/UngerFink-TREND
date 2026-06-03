@@ -1,0 +1,85 @@
+RSI MR Universe Filter -- Steps 1-3
+Config: rsi14/os25/t20/atr3.0/none
+Filter: avg_r>0  trades>=8  top_month<0.6
+
+Full universe  : 64 symbols, 312 trades, avg_r=+0.1777R, total_r=+55.44R
+Filtered       : 4 symbols, 35 trades, avg_r=+0.4283R, total_r=+14.99R
+
+Filtered symbols:
+   symbol  n_trades  avg_r  total_r  win_rate  top_month_pct top_month
+ LPT_USDT         9 0.6617     5.96    0.5556          0.582   2023-01
+ ZEC_USDT         8 0.5933     4.75    1.0000          0.389   2023-06
+ CHZ_USDT        10 0.3108     3.11    0.7000          0.467   2023-09
+ATOM_USDT         8 0.1477     1.18    0.7500          0.560   2022-06
+
+All per-symbol stats:
+      symbol  n_trades   avg_r  total_r  win_rate  top_month_pct  pass_filter         skip_reason
+   HBAR_USDT         7  1.4832    10.38    0.8571          0.640        False          min_trades
+    APT_USDT         7  1.0147     7.10    0.7143          0.837        False          min_trades
+    LPT_USDT         9  0.6617     5.96    0.5556          0.582         True                    
+    SOL_USDT         7  0.7519     5.26    0.4286          1.089        False          min_trades
+    ZEC_USDT         8  0.5933     4.75    1.0000          0.389         True                    
+    ZEN_USDT         5  0.8150     4.08    1.0000          0.431        False          min_trades
+    ICP_USDT         9  0.3768     3.39    0.5556          0.653        False  top_month_pct=0.65
+    CHZ_USDT        10  0.3108     3.11    0.7000          0.467         True                    
+    GRT_USDT         7  0.4067     2.85    0.8571          0.441        False          min_trades
+   DASH_USDT         6  0.3534     2.12    0.6667          0.450        False          min_trades
+   DOGE_USDT         3  0.7008     2.10    1.0000          0.388        False          min_trades
+    TIA_USDT         4  0.4775     1.91    0.7500          0.508        False          min_trades
+    SEI_USDT         5  0.3630     1.81    0.8000          0.822        False          min_trades
+    UNI_USDT         4  0.4330     1.73    0.7500          1.009        False          min_trades
+     IO_USDT         5  0.3437     1.72    0.6000          0.905        False          min_trades
+   AAVE_USDT         2  0.8530     1.71    1.0000          0.692        False          min_trades
+   LINK_USDT         6  0.2544     1.53    0.6667          1.009        False          min_trades
+    SPK_USDT         1  1.4362     1.44    1.0000          1.000        False          min_trades
+    DOT_USDT         6  0.2281     1.37    0.5000          0.808        False          min_trades
+    FET_USDT         6  0.2069     1.24    0.5000          1.428        False          min_trades
+   PEPE_USDT         3  0.4045     1.21    0.6667          0.736        False          min_trades
+ PENDLE_USDT         2  0.5921     1.18    1.0000          0.772        False          min_trades
+   ATOM_USDT         8  0.1477     1.18    0.7500          0.560         True                    
+  EIGEN_USDT         4  0.2703     1.08    0.5000          0.951        False          min_trades
+    ADA_USDT         7  0.1532     1.07    0.8571          0.654        False          min_trades
+    ARB_USDT         7  0.1429     1.00    0.5714          1.538        False          min_trades
+    FIL_USDT        10  0.0901     0.90    0.5000          0.945        False  top_month_pct=0.94
+    ETH_USDT         6  0.1462     0.88    0.5000          0.973        False          min_trades
+    SUI_USDT         8  0.0957     0.77    0.5000          3.513        False  top_month_pct=3.51
+   ONDO_USDT         1  0.5839     0.58    1.0000          1.000        False          min_trades
+  PENGU_USDT         1  0.4925     0.49    1.0000          1.000        False          min_trades
+    LTC_USDT         5  0.0965     0.48    0.4000          2.389        False          min_trades
+    JTO_USDT         3  0.1405     0.42    0.3333          2.550        False          min_trades
+    NIL_USDT         2  0.1845     0.37    0.5000          1.363        False          min_trades
+    ENA_USDT         3  0.1050     0.32    0.6667          2.017        False          min_trades
+   SAGA_USDT         7  0.0326     0.23    0.5714          4.451        False          min_trades
+   ORDI_USDT         2  0.1163     0.23    1.0000          0.701        False          min_trades
+ RENDER_USDT         2  0.0781     0.16    0.5000          1.302        False          min_trades
+   POND_USDT         6  0.0167     0.10    0.5000         12.806        False          min_trades
+    TAO_USDT         2  0.0208     0.04    0.5000          8.247        False          min_trades
+   NEAR_USDT         8  0.0036     0.03    0.5000         33.557        False top_month_pct=33.56
+   PUMP_USDT         0  0.0000     0.00    0.0000          1.000        False           no_trades
+VIRTUAL_USDT         0  0.0000     0.00    0.0000          1.000        False           no_trades
+   XUSD_USDT         0  0.0000     0.00    0.0000          1.000        False           no_trades
+ MORPHO_USDT         0  0.0000     0.00    0.0000          1.000        False           no_trades
+  BFUSD_USDT         0  0.0000     0.00    0.0000          1.000        False           no_trades
+  ASTER_USDT         1 -0.0670    -0.07    0.0000          1.000        False          min_trades
+    ALT_USDT         5 -0.0480    -0.24    0.6000          1.000        False          min_trades
+    PHA_USDT         1 -0.3629    -0.36    0.0000          1.000        False          min_trades
+    TRX_USDT         4 -0.0914    -0.37    0.5000          1.000        False          min_trades
+   WLFI_USDT         4 -0.1147    -0.46    0.7500          1.000        False          min_trades
+    TON_USDT         6 -0.0826    -0.50    0.5000          1.000        False          min_trades
+   EDEN_USDT         2 -0.2615    -0.52    0.0000          1.000        False          min_trades
+    WLD_USDT         2 -0.2706    -0.54    0.5000          1.000        False          min_trades
+   ARKM_USDT         2 -0.3153    -0.63    0.0000          1.000        False          min_trades
+    XRP_USDT         5 -0.1600    -0.80    0.4000          1.000        False          min_trades
+    BTC_USDT         9 -0.0890    -0.80    0.3333          1.000        False            avg_r<=0
+  TRUMP_USDT         5 -0.1693    -0.85    0.2000          1.000        False          min_trades
+    BCH_USDT         4 -0.2262    -0.90    0.5000          1.000        False          min_trades
+    INJ_USDT         5 -0.1823    -0.91    0.4000          1.000        False          min_trades
+   AVAX_USDT         3 -0.3108    -0.93    0.3333          1.000        False          min_trades
+    XPL_USDT         2 -0.5272    -1.05    0.0000          1.000        False          min_trades
+   DOGS_USDT         3 -0.3680    -1.10    0.0000          1.000        False          min_trades
+ SAHARA_USDT         4 -0.2948    -1.18    0.2500          1.000        False          min_trades
+    MMT_USDT         4 -0.3413    -1.37    0.2500          1.000        False          min_trades
+  HMSTR_USDT         5 -0.3570    -1.78    0.0000          1.000        False          min_trades
+   FIDA_USDT         6 -0.3732    -2.24    0.3333          1.000        False          min_trades
+    ERA_USDT         6 -0.4214    -2.53    0.1667          1.000        False          min_trades
+    BNB_USDT        10 -0.2697    -2.70    0.4000          1.000        False            avg_r<=0

@@ -1,0 +1,7 @@
+sweep,label,rsi_n,oversold,n,avg_r,pf,win_rate,total_r,canonical,pass
+rsi_n,rsi10/os25,10,25,686,0.0903,1.32,0.4971,61.97,False,True
+rsi_n,rsi14/os25,14,25,253,0.2689,2.37,0.6126,68.03,True,True
+rsi_n,rsi20/os25,20,25,34,0.2601,3.51,0.7059,8.84,False,True
+oversold,rsi14/os20,14,20,39,0.2628,4.61,0.7179,10.25,False,True
+oversold,rsi14/os25,14,25,253,0.2689,2.37,0.6126,68.03,True,True
+oversold,rsi14/os30,14,30,703,0.0692,1.23,0.4751,48.61,False,True

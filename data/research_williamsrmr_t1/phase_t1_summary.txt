@@ -1,0 +1,12 @@
+Williams %R MR Long -- T1 Concept Discovery
+Timeframes: ['1d', '2h']
+MR gates: WR 50-70%, avg_r > 0.10R, stability >= 0.67
+
+
+1D: 3 gate-passing combos
+ wr_n  oversold  hold_bars  atr_mult        filter_mode  num_trades  win_rate  avg_r     pf  total_r
+   14       -90         10       2.0 ema200_price_above         478    0.5105 0.1326 1.4102    63.36
+   10       -90         10       2.0 ema200_price_above         582    0.5052 0.1177 1.3739    68.49
+    7       -90         10       2.0 ema200_price_above         694    0.5101 0.1029 1.3354    71.45
+
+2H: 0 gate-passing combos
