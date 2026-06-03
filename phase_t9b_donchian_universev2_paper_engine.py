@@ -23,15 +23,13 @@ OHLCV data strategy (works from GitHub Actions / US-based servers):
   1. Load committed historical cache: data/universe/ohlcv_1d/{sym}_1d.csv
      This file is tracked in git and checked out with the repo.
      It covers 2020-present for all 24 symbols.
-  2. Append latest 10 bars using a geo-unrestricted source:
-       a. Binance US (binanceus) -- works from US servers (GitHub Actions)
-       b. yfinance (Yahoo Finance) -- universal fallback, no restrictions
+  2. Append latest 10 bars via yfinance (Yahoo Finance).
+     yfinance is geo-unrestricted and works from GitHub Actions US servers.
+     Binance.com returns HTTP 451 from US IPs; ccxt/binanceus also fails
+     on GitHub Actions -- yfinance is the only reliable live source.
   3. Save updated file back to data/universe/ohlcv_1d/ so the GitHub Actions
      commit step accumulates the cache one row per day.
   4. Use --no-download to skip live fetch (read committed cache only).
-
-  Binance.com (the global exchange) is NOT used -- it returns HTTP 451
-  from US-based servers. Only binanceus or yfinance is called for live data.
 
 Usage:
   python phase_t9b_donchian_universev2_paper_engine.py
@@ -260,7 +258,7 @@ def load_ohlcv(symbol: str, up_to_date: Optional[date] = None) -> pd.DataFrame:
 
     First call per symbol per session:
       1. Read committed historical cache (data/universe/ohlcv_1d/ -- in git)
-      2. Fetch last 10 bars via a geo-unrestricted source (binanceus -> yfinance)
+      2. Fetch last 10 bars via yfinance (geo-unrestricted, works on GitHub Actions)
       3. Merge, deduplicate, save back to committed cache (one extra row per day)
 
     Subsequent calls for the same symbol reuse the in-memory session cache.
@@ -362,47 +360,13 @@ def _parse_ohlcv(raw: pd.DataFrame) -> pd.DataFrame:
 
 def _fetch_latest_bars(symbol: str, n_bars: int = 10) -> Optional[pd.DataFrame]:
     """
-    Fetch the latest n_bars 1D candles from a geo-unrestricted source.
+    Fetch the latest n_bars 1D candles via yfinance (Yahoo Finance).
 
-    Fallback chain:
-      1. Binance US (ccxt binanceus) -- works FROM US servers (GitHub Actions).
-         binanceus.com is the US-compliant exchange; not geo-blocked for US IPs.
-      2. yfinance (Yahoo Finance) -- universal fallback, BTC-USD format.
-
-    Returns a raw DataFrame or None if both fail.
-    Binance.com (global) is intentionally NOT used -- it returns HTTP 451 from US IPs.
+    yfinance is geo-unrestricted and works from GitHub Actions US servers.
+    Binance.com returns HTTP 451 from US IPs; binanceus (ccxt) also fails
+    on GitHub Actions. yfinance is the only reliable source here.
     """
-    raw = _try_binanceus(symbol, n_bars)
-    if raw is not None and not raw.empty:
-        return raw
-
-    raw = _try_yfinance(symbol, n_bars)
-    return raw  # None if both failed
-
-
-def _try_binanceus(symbol: str, n_bars: int) -> Optional[pd.DataFrame]:
-    """Fetch from Binance US using ccxt. Same symbol/format as Binance.com."""
-    try:
-        import ccxt  # type: ignore
-    except ImportError:
-        return None
-
-    try:
-        exchange = ccxt.binanceus({
-            "enableRateLimit": True,
-            "options": {"defaultType": "spot"},
-        })
-        ohlcv = exchange.fetch_ohlcv(symbol, "1d", limit=n_bars)
-        if not ohlcv:
-            return None
-        time.sleep(SLEEP_SEC)
-        return pd.DataFrame(
-            ohlcv,
-            columns=["timestamp", "open", "high", "low", "close", "volume"],
-        )
-    except Exception as exc:
-        print(f"    [binanceus] {symbol}: {exc}")
-        return None
+    return _try_yfinance(symbol, n_bars)
 
 
 def _try_yfinance(symbol: str, n_bars: int) -> Optional[pd.DataFrame]:
@@ -1155,7 +1119,7 @@ def main() -> int:
     global _SKIP_LIVE_FETCH
     _SKIP_LIVE_FETCH = args.no_download
 
-    # Refresh committed cache (appends latest bars via binanceus/yfinance)
+    # Refresh committed cache (appends latest bars via yfinance)
     refresh_ohlcv_cache(symbols)
 
     print()
