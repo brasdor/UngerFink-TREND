@@ -20,11 +20,10 @@ Frozen config (2026-06-01):
 OHLCV data strategy (geo-unrestricted, works from GitHub Actions):
   1. Load committed historical cache: data/universe/ohlcv_1d/{sym}_1d.csv
      Tracked in git, same cache shared with Donchian T9B engine.
-  2. Append latest bars via binanceus (US-compliant) -> yfinance fallback.
+  2. Append latest bars via yfinance (geo-unrestricted, works on GitHub Actions).
+     Binance.com returns HTTP 451 from US IPs; ccxt/binanceus also fails.
   3. Commit updated files back via git in the workflow.
   4. --no-download: skip live fetch, use committed cache only.
-
-  Binance.com (global) is NOT used -- HTTP 451 from US-based servers.
 
 Usage:
   python phase_t9b_meanreversion_paper_engine.py
@@ -290,27 +289,8 @@ def _parse_ohlcv(raw: pd.DataFrame) -> pd.DataFrame:
 
 
 def _fetch_latest_bars(symbol: str, n_bars: int = 10) -> Optional[pd.DataFrame]:
-    raw = _try_binanceus(symbol, n_bars)
-    if raw is not None and not raw.empty:
-        return raw
+    """yfinance only -- geo-unrestricted, works from GitHub Actions US servers."""
     return _try_yfinance(symbol, n_bars)
-
-
-def _try_binanceus(symbol: str, n_bars: int) -> Optional[pd.DataFrame]:
-    try:
-        import ccxt
-    except ImportError:
-        return None
-    try:
-        exc = ccxt.binanceus({"enableRateLimit": True, "options": {"defaultType": "spot"}})
-        ohlcv = exc.fetch_ohlcv(symbol, "1d", limit=n_bars)
-        if not ohlcv:
-            return None
-        time.sleep(SLEEP_SEC)
-        return pd.DataFrame(ohlcv, columns=["timestamp","open","high","low","close","volume"])
-    except Exception as e:
-        print(f"    [binanceus] {symbol}: {e}")
-        return None
 
 
 def _try_yfinance(symbol: str, n_bars: int) -> Optional[pd.DataFrame]:

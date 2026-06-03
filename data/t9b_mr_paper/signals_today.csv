@@ -1,2 +1,1 @@
-symbol,signal_date,close,rsi,atr,stop_loss,risk_unit,signal
-SAGA/USDT,2026-05-01,0.01714,24.1614,0.00184934,0.01159197,0.00554803,BUY_MR
+symbol,signal_date,close,rsi,atr,stop_loss,signal
