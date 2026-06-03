@@ -1,6 +1,6 @@
 name: T9B Daily Paper Trading
 
-# Runs daily at 08:00 UTC -- 8 hours after the previous 1D candle closed at midnight.
+# Runs daily at 08:00 UTC -- 8 hours after the 1D candle closed at midnight UTC.
 # Also triggerable manually from the GitHub Actions tab (workflow_dispatch).
 
 on:
@@ -48,9 +48,11 @@ jobs:
 
       # ------------------------------------------------------------------
       # 4a. Run Donchian T9B paper engine
+      #     continue-on-error: other engines must still run if this fails
       # ------------------------------------------------------------------
       - name: Run T9B Donchian paper engine
         id: engine_donchian
+        continue-on-error: true
         run: |
           if [ -n "${{ github.event.inputs.run_date }}" ]; then
             echo "Donchian: running for ${{ github.event.inputs.run_date }}"
@@ -64,11 +66,12 @@ jobs:
 
       # ------------------------------------------------------------------
       # 4b. Run MeanReversionRSI T9B paper engine
-      #     Runs AFTER Donchian so OHLCV cache is already warm for shared
-      #     symbols (BTC, ETH, etc.); MR-only symbols fetched here.
+      #     OHLCV cache is warm for shared symbols from step 4a.
+      #     continue-on-error: other engines must still run if this fails
       # ------------------------------------------------------------------
       - name: Run T9B MeanReversionRSI paper engine
         id: engine_mr
+        continue-on-error: true
         run: |
           if [ -n "${{ github.event.inputs.run_date }}" ]; then
             echo "MR: running for ${{ github.event.inputs.run_date }}"
@@ -81,13 +84,33 @@ jobs:
           fi
 
       # ------------------------------------------------------------------
-      # 5. Print daily summary (also writes to log for phone browsing)
+      # 4c. Run ConsecDownDaysMR T9B paper engine
+      #     OHLCV cache warm from steps 4a/4b.
+      #     continue-on-error: workflow must still commit + summarize
       # ------------------------------------------------------------------
-      - name: Print daily summary
-        run: python t9b_daily_summary.py
+      - name: Run T9B ConsecDownDaysMR paper engine
+        id: engine_cd
+        continue-on-error: true
+        run: |
+          if [ -n "${{ github.event.inputs.run_date }}" ]; then
+            echo "ConsecDown: running for ${{ github.event.inputs.run_date }}"
+            python phase_t9b_consecdowndays_paper_engine.py \
+              --date "${{ github.event.inputs.run_date }}" \
+              --notify
+          else
+            echo "ConsecDown: running for yesterday"
+            python phase_t9b_consecdowndays_paper_engine.py --notify
+          fi
+
+      # ------------------------------------------------------------------
+      # 5. Print combined summary (all three systems side-by-side)
+      # ------------------------------------------------------------------
+      - name: Print combined T9B summary
+        run: python t9b_combined_summary.py
 
       # ------------------------------------------------------------------
       # 6. Commit all output files back to the repository.
+      #    Uses --force to commit files in .gitignore-adjacent directories.
       # ------------------------------------------------------------------
       - name: Commit output files
         run: |
@@ -112,7 +135,16 @@ jobs:
             data/t9b_mr_paper/daily_log.csv \
             || true
 
-          # Shared OHLCV cache (both engines read/write here -- one extra row per symbol per day)
+          # ConsecDownDaysMR outputs
+          git add --force \
+            data/t9b_consecdowndays_paper/state.json \
+            data/t9b_consecdowndays_paper/open_positions.csv \
+            data/t9b_consecdowndays_paper/signals_today.csv \
+            data/t9b_consecdowndays_paper/equity_curve.csv \
+            data/t9b_consecdowndays_paper/daily_log.csv \
+            || true
+
+          # Shared OHLCV cache (all three engines read/write here)
           git add --force data/universe/ohlcv_1d/ || true
 
           if git diff --cached --quiet; then
@@ -125,10 +157,28 @@ jobs:
           fi
 
       # ------------------------------------------------------------------
-      # 7. Create GitHub issues for new signals (both engines)
+      # 7. Create GitHub issues for new signals (all three systems)
       # ------------------------------------------------------------------
       - name: Create issues for new signals
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python .github/scripts/create_signal_issues.py
+
+      # ------------------------------------------------------------------
+      # 8. Report engine exit statuses for visibility
+      # ------------------------------------------------------------------
+      - name: Report engine statuses
+        if: always()
+        run: |
+          echo "Engine exit statuses:"
+          echo "  Donchian    : ${{ steps.engine_donchian.outcome }}"
+          echo "  RSI MR      : ${{ steps.engine_mr.outcome }}"
+          echo "  ConsecDown  : ${{ steps.engine_cd.outcome }}"
+          if [ "${{ steps.engine_donchian.outcome }}" = "failure" ] || \
+             [ "${{ steps.engine_mr.outcome }}" = "failure" ] || \
+             [ "${{ steps.engine_cd.outcome }}" = "failure" ]; then
+            echo "WARNING: one or more engines failed -- check logs above"
+          else
+            echo "All engines completed successfully"
+          fi
