@@ -1,2 +1,2 @@
 position_id,symbol,entry_date,as_of_date,entry_price,stop_loss,bars_held,bars_remaining,rsi_at_entry,atr_at_entry,risk_amount_usdt,qty
-SAGA_USDT_20260501,SAGA/USDT,2026-05-01,2026-06-02,0.01714,0.01159197,0,20,24.1614,0.00184934,25.0,4506.103968435643
+SAGA_USDT_20260501,SAGA/USDT,2026-05-01,2026-06-03,0.01714,0.01159197,0,20,24.1614,0.00184934,25.0,4506.103968435643
