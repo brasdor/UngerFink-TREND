@@ -305,7 +305,7 @@ def _try_yfinance(symbol: str, n_bars: int) -> Optional[pd.DataFrame]:
     yf_sym = f"{base}-USD"
     try:
         hist = yf.download(yf_sym, period="30d", interval="1d",
-                           progress=False, auto_adjust=True, raise_errors=False)
+                           progress=False, auto_adjust=True)
         if hist is None or hist.empty:
             return None
         hist = hist.tail(n_bars).reset_index()

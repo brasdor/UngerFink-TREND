@@ -390,7 +390,6 @@ def _try_yfinance(symbol: str, n_bars: int) -> Optional[pd.DataFrame]:
             interval="1d",
             progress=False,
             auto_adjust=True,
-            raise_errors=False,   # suppress download exceptions; returns empty instead
         )
         if hist is None or hist.empty:
             return None
