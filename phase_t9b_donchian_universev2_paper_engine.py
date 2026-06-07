@@ -64,6 +64,8 @@ from typing import Dict, List, Optional
 import numpy as np
 import pandas as pd
 
+import t9b_shared
+
 
 # =============================================================================
 # FROZEN CONFIG  (2026-05-30)
@@ -82,6 +84,7 @@ CHANDELIER_MULT        = 5.0
 CHANDELIER_ACTIVATE_R  = 6.0   # R threshold before chandelier activates
 
 RISK_PER_TRADE_PCT     = 0.0025   # 0.25%
+MIN_ORDER_SIZE_USDT    = 15.0     # Fix 2: minimum position notional
 MAX_OPEN_POSITIONS     = 8
 INITIAL_CAPITAL        = 10_000.0
 LEVERAGE               = 1.0
@@ -201,6 +204,50 @@ def positions_from_state(state: dict) -> Dict[str, Position]:
 
 def positions_to_state(state: dict, positions: Dict[str, Position]) -> None:
     state["open_positions"] = [asdict(p) for p in positions.values()]
+
+
+def _reconcile_state(state: dict, run_date: date) -> None:
+    """Fix 3: Verify open positions consistency on engine startup."""
+    positions = state.get("open_positions", [])
+    issues: list[str] = []
+    for pos in positions:
+        pid  = pos.get("position_id", "?")
+        sym  = pos.get("symbol", "")
+        ep   = pos.get("entry_price")
+        qty  = pos.get("qty")
+        stop = pos.get("current_stop", pos.get("stop_loss"))
+        ed   = pos.get("entry_date")
+        if not sym:
+            issues.append(f"{pid}: missing symbol")
+        try:
+            if float(ep) <= 0:
+                issues.append(f"{sym}: entry_price={ep} <= 0")
+        except (TypeError, ValueError):
+            issues.append(f"{sym}: entry_price not numeric ({ep!r})")
+        try:
+            if float(qty) <= 0:
+                issues.append(f"{sym}: qty={qty} <= 0")
+        except (TypeError, ValueError):
+            issues.append(f"{sym}: qty not numeric ({qty!r})")
+        try:
+            if stop is not None and ep is not None and float(stop) >= float(ep):
+                issues.append(f"{sym}: stop={stop} >= entry_price={ep} (invalid for LONG)")
+        except (TypeError, ValueError):
+            pass
+        try:
+            date.fromisoformat(str(ed))
+        except (ValueError, TypeError):
+            issues.append(f"{sym}: invalid entry_date={ed!r}")
+
+    if issues:
+        print(f"[RECONCILE] {len(issues)} issue(s) in open positions:")
+        for iss in issues:
+            print(f"  [WARN] {iss}")
+        rows = [{"run_date": str(run_date), "event": "RECONCILE_WARN",
+                 "symbol": "", "detail": iss} for iss in issues]
+        append_csv(DAILY_LOG_CSV, rows)
+    else:
+        print(f"[RECONCILE] OK  ({len(positions)} position(s) verified)")
 
 
 def read_csv_or_empty(path: Path) -> pd.DataFrame:
@@ -705,9 +752,15 @@ def run_one_day(
     # STEP 2: Scan for new entry signals
     # ------------------------------------------------------------------
     if not kill_sw:
+        cross_syms = t9b_shared.get_cross_system_symbols('donchian')  # Fix 1
         for sym in symbols:
             # Skip if already holding this symbol
             if any(p.symbol == sym for p in positions.values()):
+                continue
+
+            # Fix 1: cross-system duplicate check
+            if t9b_shared.normalize_sym(sym) in cross_syms:
+                _log("SIGNAL_SKIPPED", sym, "duplicate_cross_system")
                 continue
 
             df  = load_ohlcv(sym, up_to_date=run_date)
@@ -733,6 +786,13 @@ def run_one_day(
             qty            = risk_amount / max(risk_per_unit, EPS)
             entry_price    = sig["close"]
             initial_stop   = sig["initial_stop"]
+
+            # Fix 2: minimum order size validation
+            if qty * entry_price < MIN_ORDER_SIZE_USDT:
+                _log("SIGNAL_SKIPPED", sym,
+                     f"position_too_small  size=${qty * entry_price:.2f} < ${MIN_ORDER_SIZE_USDT}",
+                     close=entry_price)
+                continue
 
             pid = f"{safe_sym(sym)}_{run_date.strftime('%Y%m%d')}"
             pos = Position(
@@ -1130,6 +1190,10 @@ def main() -> int:
     print(f"[STATE] equity=${state['paper_equity_usdt']:,.2f}  "
           f"open={n_open}  closed={n_closed}  "
           f"kill_sw={'YES' if state.get('kill_switch_triggered') else 'no'}")
+    print()
+
+    # Fix 3: state reconciliation on startup
+    _reconcile_state(state, run_dates[0])
     print()
 
     # Daily loop
