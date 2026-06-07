@@ -1,0 +1,3 @@
+run_date,event,detail,equity
+2026-06-07,SKIP,"No valid basket signals",10000.0000
+2026-06-07,REBAL,"REBAL #1  L=12 (12 new 0 held 0 closed)  S=10 (10 new 0 held 0 closed)  pnl=$+0.00  cost=0.150%  eq=$9,985.00",9985.0000
