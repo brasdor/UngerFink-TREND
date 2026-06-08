@@ -58,6 +58,7 @@ import numpy as np
 import pandas as pd
 
 import t9b_shared
+import signal_arbitrator
 
 
 # =============================================================================
@@ -589,14 +590,9 @@ def run_one_day(run_date: date, symbols: List[str], state: dict) -> dict:
     # STEP 2: Scan for new entry signals
     # ------------------------------------------------------------------
     if not kill_sw:
-        cross_syms = t9b_shared.get_cross_system_symbols('rsi_mr')  # Fix 1
+        arb = signal_arbitrator.SignalArbitrator("rsi_mr", run_date)
         for sym in symbols:
             if any(p.symbol == sym for p in positions.values()):
-                continue
-
-            # Fix 1: cross-system duplicate check
-            if t9b_shared.normalize_sym(sym) in cross_syms:
-                _log("SIGNAL_SKIPPED", sym, "duplicate_cross_system")
                 continue
 
             df  = load_ohlcv(sym, up_to_date=run_date)
@@ -621,6 +617,12 @@ def run_one_day(run_date: date, symbols: List[str], state: dict) -> dict:
                 _log("SIGNAL_SKIPPED", sym,
                      f"position_too_small  size=${qty * sig['close']:.2f} < ${MIN_ORDER_SIZE_USDT}",
                      close=sig["close"])
+                continue
+
+            # Arbitration: cross-system rules 1-5
+            decision, arb_reason = arb.check_signal(sym, "LONG", risk_amount)
+            if decision == "REJECTED":
+                _log("SIGNAL_SKIPPED", sym, arb_reason, close=sig["close"])
                 continue
 
             pid           = f"{safe_sym(sym)}_{run_date.strftime('%Y%m%d')}"

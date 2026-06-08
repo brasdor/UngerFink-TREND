@@ -65,6 +65,7 @@ import numpy as np
 import pandas as pd
 
 import t9b_shared
+import signal_arbitrator
 
 
 # =============================================================================
@@ -752,15 +753,10 @@ def run_one_day(
     # STEP 2: Scan for new entry signals
     # ------------------------------------------------------------------
     if not kill_sw:
-        cross_syms = t9b_shared.get_cross_system_symbols('donchian')  # Fix 1
+        arb = signal_arbitrator.SignalArbitrator("donchian", run_date)
         for sym in symbols:
             # Skip if already holding this symbol
             if any(p.symbol == sym for p in positions.values()):
-                continue
-
-            # Fix 1: cross-system duplicate check
-            if t9b_shared.normalize_sym(sym) in cross_syms:
-                _log("SIGNAL_SKIPPED", sym, "duplicate_cross_system")
                 continue
 
             df  = load_ohlcv(sym, up_to_date=run_date)
@@ -792,6 +788,12 @@ def run_one_day(
                 _log("SIGNAL_SKIPPED", sym,
                      f"position_too_small  size=${qty * entry_price:.2f} < ${MIN_ORDER_SIZE_USDT}",
                      close=entry_price)
+                continue
+
+            # Arbitration: cross-system rules 1-5
+            decision, arb_reason = arb.check_signal(sym, "LONG", risk_amount)
+            if decision == "REJECTED":
+                _log("SIGNAL_SKIPPED", sym, arb_reason, close=entry_price)
                 continue
 
             pid = f"{safe_sym(sym)}_{run_date.strftime('%Y%m%d')}"

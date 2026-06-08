@@ -50,6 +50,7 @@ import numpy as np
 import pandas as pd
 
 import t9b_shared
+import signal_arbitrator
 
 # ── Paths ─────────────────────────────────────────────────────────────────
 ROOT       = Path(__file__).resolve().parent
@@ -418,20 +419,7 @@ def compute_basket(close: pd.DataFrame, as_of: Date,
 
     actual_long_k = min(len(sig_long), LONG_K)
     longs  = list(sig_long.nlargest(actual_long_k).index) if actual_long_k > 0 else []
-
-    # Fix 1: cross-system duplicate filter
-    cross_syms = t9b_shared.get_cross_system_symbols('momentum')
-    n_before_l = len(longs)
-    longs  = [s for s in longs  if t9b_shared.normalize_sym(s) not in cross_syms]
-    # Refill shorts from full ranked list (skip cross-system duplicates)
-    shorts_candidates = [s for s in sig_short.nsmallest(len(sig_short)).index
-                         if t9b_shared.normalize_sym(s) not in cross_syms]
-    shorts = shorts_candidates[:SHORT_K]
-
-    if n_before_l != len(longs):
-        meta['cross_dedup_longs'] = n_before_l - len(longs)
-    if len(shorts) < SHORT_K:
-        meta['cross_dedup_shorts'] = f"Only {len(shorts)}/{SHORT_K} after cross-system dedup"
+    shorts = list(sig_short.nsmallest(SHORT_K).index)
 
     if not shorts:
         return [], [], meta
@@ -466,7 +454,8 @@ def is_rebal_day(today: Date, state: dict) -> bool:
 
 
 def do_rebalance(state: dict, close: pd.DataFrame, today: Date,
-                 vol_usdt: pd.DataFrame | None = None) -> list[dict]:
+                 vol_usdt: pd.DataFrame | None = None,
+                 arb: "signal_arbitrator.SignalArbitrator | None" = None) -> list[dict]:
     """
     Execute basket rebalance. Updates state in-place.
     Returns list of signal rows for signals_today.csv.
@@ -535,6 +524,12 @@ def do_rebalance(state: dict, close: pd.DataFrame, today: Date,
                        f"position_too_small: {sym} LONG alloc=${long_alloc:.2f} < ${MIN_ORDER_SIZE_USDT}",
                        equity_after_cost)
             continue
+        # Arbitration: cross-system rules 1-5 (heat proxy = 1% of long notional)
+        if arb is not None:
+            decision, arb_reason = arb.check_signal(sym, "LONG", long_alloc * 0.01)
+            if decision == "REJECTED":
+                _log_event(today, 'SKIP', f"arb:{arb_reason}  {sym} LONG", equity_after_cost)
+                continue
         new_long_pos.append({
             'symbol':      sym,
             'side':        'LONG',
@@ -565,6 +560,12 @@ def do_rebalance(state: dict, close: pd.DataFrame, today: Date,
                        f"position_too_small: {sym} SHORT alloc=${short_alloc:.2f} < ${MIN_ORDER_SIZE_USDT}",
                        equity_after_cost)
             continue
+        # Arbitration: cross-system rules 1-5 (heat proxy = 2% of short notional)
+        if arb is not None:
+            decision, arb_reason = arb.check_signal(sym, "SHORT", short_alloc * 0.02)
+            if decision == "REJECTED":
+                _log_event(today, 'SKIP', f"arb:{arb_reason}  {sym} SHORT", equity_after_cost)
+                continue
         new_short_pos.append({
             'symbol':      sym,
             'side':        'SHORT',
@@ -841,7 +842,9 @@ def main() -> None:
         p(f"\n  REBALANCE DAY")
         # Fix 5: load volume matrix for liquidity filter
         vol_usdt = load_vol_usdt_matrix()
-        signal_rows = do_rebalance(state, close, today, vol_usdt=vol_usdt)
+        # fresh_heat=True because rebalance clears all old positions before rebuilding
+        arb = signal_arbitrator.SignalArbitrator("momentum", today, fresh_heat=True)
+        signal_rows = do_rebalance(state, close, today, vol_usdt=vol_usdt, arb=arb)
         rebalanced  = True
         # Fix 4: funding rate monitor for short positions after rebalance
         if state.get('short_positions'):
