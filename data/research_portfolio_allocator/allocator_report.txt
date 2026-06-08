@@ -1,0 +1,22 @@
+Regime-Aware Portfolio Allocator Report
+====================================================================
+
+PERFORMANCE SUMMARY
+            Combined Allocator  CAGR=+22.49%  MaxDD=-9.68%  End=$89,949
+               Independent Sum  CAGR=+7.16%  MaxDD=-2.71%  End=$43,615
+              Donchian (indep)  CAGR=+13.32%  MaxDD=-9.94%  End=$19,677
+                RSI_MR (indep)  CAGR=+1.95%  MaxDD=-3.46%  End=$11,101
+        ConsecDownDays (indep)  CAGR=+4.72%  MaxDD=-4.16%  End=$12,837
+
+REGIME DISTRIBUTION
+  BULL: 513 days (25.9%)
+  MIXED: 665 days (33.6%)
+  BEAR: 799 days (40.4%)
+
+YEAR-BY-YEAR
+  2021: allocator=+67.04%  independent=+12.39%
+  2022: allocator=-9.16%  independent=-2.40%
+  2023: allocator=-1.95%  independent=+1.14%
+  2024: allocator=+105.28%  independent=+19.87%
+  2025: allocator=+70.18%  independent=+12.02%
+  2026: allocator=-31.55%  independent=-2.41%

@@ -1,0 +1,18 @@
+Portfolio Allocator V2 Report
+====================================================================
+
+V1: CAGR=+22.49%  MaxDD=-9.68%
+V2: CAGR=+21.47%  MaxDD=-6.66%
+
+Year-by-year (equity-relative %):
+  2021: V1=+67.04%  V2=+61.25%  PoolA=+66.76%  PoolB=+11.63%
+  2022: V1=-9.16%  V2=-5.42%  PoolA=-5.75%  PoolB=-1.06%
+  2023: V1=-1.95%  V2=+0.68%  PoolA=+0.85%  PoolB=-1.44%
+  2024: V1=+105.28%  V2=+57.23%  PoolA=+60.37%  PoolB=+16.08%
+  2025: V1=+70.18%  V2=+25.36%  PoolA=+26.71%  PoolB=+0.93%
+  2026: V1=-31.55%  V2=-5.32%  PoolA=-5.59%  PoolB=+0.65%
+
+System breakdown:
+  Donchian: n=348  avg_r=+1.2509R  win=17.8%
+  RSI_MR: n=233  avg_r=+0.2438R  win=60.1%
+  ConsecDownDays: n=185  avg_r=+0.5593R  win=51.4%

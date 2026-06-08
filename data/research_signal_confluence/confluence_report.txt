@@ -1,0 +1,35 @@
+Signal Confluence Analysis -- Three Frozen Systems
+====================================================================
+
+1. SIGNAL OVERLAP MATRIX (same symbol, same day)
+                     pair        A              B  both  A_fires  B_fires  pct_of_A  pct_of_B
+        Donchian + RSI_MR Donchian         RSI_MR     0     2326      876       0.0       0.0
+Donchian + ConsecDownDays Donchian ConsecDownDays     0     2326      313       0.0       0.0
+  RSI_MR + ConsecDownDays   RSI_MR ConsecDownDays     0      876      313       0.0       0.0
+
+2. P&L CORRELATION MATRIX (daily R per system)
+system          Donchian  RSI_MR  ConsecDownDays
+system                                          
+Donchian          1.0000 -0.0131         -0.0122
+RSI_MR           -0.0131  1.0000          0.0218
+ConsecDownDays   -0.0122  0.0218          1.0000
+
+3. CONFLUENCE PREMIUM
+combo         description    n  avg_r  win_rate       pf     total_r
+    D       Donchian only 2326 1.2442  0.196045 2.554778 2893.924586
+    M         RSI_MR only  876 0.1371  0.547945 1.578112  120.101660
+    C ConsecDownDays only  313 0.3958  0.527157 2.077549  123.875663
+
+4. YEAR-BY-YEAR CONFLUENCE
+ year  Donchian  RSI_MR  ConsecDownDays  D+M  D+C  M+C  All3
+ 2021       568      46              67    0    0    0     0
+ 2022        63     158               9    0    0    0     0
+ 2023       473     181              45    0    0    0     0
+ 2024       792     152             111    0    0    0     0
+ 2025       342     192              69    0    0    0     0
+ 2026        88     147              12    0    0    0     0
+
+5. KEY CORRELATIONS
+  Donchian  vs RSI_MR        : -0.0131
+  Donchian  vs ConsecDownDays : -0.0122
+  RSI_MR    vs ConsecDownDays : +0.0218

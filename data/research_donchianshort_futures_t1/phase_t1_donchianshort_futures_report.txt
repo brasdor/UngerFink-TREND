@@ -1,0 +1,192 @@
+PHASE T1 -- DonchianShort Futures Concept Discovery  (expanded universe)
+================================================================================
+
+Entry:   Close < Donchian N-period LOW (shifted 1 bar, no lookahead)
+Filter:  Close < EMA200  (mandatory bear regime gate)
+Stop:    Entry + ATR(14) * atr_mult  (above entry for short)
+Chandelier (SHORT-side mirror of long formula):
+  trail_stop = lowest_low_since_entry + ATR_at_entry * atr_mult
+  active_stop = min(initial_stop, chandelier_stop)
+Exit:    high >= active_stop  OR  close > Donchian(N//2) upper band
+
+Exchange:       Binance Futures (USD-M perpetuals)
+Timeframes:     ['1d', '4h', '6h']
+Donchian N:     [10, 15, 20, 25, 30, 40, 55]  (exit = N // 2, upper band)
+ATR mults:      [2.0, 3.0]
+Filter:         ema200_price_below
+
+Universe:
+  1D :  all symbols with data in data\futures_universe\ohlcv_1d
+  4H/6H: symbols_pre2021.csv (58 symbols, bear-cycle coverage)
+
+Section 4.2 -- Futures cost floor adjustment:
+  Short-side (Futures): avg_r > 0.25R  (funding rate overhead)
+
+Stability zone:  N in [15, 20, 25]  (PASS if >=67% profitable)
+
+================================================================================
+TIMEFRAME: 1d  (symbols loaded: 290)
+================================================================================
+STABILITY RANKING
+--------------------------------------------------
+  [FAIL] ATR*3.0  zone=1/3 profitable  (33%)  N=20: trades=4716  avg_r=-0.0120  pf=0.96  dd=-56.24  win%=38.5%  cf=0/3
+  [FAIL] ATR*2.0  zone=0/3 profitable  (0%)  N=20: trades=5901  avg_r=-0.0333  pf=0.89  dd=-197.79  win%=38.7%  cf=0/3
+
+  Best (1d):  ATR*3.0  stability=33%  (FAIL)  Sec4.2=FAIL (-0.0120R)
+
+DONCHIAN N SENSITIVITY  (1d, ema200_price_below)
+--------------------------------------------------
+
+  ATR*2.0
+    [-] N=10  exit= 5  trades=8386  avg_r=-0.0464  pf=0.84  dd=-389.41  win%=38.1%
+    [-] N=15  exit= 7  trades=6824  avg_r=-0.0265  pf=0.91  dd=-179.87  win%=39.1% <- zone
+    [-] N=20  exit=10  trades=5901  avg_r=-0.0333  pf=0.89  dd=-197.79  win%=38.7% <- zone <- canonical
+    [-] N=25  exit=12  trades=5020  avg_r=-0.0238  pf=0.92  dd=-120.25  win%=40.5% <- zone
+    [-] N=30  exit=15  trades=4525  avg_r=-0.0226  pf=0.92  dd=-103.52  win%=40.6%
+    [-] N=40  exit=20  trades=4090  avg_r=-0.0238  pf=0.92  dd=-98.05  win%=40.9%
+    [-] N=55  exit=27  trades=3440  avg_r=-0.0080  pf=0.97  dd=-63.17  win%=42.0%
+
+  ATR*3.0
+    [-] N=10  exit= 5  trades=7362  avg_r=-0.0362  pf=0.85  dd=-266.22  win%=37.8%
+    [-] N=15  exit= 7  trades=5745  avg_r=-0.0290  pf=0.88  dd=-166.00  win%=38.6% <- zone
+    [-] N=20  exit=10  trades=4716  avg_r=-0.0120  pf=0.96  dd=-56.24  win%=38.5% <- zone <- canonical
+    [+] N=25  exit=12  trades=3887  avg_r=+0.0204  pf=1.07  dd=-28.63  win%=40.6% <- zone
+    [+] N=30  exit=15  trades=3423  avg_r=+0.0263  pf=1.09  dd=-23.29  win%=41.9%
+    [+] N=40  exit=20  trades=2954  avg_r=+0.0459  pf=1.16  dd=-19.93  win%=43.4%
+    [+] N=55  exit=27  trades=2488  avg_r=+0.0184  pf=1.06  dd=-29.48  win%=41.0%
+
+================================================================================
+TIMEFRAME: 4h  (symbols loaded: 58)
+================================================================================
+STABILITY RANKING
+--------------------------------------------------
+  [PASS] ATR*3.0  zone=3/3 profitable  (100%)  N=20: trades=7243  avg_r=+0.0019  pf=1.01  dd=-60.85  win%=38.1%  cf=0/3
+  [FAIL] ATR*2.0  zone=1/3 profitable  (33%)  N=20: trades=9159  avg_r=-0.0109  pf=0.96  dd=-149.32  win%=38.1%  cf=0/3
+
+  Best (4h):  ATR*3.0  stability=100%  (PASS)  Sec4.2=FAIL (0.0019R)
+
+DONCHIAN N SENSITIVITY  (4h, ema200_price_below)
+--------------------------------------------------
+
+  ATR*2.0
+    [-] N=10  exit= 5  trades=12912  avg_r=-0.0192  pf=0.94  dd=-283.58  win%=37.8%
+    [-] N=15  exit= 7  trades=10599  avg_r=-0.0140  pf=0.95  dd=-199.37  win%=38.3% <- zone
+    [-] N=20  exit=10  trades=9159  avg_r=-0.0109  pf=0.96  dd=-149.32  win%=38.1% <- zone <- canonical
+    [+] N=25  exit=12  trades=8290  avg_r=+0.0007  pf=1.00  dd=-95.53  win%=38.0% <- zone
+    [+] N=30  exit=15  trades=7523  avg_r=+0.0035  pf=1.01  dd=-72.08  win%=37.9%
+    [+] N=40  exit=20  trades=6466  avg_r=+0.0245  pf=1.08  dd=-50.00  win%=38.8%
+    [+] N=55  exit=27  trades=5515  avg_r=+0.0436  pf=1.15  dd=-31.73  win%=38.9%
+
+  ATR*3.0
+    [+] N=10  exit= 5  trades=10847  avg_r=+0.0096  pf=1.04  dd=-60.86  win%=38.0%
+    [+] N=15  exit= 7  trades=8585  avg_r=+0.0099  pf=1.04  dd=-53.34  win%=38.1% <- zone
+    [+] N=20  exit=10  trades=7243  avg_r=+0.0019  pf=1.01  dd=-60.85  win%=38.1% <- zone <- canonical
+    [+] N=25  exit=12  trades=6511  avg_r=+0.0011  pf=1.00  dd=-56.99  win%=38.4% <- zone
+    [+] N=30  exit=15  trades=5847  avg_r=+0.0013  pf=1.00  dd=-47.01  win%=38.7%
+    [+] N=40  exit=20  trades=4913  avg_r=+0.0306  pf=1.10  dd=-30.03  win%=39.1%
+    [+] N=55  exit=27  trades=4226  avg_r=+0.0278  pf=1.09  dd=-35.70  win%=38.4%
+
+================================================================================
+TIMEFRAME: 6h  (symbols loaded: 58)
+================================================================================
+STABILITY RANKING
+--------------------------------------------------
+  [FAIL] ATR*3.0  zone=0/3 profitable  (0%)  N=20: trades=4908  avg_r=-0.0080  pf=0.97  dd=-85.75  win%=39.2%  cf=0/3
+  [FAIL] ATR*2.0  zone=0/3 profitable  (0%)  N=20: trades=6250  avg_r=-0.0335  pf=0.89  dd=-218.95  win%=37.4%  cf=0/3
+
+  Best (6h):  ATR*3.0  stability=0%  (FAIL)  Sec4.2=FAIL (-0.0080R)
+
+DONCHIAN N SENSITIVITY  (6h, ema200_price_below)
+--------------------------------------------------
+
+  ATR*2.0
+    [-] N=10  exit= 5  trades=8738  avg_r=-0.0344  pf=0.89  dd=-319.83  win%=37.0%
+    [-] N=15  exit= 7  trades=7222  avg_r=-0.0360  pf=0.88  dd=-265.66  win%=37.0% <- zone
+    [-] N=20  exit=10  trades=6250  avg_r=-0.0335  pf=0.89  dd=-218.95  win%=37.4% <- zone <- canonical
+    [-] N=25  exit=12  trades=5508  avg_r=-0.0219  pf=0.93  dd=-141.46  win%=37.6% <- zone
+    [-] N=30  exit=15  trades=5050  avg_r=-0.0029  pf=0.99  dd=-52.76  win%=38.3%
+    [-] N=40  exit=20  trades=4484  avg_r=-0.0243  pf=0.92  dd=-122.85  win%=37.0%
+    [+] N=55  exit=27  trades=3807  avg_r=+0.0023  pf=1.01  dd=-36.58  win%=38.8%
+
+  ATR*3.0
+    [+] N=10  exit= 5  trades=7251  avg_r=+0.0028  pf=1.01  dd=-63.05  win%=37.9%
+    [-] N=15  exit= 7  trades=5818  avg_r=-0.0082  pf=0.97  dd=-91.90  win%=37.9% <- zone
+    [-] N=20  exit=10  trades=4908  avg_r=-0.0080  pf=0.97  dd=-85.75  win%=39.2% <- zone <- canonical
+    [-] N=25  exit=12  trades=4298  avg_r=-0.0038  pf=0.99  dd=-64.12  win%=38.3% <- zone
+    [+] N=30  exit=15  trades=3874  avg_r=+0.0049  pf=1.02  dd=-47.92  win%=38.7%
+    [-] N=40  exit=20  trades=3374  avg_r=-0.0176  pf=0.94  dd=-91.19  win%=38.4%
+    [+] N=55  exit=27  trades=2791  avg_r=+0.0213  pf=1.07  dd=-38.10  win%=41.0%
+
+================================================================================
+2022 BEAR MARKET CHECK  (best year for any short system)
+================================================================================
+  1d: 9179 trades in 2022
+    ATR*2.0 N=10: trades=1071  avg_r=+0.0563  pf=1.24  total_r=+60.3R
+    ATR*2.0 N=15: trades=883  avg_r=+0.0495  pf=1.22  total_r=+43.7R [zone]
+    ATR*2.0 N=20: trades=786  avg_r=+0.0181  pf=1.07  total_r=+14.2R [zone]
+    ATR*2.0 N=25: trades=713  avg_r=-0.0214  pf=0.92  total_r=-15.3R [zone]
+    ATR*2.0 N=30: trades=658  avg_r=-0.0592  pf=0.78  total_r=-39.0R
+    ATR*2.0 N=40: trades=583  avg_r=-0.0822  pf=0.71  total_r=-47.9R
+    ATR*2.0 N=55: trades=508  avg_r=-0.0934  pf=0.65  total_r=-47.5R
+    ATR*3.0 N=10: trades=902  avg_r=+0.1109  pf=1.63  total_r=+100.0R
+    ATR*3.0 N=15: trades=713  avg_r=+0.1241  pf=1.69  total_r=+88.5R [zone]
+    ATR*3.0 N=20: trades=595  avg_r=+0.1201  pf=1.58  total_r=+71.4R [zone]
+    ATR*3.0 N=25: trades=532  avg_r=+0.1015  pf=1.49  total_r=+54.0R [zone]
+    ATR*3.0 N=30: trades=477  avg_r=+0.0759  pf=1.33  total_r=+36.2R
+    ATR*3.0 N=40: trades=404  avg_r=+0.0638  pf=1.26  total_r=+25.8R
+    ATR*3.0 N=55: trades=354  avg_r=-0.0023  pf=0.99  total_r=-0.8R
+  4h: 14935 trades in 2022
+    ATR*2.0 N=10: trades=1731  avg_r=-0.0605  pf=0.80  total_r=-104.7R
+    ATR*2.0 N=15: trades=1456  avg_r=-0.0677  pf=0.77  total_r=-98.6R [zone]
+    ATR*2.0 N=20: trades=1285  avg_r=-0.0562  pf=0.81  total_r=-72.2R [zone]
+    ATR*2.0 N=25: trades=1170  avg_r=-0.0554  pf=0.82  total_r=-64.9R [zone]
+    ATR*2.0 N=30: trades=1053  avg_r=-0.0556  pf=0.82  total_r=-58.5R
+    ATR*2.0 N=40: trades=913  avg_r=-0.0586  pf=0.80  total_r=-53.5R
+    ATR*2.0 N=55: trades=732  avg_r=-0.0450  pf=0.84  total_r=-32.9R
+    ATR*3.0 N=10: trades=1445  avg_r=-0.0158  pf=0.94  total_r=-22.9R
+    ATR*3.0 N=15: trades=1173  avg_r=-0.0292  pf=0.90  total_r=-34.3R [zone]
+    ATR*3.0 N=20: trades=1002  avg_r=-0.0336  pf=0.89  total_r=-33.7R [zone]
+    ATR*3.0 N=25: trades=926  avg_r=-0.0473  pf=0.85  total_r=-43.8R [zone]
+    ATR*3.0 N=30: trades=814  avg_r=-0.0411  pf=0.87  total_r=-33.4R
+    ATR*3.0 N=40: trades=681  avg_r=-0.0284  pf=0.91  total_r=-19.3R
+    ATR*3.0 N=55: trades=554  avg_r=-0.0438  pf=0.86  total_r=-24.3R
+  6h: 9898 trades in 2022
+    ATR*2.0 N=10: trades=1202  avg_r=-0.1063  pf=0.66  total_r=-127.8R
+    ATR*2.0 N=15: trades=1028  avg_r=-0.1033  pf=0.68  total_r=-106.2R [zone]
+    ATR*2.0 N=20: trades=848  avg_r=-0.0738  pf=0.77  total_r=-62.6R [zone]
+    ATR*2.0 N=25: trades=737  avg_r=-0.0548  pf=0.82  total_r=-40.4R [zone]
+    ATR*2.0 N=30: trades=674  avg_r=-0.0577  pf=0.81  total_r=-38.9R
+    ATR*2.0 N=40: trades=577  avg_r=-0.0465  pf=0.84  total_r=-26.9R
+    ATR*2.0 N=55: trades=505  avg_r=-0.0351  pf=0.88  total_r=-17.7R
+    ATR*3.0 N=10: trades=980  avg_r=-0.0584  pf=0.78  total_r=-57.2R
+    ATR*3.0 N=15: trades=830  avg_r=-0.0721  pf=0.75  total_r=-59.9R [zone]
+    ATR*3.0 N=20: trades=661  avg_r=-0.0323  pf=0.89  total_r=-21.3R [zone]
+    ATR*3.0 N=25: trades=571  avg_r=-0.0264  pf=0.91  total_r=-15.1R [zone]
+    ATR*3.0 N=30: trades=502  avg_r=-0.0119  pf=0.96  total_r=-6.0R
+    ATR*3.0 N=40: trades=425  avg_r=+0.0146  pf=1.06  total_r=+6.2R
+    ATR*3.0 N=55: trades=358  avg_r=+0.0441  pf=1.19  total_r=+15.8R
+
+================================================================================
+OVERALL BEST CANDIDATE
+================================================================================
+  Timeframe:   4h
+  ATR mult:    3.0
+  Stability:   100%  (PASS)
+  Sec 4.2:     FAIL (0.0019R vs >0.25R)
+
+  !! DO NOT PROCEED -- awaiting human review.
+
+================================================================================
+INTERPRETATION
+================================================================================
+
+  PASS (>=67%): Short-side edge robust -- proceed to T2.
+  WARN (40-67%): Edge exists but parameter-sensitive.
+  FAIL (<40%):  No consistent short edge -- do NOT proceed.
+
+  Cost floor: avg_r > 0.25R (Futures funding rate adjustment).
+  Win rate 25-40% healthy for short trend-following (bearish periods rare).
+  IMPORTANT: Bear markets are shorter than bull markets in 4yr+ backtest.
+  Fewer trades than long-side expected -- structural, not a failure.
+
+  !! STOP HERE -- do not proceed to T2 until human review.

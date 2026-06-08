@@ -1,0 +1,4 @@
+pair,A,B,both,A_fires,B_fires,pct_of_A,pct_of_B
+Donchian + RSI_MR,Donchian,RSI_MR,0,2326,876,0.0,0.0
+Donchian + ConsecDownDays,Donchian,ConsecDownDays,0,2326,313,0.0,0.0
+RSI_MR + ConsecDownDays,RSI_MR,ConsecDownDays,0,876,313,0.0,0.0

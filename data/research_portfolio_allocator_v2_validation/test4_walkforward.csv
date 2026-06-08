@@ -1,0 +1,6 @@
+period,thresholds,cagr,max_dd
+Full 2020-2026,canonical (55/45),21.47,-6.66
+IS  2020-2022,canonical (55/45),23.51,-5.94
+IS  2020-2022,best IS (55/35),23.51,-5.94
+OOS 2023-now,canonical (55/45),18.84,-7.84
+OOS 2023-now,IS-fitted (55/35),18.84,-7.84

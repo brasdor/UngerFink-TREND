@@ -1,0 +1,7 @@
+timeframe,filter_mode,atr_mult,zone_total,zone_pf_gt1,zone_avg_r_positive,zone_cost_floor_pass,zone_stability_pct,stability_verdict,can_n20_trades,can_n20_avg_r,can_n20_pf,can_n20_max_dd_r,can_n20_win_pct
+4h,ema200_price_below,3.0,3,3,3,0,100.0,PASS,7243,0.0019,1.006,-60.85,38.1
+4h,ema200_price_below,2.0,3,1,1,0,33.3,FAIL,9159,-0.0109,0.964,-149.32,38.1
+1d,ema200_price_below,3.0,3,1,1,0,33.3,FAIL,4716,-0.012,0.958,-56.24,38.5
+6h,ema200_price_below,3.0,3,0,0,0,0.0,FAIL,4908,-0.008,0.974,-85.75,39.2
+6h,ema200_price_below,2.0,3,0,0,0,0.0,FAIL,6250,-0.0335,0.893,-218.95,37.4
+1d,ema200_price_below,2.0,3,0,0,0,0.0,FAIL,5901,-0.0333,0.891,-197.79,38.7
