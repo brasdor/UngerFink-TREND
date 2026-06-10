@@ -33,5 +33,17 @@ build/
 # OS
 .DS_Store
 Thumbs.db
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Backend
+backend/*.db
+*.db
+
+# Docker
+pgdata/
 data/research_linregbreakout_t1/phase_t1_linregbreakout_all_trades.csv 
 data/research_prevsessionbreakout_t1/phase_t1_prevsessionbreakout_trades.csv 
