@@ -483,7 +483,7 @@ Recovery-specific dashboards for reviewing state reconciliation.
 
 ```powershell
 while ($true) {
-    python phase_t9a_binance_paper_sim_engine_V2.py
+    python engines/phase_t9a_binance_paper_sim_engine_V2.py
     Start-Sleep -Seconds 900   # 15 minutes
 }
 ```
