@@ -26,19 +26,17 @@ class SizedOrder:
 
 
 def _build_client(settings: Settings) -> "ccxt.binance":
-    if not settings.exchange_api_key or not settings.exchange_secret:
-        raise ExecutionError(
-            "Exchange API key/secret are not configured. Add them to backend/.env "
-            "(use TESTNET keys first)."
-        )
-    client = ccxt.binance(
-        {
-            "apiKey": settings.exchange_api_key,
-            "secret": settings.exchange_secret,
-            "enableRateLimit": True,
-            "options": {"defaultType": "spot"},
-        }
-    )
+    # Keys are optional here: public endpoints (load_markets, precision/limits)
+    # work without them, so dry-run sizing needs no credentials. Authenticated
+    # calls (balance, placement) enforce key presence themselves.
+    config = {
+        "enableRateLimit": True,
+        "options": {"defaultType": "spot"},
+    }
+    if settings.exchange_api_key and settings.exchange_secret:
+        config["apiKey"] = settings.exchange_api_key
+        config["secret"] = settings.exchange_secret
+    client = ccxt.binance(config)
     if settings.exchange_testnet:
         client.set_sandbox_mode(True)  # route everything to Binance testnet (fake money)
     return client
@@ -52,6 +50,13 @@ class ExchangeClient:
         self._client = _build_client(settings)
         self._markets_loaded = False
 
+    def _require_keys(self) -> None:
+        if not self._settings.exchange_api_key or not self._settings.exchange_secret:
+            raise ExecutionError(
+                "Exchange API key/secret are not configured. Add them to "
+                "backend/.env (use TESTNET keys first)."
+            )
+
     # -- read-only -----------------------------------------------------------
     def _ensure_markets(self) -> None:
         if not self._markets_loaded:
@@ -60,6 +65,7 @@ class ExchangeClient:
 
     def fetch_balance(self) -> dict:
         """Return free balances keyed by asset (non-zero only)."""
+        self._require_keys()
         bal = self._client.fetch_balance()
         free = bal.get("free", {})
         return {asset: amt for asset, amt in free.items() if amt}
@@ -125,6 +131,7 @@ class ExchangeClient:
 
         Returns the raw ccxt order dict. The caller persists/reconciles it.
         """
+        self._require_keys()
         self._ensure_markets()
         if order_type == "market":
             return self._client.create_order(symbol, "market", "buy", qty)
