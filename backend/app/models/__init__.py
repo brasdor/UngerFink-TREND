@@ -8,6 +8,7 @@ from app.models.signal import Signal
 from app.models.alert import Alert, AlertHistory
 from app.models.journal_entry import JournalEntry
 from app.models.research_run import ResearchRun
+from app.models.order import Order
 
 __all__ = [
     "Base",
@@ -21,4 +22,5 @@ __all__ = [
     "AlertHistory",
     "JournalEntry",
     "ResearchRun",
+    "Order",
 ]

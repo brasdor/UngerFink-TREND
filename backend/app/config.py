@@ -27,6 +27,28 @@ class Settings(BaseSettings):
     # Paper trading
     paper_polling_interval_seconds: int = 900  # 15 minutes
 
+    # --- Live execution (Binance spot) -------------------------------------
+    # Keys come from backend/.env and are NEVER committed. Start with TESTNET
+    # keys. The master switch and testnet flag are the primary safety gates.
+    exchange_api_key: str = ""
+    exchange_secret: str = ""
+
+    # Safety posture: default to fake money, with live placement disabled.
+    exchange_testnet: bool = True          # ccxt set_sandbox_mode(True)
+    live_trading_enabled: bool = False     # master switch — must be flipped on purpose
+
+    # Risk / sizing
+    default_risk_pct: float = 0.0025       # 0.25% of equity per trade (frozen config)
+
+    # Hard caps (kill-switches)
+    max_order_usdt: float = 100.0          # reject any single order above this notional
+    daily_loss_limit_usdt: float = 200.0   # block new orders once breached for the day
+
+    # --- Telegram alerts ---------------------------------------------------
+    # From @BotFather. Empty = alerts silently disabled. Set in backend/.env.
+    telegram_bot_token: str = ""
+    telegram_chat_id: str = ""
+
     # Auth (future)
     secret_key: str = "dev-secret-change-in-production"
     access_token_expire_minutes: int = 1440  # 24 hours

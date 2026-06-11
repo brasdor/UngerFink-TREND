@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
-from app.routers import portfolio, trades, signals, strategies, research, alerts, websocket
+from app.routers import portfolio, trades, signals, strategies, research, alerts, websocket, execution
 
 settings = get_settings()
 
@@ -17,7 +17,7 @@ async def lifespan(app: FastAPI):
     from app.models.base import Base
     from app.models import (
         Trade, Position, EquitySnapshot, Candle,
-        Strategy, Signal, Alert, AlertHistory, JournalEntry, ResearchRun,
+        Strategy, Signal, Alert, AlertHistory, JournalEntry, ResearchRun, Order,
     )
     if "sqlite" in str(engine.url):
         async with engine.begin() as conn:
@@ -50,6 +50,7 @@ app.include_router(signals.router, prefix=f"{settings.api_prefix}/signals", tags
 app.include_router(strategies.router, prefix=f"{settings.api_prefix}/strategies", tags=["Strategies"])
 app.include_router(research.router, prefix=f"{settings.api_prefix}/research", tags=["Research"])
 app.include_router(alerts.router, prefix=f"{settings.api_prefix}/alerts", tags=["Alerts"])
+app.include_router(execution.router, prefix=f"{settings.api_prefix}/execution", tags=["Execution"])
 app.include_router(websocket.router, prefix="/ws", tags=["WebSocket"])
 
 
