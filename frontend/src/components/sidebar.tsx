@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { href: "/trades", label: "Trades", icon: "📋" },
   { href: "/equity", label: "Equity", icon: "💰" },
   { href: "/signals", label: "Signals", icon: "🔔" },
+  { href: "/execution", label: "Trade Desk", icon: "⚡" },
   { href: "/research", label: "Research", icon: "🔬" },
   { href: "/journal", label: "Journal", icon: "📝" },
   { href: "/alerts", label: "Alerts", icon: "⚠️" },
