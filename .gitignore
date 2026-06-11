@@ -38,6 +38,7 @@ Thumbs.db
 frontend/node_modules/
 frontend/.next/
 frontend/out/
+frontend/*.tsbuildinfo
 
 # Backend
 backend/*.db
