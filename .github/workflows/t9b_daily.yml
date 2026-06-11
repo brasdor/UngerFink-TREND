@@ -166,6 +166,18 @@ jobs:
         run: python .github/scripts/create_signal_issues.py
 
       # ------------------------------------------------------------------
+      # 7b. Push a Telegram summary of today's signals.
+      #     continue-on-error: a Telegram outage must never fail the run.
+      #     No-ops if the TELEGRAM_* secrets are not configured.
+      # ------------------------------------------------------------------
+      - name: Send Telegram summary
+        continue-on-error: true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python .github/scripts/send_telegram.py
+
+      # ------------------------------------------------------------------
       # 8. Report engine exit statuses for visibility
       # ------------------------------------------------------------------
       - name: Report engine statuses
