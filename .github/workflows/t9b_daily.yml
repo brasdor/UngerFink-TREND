@@ -109,6 +109,25 @@ jobs:
         run: python engines/t9b_combined_summary.py
 
       # ------------------------------------------------------------------
+      # 5b. Auto-execute accepted signals (OFF unless AUTO_EXECUTE_ENABLED).
+      #     Defaults to TESTNET (fake money). continue-on-error so a placement
+      #     problem never fails the run. Idempotent via data/auto_orders ledger.
+      # ------------------------------------------------------------------
+      - name: Auto-execute accepted signals
+        continue-on-error: true
+        env:
+          AUTO_EXECUTE_ENABLED: ${{ vars.AUTO_EXECUTE_ENABLED }}
+          EXCHANGE_TESTNET: ${{ vars.EXCHANGE_TESTNET }}
+          EXCHANGE_API_KEY: ${{ secrets.EXCHANGE_API_KEY }}
+          EXCHANGE_SECRET: ${{ secrets.EXCHANGE_SECRET }}
+          EQUITY_USDT: ${{ vars.EQUITY_USDT }}
+          RISK_PCT: ${{ vars.RISK_PCT }}
+          MAX_ORDER_USDT: ${{ vars.MAX_ORDER_USDT }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python .github/scripts/auto_execute.py
+
+      # ------------------------------------------------------------------
       # 6. Commit all output files back to the repository.
       #    Uses --force to commit files in .gitignore-adjacent directories.
       # ------------------------------------------------------------------
@@ -146,6 +165,9 @@ jobs:
 
           # Shared OHLCV cache (all three engines read/write here)
           git add --force data/universe/ohlcv_1d/ || true
+
+          # Auto-execution ledger (idempotency record)
+          git add --force data/auto_orders/placed.csv || true
 
           if git diff --cached --quiet; then
             echo "No output file changes to commit."
