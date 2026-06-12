@@ -38,3 +38,10 @@ run_date,event,symbol,detail,entry_price,stop,risk_amount,equity
 2026-06-06,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system,
 2026-06-06,SIGNAL_SKIPPED,XRP/USDT,cap 10 reached  (RSI=17.9  close=1.0818),1.08179998
 2026-06-06,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,
+2026-06-11,SIGNAL_SKIPPED,CHZ/USDT,duplicate_cross_system
+2026-06-11,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system
+2026-06-11,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-06-11,SIGNAL_SKIPPED,JTO/USDT,duplicate_cross_system
+2026-06-11,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
+2026-06-11,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
+2026-06-11,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system

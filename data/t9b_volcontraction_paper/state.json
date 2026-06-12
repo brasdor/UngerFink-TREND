@@ -1,0 +1,13 @@
+{
+  "system_name": "VolContractionShort_4H_T9B",
+  "created_utc": "2026-06-11T19:20:09.618872+00:00",
+  "last_run_date": "2026-06-10",
+  "last_processed_ts_ms": 1781035200000,
+  "paper_equity_usdt": 10000.0,
+  "peak_equity_usdt": 10000.0,
+  "drawdown_pct": 0.0,
+  "kill_switch_triggered": false,
+  "open_positions": [],
+  "pending_entries": [],
+  "closed_trade_count": 0
+}

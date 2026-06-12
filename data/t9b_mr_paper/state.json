@@ -1,7 +1,7 @@
 {
   "system_name": "MR_RSI14_1D_T9B",
   "created_utc": "2026-06-01T09:28:48.389060+00:00",
-  "last_run_date": "2026-06-06",
+  "last_run_date": "2026-06-11",
   "paper_equity_usdt": 10000.0,
   "peak_equity_usdt": 10000.0,
   "drawdown_pct": 0.0,
@@ -42,7 +42,7 @@
       "initial_risk_per_unit": 0.03833556,
       "risk_amount_usdt": 25.0,
       "qty": 652.1360324461153,
-      "bars_held": 2,
+      "bars_held": 3,
       "atr_at_entry": 0.01277852,
       "rsi_at_entry": 11.9136
     },
@@ -68,7 +68,7 @@
       "initial_risk_per_unit": 1.38229446,
       "risk_amount_usdt": 25.0,
       "qty": 18.085871515393325,
-      "bars_held": 2,
+      "bars_held": 3,
       "atr_at_entry": 0.46076482,
       "rsi_at_entry": 17.2926
     },
@@ -94,7 +94,7 @@
       "initial_risk_per_unit": 7532.60815167,
       "risk_amount_usdt": 25.0,
       "qty": 0.0033189035585844766,
-      "bars_held": 2,
+      "bars_held": 3,
       "atr_at_entry": 2510.86938389,
       "rsi_at_entry": 15.0301
     },
@@ -133,7 +133,7 @@
       "initial_risk_per_unit": 271.22953915,
       "risk_amount_usdt": 25.0,
       "qty": 0.09217285137285167,
-      "bars_held": 2,
+      "bars_held": 3,
       "atr_at_entry": 90.40984638,
       "rsi_at_entry": 12.5028
     }
