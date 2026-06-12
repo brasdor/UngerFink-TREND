@@ -1,0 +1,117 @@
+==============================================================================
+T1 RESULTS: Donchian Short + Funding Gate (2H/4H/6H/8H/1D) -- FINAL ATTEMPT
+Funding gate >= 0.01%/8h + EMA200 bear filter (mandatory on all combos)
+Cost floor (4.2): 0.25R   Min trades per combo: 30
+No-gate baseline: +0.096R (4 failed attempts) | System 7 reference +0.304R
+==============================================================================
+
+--- Timeframe 1D ---
+  combos: 50  with >= 30 trades: 50
+  BEST: donchian_n=30 hold_bars=25 atr_mult=2.0
+    n=885  avg_r=+0.1047R  total=+92.6R  wr=53.9%  pf=1.26
+    stability zone (+/-1 on donchian_n): 100% of 2 profitable  [PASS]
+    4.2 cost floor: avg_r +0.1047R vs 0.25R  [FAIL]
+    2022: n=136 total=+44.29R  [PASS]
+    2025 concentration: 34.0% of total R  [OK]
+    year-by-year:
+      2020: n=   4  total=   -4.00R  avg=-1.0000R
+      2021: n=  39  total=   -3.19R  avg=-0.0818R
+      2022: n= 136  total=  +44.29R  avg=+0.3257R
+      2023: n= 177  total=   +4.98R  avg=+0.0282R
+      2024: n= 188  total=   +2.50R  avg=+0.0133R
+      2025: n= 273  total=  +31.46R  avg=+0.1153R
+      2026: n=  68  total=  +16.59R  avg=+0.2439R
+    verdict: FAIL 4.2
+
+--- Timeframe 2H ---
+  combos: 50  with >= 30 trades: 50
+  BEST: donchian_n=30 hold_bars=30 atr_mult=2.0
+    n=11934  avg_r=+0.1653R  total=+1972.2R  wr=41.5%  pf=1.31
+    stability zone (+/-1 on donchian_n): 100% of 2 profitable  [PASS]
+    4.2 cost floor: avg_r +0.1653R vs 0.25R  [FAIL]
+    2022: n=1643 total=+665.88R  [PASS]
+    2025 concentration: 27.6% of total R  [OK]
+    year-by-year:
+      2019: n=  10  total=   +4.81R  avg=+0.4813R
+      2020: n= 458  total=  +25.75R  avg=+0.0562R
+      2021: n=1378  total= -116.65R  avg=-0.0847R
+      2022: n=1643  total= +665.88R  avg=+0.4053R
+      2023: n=2185  total= +168.49R  avg=+0.0771R
+      2024: n=2997  total= +659.07R  avg=+0.2199R
+      2025: n=2457  total= +544.32R  avg=+0.2215R
+      2026: n= 806  total=  +20.49R  avg=+0.0254R
+    verdict: FAIL 4.2
+
+--- Timeframe 4H ---
+  combos: 50  with >= 30 trades: 50
+  BEST: donchian_n=30 hold_bars=30 atr_mult=2.0
+    n=5745  avg_r=+0.2321R  total=+1333.4R  wr=46.4%  pf=1.49
+    stability zone (+/-1 on donchian_n): 100% of 2 profitable  [PASS]
+    4.2 cost floor: avg_r +0.2321R vs 0.25R  [FAIL]
+    2022: n=830 total=+383.07R  [PASS]
+    2025 concentration: 20.5% of total R  [OK]
+    year-by-year:
+      2019: n=   4  total=   +4.67R  avg=+1.1677R
+      2020: n= 193  total=   -7.26R  avg=-0.0376R
+      2021: n= 605  total=  -50.06R  avg=-0.0827R
+      2022: n= 830  total= +383.07R  avg=+0.4615R
+      2023: n= 982  total= +158.46R  avg=+0.1614R
+      2024: n=1435  total= +497.44R  avg=+0.3466R
+      2025: n=1282  total= +272.70R  avg=+0.2127R
+      2026: n= 414  total=  +74.34R  avg=+0.1796R
+    verdict: FAIL 4.2
+
+--- Timeframe 6H ---
+  combos: 50  with >= 30 trades: 50
+  BEST: donchian_n=15 hold_bars=25 atr_mult=2.0
+    n=5511  avg_r=+0.2267R  total=+1249.4R  wr=49.0%  pf=1.51
+    stability zone (+/-1 on donchian_n): 100% of 3 profitable  [PASS]
+    4.2 cost floor: avg_r +0.2267R vs 0.25R  [FAIL]
+    2022: n=895 total=+347.50R  [PASS]
+    2025 concentration: 26.3% of total R  [OK]
+    year-by-year:
+      2019: n=   2  total=   -0.75R  avg=-0.3737R
+      2020: n= 163  total=  -14.46R  avg=-0.0887R
+      2021: n= 495  total=  +24.22R  avg=+0.0489R
+      2022: n= 895  total= +347.50R  avg=+0.3883R
+      2023: n= 887  total= +185.67R  avg=+0.2093R
+      2024: n=1380  total= +304.59R  avg=+0.2207R
+      2025: n=1271  total= +328.93R  avg=+0.2588R
+      2026: n= 418  total=  +73.69R  avg=+0.1763R
+    verdict: FAIL 4.2
+
+--- Timeframe 8H ---
+  combos: 50  with >= 30 trades: 50
+  BEST: donchian_n=10 hold_bars=30 atr_mult=2.0
+    n=4684  avg_r=+0.1837R  total=+860.7R  wr=46.9%  pf=1.39
+    stability zone (+/-1 on donchian_n): 100% of 2 profitable  [PASS]
+    4.2 cost floor: avg_r +0.1837R vs 0.25R  [FAIL]
+    2022: n=811 total=+215.73R  [PASS]
+    2025 concentration: 38.8% of total R  [OK]
+    year-by-year:
+      2020: n= 108  total=  -29.00R  avg=-0.2685R
+      2021: n= 381  total=   +3.97R  avg=+0.0104R
+      2022: n= 811  total= +215.73R  avg=+0.2660R
+      2023: n= 750  total= +153.24R  avg=+0.2043R
+      2024: n=1155  total= +133.94R  avg=+0.1160R
+      2025: n=1113  total= +334.23R  avg=+0.3003R
+      2026: n= 366  total=  +48.58R  avg=+0.1327R
+    verdict: FAIL 4.2
+
+--- TOP 15 COMBOS OVERALL (n >= 30) ---
+  tf  donchian_n hold_bars atr_mult     n    avg_r    total   wr%  2022R  25conc
+  4h  30      30      2.0      5745  +0.2321  +1333.4  46.4  +383.1   20.5%
+  6h  15      25      2.0      5511  +0.2267  +1249.4  49.0  +347.5   26.3%
+  6h  25      25      2.0      4220  +0.2223   +938.3  49.3  +294.6   20.8%
+  4h  30      25      2.0      5930  +0.2175  +1289.9  47.9  +304.2   22.9%
+  4h  15      30      2.0      8086  +0.2157  +1743.8  46.1  +543.0   28.1%
+  4h  20      30      2.0      6988  +0.2138  +1493.9  45.7  +448.3   26.6%
+  6h  20      25      2.0      4813  +0.2120  +1020.2  49.0  +306.1   25.3%
+  4h  25      30      2.0      6353  +0.2108  +1339.1  45.8  +405.8   21.9%
+  6h  25      20      2.0      4376  +0.2087   +913.4  50.6  +284.5   12.5%
+  6h  15      30      2.0      5279  +0.2084  +1100.4  47.5  +298.0   30.8%
+  6h  30      25      2.0      3891  +0.2021   +786.4  48.6  +247.1   20.2%
+  6h  25      30      2.0      4106  +0.1975   +810.9  48.2  +231.4   24.9%
+  6h  30      20      2.0      4015  +0.1956   +785.2  50.6  +249.1   11.9%
+  4h  20      25      2.0      7259  +0.1954  +1418.4  47.0  +341.0   27.5%
+  4h  25      25      2.0      6587  +0.1950  +1284.3  47.1  +300.5   24.5%

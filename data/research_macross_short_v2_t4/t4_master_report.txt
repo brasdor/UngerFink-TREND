@@ -1,0 +1,88 @@
+==========================================================================
+T3 EXIT SWEEP: MA Cross Short V2 (fast=20 slow=30 am=2.0, 4H)
+==========================================================================
+  hb     n     avg_r    total_r    wr%    pf    2022R    2025conc
+  25     3610  +0.2659     +959.8   50.7   1.63   +208.8    25.9%
+  30     3601  +0.2787    +1003.7   48.6   1.62   +261.0    24.0%
+  35     3572  +0.3145    +1123.5   47.2   1.66   +307.5    28.2%
+  40     3559  +0.3167    +1127.2   45.4   1.63   +310.0    34.3%
+  45     3529  +0.3066    +1082.1   43.4   1.58   +299.0    34.9%
+  Best hb=40  [interior]  -- canonical stays hb=35
+
+==========================================================================
+T2 WALK-FORWARD: MA Cross Short V2 (fast=20 slow=30 hb=35 am=2.0)
+Universe: 106 symbols   Total trades: 3572
+==========================================================================
+  IS  (2019-2022): n= 1019  avg_r=+0.3430R
+  OOS (2023-2026): n= 2553  avg_r=+0.3032R
+  Degradation: 11.6% (max 40%)
+  avg_r=+0.3145R [PASS]  wr=47.2% [FLAG -- structural, S7=45.6%]  pf=1.66
+  4.7 top-1: IOSTUSDT 4.2% [PASS]
+
+  Year-by-year:
+    2019: n=   2  total=   -0.22R  avg=-0.1093R
+    2020: n= 139  total=  +17.22R  avg=+0.1239R
+    2021: n= 355  total=  +25.09R  avg=+0.0707R
+    2022: n= 523  total= +307.45R  avg=+0.5879R
+    2023: n= 671  total= +185.93R  avg=+0.2771R
+    2024: n= 888  total= +303.16R  avg=+0.3414R
+    2025: n= 748  total= +316.43R  avg=+0.4230R
+    2026: n= 246  total=  -31.55R  avg=-0.1283R
+  2022 rank: #2 [PASS]
+  Remove best month (2024-04): +0.2614R [PASS]
+  Remove best asset (IOSTUSDT): +0.3069R [PASS]
+
+  T2: PASS (7/7)
+
+==========================================================================
+T4 ROBUSTNESS: MA Cross Short V2
+==========================================================================
+  baseline: n=3572 avg=+0.3145R wr=47.2% pf=1.659 t=11.3 maxDD=-118.2R streak=48
+
+  MC (2000 runs):  bs   p05      p50      p95     prob+   PF_p05
+                 1      +960.8  +1124.7  +1289.7  100.00%  1.552
+                 5      +835.7  +1118.5  +1407.3  100.00%  1.476
+                 10     +761.0  +1115.9  +1472.1  100.00%  1.430
+                 20     +667.9  +1090.7  +1556.0  100.00%  1.369
+                 50     +582.8  +1105.9  +1677.7  100.00%  1.322
+  MC p05 all positive: [PASS]
+
+  cost stress: +0.00R pf=1.66  +0.05R pf=1.53  +0.10R pf=1.40  +0.15R pf=1.29  +0.20R pf=1.20
+  0.05R PF>1: [PASS]
+
+  halves: first +0.3189R / second +0.3101R [PASS]
+  last 500: +0.4129R [OK]
+  rm top-1 assets: avg=+0.3069R total= +1076.6R
+  rm top-3 assets: avg=+0.2904R total=  +994.8R
+  rm top-5 assets: avg=+0.2799R total=  +920.6R
+  rm top-1 months: avg=+0.2614R total=  +902.4R
+  rm top-2 months: avg=+0.2265R total=  +763.7R
+  rm top-3 months: avg=+0.1915R total=  +629.0R
+  concentration: top1 4.2%  top3 11.5%  top5 18.1%
+  rm 2022: avg=+0.2676R total=  +816.1R [PASS]
+  rm 2024: avg=+0.3056R total=  +820.3R [PASS]
+  2026 partial: -31.6R [FAIL -- caveat class, monitor in T9B]
+
+  T4 SCORECARD:
+    [PASS] MC p05 all bs
+    [PASS] cost 0.05R
+    [PASS] rm top-1 asset >0.10R
+    [PASS] rm top-1 month >0.10R
+    [PASS] rm 2022
+    [PASS] rm 2024
+    [PASS] second half
+    [FAIL] 2026 partial
+    [PASS] conc <50%
+    8/9
+
+  VERDICT: PROCEED to T5-T8
+  (2026 partial -31.6R carried as documented caveat -- System 7 precedent)
+
+--- COMPARISON ---
+  metric        System 7    MACross v1   MACross V2
+  avg_r         +0.304R     +0.255R      +0.315R
+  trades        3214        2910         3572
+  t-score       10.3        9.2          11.3
+  MC p05 bs50   +455R       +350R        +583R
+  IS->OOS       24.4%       4.1%         11.6%
+  last 500      +0.092R     +0.292R      +0.413R

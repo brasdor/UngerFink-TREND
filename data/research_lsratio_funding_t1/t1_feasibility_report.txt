@@ -1,0 +1,34 @@
+==============================================================================
+BATCH 2 FEASIBILITY: OI Spike Short (Test 4) and L/S Ratio Short (Test 5)
+==============================================================================
+
+--- Test 4 -- Open Interest (open_interest) ---
+  rows: 6326   symbols: 194
+  date range: 2026-05-07 -> 2026-06-09 (33 days)
+  rows per symbol: median=34  max=34
+  resolution: daily (1 row/day/symbol)
+
+--- Test 5 -- Long/Short Ratio (ls_ratio) ---
+  rows: 6326   symbols: 194
+  date range: 2026-05-07 -> 2026-06-09 (33 days)
+  rows per symbol: median=34  max=34
+  resolution: daily (1 row/day/symbol)
+
+--- VERDICT ---
+  BLOCKED -- INSUFFICIENT HISTORY for T1 validation.
+  Available: ~1 month of daily OI and L/S ratio data (May-Jun 2026).
+  Required:  2019-2026 with year-by-year breakdown; 2022 must be testable.
+  Root cause: Binance API exposes only the last 30 days of OI history
+  and global long/short account ratio. Historical depth cannot be
+  downloaded retroactively from Binance.
+
+  OPTIONS:
+  1. Keep collecting daily (CryptoTradingDailyPipeline already stores both
+     tables) and revisit after 12+ months of accumulation -- still thin.
+  2. Purchase historical OI/LS data from a vendor (Coinglass, Laevitas,
+     Amberdata) -- only path to a 2019-2026 backtest.
+  3. Drop Tests 4/5 from the sweep. Confluence (Test 7) runs with signals
+     A (VolContraction), B (NHF), D (funding >= 0.02%) -- Signal C (OI)
+     excluded for the same reason.
+
+  STATUS: Test 4 BLOCKED (data) -- Test 5 BLOCKED (data)

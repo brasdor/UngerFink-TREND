@@ -1,0 +1,67 @@
+==========================================================================
+T2 WALK-FORWARD: MA Cross Short 4H + Funding Gate (System 8 candidate)
+Config: fast=20 slow=50 hb=30 am=2.0  gate>=0.01%/8h + EMA200 bear
+Universe: 103 symbols   Total trades: 2910
+==========================================================================
+
+--- IS / OOS Split ---
+  IS  (2019-2022): n=  776  avg_r=+0.2633R
+  OOS (2023-2026): n= 2134  avg_r=+0.2525R
+  IS->OOS degradation: 4.1%  (max 40%)
+  IS avg_r > 0.25R: [PASS]
+  Degradation:      [PASS]
+
+--- 4.1 / 4.2 ---
+  avg_r: +0.2554R (floor 0.25R)  [PASS]
+  win rate: 49.6%  pf=1.58  [FLAG above 45% -- structural: funding gate selects crowded shorts, not breakout trend entries; System 7 precedent 45.6%]
+
+--- 4.7 Concentration ---
+  Top-1: BTCUSDT +34.7R (4.7%)  [PASS]
+    BTCUSDT              +34.67R (4.7%)
+    ENJUSDT              +34.17R (4.6%)
+    AAVEUSDT             +31.15R (4.2%)
+    ENSUSDT              +28.03R (3.8%)
+    FILUSDT              +24.71R (3.3%)
+
+--- Year-by-Year ---
+  2019: n=   3  total=   -1.42R  avg=-0.4744R
+  2020: n= 123  total=  +10.80R  avg=+0.0878R
+  2021: n= 303  total=   -6.68R  avg=-0.0221R
+  2022: n= 347  total= +201.61R  avg=+0.5810R
+  2023: n= 569  total= +136.76R  avg=+0.2403R
+  2024: n= 739  total= +192.26R  avg=+0.2602R
+  2025: n= 627  total= +237.33R  avg=+0.3785R
+  2026: n= 199  total=  -27.53R  avg=-0.1383R
+  2022 rank by total R: #2  (must be best or 2nd)  [PASS]
+
+--- Remove Best Month ---
+  Best month: 2025-10 (+122.1R)  avg_r without: +0.2187R (floor 0.10R)  [PASS]
+--- Remove Best Asset ---
+  Removed BTCUSDT: avg_r +0.2461R (floor 0.10R)  [PASS]
+
+--- T2 VERDICT ---
+  [PASS] IS avg_r > 0.25R
+  [PASS] IS->OOS degradation < 40%
+  [PASS] 4.2 avg_r > 0.25R
+  [PASS] 4.7 top-1 < 50%
+  [PASS] 2022 best or 2nd year
+  [PASS] remove best month > 0.10R
+  [PASS] remove best asset > 0.10R
+  win rate 49.6% outside 30-45 gate: FLAGGED -- documented structural
+  T2: PASS (7/7 checks)
+
+==========================================================================
+T3 EXIT ENGINEERING: hold_bars sweep [15, 20, 25, 30, 35, 40] (4H bars)
+==========================================================================
+
+  hb     n     avg_r    total_r    wr%    pf    2022R    2025conc
+  15     2936  +0.1417     +416.0   51.5   1.41   +122.8    26.7%
+  20     2922  +0.1971     +576.1   51.5   1.51   +144.3    36.5%
+  25     2913  +0.2287     +666.1   51.5   1.56   +159.7    35.6%
+  30     2910  +0.2554     +743.1   49.6   1.58   +201.6    31.9%
+  35     2904  +0.2604     +756.1   47.2   1.55   +202.6    37.1%
+  40     2895  +0.2738     +792.6   46.2   1.55   +195.8    41.6%
+
+  Best hold_bars: 40  avg_r=+0.2738R
+  Exit stability: 6/6 positive, 3/6 above 0.25R
+  T1 canonical hb=30: +0.2554R

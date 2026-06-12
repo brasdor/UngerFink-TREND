@@ -1,0 +1,118 @@
+==============================================================================
+T1 RESULTS: New High Failure + Funding Gate (2H/4H/6H/8H/1D)
+Funding gate >= 0.01%/8h + EMA200 bear filter (mandatory on all combos)
+Cost floor (4.2): 0.25R   Min trades per combo: 30
+No-gate baseline: +0.108R | System 7 reference +0.304R
+==============================================================================
+
+--- Timeframe 1D ---
+  combos: 32  with >= 30 trades: 32
+  BEST: lookback_n=10 hold_bars=20 atr_mult=2.0
+    n=1265  avg_r=+0.0725R  total=+91.7R  wr=47.7%  pf=1.15
+    stability zone (+/-1 on lookback_n): 67% of 3 profitable  [FAIL]
+    4.2 cost floor: avg_r +0.0725R vs 0.25R  [FAIL]
+    2022: n=213 total=+31.72R  [PASS]
+    2025 concentration: 140.0% of total R  [FLAG >40%]
+    year-by-year:
+      2020: n=   2  total=   -2.00R  avg=-1.0000R
+      2021: n=  31  total=   -9.33R  avg=-0.3009R
+      2022: n= 213  total=  +31.72R  avg=+0.1489R
+      2023: n= 273  total=  -82.98R  avg=-0.3040R
+      2024: n= 261  total=  +20.66R  avg=+0.0792R
+      2025: n= 375  total= +128.43R  avg=+0.3425R
+      2026: n= 110  total=   +5.22R  avg=+0.0474R
+    verdict: FAIL 4.2
+
+--- Timeframe 2H ---
+  combos: 32  with >= 30 trades: 32
+  BEST: lookback_n=5 hold_bars=20 atr_mult=2.0
+    n=15919  avg_r=+0.0982R  total=+1563.4R  wr=45.4%  pf=1.21
+    stability zone (+/-1 on lookback_n): 100% of 2 profitable  [PASS]
+    4.2 cost floor: avg_r +0.0982R vs 0.25R  [FAIL]
+    2022: n=2144 total=+488.71R  [PASS]
+    2025 concentration: 26.7% of total R  [OK]
+    year-by-year:
+      2019: n=  21  total=   +5.27R  avg=+0.2509R
+      2020: n= 653  total=  -16.15R  avg=-0.0247R
+      2021: n=1766  total=  +43.75R  avg=+0.0248R
+      2022: n=2144  total= +488.71R  avg=+0.2279R
+      2023: n=2853  total=   -2.52R  avg=-0.0009R
+      2024: n=3996  total= +543.86R  avg=+0.1361R
+      2025: n=3621  total= +417.83R  avg=+0.1154R
+      2026: n= 865  total=  +82.64R  avg=+0.0955R
+    verdict: FAIL 4.2
+
+--- Timeframe 4H ---
+  combos: 32  with >= 30 trades: 32
+  BEST: lookback_n=5 hold_bars=15 atr_mult=2.0
+    n=9447  avg_r=+0.0703R  total=+664.4R  wr=47.5%  pf=1.17
+    stability zone (+/-1 on lookback_n): 100% of 2 profitable  [PASS]
+    4.2 cost floor: avg_r +0.0703R vs 0.25R  [FAIL]
+    2022: n=1375 total=+271.40R  [PASS]
+    2025 concentration: 54.7% of total R  [FLAG >40%]
+    year-by-year:
+      2019: n=   7  total=   +7.43R  avg=+1.0616R
+      2020: n= 324  total=  -55.53R  avg=-0.1714R
+      2021: n= 899  total=  -64.46R  avg=-0.0717R
+      2022: n=1375  total= +271.40R  avg=+0.1974R
+      2023: n=1624  total=   +4.73R  avg=+0.0029R
+      2024: n=2171  total=  +69.81R  avg=+0.0322R
+      2025: n=2419  total= +363.16R  avg=+0.1501R
+      2026: n= 628  total=  +67.87R  avg=+0.1081R
+    verdict: FAIL 4.2
+
+--- Timeframe 6H ---
+  combos: 32  with >= 30 trades: 32
+  BEST: lookback_n=5 hold_bars=20 atr_mult=2.0
+    n=5881  avg_r=+0.0874R  total=+514.1R  wr=46.0%  pf=1.19
+    stability zone (+/-1 on lookback_n): 100% of 2 profitable  [PASS]
+    4.2 cost floor: avg_r +0.0874R vs 0.25R  [FAIL]
+    2022: n=977 total=+124.66R  [PASS]
+    2025 concentration: 66.1% of total R  [FLAG >40%]
+    year-by-year:
+      2019: n=   3  total=   +1.56R  avg=+0.5187R
+      2020: n= 141  total=  -32.80R  avg=-0.2326R
+      2021: n= 428  total=  -12.17R  avg=-0.0284R
+      2022: n= 977  total= +124.66R  avg=+0.1276R
+      2023: n= 987  total=  +13.13R  avg=+0.0133R
+      2024: n=1252  total=  +43.72R  avg=+0.0349R
+      2025: n=1624  total= +340.03R  avg=+0.2094R
+      2026: n= 469  total=  +35.99R  avg=+0.0767R
+    verdict: FAIL 4.2
+
+--- Timeframe 8H ---
+  combos: 32  with >= 30 trades: 32
+  BEST: lookback_n=10 hold_bars=20 atr_mult=2.0
+    n=3347  avg_r=+0.1081R  total=+361.9R  wr=45.9%  pf=1.23
+    stability zone (+/-1 on lookback_n): 100% of 3 profitable  [PASS]
+    4.2 cost floor: avg_r +0.1081R vs 0.25R  [FAIL]
+    2022: n=599 total=+166.80R  [PASS]
+    2025 concentration: 67.7% of total R  [FLAG >40%]
+    year-by-year:
+      2019: n=   1  total=   +0.33R  avg=+0.3346R
+      2020: n=  80  total=  -16.57R  avg=-0.2071R
+      2021: n= 219  total=  -30.67R  avg=-0.1400R
+      2022: n= 599  total= +166.80R  avg=+0.2785R
+      2023: n= 588  total=  -12.42R  avg=-0.0211R
+      2024: n= 733  total=   -9.97R  avg=-0.0136R
+      2025: n= 841  total= +245.09R  avg=+0.2914R
+      2026: n= 286  total=  +19.28R  avg=+0.0674R
+    verdict: FAIL 4.2
+
+--- TOP 15 COMBOS OVERALL (n >= 30) ---
+  tf  lookback_n hold_bars atr_mult     n    avg_r    total   wr%  2022R  25conc
+  8h  10      20      2.0      3347  +0.1081   +361.9  45.9  +166.8   67.7%
+  2h  5       20      2.0     15919  +0.0982  +1563.4  45.4  +488.7   26.7%
+  2h  10      20      2.0     10876  +0.0962  +1046.3  45.6  +310.3   37.0%
+  6h  5       20      2.0      5881  +0.0874   +514.1  46.0  +124.7   66.1%
+  8h  10      15      2.0      3539  +0.0872   +308.7  48.8  +132.3   86.8%
+  2h  15      20      2.0      7967  +0.0777   +618.8  45.0  +204.9   35.0%
+  8h  10      20      3.0      3184  +0.0746   +237.4  52.5  +117.3   65.5%
+  8h  5       20      2.0      4744  +0.0742   +352.0  45.9  +194.2   75.3%
+  1d  10      20      2.0      1265  +0.0725    +91.7  47.7   +31.7  140.0%
+  2h  5       15      2.0     17081  +0.0722  +1233.7  47.3  +407.1   34.3%
+  8h  5       15      2.0      5110  +0.0718   +367.1  49.5  +161.8   83.5%
+  2h  10      15      2.0     11371  +0.0710   +807.8  47.3  +252.4   44.0%
+  1d  10      20      3.0      1191  +0.0708    +84.3  56.4   +40.5  104.9%
+  4h  5       15      2.0      9447  +0.0703   +664.4  47.5  +271.4   54.7%
+  6h  5       20      3.0      5553  +0.0633   +351.2  52.6  +104.5   69.6%

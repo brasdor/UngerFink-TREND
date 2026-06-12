@@ -31,12 +31,22 @@ python phase_t9b_momentum_factor_paper_engine.py --notify
 if errorlevel 1 echo [WARN] Momentum engine exited with error
 
 echo.
+echo --- VolContraction Short (System 7) ---
+python phase_t9b_volcontraction_short_paper_engine.py --notify
+if errorlevel 1 echo [WARN] VolContraction engine exited with error
+
+echo.
+echo --- MACross Short (System 8) ---
+python phase_t9b_macross_short_paper_engine.py --notify
+if errorlevel 1 echo [WARN] MACross engine exited with error
+
+echo.
 echo --- Combined Summary ---
 python t9b_combined_summary.py
 
 echo.
 echo --- Committing to GitHub ---
-git add data/t9b_paper/ data/t9b_mr_paper/ data/t9b_consecdowndays_paper/ data/t9b_momentum_paper/ data/universe/ohlcv_1d/ data/futures_universe/ohlcv_1d/
+git add data/t9b_paper/ data/t9b_mr_paper/ data/t9b_consecdowndays_paper/ data/t9b_momentum_paper/ data/t9b_volcontraction_paper/ data/t9b_macross_paper/ data/universe/ohlcv_1d/ data/futures_universe/ohlcv_1d/ data/futures_universe/ohlcv_4h/
 git commit -m "T9B daily update %ISODATE% [skip ci]"
 if errorlevel 1 (
     echo No changes to commit or commit failed

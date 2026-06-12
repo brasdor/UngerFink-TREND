@@ -1,0 +1,27 @@
+==========================================================================
+OVERLAP: Volume Spike Short 4H (proxy T1 best) vs System 7 + MA Cross
+==========================================================================
+Volume Spike trades: 2047   System 7: 3450   MA Cross: 2910
+
+  Overlap vs System 7:         891/2047 = 43.5%
+  Overlap vs MA Cross:         854/2047 = 41.7%
+  Overlap vs EITHER:          1382/2047 = 67.5%
+
+--- Unique trades (not captured by either system) ---
+  n=665  avg_r=+0.0400R  total=+26.6R  wr=46.3%
+  Unique avg_r > 0.25R: [FAIL]
+  Unique year-by-year:
+    2020: n=  25  total=  -10.63R  avg=-0.4254R
+    2021: n=  91  total=  -28.87R  avg=-0.3172R
+    2022: n=  18  total=   +0.50R  avg=+0.0280R
+    2023: n= 100  total=  -21.82R  avg=-0.2182R
+    2024: n= 296  total=  +61.14R  avg=+0.2065R
+    2025: n= 110  total=  +11.89R  avg=+0.1081R
+    2026: n=  25  total=  +14.40R  avg=+0.5759R
+
+--- Weekly P&L correlation (entry-date attribution) ---
+  vs System 7: +0.549
+  vs MA Cross: +0.690
+
+--- DECISION ---
+  GRAY ZONE (max overlap 44%, unique avg_r +0.040R) -- judgement call.

@@ -1,0 +1,28 @@
+==========================================================================
+OVERLAP ANALYSIS: VolContraction 8H (T1 best) vs System 7 4H (frozen)
+==========================================================================
+System 7 trades: 3450   8H trades: 1848
+Symbols: S7=101  8H=94
+
+--- Overlap (8H entry within S7 position window +/- 2 days, same symbol) ---
+  Overlapping 8H trades: 1621/1848 = 87.7%
+
+--- Unique 8H trades (System 7 would NOT have been in the market) ---
+  n=227  avg_r=+0.0127R  total=+2.9R  wr=48.9%
+  Overlapping subset: n=1621  avg_r=+0.3274R
+  Unique trades vs 4.2 floor (0.25R): [FAIL]
+  Unique year-by-year:
+    2020: n=   6  total=   -0.10R  avg=-0.0160R
+    2021: n=   7  total=   -2.17R  avg=-0.3102R
+    2022: n=  54  total=   -6.34R  avg=-0.1175R
+    2023: n=  23  total=   +0.13R  avg=+0.0058R
+    2024: n=  47  total=  +10.41R  avg=+0.2215R
+    2025: n=  59  total=   +0.66R  avg=+0.0113R
+    2026: n=  31  total=   +0.29R  avg=+0.0094R
+
+--- P&L correlation (R attributed to entry date) ---
+  Daily:  +0.670
+  Weekly: +0.782
+
+--- RECOMMENDATION ---
+  Overlap = 87.7% -> SAME SYSTEM -- overlap > 60%. Skip T2. 8H is System 7 on coarser bars.

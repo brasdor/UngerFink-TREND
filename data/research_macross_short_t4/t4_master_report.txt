@@ -1,0 +1,88 @@
+==========================================================================
+T4 ROBUSTNESS: MA Cross Short 4H + Funding Gate
+Config: fast=20 slow=50 hb=30 am=2.0  gate>=0.01%/8h + EMA200 bear
+==========================================================================
+
+--- 1. Baseline ---
+  trades=2910  avg_r=+0.2554R  wr=49.6%  pf=1.579
+  total=+743.1R  max_dd=-79.1R  max losing streak=39
+  t-score=9.2  (System 7 benchmark: 10.3)
+
+--- 2. Block Bootstrap Monte Carlo (2000 runs) ---
+  bs   totR_p05   totR_p50   totR_p95   prob_pos   PF_p05   DD_p05
+  1       +613.1     +745.7     +874.1    100.00%    1.468     -28.3
+  5       +513.3     +736.0     +978.4    100.00%    1.385     -66.8
+  10      +446.1     +718.4    +1015.9    100.00%    1.332     -94.4
+  20      +398.8     +719.1    +1073.7    100.00%    1.296    -126.1
+  50      +349.5     +743.2    +1167.8    100.00%    1.258    -157.5
+  MC p05 positive at ALL block sizes: [PASS]
+  (System 7: MC p05 bs=50 = +455R)
+
+--- 3. Cost Stress ---
+  +0.00R: avg_r=+0.2554R  total=  +743.1R  pf=1.579
+  +0.05R: avg_r=+0.2054R  total=  +597.6R  pf=1.441
+  +0.10R: avg_r=+0.1554R  total=  +452.1R  pf=1.316
+  +0.15R: avg_r=+0.1054R  total=  +306.6R  pf=1.203
+  +0.20R: avg_r=+0.0554R  total=  +161.1R  pf=1.101
+  0.05R stress PF > 1.0: [PASS]
+
+--- 4. Period Splits ---
+  By trade count: first half avg=+0.2473R (n=1455)  second half avg=+0.2634R (n=1455)
+  By time (mid 2023-02-20): first avg=+0.2414R (n=796)  second avg=+0.2606R (n=2114)
+  Second half not negative: [PASS]
+  Last 500 trades: avg_r=+0.2916R  total=+145.8R  [OK]
+  (System 7 caveat was last-500 avg +0.092R)
+
+--- 5. Remove Best Assets ---
+  remove top-1 (BTCUSDT): avg_r=+0.2461R  total=  +708.4R  n=2879
+  remove top-3 (ENJUSDT, BTCUSDT, AAVEUSDT): avg_r=+0.2311R  total=  +643.1R  n=2783
+  remove top-5 (FILUSDT, ENJUSDT, ENSUSDT...): avg_r=+0.2187R  total=  +590.4R  n=2699
+  Remove top-1 asset avg_r > 0.10R: [PASS]
+
+--- 6. Remove Best Months ---
+  remove top-1 (2025-10): avg_r=+0.2187R  total=  +621.0R
+  remove top-2 (2024-04, 2025-10): avg_r=+0.1863R  total=  +511.3R
+  remove top-3 (2023-08, 2024-04, 2025-10): avg_r=+0.1549R  total=  +416.8R
+  Remove top-1 month avg_r > 0.10R: [PASS]
+
+--- 7. Asset Concentration ---
+  top-1:    +34.7R  (4.7% of total)
+  top-3:   +100.0R  (13.5% of total)
+  top-5:   +152.7R  (20.6% of total)
+
+--- 8. Year-by-Year ---
+  2019: n=   3  total=   -1.42R  avg=-0.4744R
+  2020: n= 123  total=  +10.80R  avg=+0.0878R
+  2021: n= 303  total=   -6.68R  avg=-0.0221R
+  2022: n= 347  total= +201.61R  avg=+0.5810R
+  2023: n= 569  total= +136.76R  avg=+0.2403R
+  2024: n= 739  total= +192.26R  avg=+0.2602R
+  2025: n= 627  total= +237.33R  avg=+0.3785R
+  2026: n= 199  total=  -27.53R  avg=-0.1383R
+  2026 partial positive: [FAIL] (-27.5R)
+
+--- Remove Best Years ---
+  remove 2022: avg_r=+0.2113R  total=  +541.5R  [PASS]
+  remove 2024: avg_r=+0.2537R  total=  +550.9R  [PASS]
+
+--- T4 SCORECARD ---
+  [PASS] MC p05 positive all block sizes
+  [PASS] Cost stress 0.05R PF > 1.0
+  [PASS] Remove top-1 asset > 0.10R
+  [PASS] Remove top-1 month > 0.10R
+  [PASS] Remove 2022 profitable
+  [PASS] Remove 2024 profitable
+  [PASS] Second half not negative
+  [FAIL] 2026 partial positive
+  [PASS] Concentration top-1 < 50%
+
+  Passed 8/9
+
+--- BENCHMARK vs SYSTEM 7 ---
+  metric        System 7      MA Cross
+  avg_r         +0.304R       +0.255R
+  t-score       10.3          9.2
+  MC p05 bs50   +455R         +350R
+  IS->OOS       24.4%         4.1%
+
+  T4 VERDICT: REVIEW

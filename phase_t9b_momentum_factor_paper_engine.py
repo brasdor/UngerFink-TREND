@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 T9B MOMENTUM FACTOR -- PAPER TRADING ENGINE
@@ -50,8 +50,9 @@ import numpy as np
 import pandas as pd
 
 import t9b_shared
+from signal_arbitrator import SignalArbitrator
 
-# ── Paths ─────────────────────────────────────────────────────────────────
+# â”€â”€ Paths â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 ROOT       = Path(__file__).resolve().parent
 OHLCV_DIR  = ROOT / "data" / "futures_universe" / "ohlcv_1d"
 SYM_FILE   = ROOT / "data" / "futures_universe" / "all_symbols.csv"
@@ -64,7 +65,7 @@ EQ_FILE    = OUT_DIR / "equity_curve.csv"
 
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# ── Frozen config ─────────────────────────────────────────────────────────
+# â”€â”€ Frozen config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 SYSTEM_NAME  = "MomentumFactor_Lb20_L20_S10_Biweekly_T9B"
 LOOKBACK     = 20
 LONG_K       = 20
@@ -81,7 +82,7 @@ MIN_SHORT_VOL_USDT   = 1_000_000   # Fix 5: min avg daily USDT volume for shorts
 FUNDING_WARN_RATE    = 0.0005      # Fix 4: warn if funding > 0.05% per 8h
 
 
-# ── Utilities ─────────────────────────────────────────────────────────────
+# â”€â”€ Utilities â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def p(*a, **kw):
     kw.setdefault('flush', True)
@@ -101,7 +102,7 @@ def parse_args() -> argparse.Namespace:
     return ap.parse_args()
 
 
-# ── State ─────────────────────────────────────────────────────────────────
+# â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def _empty_state() -> dict:
     return {
@@ -130,7 +131,7 @@ def save_state(state: dict) -> None:
         json.dump(state, f, indent=2, default=str)
 
 
-# ── Data update (delta via ccxt) ──────────────────────────────────────────
+# â”€â”€ Data update (delta via ccxt) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def update_ohlcv_delta(symbols: list[str], full_update: bool = False) -> int:
     """
@@ -204,12 +205,32 @@ def update_ohlcv_delta(symbols: list[str], full_update: bool = False) -> int:
     return updated
 
 
-# ── Universe loading ───────────────────────────────────────────────────────
+# â”€â”€ Universe loading â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+def rebuild_symbol_file() -> int:
+    """Regenerate all_symbols.csv from ohlcv_1d cache filenames.
+
+    all_symbols.csv is derived data (originally written by the Phase 1
+    downloader) and was once deleted by unrelated data reorganization,
+    silently stalling this engine. Self-heal instead of crashing.
+    """
+    syms = sorted(f.name[:-len("_1d.csv")] for f in OHLCV_DIR.glob("*_1d.csv"))
+    if not syms:
+        return 0
+    with open(SYM_FILE, "w", encoding="utf-8") as fh:
+        fh.write("symbol\n")
+        for s in syms:
+            fh.write(s + "\n")
+    return len(syms)
+
 
 def load_close_matrix() -> pd.DataFrame:
     """Load close prices for all symbols from CSVs. Returns (date x symbol) DataFrame."""
     if not SYM_FILE.exists():
-        raise FileNotFoundError(f"Symbol list not found: {SYM_FILE}")
+        n = rebuild_symbol_file()
+        p(f"  [WARN] {SYM_FILE.name} was missing -- rebuilt from ohlcv_1d cache ({n} symbols)")
+        if n == 0:
+            raise FileNotFoundError(f"Symbol list not found and ohlcv_1d cache empty: {SYM_FILE}")
 
     syms = pd.read_csv(SYM_FILE)['symbol'].tolist()
     frames: dict[str, pd.Series] = {}
@@ -357,7 +378,7 @@ def get_latest_price(close: pd.DataFrame, sym: str, as_of: Date) -> float | None
     return float(series.iloc[-1]) if not series.empty else None
 
 
-# ── Signal computation ─────────────────────────────────────────────────────
+# â”€â”€ Signal computation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def compute_basket(close: pd.DataFrame, as_of: Date,
                    vol_usdt: pd.DataFrame | None = None) -> tuple[list[str], list[str], dict]:
@@ -449,7 +470,7 @@ def compute_basket(close: pd.DataFrame, as_of: Date,
     return longs, shorts, meta
 
 
-# ── Rebalance logic ───────────────────────────────────────────────────────
+# â”€â”€ Rebalance logic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def is_rebal_day(today: Date, state: dict) -> bool:
     """
@@ -524,6 +545,10 @@ def do_rebalance(state: dict, close: pd.DataFrame, today: Date,
     new_short_pos = []
     signal_rows   = []
 
+    # Signal Arbitration Manager (Rules 1-6). fresh_heat=True: the rebalance
+    # rebuilds the whole basket, so this engine's prior heat must not count.
+    arbitrator = SignalArbitrator('momentum', today, fresh_heat=True)
+
     for rank, sym in enumerate(longs, 1):
         price = get_latest_price(close, sym, today)
         if not price or price <= 0:
@@ -533,6 +558,12 @@ def do_rebalance(state: dict, close: pd.DataFrame, today: Date,
         if long_alloc < MIN_ORDER_SIZE_USDT:
             _log_event(today, 'SKIP',
                        f"position_too_small: {sym} LONG alloc=${long_alloc:.2f} < ${MIN_ORDER_SIZE_USDT}",
+                       equity_after_cost)
+            continue
+        decision, arb_reason = arbitrator.check_signal(sym, 'LONG', long_alloc * 0.01)
+        if decision == 'REJECTED':
+            _log_event(today, 'SKIP',
+                       f"arbitrator_reject_reason={arb_reason}: {sym} LONG",
                        equity_after_cost)
             continue
         new_long_pos.append({
@@ -563,6 +594,12 @@ def do_rebalance(state: dict, close: pd.DataFrame, today: Date,
         if short_alloc < MIN_ORDER_SIZE_USDT:
             _log_event(today, 'SKIP',
                        f"position_too_small: {sym} SHORT alloc=${short_alloc:.2f} < ${MIN_ORDER_SIZE_USDT}",
+                       equity_after_cost)
+            continue
+        decision, arb_reason = arbitrator.check_signal(sym, 'SHORT', short_alloc * 0.02)
+        if decision == 'REJECTED':
+            _log_event(today, 'SKIP',
+                       f"arbitrator_reject_reason={arb_reason}: {sym} SHORT",
                        equity_after_cost)
             continue
         new_short_pos.append({
@@ -633,7 +670,7 @@ def do_rebalance(state: dict, close: pd.DataFrame, today: Date,
     return signal_rows
 
 
-# ── Daily MTM (non-rebalance days) ────────────────────────────────────────
+# â”€â”€ Daily MTM (non-rebalance days) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def compute_unrealized_pnl(state: dict, close: pd.DataFrame, today: Date) -> float:
     """Compute total unrealized P&L across all open positions."""
@@ -661,7 +698,7 @@ def do_daily_mtm(state: dict, close: pd.DataFrame, today: Date) -> None:
     _log_event(today, 'MTM', detail, mtm_equity)
 
 
-# ── Output writers ─────────────────────────────────────────────────────────
+# â”€â”€ Output writers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def _log_event(run_date: Date, event: str, detail: str, equity: float) -> None:
     exists = LOG_FILE.exists()
@@ -779,7 +816,7 @@ def print_notify(state: dict, close: pd.DataFrame, today: Date, rebalanced: bool
               f"{pos['quantity']:>12.6f}  ${upnl:>+8.2f}  {upct:>+6.2f}%")
 
 
-# ── Main ───────────────────────────────────────────────────────────────────
+# â”€â”€ Main â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def main() -> None:
     args = parse_args()
@@ -803,6 +840,9 @@ def main() -> None:
         return
 
     # Data update
+    if not SYM_FILE.exists():
+        n = rebuild_symbol_file()
+        p(f"  [WARN] {SYM_FILE.name} was missing -- rebuilt from ohlcv_1d cache ({n} symbols)")
     all_syms = (pd.read_csv(SYM_FILE)['symbol'].tolist()
                 if SYM_FILE.exists() else [])
 
@@ -879,4 +919,4 @@ def main() -> None:
 
 
 if __name__ == '__main__':
-    main()
+    t9b_shared.run_engine("momentum", main)

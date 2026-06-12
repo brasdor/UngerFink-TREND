@@ -1,0 +1,42 @@
+
+=== Timeframe 4H ===
+  Signal A: VolContraction cb=15 ap=20
+  Signal B: NHF lookback_n=5
+  Signal D: funding >= 0.02%/8h
+  Exit: hold_bars=30  atr_mult=2.0  (System 7-inherited)
+
+  L2 (any 2 of A/B/D): n=645  avg_r=+0.1248R  total=+80.5R  wr=41.2%  pf=1.23
+    4.2 (0.25R): [FAIL]   2022: +10.00R [PASS]   2025 conc: 45.0% [FLAG]
+    year-by-year:
+      2020: n=  67  total=   -9.44R  avg=-0.1409R
+      2021: n= 148  total=  -20.23R  avg=-0.1367R
+      2022: n=  27  total=  +10.00R  avg=+0.3705R
+      2023: n=  52  total=  -21.20R  avg=-0.4076R
+      2024: n= 154  total=  +78.79R  avg=+0.5116R
+      2025: n= 144  total=  +36.23R  avg=+0.2516R
+      2026: n=  53  total=   +6.37R  avg=+0.1201R
+
+  L3 (any 3 of A/B/D): n=3  avg_r=+0.5494R  total=+1.6R  wr=66.7%  pf=2.65
+    4.2 (0.25R): [PASS]   2022: +0.00R [FAIL]   2025 conc: 38.6% [OK]
+    year-by-year:
+      2024: n=   1  total=   +1.01R  avg=+1.0116R
+      2025: n=   2  total=   +0.64R  avg=+0.3183R
+
+=== Timeframe 8H ===
+  Signal A: VolContraction cb=15 ap=20
+  Signal B: NHF lookback_n=10
+  Signal D: funding >= 0.02%/8h
+  Exit: hold_bars=15  atr_mult=2.0  (System 7-inherited)
+
+  L2 (any 2 of A/B/D): n=209  avg_r=+0.2290R  total=+47.9R  wr=50.7%  pf=1.58
+    4.2 (0.25R): [FAIL]   2022: +3.20R [PASS]   2025 conc: 40.7% [FLAG]
+    year-by-year:
+      2020: n=  25  total=   +7.45R  avg=+0.2981R
+      2021: n=  35  total=   -4.34R  avg=-0.1241R
+      2022: n=   7  total=   +3.20R  avg=+0.4573R
+      2023: n=  17  total=   +9.33R  avg=+0.5488R
+      2024: n=  40  total=  +18.12R  avg=+0.4530R
+      2025: n=  63  total=  +19.47R  avg=+0.3091R
+      2026: n=  22  total=   -5.36R  avg=-0.2438R
+
+  L3: 0 trades

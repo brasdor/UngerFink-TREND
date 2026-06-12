@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 PHASE T9B -- MEANREVERSIONRSI 1D PAPER ENGINE
@@ -58,6 +58,7 @@ import numpy as np
 import pandas as pd
 
 import t9b_shared
+from signal_arbitrator import SignalArbitrator
 
 
 # =============================================================================
@@ -590,6 +591,7 @@ def run_one_day(run_date: date, symbols: List[str], state: dict) -> dict:
     # ------------------------------------------------------------------
     if not kill_sw:
         cross_syms = t9b_shared.get_cross_system_symbols('rsi_mr')  # Fix 1
+        arbitrator = SignalArbitrator('rsi_mr', run_date)
         for sym in symbols:
             if any(p.symbol == sym for p in positions.values()):
                 continue
@@ -621,6 +623,13 @@ def run_one_day(run_date: date, symbols: List[str], state: dict) -> dict:
                 _log("SIGNAL_SKIPPED", sym,
                      f"position_too_small  size=${qty * sig['close']:.2f} < ${MIN_ORDER_SIZE_USDT}",
                      close=sig["close"])
+                continue
+
+            # Signal Arbitration Manager (Rules 1-6)
+            decision, arb_reason = arbitrator.check_signal(sym, "LONG", risk_amount)
+            if decision == "REJECTED":
+                _log("SIGNAL_SKIPPED", sym, f"arbitrator: {arb_reason}",
+                     arbitrator_reject_reason=arb_reason)
                 continue
 
             pid           = f"{safe_sym(sym)}_{run_date.strftime('%Y%m%d')}"
@@ -974,4 +983,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    t9b_shared.run_engine("rsi_mr", main)

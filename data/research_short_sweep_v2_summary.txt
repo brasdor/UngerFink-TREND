@@ -1,0 +1,221 @@
+==============================================================================
+SHORT-SIDE SWEEP V2 -- FUNDING GATE APPLIED TO ALL APPROACHES
+T1 COMPLETE -- 2026-06-11
+==============================================================================
+Universe:   142 Binance Futures USDT symbols with funding rate data
+Gates:      EMA200 bear filter + funding_rate >= 0.01%/8h (mandatory on all)
+Cost floor: 0.25R (4.2, Futures)   2022 must be positive   Flag 2025 > 40%
+Data:       2H/6H/8H downloaded this session (142/142 symbols, Sep 2019 ->
+            Jun 2026); 4H/1D pre-existing
+Engine:     mirrors System 7 mechanics exactly (next-bar-open entry, ATR
+            stop above, fixed time exit, gate at signal-bar funding event)
+
+------------------------------------------------------------------------------
+COMBINED COMPARISON TABLE (best timeframe per test)
+------------------------------------------------------------------------------
+Test                  TF    Best avg_r  n      4.2   Stab  2022     25conc  vs no-gate        Verdict
+1: VolContraction 8H  8H    +0.289R     1848   PASS  PASS  +93.8R   19%     +0.106R -> +0.289 BREAKTHROUGH
+2: NHF + gate         8H    +0.108R     3347   FAIL  PASS  +166.8R  68%     +0.108R -> +0.108 FAIL 4.2
+3: MA Cross + gate    4H    +0.255R     2910   PASS  PASS  +201.6R  32%     +0.123R -> +0.255 BREAKTHROUGH
+4: OI Spike + gate    --    BLOCKED     --     --    --    --       --      untested          BLOCKED (data)
+5: L/S Ratio + gate   --    BLOCKED     --     --    --    --       --      untested          BLOCKED (data)
+6: Donchian + gate    4H    +0.232R     5745   FAIL  PASS  +383.1R  21%     +0.096R -> +0.232 FAIL 4.2 -- CLOSED
+7: Confluence L2      8H    +0.229R     209    FAIL  --    +3.2R    41%     new               FAIL 4.2
+7: Confluence L3      4H    +0.549R     3      n/a   --    none     --      new               NO TRADES (n=3)
+Reference: System 7 (VolContraction 4H + gate): +0.304R PASS -- FROZEN
+
+------------------------------------------------------------------------------
+BREAKTHROUGH CANDIDATES (avg_r >= 0.25R AND 2022 positive)
+------------------------------------------------------------------------------
+1. Test 1 -- VolContraction 8H (cb=15 ap=20 hb=15 am=2.0)
+   n=1848  avg_r=+0.2888R  total=+533.6R  wr=53.5%  pf=1.79
+   2022: +93.8R  2025 conc: 19.4%  stability: PASS
+   2019-2026: positive every year except 2021 (-9.8R, mild)
+   CAVEATS: does NOT improve on System 7 4H (+0.304R) -- same signal family,
+   likely heavily overlapping trades. Win rate 53.5% above 45% ceiling
+   (System 7 was 45.6%, deemed structural for funding-gated entries).
+   ROLE IF PURSUED: check trade overlap vs System 7 before any T2 -- this
+   may be the SAME edge sampled on coarser bars, not a new system.
+
+2. Test 3 -- MA Crossover Short 4H (fast=20 slow=50 hb=30 am=2.0)
+   n=2910  avg_r=+0.2554R  total=+743.1R  wr=49.6%  pf=1.58
+   2022: +201.6R (avg +0.581R)  2025 conc: 31.9%  stability: 100% PASS
+   GENUINELY NEW SIGNAL LOGIC (trend-based vs System 7 compression-based).
+   Gate transformed +0.123R -> +0.255R, consistent with System 7 pattern.
+   1D also clears 4.2 (+0.290R) but n=230, 2025 conc 80.5% FLAG -- 4H is
+   the candidate. Win rate 49.6% above 45% ceiling -- same structural note.
+   -> PRIMARY System 8 candidate, proceed to T2 after review.
+
+------------------------------------------------------------------------------
+DEFINITIVE NEGATIVE FINDINGS
+------------------------------------------------------------------------------
+- Test 2 (NHF): funding gate added NOTHING (+0.108R with or without gate
+  at best TF). One-bar failure patterns are too noisy; gate cannot rescue.
+- Test 6 (Donchian Short): 5th and FINAL attempt. Gate lifted +0.096R ->
+  +0.232R (4H) -- large improvement but still below the 0.25R floor on all
+  5 timeframes. DONCHIAN SHORT PERMANENTLY CLOSED per protocol.
+- Test 7 (Confluence): does not work as hoped. L2 dilutes (each signal
+  alone is weaker than VolContraction; OR-ing 2-of-3 mostly adds weaker
+  NHF trades). L3 produces 0-3 trades. Confluence of A/B/D is NOT a path
+  to a new system. Note: tested without Signal C (OI) -- see below.
+- Tests 4/5 (OI Spike, L/S Ratio): BLOCKED -- Binance API exposes only the
+  last ~30 days of OI / long-short ratio history; local db has 33 days
+  (2026-05-07 -> 2026-06-09, daily). A 2019-2026 backtest requires vendor
+  data (Coinglass/Laevitas/Amberdata) or years of own collection. The
+  daily pipeline is already accumulating both tables.
+
+------------------------------------------------------------------------------
+NOTES FOR REVIEW
+------------------------------------------------------------------------------
+- Test 3 had no atr_mult in the spec grid; atr_mult=[2.0,3.0] was added as
+  the stop/risk unit to mirror all other tests (am=2.0 won everywhere).
+- Win rates of funding-gated shorts cluster ~46-54%, above the 30-45% TF
+  gate; System 7 precedent treats this as structural (funding gate selects
+  crowded conditions, not trend-following breakouts).
+- Stability zones at grid edges have only 2 members (canonical at edge);
+  T15-style widening applies later in the pipeline as usual.
+- PAUSED before T2 per instructions. Suggested next steps:
+  1. Overlap analysis: Test 1 (8H) trades vs System 7 (4H) trades
+  2. T2 walk-forward for MA Cross 4H (System 8 candidate)
+
+==============================================================================
+SESSION 2 UPDATE (2026-06-11) -- OVERLAP + T2/T3 + PROXY RESULTS
+==============================================================================
+
+TRACK 1 -- VolContraction 8H vs System 7 overlap:
+  Overlap: 87.7% (1621/1848 8H trades inside S7 position windows +/- 2d)
+  Unique 8H trades: n=227, avg_r=+0.0127R -- WORTHLESS standalone
+  P&L correlation: daily +0.67, weekly +0.78
+  VERDICT: SAME SYSTEM -- T2 SKIPPED. VolContraction 8H is System 7 on
+  coarser bars. Drop from System 8 candidacy.
+  Output: data/research_volcontraction_8h_overlap/
+
+TRACK 2 -- MA Cross Short 4H T2+T3:
+  T2: PASS 7/7
+    IS  2019-2022: n=776   avg_r=+0.2633R  (> 0.25R PASS)
+    OOS 2023-2026: n=2134  avg_r=+0.2525R  degradation 4.1% (max 40%)
+    4.7 top-1: BTCUSDT 4.7% / remove best month +0.2187R / remove best
+    asset +0.2461R / 2022 = #2 year (+201.6R)
+    FLAG: win rate 49.6% above 45% -- structural (funding gate), S7=45.6%
+  T3 exit sweep (hb 15-40): monotone rise +0.142R -> +0.274R, no interior
+    peak; hb=40 best but AT GRID EDGE with 2025 conc 41.6% (flag).
+    RECOMMENDATION: RETAIN hb=30 (+0.2554R) -- inside stable plateau
+    (30/35/40 all > 0.25R), avoids edge-of-grid selection per 2.1.
+  Output: data/research_macross_short_t2/
+
+TEST 4 PROXY -- Volume Spike Short (OI proxy) + gate:
+  4H BREAKTHROUGH: lb=15 hb=30 am=2.0  n=2047  avg_r=+0.2828R  pf=1.68
+    2022 +73.9R PASS  2025 conc 18.1% OK  stability PASS
+  8H +0.139R FAIL / 1D negative FAIL
+  -> CONCEPT VALIDATED on proxy. Flag for re-run with real Coinglass OI
+     data before any T2. RECOMMEND Coinglass subscription (~$50/month)
+     for historical OI + L/S data.
+  NOTE: signal = volume>3x avg + N-bar-low breakdown -- breakdown-family;
+  expect material trade overlap with MA Cross / System 7. Run overlap
+  analysis before treating as an independent system.
+  Output: data/research_volspike_proxy_t1/
+
+TEST 5 PROXY -- RSI Overbought Short (L/S proxy) + gate:
+  FAIL on all 3 timeframes (best 8H +0.049R; 4H +0.004R; 1D negative).
+  2022 negative on 8H. The funding gate does NOT unlock RSI overbought
+  (unlike MA Cross). L/S-ratio concept NOT validated by proxy -- do not
+  buy data for this one on current evidence.
+  Output: data/research_rsioverbought_proxy_t1/
+
+REVISED SYSTEM 8 PIPELINE:
+  1. MA Cross Short 4H (fast=20 slow=50 hb=30 am=2.0): T2 PASS -- ready
+     for T4 robustness after review
+  2. Volume Spike Short 4H: T1 breakthrough (proxy) -- overlap check vs
+     MA Cross + System 7 next, then real-OI confirmation
+  3. VolContraction 8H: DROPPED (duplicate of System 7)
+
+==============================================================================
+SESSION 3 UPDATE (2026-06-12) -- T4 + VOLSPIKE OVERLAP + T15
+==============================================================================
+
+TRACK 1 -- MA Cross Short 4H T4 ROBUSTNESS: 8/9 PASS, verdict REVIEW
+  Baseline: n=2910 avg_r=+0.2554R wr=49.6% pf=1.579 t=9.2 maxDD=-79.1R
+  MC (2000 runs): p05 positive at ALL block sizes (bs=50 p05=+349.5R,
+    prob_pos 100%, PF p05 1.258)
+  Cost stress: PF 1.44 at +0.05R, survives to +0.20R (PF 1.10)
+  Splits: first/second half both positive; second half BETTER (+0.26 vs
+    +0.24). Last 500 trades +0.2916R -- NO edge decay (S7 had +0.092R)
+  Remove top-1 asset (BTC 4.7%): +0.2461R / top-1 month: +0.2187R
+  Remove 2022: +0.2113R PASS / remove 2024: +0.2537R PASS
+  [FAIL] 2026 partial: -27.5R (n=199, avg -0.138R) -- same caveat class
+    as System 7 edge-decay flag; monitor in T9B
+  Benchmark: S7 avg_r +0.304/t 10.3/MCp05 +455R vs MACross +0.255/9.2/+350R
+  Output: data/research_macross_short_t4/
+
+TRACK 2 -- VOLUME SPIKE OVERLAP: SKIP T2
+  vs System 7: 43.5% / vs MA Cross: 41.7% / vs EITHER: 67.5% (> 60%)
+  Unique trades (n=665): avg_r=+0.0400R -- WORTHLESS standalone [FAIL 0.25R]
+  Weekly P&L corr: +0.55 (S7), +0.69 (MACross)
+  DECISION: same edge family as the S7+MACross pair combined; the residue
+  not captured by either is unprofitable. Volume Spike DROPPED as a third
+  system. Real-OI (Coinglass) re-run NOT justified by this proxy -- the
+  funding gate + bear filter already harvests the crowding event.
+  Output: data/research_volspike_overlap/
+
+TRACK 3 -- T15 PARAMETER STABILITY: FORMAL FAIL, NUANCED
+  Strict zone (one-step from canonical, must pass 0.25R): 3/9 = 33% [FAIL]
+  BUT: 9/9 zone combos PROFITABLE (avg_r +0.146R to +0.279R) -- classic
+  2.1 profitability is 100%; it is the strict Futures floor that fails
+  Within design funding level 0.01%: 9/24 combos pass 0.25R (38%)
+    (System 7 precedent: 74% within design level -- MA Cross is weaker here)
+  Structure: slow=30 column DOMINATES (passes 4.2 at ALL thresholds);
+    grid optimum at fast=20 slow=30 hb=35 thr=0.01%: +0.3145R n=3572
+    -> canonical (20,50,30) is NOT a peak; edge strengthens toward
+    (20,30,35). Re-canonicalization is a T2-rerun decision for review.
+  Funding dependence: at thr=0.005% canonical still +0.1902R (profitable,
+    below floor) -- the MA signal has structure beyond the gate, but 4.2
+    clearance DOES depend on the 0.01% gate. Same class as S7's
+    "discovery constraint, not free parameter" argument.
+  Output: data/research_macross_short_t15/
+
+STATUS: paused for review. Open decisions:
+  A. Accept T4 8/9 with 2026-partial caveat (S7 was accepted with a
+     comparable recent-performance caveat)?
+  B. T15: accept funding gate as discovery constraint (S7 precedent) and
+     judge stability within thr=0.01%? If yes, consider re-canonicalizing
+     to (fast=20 slow=30 hb=35) via fresh T2 -- stronger zone, n=3572
+  C. Volume Spike: confirm drop (recommended)
+
+==============================================================================
+SESSION 4 UPDATE (2026-06-12) -- RE-CANONICALIZATION + FULL T2->T8 CHAIN
+==============================================================================
+
+DECISIONS EXECUTED: re-canonicalize to (20,30,35) [B], archive Volume
+Spike [C] (data/research_volspike_proxy_t1/ARCHIVED.txt).
+
+MA CROSS SHORT V2 (SYSTEM 8) -- FULL VALIDATION CHAIN:
+  T3 exit sweep [25,30,35,40,45]: best hb=40 (+0.3167R) is INTERIOR;
+    hb=35 canonical retained (+0.3145R, statistically equivalent)
+  T2: PASS 7/7 -- IS +0.3430R / OOS +0.3032R, degradation 11.6%,
+    top-1 IOSTUSDT 4.2%, 2022 #2 year (+307.5R), wr 47.2% (flag, structural)
+  T4: 8/9 -- t=11.3, MC p05 positive all bs (bs50 +582.8R, prob+ 100%),
+    cost stress to +0.20R PF 1.20, halves +0.319/+0.310, last-500 +0.413R,
+    rm 2022 +0.2676R, rm top-1 asset +0.3069R.
+    [FAIL] 2026 partial -31.6R -- carried as documented caveat (S7 class)
+  T15 V2: zone 7/7 = 100% PASS. Within design level 78% (S7: 74%).
+    Full grid 100% profitable. Canonical passes 4.2 even at thr=0.005%
+    (+0.2610R) -- funding-dependence concern RESOLVED at this pocket
+  T5: uncapped canonical (caps cut total R, S7 precedent); max10 ref
+  T6: $10k -> $119,845 (+1098.5%), CAGR +46.4%, maxDD -20.96%, kill never
+  T7: remove top-1/3/5 all PASS (top-1 removed: still +1028%)
+  T8: FROZEN -- data/research_macross_short_v2_t8/phase_t8_frozen_config.py
+
+FINAL COMPARISON:
+  metric        System 7      MACross v1    MACross V2 (System 8)
+  avg_r         +0.304R       +0.255R       +0.3145R
+  trades        3214          2910          3572
+  t-score       10.3          9.2           11.3
+  win rate      45.6%         49.6%         47.2%
+  CAGR          +41.7%        --            +46.4%
+  max DD        -18.8%        --            -20.96%
+  last 500      +0.092R       +0.292R       +0.413R
+  T15 zone      74% (design)  33%           100% (78% design)
+
+STATUS: T8 FROZEN pending user freeze confirmation. Next: T9B paper
+engine + overlap/correlation check vs System 7 for portfolio integration.
+==============================================================================

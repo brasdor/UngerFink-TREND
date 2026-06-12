@@ -1,0 +1,82 @@
+==============================================================================
+T1 RESULTS: RSI Overbought Short (L/S PROXY) + Funding Gate (4H/8H/1D)
+Funding gate >= 0.01%/8h + EMA200 bear filter (mandatory on all combos)
+Cost floor (4.2): 0.25R   Min trades per combo: 30
+PROXY for Test 5 (L/S Ratio) -- real L/S history unavailable. Prior no-gate RSI OB short: +0.055R FAIL
+==============================================================================
+
+--- Timeframe 1D ---
+  combos: 32  with >= 30 trades: 32
+  BEST: ob_thresh=65 hold_bars=15 atr_mult=2.0
+    n=697  avg_r=-0.0377R  total=-26.3R  wr=40.6%  pf=0.93
+    stability zone (+/-1 on ob_thresh): 0% of 2 profitable  [FAIL]
+    4.2 cost floor: avg_r -0.0377R vs 0.25R  [FAIL]
+    2022: n=100 total=+66.94R  [PASS]
+    2025 concentration: n/a of total R  [OK]
+    year-by-year:
+      2020: n=   1  total=   -1.00R  avg=-1.0000R
+      2021: n=  11  total=   -8.70R  avg=-0.7911R
+      2022: n= 100  total=  +66.94R  avg=+0.6694R
+      2023: n= 237  total= -173.05R  avg=-0.7301R
+      2024: n=  98  total=  +16.05R  avg=+0.1638R
+      2025: n= 161  total=  +29.07R  avg=+0.1805R
+      2026: n=  89  total=  +44.42R  avg=+0.4991R
+    verdict: FAIL 4.2
+
+--- Timeframe 4H ---
+  combos: 32  with >= 30 trades: 24
+  BEST: ob_thresh=65 hold_bars=30 atr_mult=3.0
+    n=2344  avg_r=+0.0041R  total=+9.6R  wr=44.8%  pf=1.01
+    stability zone (+/-1 on ob_thresh): 50% of 2 profitable  [FAIL]
+    4.2 cost floor: avg_r +0.0041R vs 0.25R  [FAIL]
+    2022: n=399 total=+43.21R  [PASS]
+    2025 concentration: 2101.9% of total R  [FLAG >40%]
+    year-by-year:
+      2019: n=   1  total=   +1.03R  avg=+1.0258R
+      2020: n=  61  total=  -17.88R  avg=-0.2931R
+      2021: n= 159  total=  -17.68R  avg=-0.1112R
+      2022: n= 399  total=  +43.21R  avg=+0.1083R
+      2023: n= 442  total= -112.09R  avg=-0.2536R
+      2024: n= 466  total= -104.58R  avg=-0.2244R
+      2025: n= 616  total= +201.77R  avg=+0.3276R
+      2026: n= 200  total=  +15.82R  avg=+0.0791R
+    verdict: FAIL 4.2
+
+--- Timeframe 8H ---
+  combos: 32  with >= 30 trades: 24
+  BEST: ob_thresh=70 hold_bars=30 atr_mult=2.0
+    n=639  avg_r=+0.0492R  total=+31.5R  wr=36.6%  pf=1.08
+    stability zone (+/-1 on ob_thresh): 67% of 3 profitable  [FAIL]
+    4.2 cost floor: avg_r +0.0492R vs 0.25R  [FAIL]
+    2022: n=110 total=-11.29R  [FAIL]
+    2025 concentration: -48.0% of total R  [OK]
+    year-by-year:
+      2019: n=   1  total=   +1.53R  avg=+1.5272R
+      2020: n=   7  total=   -1.50R  avg=-0.2141R
+      2021: n=  38  total=   -7.53R  avg=-0.1982R
+      2022: n= 110  total=  -11.29R  avg=-0.1027R
+      2023: n= 165  total=  -38.51R  avg=-0.2334R
+      2024: n= 115  total=  +85.13R  avg=+0.7403R
+      2025: n= 115  total=  -15.09R  avg=-0.1313R
+      2026: n=  88  total=  +18.73R  avg=+0.2129R
+    verdict: FAIL 4.2
+
+--- TOP 15 COMBOS OVERALL (n >= 30) ---
+  tf  ob_thresh hold_bars atr_mult     n    avg_r    total   wr%  2022R  25conc
+  8h  70      30      2.0       639  +0.0492    +31.5  36.6   -11.3  -48.0%
+  8h  75      30      2.0       151  +0.0489     +7.4  35.8    +0.3  -186.6%
+  8h  70      20      2.0       641  +0.0251    +16.1  40.7   +19.9  -244.9%
+  8h  70      30      3.0       594  +0.0074     +4.4  44.4   -13.8  -383.3%
+  8h  75      15      2.0       151  +0.0055     +0.8  39.1    +0.9  -1851.9%
+  4h  65      30      3.0      2344  +0.0041     +9.6  44.8   +43.2  2101.9%
+  4h  65      30      2.0      2551  -0.0031     -7.9  35.9   +65.6    n/a 
+  4h  65      15      3.0      2488  -0.0101    -25.1  50.0    +5.8    n/a 
+  8h  70      15      2.0       642  -0.0109     -7.0  42.2    +8.6    n/a 
+  8h  70      20      3.0       596  -0.0149     -8.9  46.8    +4.6    n/a 
+  8h  75      30      3.0       145  -0.0160     -2.3  43.4    -2.8    n/a 
+  4h  65      20      3.0      2416  -0.0233    -56.4  47.0    -2.5    n/a 
+  8h  65      30      2.0      1607  -0.0260    -41.8  35.0   -16.7    n/a 
+  8h  70      15      3.0       597  -0.0263    -15.7  49.2    +1.9    n/a 
+  4h  65      15      2.0      2659  -0.0286    -76.1  43.7    -1.5    n/a 
+
+NOTE: This is a PROXY for L/S Ratio Extreme Short. If 4.2 + 2022 pass here, flag for re-run with real Coinglass L/S data (~$50/month) before any T2. Proxy validation de-risks the data purchase.

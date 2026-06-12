@@ -1,0 +1,37 @@
+==========================================================================
+OVERLAP: System 7 (VolContraction 4H) vs System 8 (MACross 4H)
+==========================================================================
+System 7 trades: 3450 (101 symbols)
+System 8 trades: 3572 (106 symbols)
+
+--- Trade overlap (same symbol, within position window +/- 2 days) ---
+  S8 trades overlapping an S7 position: 1263/3572 = 35.4%
+  S7 trades overlapping an S8 position: 1614/3450 = 46.8%
+  S8 unique trades: n=2309  avg_r=+0.1681R (overlapping subset: +0.5822R)
+
+--- Weekly P&L correlation: +0.572 ---
+
+--- Concurrent open positions (4H grid, 14399 points) ---
+  S7 alone:    avg 7.2   peak 64
+  S8 alone:    avg 6.2   peak 56
+  COMBINED:    avg 13.4   avg-when-active 16.4   PEAK 97
+  Both systems open simultaneously: 54.6% of all bars
+  Same-symbol simultaneous holding time: 4782 symbol-days total
+
+--- Heat implications (paper: $25-150 risk per position) ---
+  Peak combined positions: 97
+  Worst-case combined heat at $25/pos (start): $2,425
+  Worst-case combined heat at $150/pos (ceiling): $14,550
+  Proposed shared cap: $1,000 (5% of $20k Futures pool)
+  -> cap binds at 40 positions ($25 risk) / 6 positions ($150 risk)
+
+--- RECOMMENDATION ---
+  Trade overlap 47% and weekly P&L correlation +0.57:
+  The systems are correlated short-side harvesters of the same funding-
+  gated regime. They can run as separate engines (different entry logic,
+  validated independently) BUT they MUST share a heat limit -- peak
+  combined exposure of 97 positions would otherwise breach any
+  sane Futures pool risk budget in a clustered selloff.
+  IMPLEMENTED: Rule 6 in signal_arbitrator.py -- S7+S8 combined open
+  risk <= $1,000 (5% of $20k pool). Cross-system dedup (same symbol)
+  already enforced via t9b_shared + arbitrator Rules 1/2.

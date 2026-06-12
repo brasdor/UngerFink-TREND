@@ -1,0 +1,118 @@
+==============================================================================
+T1 RESULTS: MA Crossover Short + Funding Gate (2H/4H/6H/8H/1D)
+Funding gate >= 0.01%/8h + EMA200 bear filter (mandatory on all combos)
+Cost floor (4.2): 0.25R   Min trades per combo: 30
+No-gate baseline: +0.123R | System 7 reference +0.304R
+==============================================================================
+
+--- Timeframe 1D ---
+  combos: 54  with >= 30 trades: 54
+  BEST: fast_ema=30 slow_ema=100 hold_bars=30 atr_mult=2.0
+    n=230  avg_r=+0.2902R  total=+66.7R  wr=59.6%  pf=1.82
+    stability zone (+/-1 on fast_ema,slow_ema): 100% of 4 profitable  [PASS]
+    4.2 cost floor: avg_r +0.2902R vs 0.25R  [PASS]
+    2022: n=9 total=+8.64R  [PASS]
+    2025 concentration: 80.5% of total R  [FLAG >40%]
+    year-by-year:
+      2021: n=  29  total=   -6.36R  avg=-0.2193R
+      2022: n=   9  total=   +8.64R  avg=+0.9596R
+      2023: n=  42  total=   +9.15R  avg=+0.2179R
+      2024: n=  67  total=   +0.20R  avg=+0.0029R
+      2025: n=  79  total=  +53.75R  avg=+0.6804R
+      2026: n=   4  total=   +1.37R  avg=+0.3426R
+    *** BREAKTHROUGH CANDIDATE: avg_r >= 0.25R AND 2022 positive ***
+    verdict: BREAKTHROUGH
+
+--- Timeframe 2H ---
+  combos: 54  with >= 30 trades: 54
+  BEST: fast_ema=10 slow_ema=50 hold_bars=30 atr_mult=2.0
+    n=8252  avg_r=+0.1725R  total=+1423.5R  wr=44.1%  pf=1.35
+    stability zone (+/-1 on fast_ema,slow_ema): 100% of 3 profitable  [PASS]
+    4.2 cost floor: avg_r +0.1725R vs 0.25R  [FAIL]
+    2022: n=1156 total=+271.84R  [PASS]
+    2025 concentration: 33.1% of total R  [OK]
+    year-by-year:
+      2019: n=   7  total=   -0.94R  avg=-0.1343R
+      2020: n= 320  total=   +4.86R  avg=+0.0152R
+      2021: n= 878  total=  +23.18R  avg=+0.0264R
+      2022: n=1156  total= +271.84R  avg=+0.2352R
+      2023: n=1600  total= +239.81R  avg=+0.1499R
+      2024: n=1827  total= +413.84R  avg=+0.2265R
+      2025: n=1906  total= +471.09R  avg=+0.2472R
+      2026: n= 558  total=   -0.22R  avg=-0.0004R
+    verdict: FAIL 4.2
+
+--- Timeframe 4H ---
+  combos: 54  with >= 30 trades: 54
+  BEST: fast_ema=20 slow_ema=50 hold_bars=30 atr_mult=2.0
+    n=2910  avg_r=+0.2554R  total=+743.1R  wr=49.6%  pf=1.58
+    stability zone (+/-1 on fast_ema,slow_ema): 100% of 4 profitable  [PASS]
+    4.2 cost floor: avg_r +0.2554R vs 0.25R  [PASS]
+    2022: n=347 total=+201.61R  [PASS]
+    2025 concentration: 31.9% of total R  [OK]
+    year-by-year:
+      2019: n=   3  total=   -1.42R  avg=-0.4744R
+      2020: n= 123  total=  +10.80R  avg=+0.0878R
+      2021: n= 303  total=   -6.68R  avg=-0.0221R
+      2022: n= 347  total= +201.61R  avg=+0.5810R
+      2023: n= 569  total= +136.76R  avg=+0.2403R
+      2024: n= 739  total= +192.26R  avg=+0.2602R
+      2025: n= 627  total= +237.33R  avg=+0.3785R
+      2026: n= 199  total=  -27.53R  avg=-0.1383R
+    *** BREAKTHROUGH CANDIDATE: avg_r >= 0.25R AND 2022 positive ***
+    verdict: BREAKTHROUGH
+
+--- Timeframe 6H ---
+  combos: 54  with >= 30 trades: 54
+  BEST: fast_ema=10 slow_ema=50 hold_bars=30 atr_mult=2.0
+    n=2444  avg_r=+0.2307R  total=+563.8R  wr=49.4%  pf=1.51
+    stability zone (+/-1 on fast_ema,slow_ema): 100% of 3 profitable  [PASS]
+    4.2 cost floor: avg_r +0.2307R vs 0.25R  [FAIL]
+    2022: n=363 total=+190.02R  [PASS]
+    2025 concentration: 51.5% of total R  [FLAG >40%]
+    year-by-year:
+      2019: n=   1  total=   +0.95R  avg=+0.9480R
+      2020: n=  81  total=  -11.37R  avg=-0.1403R
+      2021: n= 204  total=   +1.33R  avg=+0.0065R
+      2022: n= 363  total= +190.02R  avg=+0.5235R
+      2023: n= 453  total=  +64.93R  avg=+0.1433R
+      2024: n= 601  total=  +49.33R  avg=+0.0821R
+      2025: n= 575  total= +290.15R  avg=+0.5046R
+      2026: n= 166  total=  -21.56R  avg=-0.1299R
+    verdict: FAIL 4.2
+
+--- Timeframe 8H ---
+  combos: 54  with >= 30 trades: 54
+  BEST: fast_ema=10 slow_ema=50 hold_bars=30 atr_mult=2.0
+    n=1730  avg_r=+0.2454R  total=+424.6R  wr=49.9%  pf=1.56
+    stability zone (+/-1 on fast_ema,slow_ema): 100% of 3 profitable  [PASS]
+    4.2 cost floor: avg_r +0.2454R vs 0.25R  [FAIL]
+    2022: n=266 total=+118.74R  [PASS]
+    2025 concentration: 42.9% of total R  [FLAG >40%]
+    year-by-year:
+      2020: n=  50  total=  -26.85R  avg=-0.5370R
+      2021: n= 137  total=   +0.97R  avg=+0.0071R
+      2022: n= 266  total= +118.74R  avg=+0.4464R
+      2023: n= 313  total=  +66.56R  avg=+0.2127R
+      2024: n= 406  total=  +93.44R  avg=+0.2301R
+      2025: n= 436  total= +181.99R  avg=+0.4174R
+      2026: n= 122  total=  -10.24R  avg=-0.0840R
+    verdict: FAIL 4.2
+
+--- TOP 15 COMBOS OVERALL (n >= 30) ---
+  tf  fast_ema slow_ema hold_bars atr_mult     n    avg_r    total   wr%  2022R  25conc
+  1d  30      100     30      2.0       230  +0.2902    +66.7  59.6    +8.6   80.5%
+  4h  20      50      30      2.0      2910  +0.2554   +743.1  49.6  +201.6   31.9%
+  8h  10      50      30      2.0      1730  +0.2454   +424.6  49.9  +118.7   42.9%
+  4h  10      50      30      2.0      3935  +0.2395   +942.2  48.4  +232.6   25.7%
+  1d  30      50      30      2.0       313  +0.2351    +73.6  56.5   +33.0   66.1%
+  6h  10      50      30      2.0      2444  +0.2307   +563.8  49.4  +190.0   51.5%
+  1d  30      100     30      3.0       228  +0.2261    +51.5  66.7    +5.1   82.7%
+  1d  30      200     30      2.0       177  +0.2207    +39.1  57.1    +2.4  103.6%
+  1d  20      50      30      2.0       357  +0.2175    +77.6  55.7   +43.2   54.6%
+  1d  30      100     20      2.0       231  +0.2170    +50.1  57.1    +5.9   86.3%
+  6h  10      50      20      2.0      2473  +0.2009   +496.8  53.1  +196.0   38.2%
+  4h  10      100     30      2.0      3134  +0.1986   +622.5  48.2  +230.3   42.1%
+  1d  20      200     30      2.0       207  +0.1980    +41.0  55.1    +6.4  114.0%
+  4h  20      50      20      2.0      2922  +0.1971   +576.1  51.5  +144.3   36.5%
+  8h  30      50      30      2.0      1089  +0.1967   +214.2  49.6   +76.9   14.1%

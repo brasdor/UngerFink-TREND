@@ -1,0 +1,81 @@
+==============================================================================
+T1 RESULTS: Volume Spike Short (OI PROXY) + Funding Gate (4H/8H/1D)
+Funding gate >= 0.01%/8h + EMA200 bear filter (mandatory on all combos)
+Cost floor (4.2): 0.25R   Min trades per combo: 30
+PROXY for Test 4 (OI Spike) -- real OI history unavailable. vol > 3x avg(20) as OI proxy
+==============================================================================
+
+--- Timeframe 1D ---
+  combos: 24  with >= 30 trades: 24
+  BEST: lookback_n=5 hold_bars=10 atr_mult=3.0
+    n=172  avg_r=-0.0563R  total=-9.7R  wr=39.5%  pf=0.68
+    stability zone (+/-1 on lookback_n): 0% of 2 profitable  [FAIL]
+    4.2 cost floor: avg_r -0.0563R vs 0.25R  [FAIL]
+    2022: n=21 total=+1.06R  [PASS]
+    2025 concentration: n/a of total R  [OK]
+    year-by-year:
+      2021: n=   7  total=   +1.46R  avg=+0.2088R
+      2022: n=  21  total=   +1.06R  avg=+0.0506R
+      2023: n=  43  total=   +4.09R  avg=+0.0952R
+      2024: n=  50  total=  -12.00R  avg=-0.2400R
+      2025: n=  38  total=   -3.18R  avg=-0.0836R
+      2026: n=  13  total=   -1.12R  avg=-0.0865R
+    verdict: FAIL 4.2
+
+--- Timeframe 4H ---
+  combos: 24  with >= 30 trades: 24
+  BEST: lookback_n=15 hold_bars=30 atr_mult=2.0
+    n=2047  avg_r=+0.2828R  total=+578.8R  wr=51.6%  pf=1.68
+    stability zone (+/-1 on lookback_n): 100% of 2 profitable  [PASS]
+    4.2 cost floor: avg_r +0.2828R vs 0.25R  [PASS]
+    2022: n=173 total=+73.91R  [PASS]
+    2025 concentration: 18.1% of total R  [OK]
+    year-by-year:
+      2019: n=   2  total=   +3.11R  avg=+1.5560R
+      2020: n=  68  total=   +8.37R  avg=+0.1232R
+      2021: n= 190  total=  -60.25R  avg=-0.3171R
+      2022: n= 173  total=  +73.91R  avg=+0.4272R
+      2023: n= 402  total= +197.94R  avg=+0.4924R
+      2024: n= 628  total= +184.05R  avg=+0.2931R
+      2025: n= 461  total= +104.66R  avg=+0.2270R
+      2026: n= 123  total=  +67.03R  avg=+0.5450R
+    *** BREAKTHROUGH CANDIDATE: avg_r >= 0.25R AND 2022 positive ***
+    verdict: BREAKTHROUGH
+
+--- Timeframe 8H ---
+  combos: 24  with >= 30 trades: 24
+  BEST: lookback_n=5 hold_bars=20 atr_mult=2.0
+    n=850  avg_r=+0.1391R  total=+118.2R  wr=54.8%  pf=1.40
+    stability zone (+/-1 on lookback_n): 100% of 2 profitable  [PASS]
+    4.2 cost floor: avg_r +0.1391R vs 0.25R  [FAIL]
+    2022: n=60 total=+13.25R  [PASS]
+    2025 concentration: -7.3% of total R  [OK]
+    year-by-year:
+      2020: n=  18  total=   -7.09R  avg=-0.3937R
+      2021: n=  82  total=  -10.71R  avg=-0.1306R
+      2022: n=  60  total=  +13.25R  avg=+0.2209R
+      2023: n= 130  total=  +74.11R  avg=+0.5701R
+      2024: n= 287  total=  +32.60R  avg=+0.1136R
+      2025: n= 213  total=   -8.66R  avg=-0.0407R
+      2026: n=  60  total=  +24.69R  avg=+0.4116R
+    verdict: FAIL 4.2
+
+--- TOP 15 COMBOS OVERALL (n >= 30) ---
+  tf  lookback_n hold_bars atr_mult     n    avg_r    total   wr%  2022R  25conc
+  4h  15      30      2.0      2047  +0.2828   +578.8  51.6   +73.9   18.1%
+  4h  5       30      2.0      2275  +0.2756   +627.0  51.2   +95.0   20.8%
+  4h  10      30      2.0      2131  +0.2659   +566.7  51.1   +70.7   19.3%
+  4h  15      30      3.0      2008  +0.2143   +430.4  57.4   +47.1   21.1%
+  4h  5       30      3.0      2235  +0.2015   +450.4  56.9   +59.1   23.1%
+  4h  10      30      3.0      2093  +0.1976   +413.7  56.7   +43.7   22.5%
+  4h  15      10      2.0      2199  +0.1765   +388.2  51.9   +40.6   23.3%
+  4h  15      15      2.0      2152  +0.1667   +358.8  51.1   +57.2   11.7%
+  4h  10      10      2.0      2291  +0.1666   +381.7  51.6   +40.6   24.7%
+  4h  15      20      2.0      2127  +0.1657   +352.4  51.4   +62.1    9.5%
+  4h  5       10      2.0      2448  +0.1584   +387.7  51.3   +44.2   26.2%
+  4h  5       20      2.0      2364  +0.1517   +358.6  50.6   +69.9   12.0%
+  4h  10      15      2.0      2241  +0.1500   +336.2  50.2   +55.7   11.7%
+  4h  5       15      2.0      2398  +0.1486   +356.4  50.3   +63.9   13.5%
+  4h  10      20      2.0      2215  +0.1478   +327.3  50.4   +59.8    8.6%
+
+NOTE: This is a PROXY for OI Spike Short. If 4.2 + 2022 pass here, flag for re-run with real Coinglass OI data (~$50/month subscription) before any T2. Proxy validation de-risks the data purchase.
