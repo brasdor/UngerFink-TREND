@@ -53,7 +53,12 @@ if errorlevel 1 (
 ) else (
     git pull --rebase origin master
     git push origin HEAD:master
-    if errorlevel 1 echo [WARN] Git push failed
+    if errorlevel 1 (
+        echo [ERROR] Git push failed -- results saved locally only
+        echo [ERROR] Check remote: git remote -v
+    ) else (
+        echo [OK] Results pushed to GitHub
+    )
 )
 
 echo.
