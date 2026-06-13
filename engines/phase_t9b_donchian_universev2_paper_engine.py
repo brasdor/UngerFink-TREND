@@ -59,6 +59,8 @@ import time
 from dataclasses import asdict, dataclass
 from datetime import date, timedelta
 from pathlib import Path
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from typing import Dict, List, Optional
 
 import numpy as np

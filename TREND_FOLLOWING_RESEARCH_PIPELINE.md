@@ -1668,3 +1668,28 @@ Mean Reversion Short              (requires new T1→T8 with bear data)
 *MC p05 +200.5R at bs=50, 100% prob positive — strongest validation in pipeline*
 *Next: 17.5 risk sizing theoretical + Mean Reversion T1 + T9B paper trading*
 *Short-side deployment requires extended 2017–2020 historical data — collect now*
+
+---
+
+## SYSTEM 7 + 8 T9B CAVEAT NOTE (added 2026-06-13)
+
+```
+System 7 (VolContractionShort) and System 8 (MACrossShort) both entered T9B
+paper trading in June 2026. A key limitation to note for the September review:
+
+CAVEAT_6 (S7 and S8):
+  Cross-system dedup (signal_arbitrator.py duplicate_cross_system rule) is
+  blocking S7 and S8 entries in early T9B because the Momentum Factor engine
+  holds a 22-symbol footprint (12 longs + 10 shorts) on Binance Futures.
+
+  When S7 or S8 generates a short signal on a symbol Momentum already holds
+  (as a short or long), the arbitrator blocks the duplicate. In the first weeks
+  of T9B this suppressed all S7 signals and is expected to suppress S8 signals.
+
+  September 2026 review must account for this:
+    - S7 sample size will be artificially small (not representative)
+    - S8 sample size similarly reduced
+    - Do NOT compare S7/S8 T9B trade counts directly to backtest signal frequency
+    - Consider: separate Futures heat pool for S7+S8 vs Momentum in live deployment
+      so short specialists can trade independently of Momentum's basket
+```

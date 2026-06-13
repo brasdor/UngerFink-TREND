@@ -25,12 +25,10 @@ from __future__ import annotations
 import json
 from datetime import date, timedelta
 from pathlib import Path
-import sys as _sys
-_sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import pandas as pd
 
-ROOT        = Path(__file__).resolve().parent.parent  # engines/ -> project root
+ROOT        = Path(__file__).resolve().parent
 INITIAL_CAP = 10_000.0
 
 # Spot pool: S1+S2+S3  ($30k)  Futures pool: S6+S7+S8  ($30k)

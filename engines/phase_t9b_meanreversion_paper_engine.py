@@ -52,6 +52,8 @@ import time
 from dataclasses import asdict, dataclass
 from datetime import date, timedelta
 from pathlib import Path
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from typing import Dict, List, Optional
 
 import numpy as np
@@ -202,8 +204,50 @@ def positions_from_state(state: dict) -> Dict[str, MRPosition]:
 
 
 def _reconcile_state(state: dict, run_date: date) -> None:
-    """Fix 3: Verify open positions consistency on engine startup."""
+    """Fix 3: Verify open positions consistency on engine startup.
+
+    Also removes positions whose entry_date predates the engine start date
+    (FREEZE_DATE). These are invalid seeds -- typically backfill artefacts
+    written before the engine was live. They are closed at entry_price with
+    zero P&L and logged as 'position_predates_engine_start'. They are NOT
+    counted in closed_trade_count or performance metrics.
+    """
     positions = state.get("open_positions", [])
+
+    # ── Invalid-seed purge ────────────────────────────────────────────────
+    valid   = []
+    purged  = []
+    for pos in positions:
+        try:
+            edate = date.fromisoformat(str(pos.get("entry_date", "")))
+        except (ValueError, TypeError):
+            valid.append(pos)
+            continue
+        if edate < FREEZE_DATE:
+            purged.append(pos)
+        else:
+            valid.append(pos)
+
+    if purged:
+        rows = []
+        for pos in purged:
+            sym = pos.get("symbol", "?")
+            ed  = pos.get("entry_date", "?")
+            ep  = pos.get("entry_price", 0)
+            print(f"[INVALID SEED] {sym}  entry_date={ed} < FREEZE_DATE={FREEZE_DATE}"
+                  f"  -> closed at entry_price={ep} (0 P&L, not counted in metrics)",
+                  flush=True)
+            rows.append({
+                "run_date":    str(run_date),
+                "event":       "INVALID_SEED_CLOSED",
+                "symbol":      sym,
+                "detail":      (f"entry_date={ed} predates engine start {FREEZE_DATE}"
+                                f"; closed at entry_price={ep}; not in metrics"),
+            })
+        state["open_positions"] = valid
+        append_csv(DAILY_LOG_CSV, rows)
+        positions = valid
+
     issues: list[str] = []
     for pos in positions:
         pid  = pos.get("position_id", "?")
