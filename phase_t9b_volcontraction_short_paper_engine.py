@@ -61,6 +61,8 @@ from dataclasses import asdict, dataclass
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent / "engines"))
 
 import numpy as np
 import pandas as pd
