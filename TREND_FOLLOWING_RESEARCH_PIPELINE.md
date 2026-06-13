@@ -658,7 +658,7 @@ BENCHMARK:          Donchian Long: avg_r=+0.179R, PF=1.27, CAGR=+19%, DD=-1.78%
 ### Claude Code instructions
 
 ```
-python pipeline_agent.py --method LinearRegressionBreakout --start-phase T1
+python engines/pipeline_agent.py --method LinearRegressionBreakout --start-phase T1
 ```
 
 Or paste this document to Claude Code and say:
@@ -776,7 +776,7 @@ If single-bar trades fail §4.2, try hold_bars=2 or hold_bars=4 before halting.
 ### Claude Code instructions
 
 ```
-python pipeline_agent.py --method IntradayBias --start-phase T1
+python engines/pipeline_agent.py --method IntradayBias --start-phase T1
 ```
 
 Or paste this document to Claude Code and say:
@@ -854,7 +854,7 @@ BENCHMARK:          Donchian Long frozen config:
 ### Claude Code instructions — how to start
 
 ```
-python pipeline_agent.py --method KeltnerLong --start-phase T1
+python engines/pipeline_agent.py --method KeltnerLong --start-phase T1
 ```
 
 Or paste this document to Claude Code and say:
@@ -1415,27 +1415,27 @@ GATE CHECK:
 ### 17. OPTIMIZATION SUMMARY — SEQUENCE FOR CLAUDE CODE
 
 ```
-Step 1: python pipeline_agent.py --method DonchianLong_UniverseV2 (Section 17.1)
+Step 1: python engines/pipeline_agent.py --method DonchianLong_UniverseV2 (Section 17.1)
         → Review expanded+filtered universe before proceeding
 
-Step 2: python pipeline_agent.py --method DonchianLong_RegimeV2_BTC_Dominance
-        python pipeline_agent.py --method DonchianLong_RegimeV2_Volume
-        python pipeline_agent.py --method DonchianLong_RegimeV2_ATR_Percentile
-        python pipeline_agent.py --method DonchianLong_RegimeV2_MultiTF
+Step 2: python engines/pipeline_agent.py --method DonchianLong_RegimeV2_BTC_Dominance
+        python engines/pipeline_agent.py --method DonchianLong_RegimeV2_Volume
+        python engines/pipeline_agent.py --method DonchianLong_RegimeV2_ATR_Percentile
+        python engines/pipeline_agent.py --method DonchianLong_RegimeV2_MultiTF
         → Review each independently, select best for Step 3
 
-Step 3: python pipeline_agent.py --method DonchianLong_EntryV2_Limit
-        python pipeline_agent.py --method DonchianLong_EntryV2_Confirmed
-        python pipeline_agent.py --method DonchianLong_EntryV2_Partial
+Step 3: python engines/pipeline_agent.py --method DonchianLong_EntryV2_Limit
+        python engines/pipeline_agent.py --method DonchianLong_EntryV2_Confirmed
+        python engines/pipeline_agent.py --method DonchianLong_EntryV2_Partial
         → Review each, select best for Step 4
 
-Step 4: python pipeline_agent.py --method DonchianLong_ExitV2_ChandelierACT
-        python pipeline_agent.py --method DonchianLong_ExitV2_ChandelierATR
-        python pipeline_agent.py --method DonchianLong_ExitV2_PartialProfit
-        python pipeline_agent.py --method DonchianLong_ExitV2_TimeStop
+Step 4: python engines/pipeline_agent.py --method DonchianLong_ExitV2_ChandelierACT
+        python engines/pipeline_agent.py --method DonchianLong_ExitV2_ChandelierATR
+        python engines/pipeline_agent.py --method DonchianLong_ExitV2_PartialProfit
+        python engines/pipeline_agent.py --method DonchianLong_ExitV2_TimeStop
         → Review each, select best for Step 5
 
-Step 5: python pipeline_agent.py --method DonchianLong_RiskV2_0.50pct
+Step 5: python engines/pipeline_agent.py --method DonchianLong_RiskV2_0.50pct
         (only after T9B running ≥3 months)
 ```
 
@@ -1501,19 +1501,19 @@ For each phase it:
 export ANTHROPIC_API_KEY=your_key_here
 
 # Run Dual MA from T1 (long-side, Spot)
-python pipeline_agent.py --method DualMA --start-phase T1
+python engines/pipeline_agent.py --method DualMA --start-phase T1
 
 # Run Short-side Donchian from T1 (Futures, higher cost floor)
-python pipeline_agent.py --method DonchianShort --start-phase T1 --futures
+python engines/pipeline_agent.py --method DonchianShort --start-phase T1 --futures
 
 # Resume a pipeline from a specific phase
-python pipeline_agent.py --method DualMA --start-phase T4
+python engines/pipeline_agent.py --method DualMA --start-phase T4
 
 # Skip human review checkpoints (fully automated — use with caution)
-python pipeline_agent.py --method DualMA --start-phase T1 --auto
+python engines/pipeline_agent.py --method DualMA --start-phase T1 --auto
 
 # Use a custom config JSON file
-python pipeline_agent.py --method DualMA --config my_config.json
+python engines/pipeline_agent.py --method DualMA --config my_config.json
 ```
 
 ### Human review checkpoints

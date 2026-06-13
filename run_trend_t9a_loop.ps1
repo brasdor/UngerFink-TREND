@@ -9,7 +9,7 @@ while ($true) {
     Write-Host "$(Get-Date)"
     Write-Host "==================================================="
 
-    python phase_t9a_binance_paper_sim_engine_V2.py
+    python engines\phase_t9a_binance_paper_sim_engine_V2.py
 
     Write-Host ""
     Write-Host "Sleeping 15 minutes..."

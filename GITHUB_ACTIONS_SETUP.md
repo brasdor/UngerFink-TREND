@@ -12,12 +12,20 @@ readable on any browser, including mobile.
 
 Every day at 08:00 UTC (after yesterday's 1D candle closed):
 1. Downloads latest Binance OHLCV data (public API, no key needed)
-2. Checks all 24 UniverseV2 symbols for entry/exit signals
+2. Checks all UniverseV2 symbols for entry/exit signals (three strategies)
 3. Updates paper positions and equity
 4. Commits results back to the repository
 5. Opens a GitHub Issue if any new signals fired
+6. Sends a **Telegram** summary (if `TELEGRAM_*` secrets are set)
+7. **Optionally auto-executes** accepted signals on Binance **testnet** (if
+   `AUTO_EXECUTE_ENABLED=true`) — see `LIVE_EXECUTION_AND_TELEGRAM_PLAN.md`
 
-You can check the status at any time by visiting your repository on GitHub.
+You can check the status at any time by visiting your repository on GitHub, from
+the Telegram summary, or with the `/status` bot (`run_status_bot.bat`).
+
+> Note: scripts were reorganized into folders — the engines now live in
+> `engines/` (e.g. `engines/phase_t9b_donchian_universev2_paper_engine.py`).
+> The workflow already uses the new paths.
 
 ---
 
@@ -75,7 +83,7 @@ git push -u origin master
 
 1. Visit `https://github.com/YOUR-USERNAME/UngerFink-TREND`
 2. Confirm you can see:
-   - `phase_t9b_donchian_universev2_paper_engine.py`
+   - `engines/phase_t9b_donchian_universev2_paper_engine.py`
    - `requirements.txt`
    - `.github/workflows/t9b_daily.yml`
    - `data/t9b_paper/state.json`
@@ -238,19 +246,33 @@ See Section 17.5 of `TREND_FOLLOWING_RESEARCH_PIPELINE_4.md` for full rules.
 
 Files **committed** to GitHub (tracked):
 ```
-phase_t9b_donchian_universev2_paper_engine.py
-t9b_daily_summary.py
+engines/phase_t9b_donchian_universev2_paper_engine.py
+engines/t9b_daily_summary.py
 requirements.txt
 .github/workflows/t9b_daily.yml
 .github/scripts/create_signal_issues.py
+.github/scripts/send_telegram.py       <- daily Telegram summary
+.github/scripts/auto_execute.py        <- optional testnet auto-execution
 data/t9b_paper/state.json          <- updated daily by Actions
 data/t9b_paper/open_positions.csv  <- updated daily
 data/t9b_paper/signals_today.csv   <- updated daily
 data/t9b_paper/equity_curve.csv    <- grows as trades close
 data/t9b_paper/daily_log.csv       <- grows daily
+data/auto_orders/placed.csv        <- auto-execution ledger (if enabled)
 data/universe/
 data/research_*/                   <- research outputs
 ```
+
+### Optional secrets / variables (Telegram + auto-execution)
+
+Set under **Settings → Secrets and variables → Actions**:
+- Secrets: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` (alerts);
+  `EXCHANGE_API_KEY`, `EXCHANGE_SECRET` (testnet keys, for auto-execution)
+- Variables: `AUTO_EXECUTE_ENABLED` (`true` to enable), `EXCHANGE_TESTNET`
+  (`true` = fake money), `EQUITY_USDT`, `RISK_PCT`, `MAX_ORDER_USDT`
+
+All are optional — without them the workflow just paper-trades and skips
+Telegram/auto-execution.
 
 Files **not committed** (in .gitignore — regenerated from Binance):
 ```

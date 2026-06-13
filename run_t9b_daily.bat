@@ -12,22 +12,22 @@ echo ============================================================
 
 echo.
 echo --- Donchian ---
-python phase_t9b_donchian_universev2_paper_engine.py --notify
+python engines\phase_t9b_donchian_universev2_paper_engine.py --notify
 if errorlevel 1 echo [WARN] Donchian engine exited with error
 
 echo.
 echo --- RSI Mean Reversion ---
-python phase_t9b_meanreversion_paper_engine.py --notify
+python engines\phase_t9b_meanreversion_paper_engine.py --notify
 if errorlevel 1 echo [WARN] MR engine exited with error
 
 echo.
 echo --- ConsecDownDays ---
-python phase_t9b_consecdowndays_paper_engine.py --notify
+python engines\phase_t9b_consecdowndays_paper_engine.py --notify
 if errorlevel 1 echo [WARN] ConsecDownDays engine exited with error
 
 echo.
 echo --- Momentum Factor ---
-python phase_t9b_momentum_factor_paper_engine.py --notify
+python engines\phase_t9b_momentum_factor_paper_engine.py --notify
 if errorlevel 1 echo [WARN] Momentum engine exited with error
 
 echo.
@@ -42,7 +42,7 @@ if errorlevel 1 echo [WARN] MACross engine exited with error
 
 echo.
 echo --- Combined Summary ---
-python t9b_combined_summary.py
+python engines\t9b_combined_summary.py
 
 echo.
 echo --- Committing to GitHub ---

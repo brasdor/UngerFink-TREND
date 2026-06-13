@@ -56,12 +56,12 @@ jobs:
         run: |
           if [ -n "${{ github.event.inputs.run_date }}" ]; then
             echo "Donchian: running for ${{ github.event.inputs.run_date }}"
-            python phase_t9b_donchian_universev2_paper_engine.py \
+            python engines/phase_t9b_donchian_universev2_paper_engine.py \
               --date "${{ github.event.inputs.run_date }}" \
               --notify
           else
             echo "Donchian: running for yesterday"
-            python phase_t9b_donchian_universev2_paper_engine.py --notify
+            python engines/phase_t9b_donchian_universev2_paper_engine.py --notify
           fi
 
       # ------------------------------------------------------------------
@@ -75,12 +75,12 @@ jobs:
         run: |
           if [ -n "${{ github.event.inputs.run_date }}" ]; then
             echo "MR: running for ${{ github.event.inputs.run_date }}"
-            python phase_t9b_meanreversion_paper_engine.py \
+            python engines/phase_t9b_meanreversion_paper_engine.py \
               --date "${{ github.event.inputs.run_date }}" \
               --notify
           else
             echo "MR: running for yesterday"
-            python phase_t9b_meanreversion_paper_engine.py --notify
+            python engines/phase_t9b_meanreversion_paper_engine.py --notify
           fi
 
       # ------------------------------------------------------------------
@@ -94,19 +94,38 @@ jobs:
         run: |
           if [ -n "${{ github.event.inputs.run_date }}" ]; then
             echo "ConsecDown: running for ${{ github.event.inputs.run_date }}"
-            python phase_t9b_consecdowndays_paper_engine.py \
+            python engines/phase_t9b_consecdowndays_paper_engine.py \
               --date "${{ github.event.inputs.run_date }}" \
               --notify
           else
             echo "ConsecDown: running for yesterday"
-            python phase_t9b_consecdowndays_paper_engine.py --notify
+            python engines/phase_t9b_consecdowndays_paper_engine.py --notify
           fi
 
       # ------------------------------------------------------------------
       # 5. Print combined summary (all three systems side-by-side)
       # ------------------------------------------------------------------
       - name: Print combined T9B summary
-        run: python t9b_combined_summary.py
+        run: python engines/t9b_combined_summary.py
+
+      # ------------------------------------------------------------------
+      # 5b. Auto-execute accepted signals (OFF unless AUTO_EXECUTE_ENABLED).
+      #     Defaults to TESTNET (fake money). continue-on-error so a placement
+      #     problem never fails the run. Idempotent via data/auto_orders ledger.
+      # ------------------------------------------------------------------
+      - name: Auto-execute accepted signals
+        continue-on-error: true
+        env:
+          AUTO_EXECUTE_ENABLED: ${{ vars.AUTO_EXECUTE_ENABLED }}
+          EXCHANGE_TESTNET: ${{ vars.EXCHANGE_TESTNET }}
+          EXCHANGE_API_KEY: ${{ secrets.EXCHANGE_API_KEY }}
+          EXCHANGE_SECRET: ${{ secrets.EXCHANGE_SECRET }}
+          EQUITY_USDT: ${{ vars.EQUITY_USDT }}
+          RISK_PCT: ${{ vars.RISK_PCT }}
+          MAX_ORDER_USDT: ${{ vars.MAX_ORDER_USDT }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python .github/scripts/auto_execute.py
 
       # ------------------------------------------------------------------
       # 6. Commit all output files back to the repository.
@@ -147,6 +166,9 @@ jobs:
           # Shared OHLCV cache (all three engines read/write here)
           git add --force data/universe/ohlcv_1d/ || true
 
+          # Auto-execution ledger (idempotency record)
+          git add --force data/auto_orders/placed.csv || true
+
           if git diff --cached --quiet; then
             echo "No output file changes to commit."
           else
@@ -164,6 +186,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python .github/scripts/create_signal_issues.py
+
+      # ------------------------------------------------------------------
+      # 7b. Push a Telegram summary of today's signals.
+      #     continue-on-error: a Telegram outage must never fail the run.
+      #     No-ops if the TELEGRAM_* secrets are not configured.
+      # ------------------------------------------------------------------
+      - name: Send Telegram summary
+        continue-on-error: true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python .github/scripts/send_telegram.py
 
       # ------------------------------------------------------------------
       # 8. Report engine exit statuses for visibility

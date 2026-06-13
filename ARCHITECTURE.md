@@ -1,6 +1,11 @@
 # UngerFink_TREND — Architecture & Project Overview
 
-> **Purpose:** Trend-following research and paper-live simulation system for Binance Spot USDT pairs. Built in the "Unger-style" discipline: no-curve-fitting, offline research first, frozen config, paper observation before any real capital.
+> **Purpose:** Trend-following (and mean-reversion) research, paper-live simulation, and semi/auto execution system for Binance Spot USDT pairs. Built in the "Unger-style" discipline: no-curve-fitting, offline research first, frozen config, paper observation before any real capital.
+
+> **⚠️ Status note (2026-06):** This document's §1–§13 describe the original **T9A 6H trend** research pipeline and remain accurate as history. The system has since grown: scripts were reorganized into folders, a **T9B daily multi-strategy paper system** runs in the cloud, a **FastAPI + Next.js web app** was added, plus **Telegram alerts** and **testnet-first live execution** (manual + automatic). All of that is documented in **§14 (Current Production Layers)** — read that for the present-day picture. Real money remains off; everything live runs on Binance **testnet**.
+
+> **Repository layout (post-reorg):** runnable scripts now live in folders, not the repo root:
+> `research/` (T1–T18 backtest pipeline) · `engines/` (live T9 paper engines, `t9b_shared`, summaries, `pipeline_agent`) · `dashboards/` (Streamlit monitors) · `tools/` (data fetch/migrate). Always run them **from the repo root**, e.g. `python engines/phase_t9b_donchian_universev2_paper_engine.py`. The `backend/` and `frontend/` folders hold the web app.
 
 ---
 
@@ -19,6 +24,7 @@
 11. [Dependencies](#11-dependencies)
 12. [Key Design Decisions & Invariants](#12-key-design-decisions--invariants)
 13. [Research Status & Warnings](#13-research-status--warnings)
+14. [Current Production Layers (2026 update)](#14-current-production-layers-2026-update)
 
 ---
 
@@ -483,7 +489,7 @@ Recovery-specific dashboards for reviewing state reconciliation.
 
 ```powershell
 while ($true) {
-    python phase_t9a_binance_paper_sim_engine_V2.py
+    python engines/phase_t9a_binance_paper_sim_engine_V2.py
     Start-Sleep -Seconds 900   # 15 minutes
 }
 ```
@@ -540,7 +546,9 @@ pip install ccxt pandas numpy streamlit plotly
 | `streamlit` | Dashboard UI |
 | `plotly` | Interactive candlestick charts in dashboard |
 
-**Python version:** 3.8+ (uses `from __future__ import annotations`, dataclasses, `pathlib`)
+The research/engine layer installs from the repo-root `requirements.txt`. The web app has its own `backend/requirements.txt` adding `fastapi`, `uvicorn`, `sqlalchemy[asyncio]`, `aiosqlite`/`asyncpg`, `alembic`, `redis`, `httpx`, and uses `ccxt` for **order placement** (not just data) — see §14. The frontend is `Next.js` + `React` + `Tailwind` (`frontend/package.json`).
+
+**Python version:** 3.8+ for research/engines; the web app targets 3.11.
 
 ---
 
@@ -560,7 +568,8 @@ pip install ccxt pandas numpy streamlit plotly
 | Short research-only / long preferred live | Binance Spot does not support direct shorting |
 | State persisted to JSON | Survives engine restarts and system crashes |
 | T9D recovery engine exists | Explicit design for downtime resilience |
-| No API keys anywhere | All data from public Binance OHLCV endpoint |
+| Research/paper layer uses no API keys | All market data from the public Binance OHLCV endpoint |
+| Execution layer keys are testnet + gated | Order placement (§14) needs keys, but defaults to Binance **testnet** with a `LIVE_TRADING_ENABLED` master switch off; real keys are never committed (`backend/.env`, GitHub secrets) |
 
 ---
 
@@ -582,5 +591,71 @@ As of the T8 freeze (current paper-live phase):
 - Short-side edge is theoretically present but not executable on Binance Spot.
 
 **Rule:**
-> No new filters. No optimisation. No live capital yet.
-> Paper-live observation is the only authorised activity at this stage.
+> No new filters. No optimisation. **No real capital yet.**
+> Paper observation (and **testnet** execution dry-running, §14) is the only authorised activity at this stage. The documented real-money review date is **2026-08-28**.
+
+---
+
+## 14. Current Production Layers (2026 update)
+
+§1–§13 describe the original T9A 6H trend pipeline. This section documents what the repository actually runs today. Everything live is on Binance **testnet** (fake money); no real capital is deployed.
+
+### 14.1 Repository layout (after the script reorg)
+
+The ~106 formerly-root scripts now live in folders (run all **from the repo root**):
+
+| Folder | Contents |
+|--------|----------|
+| `research/` | T1–T18 backtest pipeline + studies (`phase_t*`) |
+| `engines/` | Live T9 paper engines (`phase_t9a/b/d_*`), `t9b_shared.py`, summaries (`t9b_combined_summary.py`), `pipeline_agent.py` |
+| `dashboards/` | Streamlit monitors (`dashboard_trend_*`) |
+| `tools/` | `fetch_2h_data.py`, `phase_download_extended_history.py`, `migrate_data.py`, `telegram_status_bot.py` |
+| `backend/` | FastAPI web app (API + DB) |
+| `frontend/` | Next.js web UI |
+
+Scripts that derive the repo root from their own location use `Path(__file__).resolve().parents[1]`; the live engines use `Path.cwd()`. CI / `.bat` / `.ps1` / `pipeline_agent` invocation paths were all updated accordingly.
+
+### 14.2 T9B — daily multi-strategy paper system (the live system)
+
+Runs **unattended in GitHub Actions** (`.github/workflows/t9b_daily.yml`, daily at 08:00 UTC), not on a local PC. Three frozen strategies, each in its own engine and data dir:
+
+| Strategy | Engine | Data dir |
+|----------|--------|----------|
+| Donchian breakout (UniverseV2, ExitV2) | `engines/phase_t9b_donchian_universev2_paper_engine.py` | `data/t9b_paper/` |
+| MeanReversionRSI 1D | `engines/phase_t9b_meanreversion_paper_engine.py` | `data/t9b_mr_paper/` |
+| ConsecDownDaysMR 1D | `engines/phase_t9b_consecdowndays_paper_engine.py` | `data/t9b_consecdowndays_paper/` |
+
+Each run: downloads candles (public ccxt) → updates paper positions → writes `signals_today.csv`, `open_positions.csv`, `equity_curve.csv`, `daily_log.csv`, `state.json` → commits them back → opens a **GitHub Issue** per signal (`.github/scripts/create_signal_issues.py`) → sends a **Telegram** summary. Cross-strategy symbol dedup via `engines/t9b_shared.py`.
+
+### 14.3 Web application (`backend/` + `frontend/`)
+
+A separate layer over the file-based pipeline:
+- **Backend** — FastAPI + async SQLAlchemy. Models: `Trade`, `Position`, `Signal`, `Candle`, `Strategy`, `Alert`, `EquitySnapshot`, `JournalEntry`, `ResearchRun`, **`Order`**. Routers under `/api/*`: portfolio, trades, signals, strategies, research, alerts, **execution**, websocket. SQLite for local dev (auto-creates tables); Postgres/TimescaleDB via `docker compose`. `tools/migrate_data.py` loads CSV data into the DB.
+- **Frontend** — Next.js dashboard (Positions, Trades, Equity, Signals, Research, **Trade Desk**, …) reading the API.
+- Run locally with `docker compose up` (API :8000, web :3000).
+
+### 14.4 Telegram
+
+- **Daily signal summary** — `.github/scripts/send_telegram.py`, a step in the daily workflow (after engines), via bot `@ungertrend_bot`. Uses GitHub secrets `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`. Sends even when there are no signals ("no new signals"). Failures never break the workflow.
+- **`/status` command** — `tools/telegram_status_bot.py`, a local long-polling listener (run via `run_status_bot.bat`). Answers `/status` with open positions per strategy, last run, auto-exec ledger, and testnet balance. Read-only; only responds while running (serverless polling would exceed free Actions minutes). Backend `app/services/telegram.py` is the reusable async notifier.
+
+### 14.5 Live execution (testnet-first)
+
+Two paths, both **spot, long-only**, both defaulting to **testnet** with real money gated off:
+
+**Manual ("Trade Desk")** — `backend/app/routers/execution.py` + `backend/app/services/execution.py` (ccxt) + frontend `/execution` page. `POST /api/execution/place` runs the safety chain: live-switch gate → idempotency → risk-based sizing (lot/min-notional rounding) → per-order cap → daily-loss kill-switch → place → reconcile. Every order is an `Order` row (intended vs actual fill). A **dry-run** toggle simulates without sending.
+
+**Automatic** — `.github/scripts/auto_execute.py`, a daily-workflow step. After the engines run it mirrors the paper engine: market **BUY** for each accepted entry (event=ENTRY), market **SELL** for any position we hold that the engine has closed (detected by the symbol leaving `open_positions.csv`). Idempotent via an append-only BUY/SELL ledger `data/auto_orders/placed.csv` (net position = BUYs − SELLs). Telegram-confirms each fill.
+
+**Safety posture (all deliberate, currently set to testnet):**
+
+| Gate | Default | Where |
+|------|---------|-------|
+| `EXCHANGE_TESTNET` | `true` (fake money) | `.env` / repo var |
+| `LIVE_TRADING_ENABLED` (manual) | `false` | `.env` |
+| `AUTO_EXECUTE_ENABLED` (auto) | off unless set | repo var |
+| `MAX_ORDER_USDT` cap | 100 | config / env |
+| `daily_loss_limit_usdt` | 200 | config |
+| API keys | testnet, never committed | `backend/.env`, GitHub secrets |
+
+**Going to real money** is a deliberate two-switch change (real keys **and** `EXCHANGE_TESTNET=false`) the operator makes consciously — not before the 2026-08-28 review. See `LIVE_EXECUTION_AND_TELEGRAM_PLAN.md` for the full plan.
