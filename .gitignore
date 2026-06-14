@@ -50,5 +50,16 @@ backend/*.db
 
 # Docker
 pgdata/
-data/research_linregbreakout_t1/phase_t1_linregbreakout_all_trades.csv 
-data/research_prevsessionbreakout_t1/phase_t1_prevsessionbreakout_trades.csv 
+
+# Large research trade CSVs (individual patterns)
+data/research_linregbreakout_t1/phase_t1_linregbreakout_all_trades.csv
+data/research_prevsessionbreakout_t1/phase_t1_prevsessionbreakout_trades.csv
+
+# Futures OHLCV caches -- regeneratable from Binance, excluded to keep repo small
+data/research_*/ohlcv_cache/
+data/futures_universe/ohlcv_2h/
+data/futures_universe/ohlcv_6h/
+data/futures_universe/ohlcv_8h/
+
+# Backup files
+*.csv.bak
