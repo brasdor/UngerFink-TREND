@@ -102,7 +102,7 @@ async function buildStatus(env) {
         runDate = JSON.parse(sj).last_run_date || "?";
       } catch (e) {}
     }
-    const shown = syms.slice(0, 6).join(", ") + (syms.length > 6 ? "…" : "");
+    const shown = syms.join(", ");
     lines.push(`<b>${label}</b>: ${syms.length} open${shown ? " — " + shown : ""}`);
     lines.push(`   last run: ${runDate}`);
   }

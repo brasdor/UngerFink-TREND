@@ -133,7 +133,7 @@ def build_status() -> str:
         n, syms = _open_positions(d)
         eq = _last_equity(d)
         eq_s = f"  ·  equity ${eq:,.0f}" if eq is not None else ""
-        shown = ", ".join(syms[:6]) + ("…" if len(syms) > 6 else "")
+        shown = ", ".join(syms)
         lines.append(f"<b>{label}</b>: {n} open{(' — ' + shown) if shown else ''}{eq_s}")
         lines.append(f"   last run: {_last_run(d)}")
 
