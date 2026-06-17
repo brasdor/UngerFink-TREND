@@ -1,2 +1,1 @@
-symbol,signal_date,close,rsi,atr,stop_loss,risk_unit,signal
-TON/USDT,2026-06-13,0.00850019,17.6111,0.10627391,-0.31032156,0.31882174,BUY_MR
+symbol,signal_date,close,rsi,atr,stop_loss,signal
