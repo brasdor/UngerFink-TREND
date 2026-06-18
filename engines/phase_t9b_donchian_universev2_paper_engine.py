@@ -89,7 +89,7 @@ CHANDELIER_ACTIVATE_R  = 6.0   # R threshold before chandelier activates
 RISK_PER_TRADE_PCT     = 0.0025   # 0.25%
 MIN_ORDER_SIZE_USDT    = 15.0     # Fix 2: minimum position notional
 MAX_OPEN_POSITIONS     = 8
-INITIAL_CAPITAL        = 10_000.0
+INITIAL_CAPITAL        = 8_000.0   # Scheme C allocation: $8k of $30k Spot
 LEVERAGE               = 1.0
 KILL_SWITCH_DD_PCT     = 35.0     # halt new entries if DD exceeds this from peak
 

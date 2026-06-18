@@ -79,7 +79,7 @@ TIME_EXIT_BARS      = 20      # exit after exactly 20 daily bars
 RISK_PER_TRADE_PCT  = 0.0025  # 0.25% of current equity
 MIN_ORDER_SIZE_USDT = 15.0    # Fix 2: minimum position notional
 MAX_OPEN_POSITIONS  = 10
-INITIAL_CAPITAL     = 10_000.0
+INITIAL_CAPITAL     = 12_000.0  # Scheme C allocation: $12k of $30k Spot
 LEVERAGE            = 1.0
 KILL_SWITCH_DD_PCT  = 35.0    # halt new entries if DD from peak exceeds this
 

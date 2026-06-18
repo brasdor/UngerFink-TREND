@@ -15,7 +15,7 @@ Systems:
   S7  VolContractionShort 4H                (data/t9b_volcontraction_paper/)
   S8  MACrossShort 4H                       (data/t9b_macross_paper/)
 
-Total deployed capital: $60,000 (6 x $10,000)
+Total deployed capital: $60,000 (Scheme C regime-tilted allocation)
 
 ASCII only, flush=True on all print statements.
 """
@@ -31,7 +31,19 @@ _sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import pandas as pd
 
 ROOT        = Path(__file__).resolve().parent.parent  # engines/ -> project root
-INITIAL_CAP = 10_000.0
+
+# Scheme C regime-tilted allocation (confirmed 2026-06-17)
+TARGET_ALLOC = {
+    "S1":  8_000.0,   # Spot: Donchian Long
+    "S2": 12_000.0,   # Spot: RSI MR Long
+    "S3": 10_000.0,   # Spot: ConsecDownDays MR
+    "S6":  8_000.0,   # Futures: Momentum Factor
+    "S7": 11_000.0,   # Futures: VolContraction Short
+    "S8": 11_000.0,   # Futures: MA Cross Short
+}
+TOTAL_CAPITAL = 60_000.0
+SPOT_TARGET   = 30_000.0
+FUT_TARGET    = 30_000.0
 
 # Spot pool: S1+S2+S3  ($30k)  Futures pool: S6+S7+S8  ($30k)
 SYSTEMS = [
@@ -158,16 +170,20 @@ def system_snapshot(cfg: dict, today: date) -> dict:
     sig_df  = load_csv(cfg["data_dir"] / "signals_today.csv")
     open_df = load_csv(cfg["data_dir"] / "open_positions.csv")
 
+    sys_id     = cfg["id"]
+    target_eq  = TARGET_ALLOC.get(sys_id, 10_000.0)
     not_started = not cfg["data_dir"].exists() or not state
 
     if not_started:
         return {
             **cfg,
             "not_started":  True,
-            "equity":       INITIAL_CAP,
-            "peak":         INITIAL_CAP,
+            "equity":       target_eq,
+            "target_eq":    target_eq,
+            "peak":         target_eq,
             "ret_pct":      0.0,
             "dd_pct":       0.0,
+            "drift_pct":    0.0,
             "kill_sw":      False,
             "n_open_long":  0,
             "n_open_short": 0,
@@ -189,10 +205,10 @@ def system_snapshot(cfg: dict, today: date) -> dict:
             "total_unreal": 0.0,
         }
 
-    eq      = float(state.get("paper_equity_usdt", INITIAL_CAP))
-    peak    = float(state.get("peak_equity_usdt", INITIAL_CAP))
+    eq      = float(state.get("paper_equity_usdt", target_eq))
+    peak    = float(state.get("peak_equity_usdt", target_eq))
     dd      = float(state.get("drawdown_pct", 0.0))
-    ret_pct = (eq / INITIAL_CAP - 1.0) * 100.0
+    ret_pct = (eq / target_eq - 1.0) * 100.0
     kill_sw = state.get("kill_switch_triggered", False)
     last_run = state.get("last_run_date", "n/a")
 
@@ -232,13 +248,25 @@ def system_snapshot(cfg: dict, today: date) -> dict:
     if t == "momentum" and not open_df.empty and "unrealized_pnl" in open_df.columns:
         total_unreal = float(pd.to_numeric(open_df["unrealized_pnl"], errors="coerce").sum())
 
+    # Allocation drift: how far current equity is from target %
+    total_eq_est = sum(
+        float(load_state(c["data_dir"]).get("paper_equity_usdt",
+              TARGET_ALLOC.get(c["id"], 10_000.0)))
+        for c in SYSTEMS
+    )
+    current_pct = (eq / total_eq_est * 100) if total_eq_est > 0 else 0
+    target_pct  = (target_eq / TOTAL_CAPITAL * 100)
+    drift_pct   = current_pct - target_pct
+
     return {
         **cfg,
         "not_started":  False,
         "equity":       eq,
+        "target_eq":    target_eq,
         "peak":         peak,
         "ret_pct":      ret_pct,
         "dd_pct":       dd,
+        "drift_pct":    drift_pct,
         "kill_sw":      kill_sw,
         "n_open_long":  n_long,
         "n_open_short": n_short,
@@ -267,52 +295,50 @@ def main() -> int:
     today  = date.today()
     regime = detect_regime(today)
 
-    p("=" * 65)
+    p("=" * 75)
     p("T9B COMBINED SUMMARY -- ALL 6 SYSTEMS")
-    p(f"Date: {today}  |  Regime: {regime}  |  Capital: $60,000 (6 x $10k)")
-    p("=" * 65)
+    p(f"Date: {today}  |  Regime: {regime}  |  Scheme C: $60k regime-tilted")
+    p("=" * 75)
 
     snaps = [system_snapshot(cfg, today) for cfg in SYSTEMS]
 
-    # ── Section 1: Equity overview ──────────────────────────────────────
+    # ── Section 1: Equity overview + allocation drift ───────────────────
     p()
-    p("EQUITY OVERVIEW")
-    p(f"  {'ID':<3} {'System':<11} {'Pool':<7} {'Equity':>10}  {'Return':>8}  "
-      f"{'DD':>7}  {'L':>3}  {'S':>3}  {'Days':>5}  {'Last Run':<12}  Kill")
-    p(f"  {'-'*3} {'-'*11} {'-'*7} {'-'*10}  {'-'*8}  {'-'*7}  "
-      f"{'-'*3}  {'-'*3}  {'-'*5}  {'-'*12}  {'-'*4}")
+    p("EQUITY OVERVIEW (Scheme C allocation)")
+    p(f"  {'ID':<3} {'System':<11} {'Pool':<7} {'Target':>8} {'Equity':>10}  "
+      f"{'Return':>8}  {'DD':>7}  {'Drift':>6}  {'L':>2} {'S':>2}  {'Days':>4}")
+    p(f"  {'-'*3} {'-'*11} {'-'*7} {'-'*8} {'-'*10}  "
+      f"{'-'*8}  {'-'*7}  {'-'*6}  {'-'*2} {'-'*2}  {'-'*4}")
 
     spot_eq = fut_eq = 0.0
-    spot_n  = fut_n  = 0
 
     for s in snaps:
         if s["not_started"]:
-            p(f"  {s['id']:<3} {s['name']:<11} {s['pool']:<7}  NOT STARTED")
+            tgt = s["target_eq"]
+            p(f"  {s['id']:<3} {s['name']:<11} {s['pool']:<7} ${tgt:>6,.0f}  NOT STARTED")
             continue
-        ks  = "YES" if s["kill_sw"] else "no"
-        p(f"  {s['id']:<3} {s['name']:<11} {s['pool']:<7} ${s['equity']:>9,.2f}  "
+        tgt = s["target_eq"]
+        p(f"  {s['id']:<3} {s['name']:<11} {s['pool']:<7} ${tgt:>6,.0f} ${s['equity']:>9,.2f}  "
           f"{s['ret_pct']:>+7.2f}%  {s['dd_pct']:>+6.2f}%  "
-          f"{s['n_open_long']:>3}  {s['n_open_short']:>3}  "
-          f"{s['days_running']:>5}  {s['last_run']:<12}  {ks}")
+          f"{s['drift_pct']:>+5.1f}%  "
+          f"{s['n_open_long']:>2} {s['n_open_short']:>2}  "
+          f"{s['days_running']:>4}")
         if s["pool"] == "Spot":
             spot_eq += s["equity"]
-            spot_n  += 1
         else:
             fut_eq += s["equity"]
-            fut_n  += 1
 
     total_eq  = spot_eq + fut_eq
-    total_cap = INITIAL_CAP * len(snaps)
-    total_ret = (total_eq / total_cap - 1.0) * 100.0 if total_cap > 0 else 0.0
-    spot_ret  = (spot_eq / (INITIAL_CAP * spot_n) - 1.0) * 100.0 if spot_n else 0.0
-    fut_ret   = (fut_eq  / (INITIAL_CAP * fut_n)  - 1.0) * 100.0 if fut_n  else 0.0
+    total_ret = (total_eq / TOTAL_CAPITAL - 1.0) * 100.0 if TOTAL_CAPITAL > 0 else 0.0
+    spot_ret  = (spot_eq / SPOT_TARGET - 1.0) * 100.0 if SPOT_TARGET > 0 else 0.0
+    fut_ret   = (fut_eq  / FUT_TARGET  - 1.0) * 100.0 if FUT_TARGET  > 0 else 0.0
 
-    p(f"  {'':<3} {'Spot pool':<11} {'':>7} ${spot_eq:>9,.2f}  {spot_ret:>+7.2f}%  "
-      f"  (${INITIAL_CAP*spot_n:,.0f} deployed, {spot_n} systems)")
-    p(f"  {'':<3} {'Futures pool':<11} {'':>7} ${fut_eq:>9,.2f}  {fut_ret:>+7.2f}%  "
-      f"  (${INITIAL_CAP*fut_n:,.0f} deployed, {fut_n} systems)")
-    p(f"  {'':<3} {'PORTFOLIO':<11} {'':>7} ${total_eq:>9,.2f}  {total_ret:>+7.2f}%  "
-      f"  (${total_cap:,.0f} total deployed)")
+    p(f"  {'':<3} {'Spot pool':<11} {'':>7} ${'30k':>6} ${spot_eq:>9,.2f}  "
+      f"{spot_ret:>+7.2f}%")
+    p(f"  {'':<3} {'Futures pool':<11} {'':>7} ${'30k':>6} ${fut_eq:>9,.2f}  "
+      f"{fut_ret:>+7.2f}%")
+    p(f"  {'':<3} {'PORTFOLIO':<11} {'':>7} ${'60k':>6} ${total_eq:>9,.2f}  "
+      f"{total_ret:>+7.2f}%")
 
     # Long / short position summary
     total_longs  = sum(s["n_open_long"]  for s in snaps)

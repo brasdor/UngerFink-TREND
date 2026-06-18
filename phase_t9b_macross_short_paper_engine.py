@@ -81,7 +81,7 @@ RISK_PER_TRADE_PCT  = 0.0025  # 0.25%
 CAPITAL_CEILING     = 150.0   # USD ceiling on risk per trade
 MIN_ORDER_USDT      = 15.0
 MAX_OPEN_POSITIONS  = None    # uncapped
-INITIAL_CAPITAL     = 10_000.0
+INITIAL_CAPITAL     = 11_000.0  # Scheme C allocation: $11k of $30k Futures
 LEVERAGE            = 1.0
 KILL_SWITCH_DD_PCT  = 35.0
 
