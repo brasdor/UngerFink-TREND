@@ -1,1 +1,2 @@
-symbol,signal_date,close,consec,atr,ema200,stop_loss,signal
+symbol,signal_date,close,consec,atr,ema200,stop_loss,risk_unit,signal
+WLD/USDT,2026-06-21,0.604927,5,0.07383746,0.4718143,0.45725209,0.14767492,BUY_CD
