@@ -115,3 +115,19 @@ run_date,event,symbol,detail
 2026-06-21,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system,,,,
 2026-06-21,ENTRY,WLD/USDT,"consec=5  price=0.604927  ema200=0.471814  stop=0.457252  risk=$25.00  bars_to_exit=20  equity=$10,000.00",0.604927,0.45725209,25.0,10000.0
 2026-06-21,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,
+2026-06-23,SIGNAL_SKIPPED,AAVE/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,ADA/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,ARB/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,AVAX/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,BCH/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,CHZ/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,DOGE/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,DOT/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,ETH/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,JTO/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
+2026-06-23,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
