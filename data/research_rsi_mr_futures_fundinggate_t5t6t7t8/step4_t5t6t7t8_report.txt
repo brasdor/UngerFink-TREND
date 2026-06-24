@@ -1,0 +1,79 @@
+======================================================================
+STEP 4 -- T5 PORTFOLIO FILTER
+======================================================================
+
+         Cap   Trades   Accept%      avg_r    total_r
+  --------------------------------------------------
+    uncapped      257    100.0%   +0.6131R    +157.6R
+        max3       63     24.5%   +0.2900R     +18.3R
+        max5       92     35.8%   +0.3480R     +32.0R
+        max8      127     49.4%   +0.3157R     +40.1R
+       max10      147     57.2%   +0.4050R     +59.5R
+       max15      182     70.8%   +0.4855R     +88.4R
+       max20      213     82.9%   +0.6333R    +134.9R
+
+  Canonical: uncapped (257 trades)
+  (MR + negative funding gate fires rarely -- low concurrent risk)
+
+======================================================================
+STEP 4 -- T6 CAPITAL EXECUTION
+  Start: $10,000  Risk: 0.25%  Ceiling: $150
+  Kill-switch: 35% drawdown from peak
+======================================================================
+
+  Final equity: $14,782.45
+  CAGR: +10.3%  Max DD: -6.3%
+  Kill switch: NOT FIRED
+  Cap hits: 0 trades at $150 ceiling
+
+  Year-by-year:
+    2020:  11 trades  $   +160.90  cum=$   10,160.90
+    2021:  10 trades  $   +239.77  cum=$   10,400.67
+    2022: 140 trades  $ +3,208.03  cum=$   13,608.70
+    2023:  96 trades  $ +1,173.75  cum=$   14,782.45
+
+======================================================================
+STEP 4 -- T7 ASSET ROBUSTNESS
+======================================================================
+
+  Remove top-1 (APTUSDT):
+    avg_r=+0.5550R  final=$14,231.27  CAGR=+9.2%  [PASS]
+
+  Remove top-3 (APTUSDT, GALAUSDT, COMPUSDT):
+    avg_r=+0.4971R  final=$13,620.02  CAGR=+8.0%  [PASS]
+
+  Remove top-5 (APTUSDT, GALAUSDT, COMPUSDT...):
+    avg_r=+0.4643R  final=$13,207.64  CAGR=+7.2%  [PASS]
+
+======================================================================
+STEP 4 -- T8 FINAL SCORECARD
+======================================================================
+
+  METHOD:           RSI_MR_Futures_FundingGate
+  CONFIG:           1D / RSI(10)<20 / funding<0 / hold 25 bars / ATR x2.0
+  EXCHANGE:         Binance Futures USD-M, LONG, LEVERAGE=1.0
+  FILTER:           none
+  PORTFOLIO_CAP:    uncapped
+  RISK_PER_TRADE:   0.25%
+  COST_FLOOR:       0.15R (longs earn negative funding)
+
+  TRADES:           257
+  AVG R:            +0.6131R   [gate > 0.15R]
+  WIN RATE:         66.9%
+  PROFIT FACTOR:    3.463
+  T-STAT:           5.28
+  TOTAL R:          +157.6R
+  CAGR:             +10.3%
+  MAX DD:           -6.3%
+  FINAL EQUITY:     $14,782.45 (from $10,000)
+  KILL SWITCH:      NOT FIRED
+  REMOVE TOP-1:     PASS
+  CONCENTRATION:    9.8% (APTUSDT)
+
+  MC P05 (from T4): +110.7R (all block sizes positive)
+  COST STRESS (T4): PF=3.12 at +0.05R
+
+  STATUS:           FROZEN -- READY FOR T9B
+======================================================================
+
+  Frozen config written: data\research_rsi_mr_futures_fundinggate_t5t6t7t8\phase_t8_frozen_config.py

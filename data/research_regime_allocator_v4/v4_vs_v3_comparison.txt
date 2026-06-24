@@ -1,0 +1,66 @@
+======================================================================
+STEP 12 V2 -- REGIME ALLOCATOR v4 (ANTI-OSCILLATION)
+======================================================================
+
+Backtest: 2021-01-01 to 2026-06-15 (1992 days)
+Three-axis detection with hysteresis + EMA smoothing + min hold
+
+ANTI-OSCILLATION PARAMETERS:
+  Funding hysteresis: enter HIGH >0.025%/8h, exit HIGH <0.010%/8h
+  Breadth hysteresis: enter BULL >58%, exit BULL <48%
+  EMA smoothing: funding 5-day, breadth 3-day
+  Min hold period: 5 days per axis
+
+SWITCH COUNT (KEY METRIC):
+  v4 total switches: 200
+  v4 switches/year:  36.7
+  v3 total switches: 546
+  v3 switches/year:  100.2
+  Reduction:         63%
+  Target:            <50/year
+  Gate:              [PASS]
+
+SWITCHES PER YEAR:
+  2021: 31 switches
+  2022: 19 switches
+  2023: 50 switches
+  2024: 34 switches
+  2025: 39 switches
+  2026: 23 switches
+
+REGIME DISTRIBUTION:
+    BULL:   428 days (21.5%)
+    BEAR:   809 days (40.6%)
+   MIXED:   755 days (37.9%)
+
+FUNDING DISTRIBUTION:
+      HIGH:  1073 days (53.9%)
+   NEUTRAL:   283 days (14.2%)
+       LOW:   636 days (31.9%)
+
+2022 BEAR CLASSIFICATION (CRITICAL CHECK):
+  Days classified BEAR: 355/365 (97.3%)
+  Gate (>= 90%):        [PASS]
+
+PERFORMANCE COMPARISON:
+  Metric                      v4 Auto Manual (MIXED)
+  --------------------------------------------------
+  Final equity         $      192,705 $      150,257
+  CAGR                         +23.8%         +18.3%
+  Sharpe                       50.262         67.988
+
+CAGR GATE:
+  v4 CAGR: +23.8%  (threshold >= +21.8% from v3)
+  Gate:    [PASS]
+
+YEAR-BY-YEAR:
+  2021: auto=+29.2%  manual=+21.2%  regimes={'BULL': 231, 'BEAR': 87, 'MIXED': 47}
+  2022: auto=+19.5%  manual=+15.3%  regimes={'BEAR': 355, 'MIXED': 10}
+  2023: auto=+23.7%  manual=+19.5%  regimes={'MIXED': 240, 'BEAR': 64, 'BULL': 61}
+  2024: auto=+33.0%  manual=+23.6%  regimes={'MIXED': 197, 'BULL': 131, 'BEAR': 38}
+  2025: auto=+24.9%  manual=+19.5%  regimes={'MIXED': 256, 'BEAR': 104, 'BULL': 5}
+  2026: auto=+0.9%  manual=+1.3%  regimes={'BEAR': 161, 'MIXED': 5}
+
+======================================================================
+OVERALL: ALL GATES PASS -- v4 ready for Step 20
+======================================================================

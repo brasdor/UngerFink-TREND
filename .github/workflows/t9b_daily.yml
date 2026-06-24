@@ -103,7 +103,58 @@ jobs:
           fi
 
       # ------------------------------------------------------------------
-      # 5. Print combined summary (all three systems side-by-side)
+      # 4d. Run VolContractionShort T9B paper engine (S6, 4H Futures)
+      # ------------------------------------------------------------------
+      - name: Run T9B VolContraction short engine
+        id: engine_vc
+        continue-on-error: true
+        run: |
+          if [ -n "${{ github.event.inputs.run_date }}" ]; then
+            echo "VolContraction: running for ${{ github.event.inputs.run_date }}"
+            python phase_t9b_volcontraction_short_paper_engine.py \
+              --date "${{ github.event.inputs.run_date }}" \
+              --no-download --notify
+          else
+            echo "VolContraction: running for yesterday"
+            python phase_t9b_volcontraction_short_paper_engine.py --no-download --notify
+          fi
+
+      # ------------------------------------------------------------------
+      # 4e. Run MACrossShort T9B paper engine (S7, 4H Futures)
+      # ------------------------------------------------------------------
+      - name: Run T9B MACross short engine
+        id: engine_mac
+        continue-on-error: true
+        run: |
+          if [ -n "${{ github.event.inputs.run_date }}" ]; then
+            echo "MACross: running for ${{ github.event.inputs.run_date }}"
+            python phase_t9b_macross_short_paper_engine.py \
+              --date "${{ github.event.inputs.run_date }}" \
+              --no-download --notify
+          else
+            echo "MACross: running for yesterday"
+            python phase_t9b_macross_short_paper_engine.py --no-download --notify
+          fi
+
+      # ------------------------------------------------------------------
+      # 4f. Run MomentumFactor T9B paper engine (S5, 1D Futures, biweekly)
+      # ------------------------------------------------------------------
+      - name: Run T9B Momentum Factor engine
+        id: engine_mom
+        continue-on-error: true
+        run: |
+          if [ -n "${{ github.event.inputs.run_date }}" ]; then
+            echo "Momentum: running for ${{ github.event.inputs.run_date }}"
+            python engines/phase_t9b_momentum_factor_paper_engine.py \
+              --date "${{ github.event.inputs.run_date }}" \
+              --no-download --notify
+          else
+            echo "Momentum: running for yesterday"
+            python engines/phase_t9b_momentum_factor_paper_engine.py --no-download --notify
+          fi
+
+      # ------------------------------------------------------------------
+      # 5. Print combined summary (all six systems side-by-side)
       # ------------------------------------------------------------------
       - name: Print combined T9B summary
         run: python engines/t9b_combined_summary.py
@@ -174,8 +225,36 @@ jobs:
             data/t9b_consecdowndays_paper/mtm_positions.csv \
             || true
 
-          # Shared OHLCV cache (all three engines read/write here)
+          # VolContractionShort outputs (S6)
+          git add --force \
+            data/t9b_volcontraction_paper/state.json \
+            data/t9b_volcontraction_paper/open_positions.csv \
+            data/t9b_volcontraction_paper/signals_today.csv \
+            data/t9b_volcontraction_paper/daily_log.csv \
+            data/t9b_volcontraction_paper/pending_entries.csv \
+            || true
+
+          # MACrossShort outputs (S7)
+          git add --force \
+            data/t9b_macross_paper/state.json \
+            data/t9b_macross_paper/open_positions.csv \
+            data/t9b_macross_paper/signals_today.csv \
+            data/t9b_macross_paper/daily_log.csv \
+            data/t9b_macross_paper/pending_entries.csv \
+            || true
+
+          # MomentumFactor outputs (S5)
+          git add --force \
+            data/t9b_momentum_paper/state.json \
+            data/t9b_momentum_paper/open_positions.csv \
+            data/t9b_momentum_paper/signals_today.csv \
+            data/t9b_momentum_paper/equity_curve.csv \
+            data/t9b_momentum_paper/daily_log.csv \
+            || true
+
+          # Shared OHLCV cache (all engines read/write here)
           git add --force data/universe/ohlcv_1d/ || true
+          git add --force data/futures_universe/ohlcv_4h/ || true
 
           # Auto-execution ledger (idempotency record)
           git add --force data/auto_orders/placed.csv || true
@@ -220,9 +299,15 @@ jobs:
           echo "  Donchian    : ${{ steps.engine_donchian.outcome }}"
           echo "  RSI MR      : ${{ steps.engine_mr.outcome }}"
           echo "  ConsecDown  : ${{ steps.engine_cd.outcome }}"
+          echo "  VolContr    : ${{ steps.engine_vc.outcome }}"
+          echo "  MACross     : ${{ steps.engine_mac.outcome }}"
+          echo "  Momentum    : ${{ steps.engine_mom.outcome }}"
           if [ "${{ steps.engine_donchian.outcome }}" = "failure" ] || \
              [ "${{ steps.engine_mr.outcome }}" = "failure" ] || \
-             [ "${{ steps.engine_cd.outcome }}" = "failure" ]; then
+             [ "${{ steps.engine_cd.outcome }}" = "failure" ] || \
+             [ "${{ steps.engine_vc.outcome }}" = "failure" ] || \
+             [ "${{ steps.engine_mac.outcome }}" = "failure" ] || \
+             [ "${{ steps.engine_mom.outcome }}" = "failure" ]; then
             echo "WARNING: one or more engines failed -- check logs above"
           else
             echo "All engines completed successfully"

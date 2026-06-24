@@ -1,0 +1,16 @@
+{
+  "date": "2026-06-15",
+  "trend_regime": "BEAR",
+  "funding_regime": "LOW",
+  "vol_multiplier": 1.0,
+  "weights": {
+    "S1": 0.05,
+    "S2": 0.3,
+    "S3": 0.1,
+    "S5": 0.15,
+    "S6": 0.2,
+    "S7": 0.2,
+    "S8": 0.0
+  },
+  "allocator_version": "v4"
+}

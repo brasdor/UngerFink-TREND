@@ -1,0 +1,74 @@
+======================================================================
+STEP 17 -- T1 REPORT: S1 DONCHIAN LONG ON FUTURES (290-SYMBOL)
+======================================================================
+
+IS: 2020-01-01 to 2022-12-31
+Universe: 106 Futures symbols with funding data
+Entry: close > EMA200 AND close >= Donchian_high(N)
+Exit: Donchian_low(N//2) OR Chandelier (ATR x5.0, activate +4.0R)
+Funding: actual per-symbol 8h rates deducted
+Cost floor: 0.25R (Futures long)
+Grid: 12 valid combinations
+Passing all gates: 0
+
+TOP 10 BY avg_r (net of funding):
+     N    am      n    avg_r      raw      fc    2022  zone  gates
+    30   2.0    337 +1.2646R +1.4735R +0.2089R  -37.9R  100%   FAIL
+    30   1.5    399 +1.2088R +1.4176R +0.2087R  -47.6R  100%   FAIL
+    25   2.0    363 +1.2010R +1.3928R +0.1918R  -38.4R  100%   FAIL
+    25   1.5    426 +1.1624R +1.3591R +0.1967R  -49.9R  100%   FAIL
+    30   2.5    320 +1.0566R +1.2396R +0.1830R  -38.6R  100%   FAIL
+    25   2.5    347 +0.9893R +1.1570R +0.1678R  -38.4R  100%   FAIL
+    20   1.5    453 +0.9060R +1.0940R +0.1880R  -49.4R  100%   FAIL
+    20   2.0    398 +0.9050R +1.0813R +0.1763R  -38.8R  100%   FAIL
+    20   2.5    380 +0.7629R +0.9166R +0.1538R  -37.3R  100%   FAIL
+    15   2.0    488 +0.3957R +0.5357R +0.1399R  -38.0R  100%   FAIL
+
+CANONICAL CONFIG:
+  donchian_n=30  atr_mult=2.0
+
+CANONICAL RESULTS:
+  Trades:    337
+  avg_r:     +1.2646R  (net of funding)
+  avg_r raw: +1.4735R  (before funding)
+  avg fc:    +0.2089R per trade
+  total_r:   +426.2R
+  Win rate:  27.3%
+  PF:        2.68
+  Sharpe:    2.79
+
+2022 PERFORMANCE (KEY TEST -- Step 2 failed at -35.1R on 20 symbols):
+  2022 total R (net): -37.9R  (68 trades)
+  2022 gate: FAIL (< -20R -- same failure mode as Step 2)
+
+  Year-by-year:
+    2020:   52 trades  raw= +312.9R  net= +293.2R  fc= +19.7R
+    2021:  217 trades  raw= +220.7R  net= +170.8R  fc= +49.9R
+    2022:   68 trades  raw=  -37.0R  net=  -37.9R  fc=  +0.8R
+
+FUNDING COST ANALYSIS:
+  Average funding cost per trade: +0.2089R
+  Funding degradation: 14.2% of raw avg_r
+  avg_r WITHOUT funding: +1.4735R
+  avg_r WITH funding:    +1.2646R
+
+CONCENTRATION CHECK (top 5 symbols by total net R):
+  ADAUSDT                 +89.0R  (2 trades, 13.0% of |total R|)
+  THETAUSDT               +62.0R  (4 trades, 9.0% of |total R|)
+  BTCUSDT                 +55.8R  (6 trades, 8.1% of |total R|)
+  AXSUSDT                 +42.9R  (3 trades, 6.2% of |total R|)
+  BNBUSDT                 +38.4R  (9 trades, 5.6% of |total R|)
+  Top-1 concentration: 20.9%  [PASS]
+
+======================================================================
+GATE CHECKS:
+  avg_r > 0.25R:     +1.2646R  [PASS]
+  2022 > -20R:        -37.9R  [FAIL]
+  Stability >= 67%:   100%  [PASS]
+
+  GATE DECISION: FAIL
+
+COMPARISON TO S1 SPOT:
+  S1 Spot: avg_r=+0.9263R, CAGR=+14.3%, Max DD=-3.4% (24-symbol universe)
+  S1 Futures: avg_r=+1.2646R (106-symbol universe)
+======================================================================

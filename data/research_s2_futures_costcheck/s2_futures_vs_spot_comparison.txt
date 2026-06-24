@@ -1,0 +1,61 @@
+======================================================================
+STEP 18 -- S2 RSI MR ON FUTURES: COST-FLOOR CHECK
+======================================================================
+
+IS: 2020-01-01 to 2023-12-31
+Universe: 158 Futures symbols
+Config: RSI(14)<25, hold 20 bars, ATR x3.0, filter=none
+NO funding gate (unfunded version -- System 8 has the gate)
+Cost floor: 0.25R (Futures long)
+
+OVERALL RESULTS:
+  Trades:          440
+  avg_r (raw):     +0.3086R  (before funding costs)
+  avg_r (net):     +0.3162R  (after funding costs)
+  avg funding cost: -0.0075R per trade
+  Funding degradation: -2.4% of raw avg_r
+  total_r (net):   +139.1R
+  Win rate:        68.6%
+  PF:              3.18
+  t-stat:          7.72
+
+YEAR-BY-YEAR BREAKDOWN (critical -- watch 2021 funding costs):
+    Year  Trades  avg_r_raw  avg_r_net   avg_fc  total_r_net
+    2020      33   +0.3628R   +0.3754R -0.0127R       +12.4R
+    2021      16   +0.2739R   +0.3036R -0.0297R        +4.9R
+    2022     194   +0.2329R   +0.2469R -0.0140R       +47.9R
+    2023     197   +0.3770R   +0.3755R +0.0015R       +74.0R
+
+2021 FUNDING COST DETAIL (historically highest funding rates):
+  2021 trades: 16
+  2021 avg funding cost: -0.0297R
+  2021 max funding cost: +0.0338R
+  2021 avg_r raw:        +0.2739R
+  2021 avg_r net:        +0.3036R
+  2021 funding degradation: -10.8%
+
+TOP 10 SYMBOLS BY TOTAL NET R:
+  COMPUSDT                 +8.7R  (6 trades)
+  SOLUSDT                  +7.2R  (6 trades)
+  1000XECUSDT              +7.1R  (7 trades)
+  HBARUSDT                 +6.2R  (4 trades)
+  ANKRUSDT                 +4.4R  (5 trades)
+  SANDUSDT                 +4.1R  (6 trades)
+  ZECUSDT                  +3.9R  (6 trades)
+  UNIUSDT                  +3.4R  (3 trades)
+  LPTUSDT                  +3.4R  (4 trades)
+  BELUSDT                  +3.2R  (4 trades)
+
+COMPARISON: S2 SPOT vs S2 FUTURES
+  S2 Spot avg_r:           +0.285R  (frozen, validated)
+  S2 Futures avg_r (raw):  +0.3086R
+  S2 Futures avg_r (net):  +0.3162R
+
+======================================================================
+GATE DECISION:
+  Cost floor: 0.25R
+  avg_r (net): +0.3162R
+
+  RESULT: PASS -- S2 can run on Futures (avg_r +0.3162R > 0.25R)
+  DECISION: S2 can migrate to Futures
+======================================================================

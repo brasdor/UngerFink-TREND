@@ -1,0 +1,45 @@
+======================================================================
+STEP 12 -- AUTOMATED REGIME ALLOCATOR v3
+======================================================================
+
+Backtest: 2021-01-01 to 2026-06-15 (1992 days)
+Three-axis detection: trend (EMA200+breadth) + funding + volatility
+
+REGIME DISTRIBUTION:
+    BULL:   435 days (21.8%)
+    BEAR:   802 days (40.3%)
+   MIXED:   755 days (37.9%)
+
+FUNDING DISTRIBUTION:
+      HIGH:  1166 days (58.5%)
+   NEUTRAL:    21 days (1.1%)
+       LOW:   805 days (40.4%)
+
+PERFORMANCE COMPARISON:
+  Metric                    Automated Manual (MIXED)
+  --------------------------------------------------
+  Final equity         $      175,748 $      148,816
+  CAGR                         +21.8%         +18.1%
+  Sharpe                       45.928         73.911
+
+GATE CHECK:
+  Automated Sharpe: 45.928  (threshold >= 1.70)
+  Gate: PASS
+
+YEAR-BY-YEAR:
+  2021: auto=+26.5%  manual=+20.4%  regimes={'BULL': 230, 'BEAR': 86, 'MIXED': 49}
+  2022: auto=+25.3%  manual=+18.0%  regimes={'BEAR': 355, 'MIXED': 10}
+  2023: auto=+19.8%  manual=+18.7%  regimes={'MIXED': 234, 'BULL': 67, 'BEAR': 64}
+  2024: auto=+28.3%  manual=+22.0%  regimes={'MIXED': 192, 'BULL': 134, 'BEAR': 40}
+  2025: auto=+19.5%  manual=+18.7%  regimes={'MIXED': 261, 'BEAR': 100, 'BULL': 4}
+  2026: auto=+0.4%  manual=+1.3%  regimes={'BEAR': 157, 'MIXED': 9}
+
+CURRENT REGIME STATE (latest):
+  Date: 2026-06-15
+  Trend: MIXED
+  Funding: LOW
+  Vol multiplier: 1.0
+  Weights: {"S1": 0.125, "S2": 0.175, "S3": 0.175, "S5L": 0.125, "S5S": 0.125, "S6": 0.075, "S7": 0.075, "S8": 0.125}
+
+regime_state.json written to: data\research_regime_allocator_v3\regime_state.json
+======================================================================

@@ -1,0 +1,65 @@
+======================================================================
+STEP 19 -- T1 REPORT: S3 CONSEC DOWN DAYS ON FUTURES (290-SYMBOL)
+======================================================================
+
+IS: 2020-01-01 to 2022-12-31
+Universe: 106 Futures symbols
+Config: 5 consecutive down closes, EMA200 filter, hold 20 bars, ATR x2.0
+Funding: actual per-symbol 8h rates deducted
+Cost floor: 0.25R (Futures long)
+
+OVERALL RESULTS:
+  Trades:          111
+  avg_r (raw):     +0.3015R  (before funding costs)
+  avg_r (net):     +0.2436R  (after funding costs)
+  avg funding cost: +0.0579R per trade
+  Funding degradation: 19.2% of raw avg_r
+  total_r (net):   +27.0R
+  Win rate:        54.1%
+  PF:              1.69
+  t-stat:          1.99
+
+YEAR-BY-YEAR BREAKDOWN (critical -- watch 2021 funding costs):
+    Year  Trades  avg_r_raw  avg_r_net   avg_fc  total_r_net
+    2020      16   +0.6673R   +0.6205R +0.0468R        +9.9R
+    2021      77   +0.4664R   +0.3998R +0.0667R       +30.8R
+    2022      18   -0.7292R   -0.7595R +0.0303R       -13.7R
+
+2021 FUNDING COST DETAIL (S3 is a bull specialist -- most trades here):
+  2021 trades: 77
+  2021 avg funding cost: +0.0667R
+  2021 max funding cost: +0.3221R
+  2021 avg_r raw:        +0.4664R
+  2021 avg_r net:        +0.3998R
+  2021 funding degradation: 14.3%
+
+2022 PERFORMANCE (EMA200 filter should keep system mostly inactive):
+  2022 trades: 18
+  2022 total R (net): -13.7R
+  2022 gate: FAIL
+
+TOP 10 SYMBOLS BY TOTAL NET R:
+  DOGEUSDT                 +5.8R  (3 trades)
+  AXSUSDT                  +4.8R  (3 trades)
+  ZECUSDT                  +3.8R  (2 trades)
+  DOTUSDT                  +3.4R  (2 trades)
+  XLMUSDT                  +2.8R  (2 trades)
+  IOTAUSDT                 +2.2R  (1 trades)
+  IOSTUSDT                 +2.1R  (4 trades)
+  RUNEUSDT                 +2.1R  (2 trades)
+  ATOMUSDT                 +2.0R  (6 trades)
+  LTCUSDT                  +2.0R  (1 trades)
+  Top-1 concentration: 21.5%  [PASS]
+
+======================================================================
+GATE CHECKS:
+  avg_r > 0.25R:    +0.2436R  [FAIL]
+  2022 positive:     -13.7R  [FAIL]
+
+  RESULT: MARGINAL -- S3 avg_r between 0.15R and 0.25R on Futures
+  DECISION: S3 should stay on Spot
+
+COMPARISON TO S3 SPOT:
+  S3 Spot: avg_r=+0.470R, CAGR=+4.03% (52-symbol universe)
+  S3 Futures: avg_r=+0.2436R (106-symbol universe)
+======================================================================

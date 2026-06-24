@@ -432,25 +432,36 @@ def add_indicators(df: pd.DataFrame) -> pd.DataFrame:
     ema200 = cls.ewm(span=EMA_N, adjust=False).mean()
 
     # Consecutive compressed bars and compression lowest low
+    # BUG FIX (2026-06-23): comp_low must use PRIOR bars' lows only,
+    # not including bar i. Original code included lo[i], making
+    # close < comp_low impossible (close >= low always). See finding #22.
+    # Fixed to match original T1 script (phase_t1_volcontraction_short.py):
+    #   consec_low_atr[i-1] >= cb AND close[i] < lows[i-cb:i].min()
+    # Here consec[i] = count of compressed bars ENDING at bar i-1 (prior),
+    # and comp_low[i] = lowest low of those prior compressed bars.
     atr_vals  = atr.values
     pct_vals  = atr_pct20.values
     low_vals  = lw.values
     consec    = np.zeros(n)
     comp_low  = np.full(n, np.nan)
-    cnt       = 0
-    low_track = np.inf
 
+    # First compute raw consecutive count at each bar
+    raw_consec = np.zeros(n)
     for i in range(1, n):
         a = atr_vals[i]
         p = pct_vals[i]
         if np.isfinite(a) and np.isfinite(p) and a < p:
-            cnt += 1
-            low_track = min(low_track, float(low_vals[i]))
+            raw_consec[i] = raw_consec[i - 1] + 1
         else:
-            cnt       = 0
-            low_track = np.inf
-        consec[i]   = cnt
-        comp_low[i] = low_track if cnt > 0 else np.nan
+            raw_consec[i] = 0
+
+    # For signal check at bar i: use prior bar's consec count and
+    # compute comp_low from the prior COMPRESSION_BARS bars (not including i)
+    for i in range(1, n):
+        consec[i] = raw_consec[i - 1]  # how many compressed bars before bar i
+        if consec[i] >= COMPRESSION_BARS:
+            cb_start = max(0, i - COMPRESSION_BARS)
+            comp_low[i] = float(np.min(low_vals[cb_start:i]))
 
     out["atr"]       = atr_vals
     out["atr_pct20"] = pct_vals
@@ -467,8 +478,8 @@ def add_indicators(df: pd.DataFrame) -> pd.DataFrame:
 def check_signal(row: pd.Series, funding_rate: float) -> Optional[dict]:
     """
     Signal conditions on a single 4H bar (checked at bar close):
-      1. consec_comp >= 15 consecutive compressed bars
-      2. close < compression_low  (breaks below compression period's lowest low)
+      1. PRIOR bars had >= 15 consecutive compressed bars
+      2. close < lowest low of those prior compressed bars
       3. close < EMA200
       4. funding_rate >= 0.01%
 
