@@ -9,12 +9,4 @@ run_date,event,detail,equity
 2026-06-14,MTM,"MTM  unrealized_pnl=$+480.84  (+4.82%)  mtm_equity=$10,465.84  days_since_rebal=7",10465.8424
 2026-06-22,MTM,"MTM  unrealized_pnl=$+571.22  (+5.72%)  mtm_equity=$10,556.22  days_since_rebal=15",10556.2153
 2026-06-24,MTM,"MTM  unrealized_pnl=$+616.76  (+6.18%)  mtm_equity=$10,601.76  days_since_rebal=17",10601.7627
-2026-06-25,MTM,"MTM  unrealized_pnl=$+616.76  (+6.18%)  mtm_equity=$10,601.76  days_since_rebal=18",10601.7627
-2026-06-26,SKIP,"arbitrator_reject_reason=direction_conflict: NEARUSDT SHORT",10596.1050
-2026-06-26,REBAL,"REBAL #2  L=9 (0 new 9 held 3 closed)  S=9 (3 new 7 held 3 closed)  pnl=$+616.76  cost=0.053%  eq=$10,596.11",10596.1050
-2026-06-27,MTM,"MTM  unrealized_pnl=$+0.00  (+0.00%)  mtm_equity=$10,596.10  days_since_rebal=1",10596.1050
-2026-06-28,MTM,"MTM  unrealized_pnl=$+0.00  (+0.00%)  mtm_equity=$10,596.10  days_since_rebal=2",10596.1050
-2026-06-29,MTM,"MTM  unrealized_pnl=$+0.00  (+0.00%)  mtm_equity=$10,596.10  days_since_rebal=3",10596.1050
-2026-06-30,MTM,"MTM  unrealized_pnl=$+0.00  (+0.00%)  mtm_equity=$10,596.10  days_since_rebal=4",10596.1050
-2026-07-01,MTM,"MTM  unrealized_pnl=$+0.00  (+0.00%)  mtm_equity=$10,596.10  days_since_rebal=5",10596.1050
-2026-07-02,MTM,"MTM  unrealized_pnl=$+0.00  (+0.00%)  mtm_equity=$10,596.10  days_since_rebal=6",10596.1050
+2026-06-29,MTM,"MTM  unrealized_pnl=$+593.30  (+5.94%)  mtm_equity=$10,578.30  days_since_rebal=22",10578.3001

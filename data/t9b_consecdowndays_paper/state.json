@@ -1,7 +1,7 @@
 {
   "system_name": "ConsecDownDaysMR_1D_T9B",
   "created_utc": "2026-06-03T09:15:18.584881+00:00",
-  "last_run_date": "2026-07-01",
+  "last_run_date": "2026-06-28",
   "paper_equity_usdt": 10000.0,
   "peak_equity_usdt": 10000.0,
   "drawdown_pct": 0.0,
@@ -16,7 +16,7 @@
       "initial_risk_per_unit": 0.14767492,
       "risk_amount_usdt": 25.0,
       "qty": 169.29076379387917,
-      "bars_held": 2,
+      "bars_held": 1,
       "atr_at_entry": 0.07383746,
       "consec_at_entry": 5
     }
