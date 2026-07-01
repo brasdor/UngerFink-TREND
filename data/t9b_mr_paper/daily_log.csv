@@ -140,3 +140,11 @@ run_date,event,symbol,detail,entry_price,stop,risk_amount,equity
 2026-06-29,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
 2026-06-29,SIGNAL_SKIPPED,WLD/USDT,duplicate_cross_system
 2026-06-29,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,CHZ/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,JTO/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,WLD/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system

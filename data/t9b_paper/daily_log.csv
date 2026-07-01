@@ -135,3 +135,12 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-06-29,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
 2026-06-29,SIGNAL_SKIPPED,ETH/USDT,duplicate_cross_system
 2026-06-29,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,DEXE/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,ADA/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,AVAX/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,DUSK/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,ETH/USDT,duplicate_cross_system
+2026-06-30,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system
