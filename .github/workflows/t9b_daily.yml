@@ -47,6 +47,19 @@ jobs:
         run: pip install -r requirements.txt
 
       # ------------------------------------------------------------------
+      # 3b. Compute daily regime state (must run before all engines)
+      #     Writes data/regime_state.json read by all T9B engines.
+      # ------------------------------------------------------------------
+      - name: Compute regime state
+        continue-on-error: true
+        run: |
+          if [ -n "${{ github.event.inputs.run_date }}" ]; then
+            python engines/regime_daily.py --date "${{ github.event.inputs.run_date }}"
+          else
+            python engines/regime_daily.py
+          fi
+
+      # ------------------------------------------------------------------
       # 4a. Run Donchian T9B paper engine
       #     continue-on-error: other engines must still run if this fails
       # ------------------------------------------------------------------
@@ -255,6 +268,12 @@ jobs:
           # Shared OHLCV cache (all engines read/write here)
           git add --force data/universe/ohlcv_1d/ || true
           git add --force data/futures_universe/ohlcv_4h/ || true
+
+          # Regime state (daily allocator output)
+          git add --force \
+            data/regime_state.json \
+            data/regime_history.csv \
+            || true
 
           # Auto-execution ledger (idempotency record)
           git add --force data/auto_orders/placed.csv || true

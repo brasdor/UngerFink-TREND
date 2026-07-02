@@ -620,7 +620,9 @@ def run_daily(run_date: date, symbols: List[str], state: dict) -> dict:
                 risk_unit   = pe["risk_unit"]
                 stop_loss   = entry_price + ATR_STOP_MULT * float(pe["atr"])
 
-                risk_amount = min(equity * RISK_PER_TRADE_PCT, CAPITAL_CEILING)
+                rw, rv = t9b_shared.get_regime_weight("volcontraction")
+                regime_scale = rw * rv * 7  # scale relative to equal weight
+                risk_amount = min(equity * RISK_PER_TRADE_PCT * regime_scale, CAPITAL_CEILING)
                 qty         = risk_amount / max(risk_unit, EPS)
 
                 if qty * entry_price < MIN_ORDER_USDT:

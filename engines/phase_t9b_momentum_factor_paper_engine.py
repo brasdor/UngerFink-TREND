@@ -538,10 +538,14 @@ def do_rebalance(state: dict, close: pd.DataFrame, today: Date,
     cost_frac = ((turn_l + turn_s) / 2.0) * COST_RT
     equity_after_cost = equity * (1.0 - cost_frac)
 
+    # Scale allocation by regime weight
+    rw, rv = t9b_shared.get_regime_weight("momentum")
+    regime_scale = rw * rv * 7
+
     # Build new position list
     # If no longs (EMA200 filter in bear market), 50% stays as cash
-    long_alloc  = equity_after_cost * LONG_ALLOC  / len(longs)  if longs  else 0.0
-    short_alloc = equity_after_cost * SHORT_ALLOC / max(len(shorts), 1)
+    long_alloc  = equity_after_cost * LONG_ALLOC * regime_scale / len(longs) if longs else 0.0
+    short_alloc = equity_after_cost * SHORT_ALLOC * regime_scale / max(len(shorts), 1)
 
     new_long_pos  = []
     new_short_pos = []

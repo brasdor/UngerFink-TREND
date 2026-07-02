@@ -784,8 +784,10 @@ def run_one_day(
                 )
                 continue
 
-            # Accept entry
-            risk_amount    = equity * RISK_PER_TRADE_PCT
+            # Accept entry — scale by regime weight
+            rw, rv = t9b_shared.get_regime_weight("donchian")
+            regime_scale = rw * rv * 7
+            risk_amount    = equity * RISK_PER_TRADE_PCT * regime_scale
             risk_per_unit  = sig["initial_risk_unit"]
             qty            = risk_amount / max(risk_per_unit, EPS)
             entry_price    = sig["close"]

@@ -60,6 +60,51 @@ def get_cross_system_symbols(exclude: str) -> frozenset[str]:
     return frozenset(syms)
 
 
+_REGIME_STATE_PATH = ROOT / "data" / "regime_state.json"
+
+_ENGINE_TO_SYSTEM = {
+    "donchian":       "S1",
+    "rsi_mr":         "S2",
+    "consecdown":     "S3",
+    "momentum":       "S5",
+    "volcontraction": "S6",
+    "macross":        "S7",
+    "rsi_mr_funding": "S8",
+}
+
+# Equal weight when 7 active systems
+_N_SYSTEMS = 7
+_EQ_WEIGHT = 1.0 / _N_SYSTEMS
+
+
+def get_regime_weight(engine_name: str) -> tuple[float, float]:
+    """
+    Read regime_state.json and return (system_weight, vol_multiplier)
+    for the given engine. If the file is missing or unreadable,
+    returns equal weight (1/7) and vol_mult=1.0.
+
+    The engine should multiply its risk_per_trade by:
+        regime_scale = weight * vol_mult * N_SYSTEMS
+    This gives the system its proportional share of the regime allocation
+    relative to equal weight.
+    """
+    sys_id = _ENGINE_TO_SYSTEM.get(engine_name)
+    if sys_id is None:
+        return _EQ_WEIGHT, 1.0
+
+    if not _REGIME_STATE_PATH.exists():
+        return _EQ_WEIGHT, 1.0
+
+    try:
+        state = json.loads(_REGIME_STATE_PATH.read_text(encoding="utf-8"))
+        weights = state.get("weights", {})
+        vol_mult = float(state.get("vol_multiplier", 1.0))
+        weight = float(weights.get(sys_id, _EQ_WEIGHT))
+        return weight, vol_mult
+    except Exception:
+        return _EQ_WEIGHT, 1.0
+
+
 def log_engine_error(engine_name: str, exc: BaseException) -> None:
     """Append a timestamped traceback to logs/t9b_task_scheduler.log."""
     try:
