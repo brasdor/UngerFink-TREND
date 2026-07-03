@@ -10,3 +10,6 @@ run_date,event,detail,equity
 2026-06-22,MTM,"MTM  unrealized_pnl=$+571.22  (+5.72%)  mtm_equity=$10,556.22  days_since_rebal=15",10556.2153
 2026-06-24,MTM,"MTM  unrealized_pnl=$+616.76  (+6.18%)  mtm_equity=$10,601.76  days_since_rebal=17",10601.7627
 2026-06-29,MTM,"MTM  unrealized_pnl=$+593.30  (+5.94%)  mtm_equity=$10,578.30  days_since_rebal=22",10578.3001
+2026-07-03,SKIP,"arbitrator_reject_reason=direction_conflict: NEARUSDT SHORT",10571.0275
+2026-07-03,SKIP,"arbitrator_reject_reason=direction_conflict: ZECUSDT SHORT",10571.0275
+2026-07-03,REBAL,"REBAL #2  L=9 (0 new 9 held 3 closed)  S=8 (5 new 5 held 5 closed)  pnl=$+593.30  cost=0.069%  eq=$10,571.03",10571.0275
