@@ -13,3 +13,4 @@ run_date,event,detail,equity
 2026-07-03,SKIP,"arbitrator_reject_reason=direction_conflict: NEARUSDT SHORT",10571.0275
 2026-07-03,SKIP,"arbitrator_reject_reason=direction_conflict: ZECUSDT SHORT",10571.0275
 2026-07-03,REBAL,"REBAL #2  L=9 (0 new 9 held 3 closed)  S=8 (5 new 5 held 5 closed)  pnl=$+593.30  cost=0.069%  eq=$10,571.03",10571.0275
+2026-07-04,MTM,"MTM  unrealized_pnl=$+0.00  (+0.00%)  mtm_equity=$10,571.03  days_since_rebal=1",10571.0275
