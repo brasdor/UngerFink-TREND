@@ -1,0 +1,2 @@
+symbol,signal_date,close,rsi,atr,funding,stop_loss,risk_unit,signal
+DUSDT,2026-07-10,0.005192,16.8015,0.00015222,-0.00050479,0.00488757,0.00030443,BUY_MR_FUNDING

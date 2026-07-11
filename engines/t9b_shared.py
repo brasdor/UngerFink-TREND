@@ -21,6 +21,7 @@ _STATE_PATHS: dict[str, Path] = {
     "momentum":       ROOT / "data" / "t9b_momentum_paper"          / "state.json",
     "volcontraction": ROOT / "data" / "t9b_volcontraction_paper"    / "state.json",
     "macross":        ROOT / "data" / "t9b_macross_paper"           / "state.json",
+    "rsi_mr_funding": ROOT / "data" / "t9b_rsi_mr_funding_paper"    / "state.json",
 }
 
 

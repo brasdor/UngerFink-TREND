@@ -35,9 +35,9 @@ ARB_LOG = ROOT / "data" / "t9b_arbitration" / "daily_log.csv"
 # MIXED: no defined ranks — first signal in session wins.
 PRIORITY: dict[str, list[str]] = {
     "BULL": ["donchian", "momentum", "consecdown", "rsi_mr",
-             "volcontraction", "macross"],
-    "BEAR": ["rsi_mr", "volcontraction", "macross", "momentum",
-             "donchian", "consecdown"],
+             "rsi_mr_funding", "volcontraction", "macross"],
+    "BEAR": ["rsi_mr_funding", "rsi_mr", "volcontraction", "macross",
+             "momentum", "donchian", "consecdown"],
 }
 
 # Engines whose open_positions are SHORT (Futures short specialists)
@@ -56,6 +56,7 @@ _STATE_PATHS: dict[str, Path] = {
     "momentum":       ROOT / "data" / "t9b_momentum_paper"        / "state.json",
     "volcontraction": ROOT / "data" / "t9b_volcontraction_paper"  / "state.json",
     "macross":        ROOT / "data" / "t9b_macross_paper"         / "state.json",
+    "rsi_mr_funding": ROOT / "data" / "t9b_rsi_mr_funding_paper"  / "state.json",
 }
 
 _BTC_PATHS = [

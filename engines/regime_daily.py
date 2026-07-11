@@ -21,11 +21,15 @@ FUNDING_DIR = ROOT / "data" / "futures_universe" / "funding_rates"
 STATE_OUT = ROOT / "data" / "regime_state.json"
 HISTORY_OUT = ROOT / "data" / "regime_history.csv"
 
+# S2+S8 are a single MR pool (finding #18: r=0.80, 91% overlap) split
+# 40% S2 / 60% S8. The former S2 weight is divided accordingly — S8=0.00
+# placeholders predated the S8 engine and starved it in BULL/BEAR regimes
+# (S8 is the bear amplifier: 2022 was its best year).
 SCHEME_C = {
-    "BULL":  {"S1": 0.25, "S2": 0.15, "S3": 0.15, "S5": 0.25,
-              "S6": 0.10, "S7": 0.10, "S8": 0.00},
-    "BEAR":  {"S1": 0.05, "S2": 0.25, "S3": 0.05, "S5": 0.15,
-              "S6": 0.25, "S7": 0.25, "S8": 0.00},
+    "BULL":  {"S1": 0.25, "S2": 0.06, "S3": 0.15, "S5": 0.25,
+              "S6": 0.10, "S7": 0.10, "S8": 0.09},
+    "BEAR":  {"S1": 0.05, "S2": 0.10, "S3": 0.05, "S5": 0.15,
+              "S6": 0.25, "S7": 0.25, "S8": 0.15},
     "MIXED": {"S1": 0.125, "S2": 0.125, "S3": 0.125, "S5": 0.125,
               "S6": 0.125, "S7": 0.125, "S8": 0.125},
 }

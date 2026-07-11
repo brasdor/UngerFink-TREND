@@ -167,6 +167,24 @@ jobs:
           fi
 
       # ------------------------------------------------------------------
+      # 4g. Run RSI MR Funding Gate T9B paper engine (System 8, 1D Futures)
+      #     Signal logic verified 257/257 vs frozen research trades.
+      # ------------------------------------------------------------------
+      - name: Run T9B RSI MR Funding engine
+        id: engine_s8
+        continue-on-error: true
+        run: |
+          if [ -n "${{ github.event.inputs.run_date }}" ]; then
+            echo "RSI MR Funding: running for ${{ github.event.inputs.run_date }}"
+            python engines/phase_t9b_rsi_mr_funding_paper_engine.py \
+              --date "${{ github.event.inputs.run_date }}" \
+              --notify
+          else
+            echo "RSI MR Funding: running for yesterday"
+            python engines/phase_t9b_rsi_mr_funding_paper_engine.py --notify
+          fi
+
+      # ------------------------------------------------------------------
       # 5. Print combined summary (all six systems side-by-side)
       # ------------------------------------------------------------------
       - name: Print combined T9B summary
@@ -219,6 +237,7 @@ jobs:
           git add --force data/t9b_volcontraction_paper/ || true
           git add --force data/t9b_macross_paper/ || true
           git add --force data/t9b_momentum_paper/ || true
+          git add --force data/t9b_rsi_mr_funding_paper/ || true
 
           # Shared OHLCV caches (all engines read/write here)
           git add --force data/universe/ohlcv_1d/ || true
@@ -278,12 +297,14 @@ jobs:
           echo "  VolContr    : ${{ steps.engine_vc.outcome }}"
           echo "  MACross     : ${{ steps.engine_mac.outcome }}"
           echo "  Momentum    : ${{ steps.engine_mom.outcome }}"
+          echo "  RSI MR Fund : ${{ steps.engine_s8.outcome }}"
           if [ "${{ steps.engine_donchian.outcome }}" = "failure" ] || \
              [ "${{ steps.engine_mr.outcome }}" = "failure" ] || \
              [ "${{ steps.engine_cd.outcome }}" = "failure" ] || \
              [ "${{ steps.engine_vc.outcome }}" = "failure" ] || \
              [ "${{ steps.engine_mac.outcome }}" = "failure" ] || \
-             [ "${{ steps.engine_mom.outcome }}" = "failure" ]; then
+             [ "${{ steps.engine_mom.outcome }}" = "failure" ] || \
+             [ "${{ steps.engine_s8.outcome }}" = "failure" ]; then
             echo "WARNING: one or more engines failed -- check logs above"
           else
             echo "All engines completed successfully"
