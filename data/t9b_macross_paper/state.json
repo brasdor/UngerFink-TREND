@@ -1,13 +1,30 @@
 {
   "system_name": "MACrossShort_4H_T9B",
   "created_utc": "2026-06-12T15:31:43.644778+00:00",
-  "last_run_date": "2026-06-12",
-  "last_processed_ts_ms": 1781136000000,
-  "paper_equity_usdt": 10000.0,
-  "peak_equity_usdt": 10000.0,
-  "drawdown_pct": 0.0,
+  "last_run_date": "2026-07-10",
+  "last_processed_ts_ms": 1783627200000,
+  "paper_equity_usdt": 10104.315200000001,
+  "peak_equity_usdt": 10148.112300000003,
+  "drawdown_pct": -0.4316,
   "kill_switch_triggered": false,
-  "open_positions": [],
+  "open_positions": [
+    {
+      "position_id": "CELRUSDT_1783310400000",
+      "symbol": "CELRUSDT",
+      "entry_ts_ms": 1783310400000,
+      "entry_date": "2026-07-06",
+      "entry_price": 0.00188,
+      "stop_loss": 0.00195542,
+      "initial_risk_per_unit": 7.542e-05,
+      "risk_amount_usdt": 26.5689,
+      "qty": 352278.81115752,
+      "bars_held": 23,
+      "atr_at_entry": 3.771e-05,
+      "funding_at_entry": 0.0001,
+      "fast_ema_at_entry": 0.00190726,
+      "slow_ema_at_entry": 0.0019079
+    }
+  ],
   "pending_entries": [],
-  "closed_trade_count": 0
+  "closed_trade_count": 17
 }

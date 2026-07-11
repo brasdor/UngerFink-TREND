@@ -6,6 +6,21 @@
   "peak_equity_usdt": 10000.0,
   "drawdown_pct": 0.0,
   "kill_switch_triggered": false,
-  "open_positions": [],
+  "open_positions": [
+    {
+      "position_id": "DUSDT_20260710",
+      "symbol": "DUSDT",
+      "entry_date": "2026-07-10",
+      "entry_price": 0.005192,
+      "stop_loss": 0.00488757,
+      "initial_risk_per_unit": 0.00030443,
+      "risk_amount_usdt": 19.687499999999996,
+      "qty": 64670.03908944583,
+      "bars_held": 0,
+      "atr_at_entry": 0.00015222,
+      "rsi_at_entry": 16.8015,
+      "funding_at_entry": -0.00050479
+    }
+  ],
   "closed_trade_count": 0
 }

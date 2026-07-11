@@ -2,23 +2,23 @@
   "date": "2026-07-10",
   "trend_regime": "BEAR",
   "funding_regime": "LOW",
-  "vol_multiplier": 1.0,
+  "vol_multiplier": 0.75,
   "weights": {
     "S1": 0.05,
-    "S2": 0.3,
+    "S2": 0.15,
     "S3": 0.1,
     "S5": 0.15,
     "S6": 0.2,
     "S7": 0.2,
-    "S8": 0.0
+    "S8": 0.15
   },
   "allocator_version": "v4_ci",
-  "breadth_raw": 3.1,
-  "breadth_ema3": 3.1034,
-  "funding_raw": 9.18e-06,
-  "funding_ema5": 9.18e-06,
+  "breadth_raw": 4.83,
+  "breadth_ema3": 3.9655,
+  "funding_raw": 1.476e-05,
+  "funding_ema5": 1.104e-05,
   "last_trend_switch": "2026-07-02",
   "last_funding_switch": "2026-07-02",
   "btc_above_ema200": false,
-  "vol_percentile": 36.5
+  "vol_percentile": 6.3
 }

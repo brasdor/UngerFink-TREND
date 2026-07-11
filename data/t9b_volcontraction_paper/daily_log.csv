@@ -71,3 +71,213 @@ run_date,bar_ts_ms,event,symbol,detail
 2026-06-24,1781107200000,SIGNAL_SKIPPED,WLDUSDT,duplicate_cross_system
 2026-06-24,1781107200000,SIGNAL_SKIPPED,XLMUSDT,duplicate_cross_system
 2026-06-24,1781107200000,SIGNAL_SKIPPED,ZECUSDT,duplicate_cross_system
+2026-07-10,1783627200000,SIGNAL_SKIPPED,AAVEUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,ACHUSDT,consec=15  close=0.004238  comp_low=0.00431  ema200=0.00530246  funding=0.0100%  stop=0.00440443,0.004238,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,ACHUSDT,"price=0.004238  stop=0.00440442  risk=$26.25  funding=0.0100%  consec=15  comp_low=0.00431  equity=$10,000.00",,,0.004238,0.00440442,26.25,10000.0,,,,
+2026-07-10,1783627200000,EXIT,ACHUSDT,"reason=stop_hit  bars=9  R=-1.000  pnl=$-26.25  equity=$9,973.75",,,,,,9973.75,-0.99994,-26.2484,-0.2625,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ADAUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,AGLDUSDT,consec=17  close=0.166  comp_low=0.1668  ema200=0.205025  funding=0.0100%  stop=0.173714,0.166,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,AGLDUSDT,"price=0.1659  stop=0.173614  risk=$26.18  funding=0.0100%  consec=17  comp_low=0.1668  equity=$9,973.75",,,0.1659,0.17361428,26.1811,9973.75,,,,
+2026-07-10,1783627200000,EXIT,AGLDUSDT,"reason=time_exit_30bars  bars=30  R=2.515  pnl=$65.84  equity=$10,039.59",,,,,,10039.59,2.514813,65.8406,0.0,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,AKTUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ARBUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ARCUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,ARKMUSDT,consec=52  close=0.1155  comp_low=0.1158  ema200=0.122398  funding=0.0100%  stop=0.120486,0.1155,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,ARKMUSDT,"price=0.1155  stop=0.120486  risk=$26.35  funding=0.0100%  consec=52  comp_low=0.1158  equity=$10,039.59",,,0.1155,0.12048572,26.3539,10039.59,,,,
+2026-07-10,1783627200000,EXIT,ARKMUSDT,"reason=stop_hit  bars=3  R=-1.000  pnl=$-26.35  equity=$10,013.24",,,,,,10013.24,-1.000002,-26.354,-0.2625,
+2026-07-10,1783627200000,SIGNAL,ASTRUSDT,consec=18  close=0.004959  comp_low=0.004963  ema200=0.00594521  funding=0.0100%  stop=0.00514471,0.004959,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,ASTRUSDT,"price=0.00496  stop=0.00514572  risk=$26.28  funding=0.0100%  consec=18  comp_low=0.004963  equity=$10,013.24",,,0.00496,0.00514572,26.2848,10013.24,,,,
+2026-07-10,1783627200000,EXIT,ASTRUSDT,"reason=stop_hit  bars=18  R=-1.000  pnl=$-26.29  equity=$9,986.95",,,,,,9986.95,-1.000054,-26.2862,-0.5243,
+2026-07-10,1783627200000,SIGNAL,AVAAIUSDT,consec=15  close=0.005039  comp_low=0.005057  ema200=0.00609379  funding=0.0168%  stop=0.00527229,0.005039,0.00016839,,,,,,,,
+2026-07-10,1783627200000,ENTRY,AVAAIUSDT,"price=0.005031  stop=0.00526428  risk=$26.22  funding=0.0168%  consec=15  comp_low=0.005057  equity=$9,986.95",,,0.005031,0.00526428,26.2157,9986.95,,,,
+2026-07-10,1783627200000,EXIT,AVAAIUSDT,"reason=stop_hit  bars=1  R=-1.000  pnl=$-26.21  equity=$9,960.74",,,,,,9960.74,-0.999957,-26.2146,-0.7854,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,AVAXUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,BANDUSDT,consec=28  close=0.1472  comp_low=0.1486  ema200=0.177812  funding=0.0100%  stop=0.154629,0.1472,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,BANDUSDT,"price=0.1472  stop=0.154629  risk=$26.15  funding=0.0100%  consec=28  comp_low=0.1486  equity=$9,960.74",,,0.1472,0.15462858,26.1469,9960.74,,,,
+2026-07-10,1783627200000,EXIT,BANDUSDT,"reason=time_exit_30bars  bars=30  R=0.458  pnl=$11.97  equity=$9,972.70",,,,,,9972.7,0.457692,11.9672,-0.6662,
+2026-07-10,1783627200000,SIGNAL,BANDUSDT,consec=15  close=0.1391  comp_low=0.1404  ema200=0.168232  funding=0.0100%  stop=0.1454,0.1391,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,BANDUSDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL_SKIPPED,BCHUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,BICOUSDT,consec=33  close=0.01862  comp_low=0.01918  ema200=0.0214516  funding=0.0100%  stop=0.0198529,0.01862,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,BICOUSDT,"price=0.01858  stop=0.0198129  risk=$26.18  funding=0.0100%  consec=33  comp_low=0.01918  equity=$9,972.70",,,0.01858,0.01981286,26.1783,9972.7,,,,
+2026-07-10,1783627200000,EXIT,BICOUSDT,"reason=stop_hit  bars=3  R=-1.000  pnl=$-26.18  equity=$9,946.53",,,,,,9946.53,-1.0,-26.1783,-0.927,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,BTCDOMUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,BTCUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,C98USDT,consec=16  close=0.01407  comp_low=0.01438  ema200=0.0175907  funding=0.0100%  stop=0.0146929,0.01407,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,C98USDT,"price=0.01408  stop=0.0147029  risk=$26.11  funding=0.0100%  consec=16  comp_low=0.01438  equity=$9,946.53",,,0.01408,0.01470286,26.1096,9946.53,,,,
+2026-07-10,1783627200000,EXIT,C98USDT,"reason=stop_hit  bars=4  R=-1.000  pnl=$-26.11  equity=$9,920.42",,,,,,9920.42,-1.0,-26.1096,-1.1871,
+2026-07-10,1783627200000,SIGNAL,C98USDT,consec=40  close=0.0132  comp_low=0.01358  ema200=0.016876  funding=0.0100%  stop=0.0139957,0.0132,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,C98USDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,C98USDT,consec=66  close=0.01371  comp_low=0.01381  ema200=0.0162229  funding=0.0100%  stop=0.01433,0.01371,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,C98USDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,C98USDT,consec=77  close=0.0126  comp_low=0.0127  ema200=0.015914  funding=0.0100%  stop=0.0133729,0.0126,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,C98USDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,C98USDT,consec=18  close=0.01234  comp_low=0.01235  ema200=0.015014  funding=0.0100%  stop=0.0128643,0.01234,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,C98USDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,C98USDT,consec=20  close=0.01213  comp_low=0.0123  ema200=0.0149601  funding=0.0100%  stop=0.0126857,0.01213,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,C98USDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,C98USDT,consec=21  close=0.01208  comp_low=0.01209  ema200=0.0149314  funding=0.0100%  stop=0.0126629,0.01208,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,C98USDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,C98USDT,consec=55  close=0.01292  comp_low=0.01297  ema200=0.0143943  funding=0.0100%  stop=0.0134786,0.01292,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,C98USDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,CELRUSDT,consec=15  close=0.001837  comp_low=0.001841  ema200=0.00208053  funding=0.0100%  stop=0.00190914,0.001837,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,CELRUSDT,"price=0.001837  stop=0.00190914  risk=$26.04  funding=0.0100%  consec=15  comp_low=0.001841  equity=$9,920.42",,,0.001837,0.00190914,26.0411,9920.42,,,,
+2026-07-10,1783627200000,EXIT,CELRUSDT,"reason=stop_hit  bars=1  R=-1.000  pnl=$-26.04  equity=$9,894.38",,,,,,9894.38,-1.0,-26.0411,-1.4464,
+2026-07-10,1783627200000,SIGNAL,CFXUSDT,consec=35  close=0.04298  comp_low=0.04321  ema200=0.0465459  funding=0.0100%  stop=0.0446671,0.04298,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,CFXUSDT,"price=0.04298  stop=0.0446671  risk=$25.97  funding=0.0100%  consec=35  comp_low=0.04321  equity=$9,894.38",,,0.04298,0.04466714,25.9727,9894.38,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,CHZUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,CKBUSDT,consec=15  close=0.001022  comp_low=0.001027  ema200=0.00119103  funding=0.0100%  stop=0.00106286,0.001022,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,CKBUSDT,"price=0.001023  stop=0.00106386  risk=$25.97  funding=0.0100%  consec=15  comp_low=0.001027  equity=$9,894.38",,,0.001023,0.00106386,25.9727,9894.38,,,,
+2026-07-10,1783627200000,EXIT,CKBUSDT,"reason=time_exit_30bars  bars=30  R=1.860  pnl=$48.31  equity=$9,942.69",,,,,,9942.69,1.86001,48.3095,-0.9652,
+2026-07-10,1783627200000,SIGNAL,CKBUSDT,consec=16  close=0.000871  comp_low=0.000881  ema200=0.00109568  funding=0.0100%  stop=0.00091443,0.000871,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,CKBUSDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,CKBUSDT,consec=25  close=0.000888  comp_low=0.000896  ema200=0.00103745  funding=0.0100%  stop=0.00093114,0.000888,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,CKBUSDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL_SKIPPED,COOKIEUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,COTIUSDT,consec=20  close=0.00831  comp_low=0.00843  ema200=0.0095639  funding=0.0100%  stop=0.00874714,0.00831,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,COTIUSDT,"price=0.00831  stop=0.00874714  risk=$26.10  funding=0.0100%  consec=20  comp_low=0.00843  equity=$9,942.69",,,0.00831,0.00874714,26.0995,9942.69,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,DEXEUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,DOGEUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,DOTUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,DUSKUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,EDUUSDT,consec=49  close=0.02703  comp_low=0.0271  ema200=0.0361284  funding=0.0100%  stop=0.0286271,0.02703,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,EDUUSDT,"price=0.02702  stop=0.0286171  risk=$26.10  funding=0.0100%  consec=49  comp_low=0.0271  equity=$9,942.69",,,0.02702,0.02861714,26.0995,9942.69,,,,
+2026-07-10,1783627200000,EXIT,EDUUSDT,"reason=stop_hit  bars=1  R=-1.000  pnl=$-26.10  equity=$9,916.59",,,,,,9916.59,-1.0,-26.0995,-1.2252,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ETHUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,FETUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,GTCUSDT,consec=15  close=0.07414  comp_low=0.07733  ema200=0.0867889  funding=0.0100%  stop=0.07938,0.07414,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,GTCUSDT,"price=0.07413  stop=0.07937  risk=$26.03  funding=0.0100%  consec=15  comp_low=0.07733  equity=$9,916.59",,,0.07413,0.07937,26.031,9916.59,,,,
+2026-07-10,1783627200000,EXIT,GTCUSDT,"reason=stop_hit  bars=14  R=-1.000  pnl=$-26.03  equity=$9,890.55",,,,,,9890.55,-1.0,-26.031,-1.4845,
+2026-07-10,1783627200000,SIGNAL,GTCUSDT,consec=43  close=0.0739  comp_low=0.07514  ema200=0.0842175  funding=0.0100%  stop=0.0777071,0.0739,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,GTCUSDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,GTCUSDT,consec=51  close=0.06989  comp_low=0.07126  ema200=0.0832912  funding=0.0100%  stop=0.0737857,0.06989,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,GTCUSDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,GTCUSDT,consec=52  close=0.06852  comp_low=0.06945  ema200=0.0831442  funding=0.0100%  stop=0.0727829,0.06852,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,GTCUSDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,GTCUSDT,consec=19  close=0.06626  comp_low=0.06664  ema200=0.0790237  funding=0.0491%  stop=0.0692614,0.06626,0.00049059,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,GTCUSDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL_SKIPPED,INJUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,IOSTUSDT,consec=17  close=0.000752  comp_low=0.000754  ema200=0.00088436  funding=0.0100%  stop=0.00078057,0.000752,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,IOSTUSDT,"price=0.000751  stop=0.00077958  risk=$25.96  funding=0.0100%  consec=17  comp_low=0.000754  equity=$9,890.55",,,0.000751,0.00077958,25.9627,9890.55,,,,
+2026-07-10,1783627200000,EXIT,IOSTUSDT,"reason=stop_hit  bars=1  R=-1.000  pnl=$-25.97  equity=$9,864.58",,,,,,9864.58,-1.00035,-25.9718,-1.7432,
+2026-07-10,1783627200000,SIGNAL,IOSTUSDT,consec=17  close=0.000712  comp_low=0.000713  ema200=0.00079374  funding=0.0100%  stop=0.00073671,0.000712,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,IOSTUSDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,IOTXUSDT,consec=19  close=0.002704  comp_low=0.002711  ema200=0.00334444  funding=0.0100%  stop=0.00282057,0.002704,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,IOTXUSDT,"price=0.002702  stop=0.00281858  risk=$25.89  funding=0.0100%  consec=19  comp_low=0.002711  equity=$9,864.58",,,0.002702,0.00281858,25.8945,9864.58,,,,
+2026-07-10,1783627200000,EXIT,IOTXUSDT,"reason=stop_hit  bars=16  R=-1.000  pnl=$-25.90  equity=$9,838.69",,,,,,9838.69,-1.000086,-25.8967,-2.0011,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,JTOUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,KNCUSDT,consec=38  close=0.1196  comp_low=0.1197  ema200=0.13045  funding=0.0100%  stop=0.124286,0.1196,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,KNCUSDT,"price=0.1195  stop=0.124186  risk=$25.83  funding=0.0100%  consec=38  comp_low=0.1197  equity=$9,838.69",,,0.1195,0.12418572,25.8266,9838.69,,,,
+2026-07-10,1783627200000,EXIT,KNCUSDT,"reason=stop_hit  bars=15  R=-1.000  pnl=$-25.83  equity=$9,812.86",,,,,,9812.86,-1.000002,-25.8267,-2.2584,
+2026-07-10,1783627200000,SIGNAL,KNCUSDT,consec=20  close=0.112  comp_low=0.1141  ema200=0.127058  funding=0.0100%  stop=0.116843,0.112,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,KNCUSDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,KNCUSDT,consec=17  close=0.1103  comp_low=0.1107  ema200=0.117932  funding=0.0100%  stop=0.1141,0.1103,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,KNCUSDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,KNCUSDT,consec=18  close=0.1096  comp_low=0.1099  ema200=0.117849  funding=0.0100%  stop=0.113314,0.1096,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,KNCUSDT,arbitrator: lower_priority_bear,,,,,,,,,,lower_priority_bear
+2026-07-10,1783627200000,SIGNAL,LQTYUSDT,consec=21  close=0.1843  comp_low=0.1856  ema200=0.203696  funding=0.0100%  stop=0.1915,0.1843,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,LQTYUSDT,"price=0.1843  stop=0.1915  risk=$25.76  funding=0.0100%  consec=21  comp_low=0.1856  equity=$9,812.86",,,0.1843,0.1915,25.7588,9812.86,,,,
+2026-07-10,1783627200000,SIGNAL,MAVUSDT,consec=16  close=0.00961  comp_low=0.00965  ema200=0.0105494  funding=0.0100%  stop=0.00995714,0.00961,0.0001,,,,,,,,
+2026-07-10,1783627200000,ENTRY,MAVUSDT,"price=0.00961  stop=0.00995714  risk=$25.76  funding=0.0100%  consec=16  comp_low=0.00965  equity=$9,812.86",,,0.00961,0.00995714,25.7588,9812.86,,,,
+2026-07-10,1783627200000,EXIT,MAVUSDT,"reason=stop_hit  bars=15  R=-1.000  pnl=$-25.76  equity=$9,787.10",,,,,,9787.1,-1.0,-25.7588,-2.515,
+2026-07-10,1783627200000,SIGNAL,MINAUSDT,consec=15  close=0.0374  comp_low=0.03763  ema200=0.0444907  funding=0.0100%  stop=0.0388129,0.0374,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,MINAUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,MINAUSDT,consec=16  close=0.03723  comp_low=0.03737  ema200=0.0444185  funding=0.0100%  stop=0.0386943,0.03723,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,MINAUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,MTLUSDT,consec=20  close=0.2271  comp_low=0.2292  ema200=0.245281  funding=0.0100%  stop=0.232971,0.2271,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,MTLUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL_SKIPPED,NEARUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,ONEUSDT,consec=18  close=0.001377  comp_low=0.0013842  ema200=0.00166043  funding=0.0100%  stop=0.00143711,0.001377,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ONEUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,ONEUSDT,consec=20  close=0.001337  comp_low=0.001358  ema200=0.00165459  funding=0.0100%  stop=0.00140469,0.001337,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ONEUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,ONEUSDT,consec=21  close=0.001317  comp_low=0.001324  ema200=0.00165123  funding=0.0100%  stop=0.00138969,0.001317,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ONEUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,ONEUSDT,consec=28  close=0.001253  comp_low=0.001283  ema200=0.0016275  funding=0.0100%  stop=0.00133114,0.001253,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ONEUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,ONEUSDT,consec=15  close=0.001194  comp_low=0.001196  ema200=0.00151071  funding=0.0100%  stop=0.00126514,0.001194,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ONEUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,ONEUSDT,consec=16  close=0.001188  comp_low=0.001189  ema200=0.00150749  funding=0.0100%  stop=0.00125886,0.001188,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ONEUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,ONEUSDT,consec=18  close=0.001155  comp_low=0.001177  ema200=0.00150087  funding=0.0100%  stop=0.00122329,0.001155,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ONEUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,ONEUSDT,consec=24  close=0.001202  comp_low=0.001205  ema200=0.00141713  funding=0.0100%  stop=0.00126457,0.001202,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ONEUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL_SKIPPED,PIPPINUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,QTUMUSDT,consec=18  close=0.694  comp_low=0.699  ema200=0.730048  funding=0.0100%  stop=0.714857,0.694,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,QTUMUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,QTUMUSDT,consec=28  close=0.675  comp_low=0.683  ema200=0.726972  funding=0.0100%  stop=0.701571,0.675,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,QTUMUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL_SKIPPED,RIFUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,RLCUSDT,consec=27  close=0.3221  comp_low=0.3343  ema200=0.386071  funding=0.0100%  stop=0.338314,0.3221,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,RLCUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,RLCUSDT,consec=24  close=0.3188  comp_low=0.3222  ema200=0.37282  funding=0.0100%  stop=0.329971,0.3188,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,RLCUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,RLCUSDT,consec=34  close=0.2939  comp_low=0.2991  ema200=0.36652  funding=0.0100%  stop=0.3084,0.2939,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,RLCUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,RLCUSDT,consec=35  close=0.2906  comp_low=0.2926  ema200=0.365765  funding=0.0100%  stop=0.306314,0.2906,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,RLCUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL_SKIPPED,RONINUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,ROSEUSDT,consec=15  close=0.006314  comp_low=0.006462  ema200=0.0076211  funding=0.0100%  stop=0.00663514,0.006314,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ROSEUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,ROSEUSDT,consec=16  close=0.006253  comp_low=0.006271  ema200=0.00760748  funding=0.0100%  stop=0.00659471,0.006253,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ROSEUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,ROSEUSDT,consec=23  close=0.006087  comp_low=0.006109  ema200=0.00752085  funding=0.0100%  stop=0.00645429,0.006087,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ROSEUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,ROSEUSDT,consec=24  close=0.005912  comp_low=0.006062  ema200=0.00750484  funding=0.0100%  stop=0.00631757,0.005912,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ROSEUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,ROSEUSDT,consec=15  close=0.005608  comp_low=0.005653  ema200=0.00704117  funding=0.0100%  stop=0.005874,0.005608,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ROSEUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,RSRUSDT,consec=15  close=0.001087  comp_low=0.001108  ema200=0.00137146  funding=0.0100%  stop=0.00113829,0.001087,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,RSRUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,RSRUSDT,consec=16  close=0.001081  comp_low=0.001083  ema200=0.00136857  funding=0.0100%  stop=0.00113357,0.001081,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,RSRUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,RSRUSDT,consec=17  close=0.001067  comp_low=0.001068  ema200=0.00136557  funding=0.0100%  stop=0.001121,0.001067,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,RSRUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,SFPUSDT,consec=20  close=0.2241  comp_low=0.2286  ema200=0.254457  funding=0.0100%  stop=0.231571,0.2241,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,SFPUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,SFPUSDT,consec=21  close=0.2236  comp_low=0.224  ema200=0.25415  funding=0.0100%  stop=0.231714,0.2236,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,SFPUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,SFPUSDT,consec=28  close=0.2139  comp_low=0.2182  ema200=0.251868  funding=0.0100%  stop=0.223214,0.2139,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,SFPUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,SFPUSDT,consec=20  close=0.2187  comp_low=0.2194  ema200=0.234195  funding=0.0100%  stop=0.226771,0.2187,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,SFPUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,SONICUSDT,consec=32  close=0.02547  comp_low=0.02648  ema200=0.0315115  funding=0.0255%  stop=0.0267914,0.02547,0.00025487,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,SONICUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL_SKIPPED,STGUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,STXUSDT,consec=16  close=0.1623  comp_low=0.1634  ema200=0.190231  funding=0.0100%  stop=0.169114,0.1623,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,STXUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,STXUSDT,consec=17  close=0.1619  comp_low=0.1621  ema200=0.189949  funding=0.0100%  stop=0.168786,0.1619,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,STXUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,THETAUSDT,consec=38  close=0.1545  comp_low=0.1552  ema200=0.17458  funding=0.0100%  stop=0.162457,0.1545,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,THETAUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,THETAUSDT,consec=39  close=0.1495  comp_low=0.1541  ema200=0.17433  funding=0.0100%  stop=0.158114,0.1495,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,THETAUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,THETAUSDT,consec=17  close=0.1278  comp_low=0.1287  ema200=0.157158  funding=0.0100%  stop=0.134014,0.1278,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,THETAUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,THETAUSDT,consec=18  close=0.1269  comp_low=0.1275  ema200=0.156857  funding=0.0100%  stop=0.132957,0.1269,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,THETAUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,TONUSDT,consec=61  close=1.5901  comp_low=1.6137  ema200=1.73189  funding=0.1296%  stop=1.7147,1.5901,0.00129627,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,TONUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL_SKIPPED,TRXUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,WLDUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,XLMUSDT,duplicate_cross_system,,,,,,,,,,
+2026-07-10,1783627200000,SIGNAL,XVGUSDT,consec=24  close=0.002486  comp_low=0.002509  ema200=0.00283887  funding=0.0100%  stop=0.00260929,0.002486,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,XVGUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,XVGUSDT,consec=26  close=0.002424  comp_low=0.002466  ema200=0.00283149  funding=0.0100%  stop=0.00255529,0.002424,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,XVGUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,XVGUSDT,consec=34  close=0.002332  comp_low=0.002352  ema200=0.00279959  funding=0.0100%  stop=0.00246357,0.002332,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,XVGUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,XVGUSDT,consec=35  close=0.002303  comp_low=0.002322  ema200=0.00279465  funding=0.0100%  stop=0.00244843,0.002303,0.0001,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,XVGUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,XVGUSDT,consec=17  close=0.002178  comp_low=0.002184  ema200=0.00265109  funding=0.0939%  stop=0.00228543,0.002178,0.00093921,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,XVGUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,XVGUSDT,consec=20  close=0.002145  comp_low=0.002165  ema200=0.00263699  funding=0.0283%  stop=0.00225257,0.002145,0.00028346,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,XVGUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,XVGUSDT,consec=21  close=0.002072  comp_low=0.002143  ema200=0.00263137  funding=0.0283%  stop=0.00219229,0.002072,0.00028346,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,XVGUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,XVGUSDT,consec=30  close=0.002151  comp_low=0.002157  ema200=0.00249367  funding=0.0368%  stop=0.00226357,0.002151,0.0003678,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,XVGUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL,XVGUSDT,consec=31  close=0.002128  comp_low=0.002136  ema200=0.00249003  funding=0.0568%  stop=0.00224471,0.002128,0.00056765,,,,,,,,
+2026-07-10,1783627200000,SIGNAL_SKIPPED,XVGUSDT,arbitrator: system_heat_exceeded  sys_heat=495  adding=26  limit=500,,,,,,,,,,system_heat_exceeded  sys_heat=495  adding=26  limit=500
+2026-07-10,1783627200000,SIGNAL_SKIPPED,ZECUSDT,duplicate_cross_system,,,,,,,,,,
