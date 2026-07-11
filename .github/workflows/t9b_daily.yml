@@ -47,6 +47,18 @@ jobs:
         run: pip install -r requirements.txt
 
       # ------------------------------------------------------------------
+      # 3a. Refresh futures data caches (funding + 1D + 4H klines).
+      #     Must run before regime_daily.py and all Futures engines.
+      #     Probes fapi.binance.com (geo-blocked from US runners as of
+      #     2026-07-11) and falls back to data.binance.vision daily dumps
+      #     for klines. Funding cannot be refreshed from CI when blocked —
+      #     the step prints a staleness warning instead.
+      # ------------------------------------------------------------------
+      - name: Refresh futures data caches
+        continue-on-error: true
+        run: python .github/scripts/refresh_futures_data.py
+
+      # ------------------------------------------------------------------
       # 3b. Compute daily regime state (must run before all engines)
       #     Writes data/regime_state.json read by all T9B engines.
       # ------------------------------------------------------------------
