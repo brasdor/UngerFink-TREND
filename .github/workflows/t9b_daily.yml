@@ -208,62 +208,17 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Donchian outputs
-          git add --force \
-            data/t9b_paper/state.json \
-            data/t9b_paper/open_positions.csv \
-            data/t9b_paper/signals_today.csv \
-            data/t9b_paper/equity_curve.csv \
-            data/t9b_paper/daily_log.csv \
-            data/t9b_paper/mtm_positions.csv \
-            || true
-
-          # MeanReversionRSI outputs
-          git add --force \
-            data/t9b_mr_paper/state.json \
-            data/t9b_mr_paper/open_positions.csv \
-            data/t9b_mr_paper/signals_today.csv \
-            data/t9b_mr_paper/equity_curve.csv \
-            data/t9b_mr_paper/daily_log.csv \
-            data/t9b_mr_paper/mtm_positions.csv \
-            || true
-
-          # ConsecDownDaysMR outputs
-          git add --force \
-            data/t9b_consecdowndays_paper/state.json \
-            data/t9b_consecdowndays_paper/open_positions.csv \
-            data/t9b_consecdowndays_paper/signals_today.csv \
-            data/t9b_consecdowndays_paper/equity_curve.csv \
-            data/t9b_consecdowndays_paper/daily_log.csv \
-            data/t9b_consecdowndays_paper/mtm_positions.csv \
-            || true
-
-          # VolContractionShort outputs (S6)
-          git add --force \
-            data/t9b_volcontraction_paper/state.json \
-            data/t9b_volcontraction_paper/open_positions.csv \
-            data/t9b_volcontraction_paper/signals_today.csv \
-            data/t9b_volcontraction_paper/daily_log.csv \
-            data/t9b_volcontraction_paper/pending_entries.csv \
-            || true
-
-          # MACrossShort outputs (S7)
-          git add --force \
-            data/t9b_macross_paper/state.json \
-            data/t9b_macross_paper/open_positions.csv \
-            data/t9b_macross_paper/signals_today.csv \
-            data/t9b_macross_paper/daily_log.csv \
-            data/t9b_macross_paper/pending_entries.csv \
-            || true
-
-          # MomentumFactor outputs (S5)
-          git add --force \
-            data/t9b_momentum_paper/state.json \
-            data/t9b_momentum_paper/open_positions.csv \
-            data/t9b_momentum_paper/signals_today.csv \
-            data/t9b_momentum_paper/equity_curve.csv \
-            data/t9b_momentum_paper/daily_log.csv \
-            || true
+          # Engine outputs — one directory add per engine.
+          # IMPORTANT: never list individual files in a single git add:
+          # one missing pathspec (e.g. daily_log.csv before first signal)
+          # makes git add fail atomically and stage NOTHING, and || true
+          # hides it. This silently discarded S7 state daily since June 13.
+          git add --force data/t9b_paper/ || true
+          git add --force data/t9b_mr_paper/ || true
+          git add --force data/t9b_consecdowndays_paper/ || true
+          git add --force data/t9b_volcontraction_paper/ || true
+          git add --force data/t9b_macross_paper/ || true
+          git add --force data/t9b_momentum_paper/ || true
 
           # Shared OHLCV cache (all engines read/write here)
           git add --force data/universe/ohlcv_1d/ || true
