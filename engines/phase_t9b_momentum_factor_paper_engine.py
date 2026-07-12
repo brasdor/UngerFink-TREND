@@ -82,6 +82,7 @@ EPS          = 1e-10
 MIN_ORDER_SIZE_USDT  = 15.0        # Fix 2: minimum per-position notional
 MIN_SHORT_VOL_USDT   = 1_000_000   # Fix 5: min avg daily USDT volume for shorts
 FUNDING_WARN_RATE    = 0.0005      # Fix 4: warn if funding > 0.05% per 8h
+KILL_SWITCH_DD_PCT   = 35.0        # halt new baskets if DD from peak exceeds this
 
 
 # â”€â”€ Utilities â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -115,6 +116,7 @@ def _empty_state() -> dict:
         "paper_equity_usdt":  STARTING_EQ,
         "peak_equity_usdt":   STARTING_EQ,
         "drawdown_pct":       0.0,
+        "kill_switch_triggered": False,
         "total_rebal_count":  0,
         "long_positions":     [],
         "short_positions":    [],
@@ -510,6 +512,47 @@ def do_rebalance(state: dict, close: pd.DataFrame, today: Date,
         realized_pnl += (pos['entry_price'] - price) * pos['quantity']
     equity += realized_pnl
 
+    # Kill-switch: -35% drawdown from peak halts new basket construction
+    peak_now = max(float(state['peak_equity_usdt']), equity)
+    dd_now   = (equity - peak_now) / max(peak_now, EPS) * 100.0
+    kill_sw  = bool(state.get('kill_switch_triggered', False))
+    if not kill_sw and dd_now <= -KILL_SWITCH_DD_PCT:
+        kill_sw = True
+        state['kill_switch_triggered'] = True
+        _log_event(today, 'KILL_SWITCH',
+                   f"DD={dd_now:.2f}% breached -{KILL_SWITCH_DD_PCT}% -- closing baskets, no new entries",
+                   equity)
+        p(f"  [HALT] Kill-switch triggered: DD={dd_now:.2f}% from peak "
+          f"-- closing all baskets, no new entries until reviewed")
+    if kill_sw:
+        # Close everything, open nothing. Realized P&L already folded into equity.
+        cost_frac = COST_RT if (old_longs or old_shorts) else 0.0
+        equity_after_cost = equity * (1.0 - cost_frac)
+        signal_rows = []
+        for sym in sorted(old_longs):
+            signal_rows.append({'symbol': sym, 'side': 'LONG', 'action': 'CLOSE',
+                                'rank': 0, 'entry_price': np.nan,
+                                'quantity': np.nan, 'notional': np.nan,
+                                'period_return_pct': np.nan})
+        for sym in sorted(old_shorts):
+            signal_rows.append({'symbol': sym, 'side': 'SHORT', 'action': 'CLOSE',
+                                'rank': 0, 'entry_price': np.nan,
+                                'quantity': np.nan, 'notional': np.nan,
+                                'period_return_pct': np.nan})
+        state['long_positions']    = []
+        state['short_positions']   = []
+        state['last_rebal_date']   = str(today)
+        state['paper_equity_usdt'] = round(equity_after_cost, 4)
+        state['peak_equity_usdt']  = round(max(peak_now, equity_after_cost), 4)
+        state['drawdown_pct']      = round(
+            (equity_after_cost - state['peak_equity_usdt'])
+            / max(state['peak_equity_usdt'], EPS) * 100, 4)
+        state['_last_rebal_equity'] = equity_after_cost
+        _log_event(today, 'SKIP', 'kill_switch_active -- no new baskets',
+                   equity_after_cost)
+        _append_equity_curve(today, 'REBAL', equity_after_cost, realized_pnl, cost_frac)
+        return signal_rows
+
     # New baskets (Fix 5 liquidity filter + Fix 1 cross-system dedup applied inside)
     longs, shorts, meta = compute_basket(close, today, vol_usdt=vol_usdt)
 
@@ -784,6 +827,7 @@ def print_notify(state: dict, close: pd.DataFrame, today: Date, rebalanced: bool
     p(f"  MTM equity:          ${base + pnl:>10,.2f}")
     p(f"  Peak equity:         ${state['peak_equity_usdt']:>10,.2f}")
     p(f"  Drawdown:            {state['drawdown_pct']:>+9.2f}%")
+    p(f"  Kill-switch:         {'TRIGGERED -- no new baskets' if state.get('kill_switch_triggered') else 'not triggered'}")
     p(f"  Long positions:      {len(state['long_positions']):>4}")
     p(f"  Short positions:     {len(state['short_positions']):>4}")
     p(f"  Rebalanced today:    {'YES' if rebalanced else 'no'}")
