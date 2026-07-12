@@ -1,2 +1,1 @@
-symbol,signal_date,close,rsi,atr,funding,stop_loss,risk_unit,signal
-HIGHUSDT,2026-07-10,0.0478,11.6766,0.0021647,-0.00743014,0.0434706,0.0043294,BUY_MR_FUNDING
+symbol,signal_date,close,rsi,atr,funding,stop_loss,signal
