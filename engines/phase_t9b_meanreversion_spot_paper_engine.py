@@ -1,52 +1,36 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PHASE T9B -- MEANREVERSIONRSI 1D PAPER ENGINE (FUTURES CONFIG)
-===============================================================
+PHASE T9B -- MEANREVERSIONRSI 1D PAPER ENGINE
+==============================================
 
-Paper trading engine for the frozen MeanReversionRSI 1D config,
-migrated to Binance Futures USD-M per Step 18 (PASS, 2026-06-19).
+Paper trading engine for the frozen MeanReversionRSI 1D config.
 
-Frozen signal config (unchanged from Spot T8 freeze 2026-06-01):
-  Entry       : RSI(14) < 25 on daily close -- enter LONG (signal-bar close)
-  Safety stop : ATR(14) x 3.0 below entry close  (safety net only)
-  Exit        : Fixed time exit after 20 bars
+Frozen config (2026-06-01):
+  Universe    : 52-symbol crypto universe
+  Timeframe   : 1D
   Filter      : none  (EMA200 confirmed net-negative across all TFs)
+  Entry       : RSI(14) < 25 on daily close -- enter LONG at next open
+  Safety stop : ATR(14) x 3.0 below entry close  (safety net only)
+  Exit        : Fixed time exit after 20 bars  (Variant E)
   Max pos     : 10 concurrent
   Risk/trade  : 0.25% of current equity
-  Leverage    : 1.0x  LONG only
+  Leverage    : 1.0x  (Binance Spot, LONG only)
 
-Futures migration (2026-07-12, Step 18):
-  Venue       : Binance Futures USD-M  (was Binance Spot)
-  Universe    : 290-symbol Futures universe, auto-discovered from
-                data/futures_universe/ohlcv_1d/  (was 52-symbol Spot list)
-  Cost floor  : 0.25R (Futures long)  -- Step 18 net avg_r +0.3162R clears it
-  Funding     : NO funding gate (S2 enters regardless of funding sign --
-                the funding gate variant is System 8, a separate engine).
-                Funding cost is implicitly favourable: S2's oversold signal
-                selects negative-funding environments (finding #21).
-  Kill-switch : -35% DD from peak, unchanged from Spot engine.
-  Signal math : SMA-seeded Wilder RSI/ATR, ported verbatim from
-                step18_s2_futures_costcheck.py (finding #22 discipline).
-
-Data strategy (same as System 8 engine):
-  1. Committed cache: data/futures_universe/ohlcv_1d/{SYM}_1d.csv
-     (kept current by CI step 3a: fapi probe -> binance.vision fallback)
-  2. Optional live top-up via fapi.binance.com (falls back silently to
-     cache if geo-blocked -- HTTP 451 from US GitHub runners).
-  3. --no-download: committed cache only.
-
-State continuity: same state dir (data/t9b_mr_paper/), same T9B clock
-(FREEZE_DATE 2026-06-01). Open Spot positions are migrated on first run:
-symbols normalized BTC/USDT -> BTCUSDT; positions whose symbol has no
-Futures data are closed at entry price (0 P&L, not counted in metrics).
+OHLCV data strategy (geo-unrestricted, works from GitHub Actions):
+  1. Load committed historical cache: data/universe/ohlcv_1d/{sym}_1d.csv
+     Tracked in git, same cache shared with Donchian T9B engine.
+  2. Append latest bars via yfinance (geo-unrestricted, works on GitHub Actions).
+     Binance.com returns HTTP 451 from US IPs; ccxt/binanceus also fails.
+  3. Commit updated files back via git in the workflow.
+  4. --no-download: skip live fetch, use committed cache only.
 
 Usage:
   python phase_t9b_meanreversion_paper_engine.py
-      --date 2026-07-12    run for a specific date
-      --backfill           replay from freeze date through yesterday
+      --date 2026-06-01    run for a specific date
+      --backfill           replay from freeze date (2026-06-01) to yesterday
       --no-download        use committed cache only
-      --reset              wipe state and restart
+      --reset              wipe state and restart from $10,000
       --notify             compact notification summary (for CI)
 
 Output files (data/t9b_mr_paper/):
@@ -64,6 +48,7 @@ from __future__ import annotations
 import argparse
 import dataclasses
 import json
+import time
 from dataclasses import asdict, dataclass
 from datetime import date, timedelta
 from pathlib import Path
@@ -79,12 +64,11 @@ from signal_arbitrator import SignalArbitrator
 
 
 # =============================================================================
-# FROZEN CONFIG  (signal params frozen 2026-06-01; Futures venue 2026-07-12)
+# FROZEN CONFIG  (2026-06-01)
 # =============================================================================
 
 SYSTEM_NAME         = "MR_RSI14_1D_T9B"
-FREEZE_DATE         = date(2026, 6, 1)    # T9B clock start (unchanged)
-MIGRATION_DATE      = date(2026, 7, 12)   # Spot -> Futures venue migration
+FREEZE_DATE         = date(2026, 6, 1)
 
 RSI_N               = 14
 OVERSOLD_THR        = 25      # enter when RSI < 25 on close
@@ -95,13 +79,14 @@ TIME_EXIT_BARS      = 20      # exit after exactly 20 daily bars
 RISK_PER_TRADE_PCT  = 0.0025  # 0.25% of current equity
 MIN_ORDER_SIZE_USDT = 15.0    # Fix 2: minimum position notional
 MAX_OPEN_POSITIONS  = 10
-INITIAL_CAPITAL     = 12_000.0  # Scheme C: $12k MR pool (40% S2 within pool)
+INITIAL_CAPITAL     = 12_000.0  # Scheme C allocation: $12k of $30k Spot
 LEVERAGE            = 1.0
 KILL_SWITCH_DD_PCT  = 35.0    # halt new entries if DD from peak exceeds this
-COST_FLOOR_R        = 0.25    # Futures long cost floor (research gate, doc only)
 
-LIMIT_BARS          = 2000
-MIN_BARS_REQUIRED   = 50      # research convention (step18: len(df) >= 50)
+LIMIT_BARS          = 2000    # bars to load per symbol
+SLEEP_SEC           = 0.15
+MAX_RETRIES         = 3
+MIN_BARS_REQUIRED   = RSI_N + 20
 
 EPS = 1e-12
 
@@ -118,22 +103,33 @@ SIGNALS_CSV     = DATA_DIR / "signals_today.csv"
 EQUITY_CSV      = DATA_DIR / "equity_curve.csv"
 DAILY_LOG_CSV   = DATA_DIR / "daily_log.csv"
 
-CACHE_1D        = ROOT / "data" / "futures_universe" / "ohlcv_1d"
+# Shared committed OHLCV cache (also used by Donchian T9B, tracked in git)
+COMMITTED_CACHE = ROOT / "data" / "universe" / "ohlcv_1d"
 
 DATA_DIR.mkdir(parents=True, exist_ok=True)
+COMMITTED_CACHE.mkdir(parents=True, exist_ok=True)
 
-_SESSION_OHLCV:   dict = {}
+_SESSION_OHLCV:  dict = {}
 _SKIP_LIVE_FETCH: bool = False
 
 
 # =============================================================================
-# UNIVERSE  (auto-discovered: all symbols with committed 1D Futures OHLCV)
+# UNIVERSE  (52-symbol original crypto universe used throughout T1-T8)
 # =============================================================================
 
-def _discover_universe() -> List[str]:
-    return sorted(f.stem.replace("_1d", "") for f in CACHE_1D.glob("*_1d.csv"))
-
-MR_UNIVERSE: List[str] = _discover_universe()
+MR_UNIVERSE = [
+    "AAVE/USDT", "ADA/USDT",  "ALT/USDT",  "APT/USDT",  "ARB/USDT",
+    "ARKM/USDT","ASTER/USDT","ATOM/USDT", "AVAX/USDT", "BCH/USDT",
+    "BNB/USDT", "BTC/USDT",  "CHZ/USDT",  "DASH/USDT", "DOGE/USDT",
+    "DOT/USDT", "EIGEN/USDT","ENA/USDT",  "ETH/USDT",  "FET/USDT",
+    "FIL/USDT", "GRT/USDT",  "HBAR/USDT", "ICP/USDT",  "INJ/USDT",
+    "JTO/USDT", "LINK/USDT", "LPT/USDT",  "LTC/USDT",  "MORPHO/USDT",
+    "NEAR/USDT","NIL/USDT",  "ONDO/USDT", "ORDI/USDT", "PENDLE/USDT",
+    "PENGU/USDT","PEPE/USDT","RENDER/USDT","SAGA/USDT","SEI/USDT",
+    "SOL/USDT", "SPK/USDT",  "SUI/USDT",  "TAO/USDT",  "TIA/USDT",
+    "TON/USDT", "TRX/USDT",  "UNI/USDT",  "WLD/USDT",  "XRP/USDT",
+    "ZEC/USDT", "ZEN/USDT",
+]
 
 
 # =============================================================================
@@ -161,6 +157,10 @@ class MRPosition:
 # =============================================================================
 # STATE HELPERS
 # =============================================================================
+
+def safe_sym(symbol: str) -> str:
+    return symbol.replace("/", "_").replace(":", "_")
+
 
 def load_state() -> dict:
     if STATE_PATH.exists():
@@ -203,66 +203,46 @@ def positions_from_state(state: dict) -> Dict[str, MRPosition]:
     return out
 
 
-def positions_to_state(state: dict, positions: Dict[str, MRPosition]) -> None:
-    state["open_positions"] = [asdict(p) for p in positions.values()]
-
-
-def append_csv(path: Path, rows: List[dict]) -> None:
-    if not rows:
-        return
-    pd.DataFrame(rows).to_csv(path, mode="a", index=False, header=not path.exists())
-
-
 def _reconcile_state(state: dict, run_date: date) -> None:
-    """Fix 3: verify open positions on startup.
+    """Fix 3: Verify open positions consistency on engine startup.
 
-    Migration handling (2026-07-12): positions opened by the Spot engine use
-    'BTC/USDT' symbol format -- normalize to Futures 'BTCUSDT'. Positions
-    whose normalized symbol has no Futures 1D data are closed at entry price
-    (0 P&L, logged, not counted in metrics). Positions predating FREEZE_DATE
-    are invalid seeds and closed the same way.
+    Also removes positions whose entry_date predates the engine start date
+    (FREEZE_DATE). These are invalid seeds -- typically backfill artefacts
+    written before the engine was live. They are closed at entry_price with
+    zero P&L and logged as 'position_predates_engine_start'. They are NOT
+    counted in closed_trade_count or performance metrics.
     """
     positions = state.get("open_positions", [])
 
-    # ── Spot -> Futures symbol normalization (one-time migration) ────────
-    migrated = 0
+    # ── Invalid-seed purge ────────────────────────────────────────────────
+    valid   = []
+    purged  = []
     for pos in positions:
-        sym = str(pos.get("symbol", ""))
-        if "/" in sym:
-            pos["symbol"] = sym.replace("/", "").replace(":", "")
-            migrated += 1
-    if migrated:
-        print(f"[MIGRATE] Normalized {migrated} Spot-format symbol(s) to Futures format")
-
-    # ── Invalid-seed / no-data purge ──────────────────────────────────────
-    valid  = []
-    purged = []
-    for pos in positions:
-        sym = str(pos.get("symbol", ""))
         try:
             edate = date.fromisoformat(str(pos.get("entry_date", "")))
         except (ValueError, TypeError):
             valid.append(pos)
             continue
         if edate < FREEZE_DATE:
-            purged.append((pos, f"entry_date={edate} predates engine start {FREEZE_DATE}"))
-        elif not (CACHE_1D / f"{sym}_1d.csv").exists():
-            purged.append((pos, "no Futures 1D data after Spot->Futures migration"))
+            purged.append(pos)
         else:
             valid.append(pos)
 
     if purged:
         rows = []
-        for pos, why in purged:
+        for pos in purged:
             sym = pos.get("symbol", "?")
+            ed  = pos.get("entry_date", "?")
             ep  = pos.get("entry_price", 0)
-            print(f"[PURGED] {sym}: {why} -> closed at entry_price={ep} "
-                  f"(0 P&L, not counted in metrics)", flush=True)
+            print(f"[INVALID SEED] {sym}  entry_date={ed} < FREEZE_DATE={FREEZE_DATE}"
+                  f"  -> closed at entry_price={ep} (0 P&L, not counted in metrics)",
+                  flush=True)
             rows.append({
-                "run_date": str(run_date),
-                "event":    "INVALID_SEED_CLOSED",
-                "symbol":   sym,
-                "detail":   f"{why}; closed at entry_price={ep}; not in metrics",
+                "run_date":    str(run_date),
+                "event":       "INVALID_SEED_CLOSED",
+                "symbol":      sym,
+                "detail":      (f"entry_date={ed} predates engine start {FREEZE_DATE}"
+                                f"; closed at entry_price={ep}; not in metrics"),
             })
         state["open_positions"] = valid
         append_csv(DAILY_LOG_CSV, rows)
@@ -315,43 +295,59 @@ def _reconcile_state(state: dict, run_date: date) -> None:
         print(f"[RECONCILE] OK  ({len(positions)} position(s) verified)")
 
 
+def positions_to_state(state: dict, positions: Dict[str, MRPosition]) -> None:
+    state["open_positions"] = [asdict(p) for p in positions.values()]
+
+
+def read_csv_or_empty(path: Path) -> pd.DataFrame:
+    return pd.read_csv(path) if path.exists() else pd.DataFrame()
+
+
+def append_csv(path: Path, rows: List[dict]) -> None:
+    if not rows:
+        return
+    pd.DataFrame(rows).to_csv(path, mode="a", index=False, header=not path.exists())
+
+
 # =============================================================================
-# OHLCV LOADING  (committed 1D Futures cache + optional live fetch --
-#                 identical strategy to System 8 engine)
+# OHLCV LOADING  (identical strategy to Donchian T9B)
 # =============================================================================
 
 def load_ohlcv(symbol: str, up_to_date: Optional[date] = None) -> pd.DataFrame:
     global _SESSION_OHLCV
+
     if symbol not in _SESSION_OHLCV:
-        cache_path = CACHE_1D / f"{symbol}_1d.csv"
-        df_base: pd.DataFrame = pd.DataFrame()
+        safe       = safe_sym(symbol)
+        cache_path = COMMITTED_CACHE / f"{safe}_1d.csv"
+
+        raw_base: Optional[pd.DataFrame] = None
         if cache_path.exists():
             try:
-                df_base = _parse_ohlcv_1d(pd.read_csv(cache_path))
+                raw_base = pd.read_csv(cache_path)
             except Exception as exc:
-                print(f"  [WARN] {symbol}: 1D cache read error -- {exc}", flush=True)
+                print(f"  [WARN] {symbol}: cache read error -- {exc}")
 
-        df_live: pd.DataFrame = pd.DataFrame()
+        raw_live: Optional[pd.DataFrame] = None
         if not _SKIP_LIVE_FETCH:
-            raw = _fetch_binance_1d(symbol, limit=15)
-            if raw is not None:
-                df_live = _parse_ohlcv_1d(raw)
+            raw_live = _fetch_latest_bars(symbol, n_bars=10)
+
+        df_base = _parse_ohlcv(raw_base) if raw_base is not None else pd.DataFrame()
+        df_live = _parse_ohlcv(raw_live) if raw_live is not None else pd.DataFrame()
 
         if not df_base.empty and not df_live.empty:
             merged = (pd.concat([df_base, df_live], ignore_index=True)
-                      .drop_duplicates("ts_ms").sort_values("ts_ms").reset_index(drop=True))
+                      .drop_duplicates("time").sort_values("time").reset_index(drop=True))
         elif not df_base.empty:
             merged = df_base
-        else:
+        elif not df_live.empty:
             merged = df_live
+        else:
+            merged = pd.DataFrame()
 
-        if not merged.empty and not df_live.empty and cache_path.parent.exists():
-            out = merged.copy()
-            out["date"] = pd.to_datetime(out["ts_ms"], unit="ms", utc=True).dt.strftime("%Y-%m-%d")
-            out = out.rename(columns={"ts_ms": "timestamp"})
-            out[["timestamp", "open", "high", "low", "close", "volume", "date"]].to_csv(
-                cache_path, index=False)
+        if not merged.empty and raw_live is not None and cache_path.parent.exists():
+            _save_committed_cache(merged, cache_path)
 
+        # Limit to LIMIT_BARS
         if len(merged) > LIMIT_BARS:
             merged = merged.iloc[-LIMIT_BARS:].reset_index(drop=True)
 
@@ -359,90 +355,121 @@ def load_ohlcv(symbol: str, up_to_date: Optional[date] = None) -> pd.DataFrame:
 
     df = _SESSION_OHLCV[symbol]
     if up_to_date is not None:
-        cutoff_ms = int(pd.Timestamp(str(up_to_date + timedelta(days=1)), tz="UTC").value // 1_000_000)
-        df = df[df["ts_ms"] < cutoff_ms].copy()
+        df = df[df["time"].dt.date <= up_to_date].copy()
     return df.reset_index(drop=True)
 
 
-def _parse_ohlcv_1d(raw: pd.DataFrame) -> pd.DataFrame:
+def _save_committed_cache(df: pd.DataFrame, path: Path) -> None:
+    out = df[["time", "open", "high", "low", "close", "volume"]].copy()
+    out["time"] = out["time"].dt.strftime("%Y-%m-%d %H:%M:%S+00:00")
+    out.to_csv(path, index=False)
+
+
+def _parse_ohlcv(raw: pd.DataFrame) -> pd.DataFrame:
     df = raw.copy()
     if "timestamp" in df.columns:
-        df["ts_ms"] = pd.to_numeric(df["timestamp"], errors="coerce").astype("Int64")
-    elif "ts_ms" in df.columns:
-        df["ts_ms"] = pd.to_numeric(df["ts_ms"], errors="coerce").astype("Int64")
+        df["time"] = pd.to_datetime(
+            pd.to_numeric(df["timestamp"], errors="coerce"),
+            unit="ms", utc=True, errors="coerce")
+    elif "time" in df.columns:
+        df["time"] = pd.to_datetime(df["time"], utc=True, errors="coerce")
+    elif "date" in df.columns:
+        df["time"] = pd.to_datetime(df["date"], utc=True, errors="coerce")
     else:
         return pd.DataFrame()
+
     for col in ["open", "high", "low", "close", "volume"]:
         df[col] = pd.to_numeric(df.get(col, np.nan), errors="coerce")
-    df = df.dropna(subset=["ts_ms", "open", "high", "low", "close"])
-    df["ts_ms"] = df["ts_ms"].astype(int)
-    df = df.drop_duplicates("ts_ms").sort_values("ts_ms")
-    return df[["ts_ms", "open", "high", "low", "close", "volume"]].reset_index(drop=True)
+
+    df = df.dropna(subset=["time", "open", "high", "low", "close"])
+    df = df.drop_duplicates("time").sort_values("time")
+    return df[["time", "open", "high", "low", "close", "volume"]].reset_index(drop=True)
 
 
-def _fetch_binance_1d(symbol: str, limit: int = 15) -> Optional[pd.DataFrame]:
+def _fetch_latest_bars(symbol: str, n_bars: int = 10) -> Optional[pd.DataFrame]:
+    """yfinance only -- geo-unrestricted, works from GitHub Actions US servers."""
+    return _try_yfinance(symbol, n_bars)
+
+
+def _try_yfinance(symbol: str, n_bars: int) -> Optional[pd.DataFrame]:
     try:
-        import requests
-        r = requests.get("https://fapi.binance.com/fapi/v1/klines",
-                         params={"symbol": symbol, "interval": "1d", "limit": limit},
-                         timeout=15)
-        r.raise_for_status()
-        data = r.json()
-        if not data:
+        import yfinance as yf
+    except ImportError:
+        return None
+    base   = symbol.split("/")[0]
+    yf_sym = f"{base}-USD"
+    try:
+        hist = yf.download(yf_sym, period="30d", interval="1d",
+                           progress=False, auto_adjust=True)
+        if hist is None or hist.empty:
             return None
-        return pd.DataFrame([{
-            "timestamp": d[0], "open": float(d[1]), "high": float(d[2]),
-            "low": float(d[3]), "close": float(d[4]), "volume": float(d[5]),
-        } for d in data])
-    except Exception:
-        return None  # geo-block / network -- fall back to committed cache
+        hist = hist.tail(n_bars).reset_index()
+        if isinstance(hist.columns, pd.MultiIndex):
+            hist.columns = [c[0].lower() for c in hist.columns]
+        else:
+            hist.columns = [str(c).lower() for c in hist.columns]
+        if "date" in hist.columns:
+            hist.rename(columns={"date": "time"}, inplace=True)
+        elif "datetime" in hist.columns:
+            hist.rename(columns={"datetime": "time"}, inplace=True)
+        hist["time"] = pd.to_datetime(hist["time"], utc=True, errors="coerce")
+        hist["timestamp"] = (hist["time"].astype(np.int64) // 1_000_000).astype(int)
+        for col in ["open","high","low","close","volume"]:
+            if col not in hist.columns:
+                hist[col] = np.nan
+        return hist[["timestamp","open","high","low","close","volume"]].copy()
+    except Exception as e:
+        print(f"    [yfinance] {symbol}: {e}")
+        return None
+
+
+def refresh_ohlcv_cache(symbols: List[str]) -> None:
+    if _SKIP_LIVE_FETCH:
+        print("[DATA] --no-download: using committed cache only")
+        return
+    yesterday = date.today() - timedelta(days=1)
+    n_updated = 0
+    print(f"[DATA] Refreshing committed OHLCV cache for {len(symbols)} symbols...")
+    for sym in symbols:
+        safe       = safe_sym(sym)
+        cache_path = COMMITTED_CACHE / f"{safe}_1d.csv"
+        if cache_path.exists():
+            try:
+                last_row  = pd.read_csv(cache_path, usecols=["time"]).iloc[-1]["time"]
+                last_date = pd.to_datetime(last_row, utc=True).date()
+                if last_date >= yesterday:
+                    continue
+            except Exception:
+                pass
+        _SESSION_OHLCV.pop(sym, None)
+        df = load_ohlcv(sym)
+        if not df.empty:
+            n_updated += 1
+        time.sleep(SLEEP_SEC)
+    print(f"[DATA] Updated {n_updated}/{len(symbols)} caches")
 
 
 # =============================================================================
-# INDICATORS  -- ported VERBATIM from step18_s2_futures_costcheck.py
-# (SMA-seeded Wilder recursion; matches the Step 18 research trades)
+# INDICATORS
 # =============================================================================
-
-def _compute_rsi(close: np.ndarray, n: int) -> np.ndarray:
-    delta = np.diff(close, prepend=close[0])
-    gain = np.maximum(delta, 0.0)
-    loss = np.maximum(-delta, 0.0)
-    avg_g = np.full(len(close), np.nan)
-    avg_l = np.full(len(close), np.nan)
-    if len(close) < n + 1:
-        return np.full(len(close), np.nan)
-    avg_g[n] = gain[1:n+1].mean()
-    avg_l[n] = loss[1:n+1].mean()
-    alpha = 1.0 / n
-    for i in range(n+1, len(close)):
-        avg_g[i] = avg_g[i-1] * (1 - alpha) + gain[i] * alpha
-        avg_l[i] = avg_l[i-1] * (1 - alpha) + loss[i] * alpha
-    rs = np.where(avg_l > 0, avg_g / avg_l, 100.0)
-    rsi = 100.0 - 100.0 / (1.0 + rs)
-    rsi[:n] = np.nan
-    return rsi
-
-
-def _compute_atr(hi: np.ndarray, lo: np.ndarray, cl: np.ndarray, n: int = 14) -> np.ndarray:
-    nb = len(cl)
-    tr = np.full(nb, np.nan)
-    for i in range(1, nb):
-        tr[i] = max(hi[i]-lo[i], abs(hi[i]-cl[i-1]), abs(lo[i]-cl[i-1]))
-    atr = np.full(nb, np.nan)
-    if nb > n:
-        atr[n] = np.nanmean(tr[1:n+1])
-        for i in range(n+1, nb):
-            if np.isfinite(tr[i]) and np.isfinite(atr[i-1]):
-                atr[i] = (atr[i-1]*(n-1)+tr[i])/n
-    return atr
-
 
 def add_indicators(df: pd.DataFrame) -> pd.DataFrame:
-    out = df.copy()
-    out["rsi"] = _compute_rsi(out["close"].values.astype(float), RSI_N)
-    out["atr"] = _compute_atr(out["high"].values.astype(float),
-                              out["low"].values.astype(float),
-                              out["close"].values.astype(float), ATR_N)
+    out  = df.copy()
+    cls  = out["close"]
+    hgh  = out["high"]
+    lw   = out["low"]
+
+    # RSI(14) -- Wilder EWM
+    delta = cls.diff()
+    avg_g = delta.clip(lower=0).ewm(alpha=1/RSI_N, min_periods=RSI_N, adjust=False).mean()
+    avg_l = (-delta.clip(upper=0)).ewm(alpha=1/RSI_N, min_periods=RSI_N, adjust=False).mean()
+    out["rsi"] = 100 - (100 / (1 + avg_g / avg_l.replace(0, np.nan)))
+
+    # ATR(14)
+    prev_c = cls.shift(1)
+    tr = pd.concat([hgh - lw, (hgh - prev_c).abs(), (lw - prev_c).abs()], axis=1).max(axis=1)
+    out["atr"] = tr.ewm(alpha=1.0/ATR_N, adjust=False).mean()
+
     return out
 
 
@@ -454,9 +481,8 @@ def check_entry_signal(symbol: str, df: pd.DataFrame, run_date: date) -> Optiona
     if df.empty or len(df) < MIN_BARS_REQUIRED:
         return None
 
-    dfi = add_indicators(df)
-    day_ms = int(pd.Timestamp(str(run_date), tz="UTC").value // 1_000_000)
-    day_rows = dfi[dfi["ts_ms"] == day_ms]
+    dfi      = add_indicators(df)
+    day_rows = dfi[dfi["time"].dt.date == run_date]
     if day_rows.empty:
         return None
 
@@ -468,22 +494,19 @@ def check_entry_signal(symbol: str, df: pd.DataFrame, run_date: date) -> Optiona
     if not all(np.isfinite([close, rsi, atr])) or atr <= EPS:
         return None
 
-    if rsi >= OVERSOLD_THR:
-        return None
-
-    # NO funding gate -- S2 enters regardless of funding sign (System 8
-    # is the funding-gated variant and runs as a separate engine).
-    stop = close - ATR_STOP_MULT * atr
-    return {
-        "symbol":      symbol,
-        "signal_date": str(run_date),
-        "close":       round(close, 8),
-        "rsi":         round(rsi, 4),
-        "atr":         round(atr, 8),
-        "stop_loss":   round(stop, 8),
-        "risk_unit":   round(ATR_STOP_MULT * atr, 8),
-        "signal":      "BUY_MR",
-    }
+    if rsi < OVERSOLD_THR:
+        stop = close - ATR_STOP_MULT * atr
+        return {
+            "symbol":      symbol,
+            "signal_date": str(run_date),
+            "close":       round(close, 8),
+            "rsi":         round(rsi, 4),
+            "atr":         round(atr, 8),
+            "stop_loss":   round(stop, 8),
+            "risk_unit":   round(ATR_STOP_MULT * atr, 8),
+            "signal":      "BUY_MR",
+        }
+    return None
 
 
 # =============================================================================
@@ -500,25 +523,20 @@ def update_and_check_exit(
 
     Exit logic (priority order):
       1. Safety stop: bar low <= pos.stop_loss  -> exit at stop_loss price
-      2. Time exit  : bars_held >= TIME_EXIT_BARS -> exit at close
+      2. Time exit  : pos.bars_held >= TIME_EXIT_BARS -> exit at close
 
-    Research convention (step18): bars_held = i - e_bar at the CURRENT bar.
-    Increment BEFORE the checks so the time exit fires exactly 20 bars
-    after the signal bar.
+    Non-exiting bar: increment bars_held by 1.
     """
     if df.empty:
         return None, pos
 
-    day_ms = int(pd.Timestamp(str(run_date), tz="UTC").value // 1_000_000)
-    day_rows = df[df["ts_ms"] == day_ms]
+    day_rows = df[df["time"].dt.date == run_date]
     if day_rows.empty:
         return None, pos
 
     row       = day_rows.iloc[-1]
     bar_low   = float(row["low"])
     bar_close = float(row["close"])
-
-    pos.bars_held += 1
 
     # 1. Safety stop hit
     if bar_low <= pos.stop_loss:
@@ -556,6 +574,8 @@ def update_and_check_exit(
             "exit_reason":   "time_exit_20bars",
         }, pos
 
+    # No exit: increment bars_held
+    pos.bars_held += 1
     return None, pos
 
 
@@ -606,6 +626,7 @@ def run_one_day(run_date: date, symbols: List[str], state: dict) -> dict:
                      equity=round(equity, 2))
         else:
             positions[pid] = pos
+
     for pid in closed_ids:
         positions.pop(pid, None)
 
@@ -657,7 +678,7 @@ def run_one_day(run_date: date, symbols: List[str], state: dict) -> dict:
                      arbitrator_reject_reason=arb_reason)
                 continue
 
-            pid = f"{sym}_{run_date.strftime('%Y%m%d')}"
+            pid           = f"{safe_sym(sym)}_{run_date.strftime('%Y%m%d')}"
 
             pos = MRPosition(
                 position_id           = pid,
@@ -779,13 +800,12 @@ def append_daily_log(events: List[dict]) -> None:
 
 def print_banner() -> None:
     print("=" * 70)
-    print("T9B -- MEANREVERSIONRSI 1D PAPER ENGINE (FUTURES CONFIG)")
+    print("T9B -- MEANREVERSIONRSI 1D PAPER ENGINE")
     print("=" * 70)
-    print(f"Frozen signal config (2026-06-01), Futures venue (Step 18, 2026-07-12):")
-    print(f"  1D / RSI({RSI_N}) < {OVERSOLD_THR} entry / Time exit {TIME_EXIT_BARS} bars / ATR stop x{ATR_STOP_MULT}")
-    print(f"  Max {MAX_OPEN_POSITIONS} positions / {RISK_PER_TRADE_PCT*100:.2f}% risk / No filter / No funding gate")
-    print(f"  {len(MR_UNIVERSE)} symbols / Binance Futures USD-M / LONG only")
-    print(f"  Cost floor {COST_FLOOR_R}R (Futures) -- Step 18 net avg_r +0.3162R")
+    print(f"Frozen config (2026-06-01):")
+    print(f"  1D / RSI(14) < 25 entry / Time exit {TIME_EXIT_BARS} bars / ATR stop x{ATR_STOP_MULT}")
+    print(f"  Max {MAX_OPEN_POSITIONS} positions / {RISK_PER_TRADE_PCT*100:.2f}% risk / No filter")
+    print(f"  {len(MR_UNIVERSE)} symbols / Binance Spot / LONG only")
     print(f"  Output: {DATA_DIR}")
     print()
 
@@ -812,7 +832,7 @@ def print_final_summary(state: dict) -> None:
     cl  = state.get("closed_trade_count", 0)
     print()
     print("-" * 70)
-    print("FINAL STATE -- MeanReversionRSI 1D Paper (Futures)")
+    print("FINAL STATE -- MeanReversionRSI 1D Paper")
     print(f"  Paper equity   : ${eq:>10,.2f}  (started ${INITIAL_CAPITAL:,.2f})")
     print(f"  Total return   : {ret:>+.2f}%")
     print(f"  Current DD     : {dd:>+.2f}%")
@@ -842,7 +862,7 @@ def _print_notify(state: dict, run_date: date) -> None:
 
     print()
     print("=" * 50)
-    print(f"T9B MR (FUTURES) DAILY UPDATE -- {run_date}")
+    print(f"T9B MR DAILY UPDATE -- {run_date}")
     print("=" * 50)
     print(f"Paper equity  : ${eq:>10,.2f}  ({ret_pct:+.2f}%)")
     print(f"Peak equity   : ${peak:>10,.2f}")
@@ -905,12 +925,12 @@ def _print_notify(state: dict, run_date: date) -> None:
 
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser(
-        description="T9B MeanReversionRSI 1D Paper Engine (Futures config)",
+        description="T9B MeanReversionRSI 1D Paper Engine",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=(
             "Examples:\n"
             "  python phase_t9b_meanreversion_paper_engine.py\n"
-            "  python phase_t9b_meanreversion_paper_engine.py --date 2026-07-12\n"
+            "  python phase_t9b_meanreversion_paper_engine.py --date 2026-06-01\n"
             "  python phase_t9b_meanreversion_paper_engine.py --backfill\n"
             "  python phase_t9b_meanreversion_paper_engine.py --notify\n"
             "  python phase_t9b_meanreversion_paper_engine.py --reset\n"
@@ -923,7 +943,7 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--no-download", action="store_true",
                     help="Skip live fetch; use committed cache only")
     ap.add_argument("--reset", action="store_true",
-                    help="Wipe state.json and restart")
+                    help="Wipe state.json and restart from $10,000")
     ap.add_argument("--quiet", action="store_true",
                     help="Suppress per-event detail")
     ap.add_argument("--notify", action="store_true",
@@ -947,14 +967,10 @@ def main() -> int:
         for f in [EQUITY_CSV, DAILY_LOG_CSV]:
             if f.exists():
                 f.unlink()
-        print(f"[RESET] State and logs cleared. Starting from ${INITIAL_CAPITAL:,.0f}.")
+        print("[RESET] State and logs cleared. Starting from $10,000.")
         print()
 
-    global _SKIP_LIVE_FETCH
-    _SKIP_LIVE_FETCH = args.no_download
-
     symbols = MR_UNIVERSE
-    print(f"[UNIVERSE] {len(symbols)} Futures symbols with committed 1D OHLCV")
 
     today     = date.today()
     yesterday = today - timedelta(days=1)
@@ -972,6 +988,11 @@ def main() -> int:
     else:
         run_dates = [yesterday]
         print(f"[MODE] Yesterday: {yesterday}")
+
+    global _SKIP_LIVE_FETCH
+    _SKIP_LIVE_FETCH = args.no_download
+
+    refresh_ohlcv_cache(symbols)
     print()
 
     state    = load_state()
@@ -982,8 +1003,8 @@ def main() -> int:
           f"kill_sw={'YES' if state.get('kill_switch_triggered') else 'no'}")
     print()
 
-    # Fix 3: state reconciliation (incl. Spot->Futures symbol migration)
-    _reconcile_state(state, run_dates[0] if run_dates else yesterday)
+    # Fix 3: state reconciliation on startup
+    _reconcile_state(state, run_dates[0])
     print()
 
     for run_date in run_dates:
