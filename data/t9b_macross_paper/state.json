@@ -1,8 +1,8 @@
 {
   "system_name": "MACrossShort_4H_T9B",
   "created_utc": "2026-06-12T15:31:43.644778+00:00",
-  "last_run_date": "2026-07-11",
-  "last_processed_ts_ms": 1783713600000,
+  "last_run_date": "2026-07-12",
+  "last_processed_ts_ms": 1783800000000,
   "paper_equity_usdt": 10104.315200000001,
   "peak_equity_usdt": 10148.112300000003,
   "drawdown_pct": -0.4316,
@@ -18,13 +18,74 @@
       "initial_risk_per_unit": 7.542e-05,
       "risk_amount_usdt": 26.5689,
       "qty": 352278.81115752,
-      "bars_held": 29,
+      "bars_held": 35,
       "atr_at_entry": 3.771e-05,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.00190726,
       "slow_ema_at_entry": 0.0019079
     }
   ],
-  "pending_entries": [],
+  "pending_entries": [
+    {
+      "symbol": "ARUSDT",
+      "signal_ts_ms": 1783800000000,
+      "signal_close": 1.969,
+      "ema_fast": 1.98711207,
+      "ema_slow": 1.98767231,
+      "ema200": 1.99907895,
+      "atr": 0.03,
+      "stop_loss": 2.029,
+      "risk_unit": 0.06,
+      "funding_rate": 0.0001
+    },
+    {
+      "symbol": "DASHUSDT",
+      "signal_ts_ms": 1783800000000,
+      "signal_close": 33.92,
+      "ema_fast": 34.6124479,
+      "ema_slow": 34.62676931,
+      "ema200": 35.4660845,
+      "atr": 0.66642857,
+      "stop_loss": 35.25285714,
+      "risk_unit": 1.33285714,
+      "funding_rate": 0.0001
+    },
+    {
+      "symbol": "ETCUSDT",
+      "signal_ts_ms": 1783800000000,
+      "signal_close": 6.95,
+      "ema_fast": 7.03935976,
+      "ema_slow": 7.04037029,
+      "ema200": 7.25645168,
+      "atr": 0.07057143,
+      "stop_loss": 7.09114286,
+      "risk_unit": 0.14114286,
+      "funding_rate": 0.0001
+    },
+    {
+      "symbol": "JASMYUSDT",
+      "signal_ts_ms": 1783800000000,
+      "signal_close": 0.004423,
+      "ema_fast": 0.0044815,
+      "ema_slow": 0.00448284,
+      "ema200": 0.00467421,
+      "atr": 8.936e-05,
+      "stop_loss": 0.00460171,
+      "risk_unit": 0.00017871,
+      "funding_rate": 0.0001
+    },
+    {
+      "symbol": "ROSEUSDT",
+      "signal_ts_ms": 1783800000000,
+      "signal_close": 0.005798,
+      "ema_fast": 0.00584249,
+      "ema_slow": 0.00584382,
+      "ema200": 0.00645439,
+      "atr": 0.00011057,
+      "stop_loss": 0.00601914,
+      "risk_unit": 0.00022114,
+      "funding_rate": 0.0001
+    }
+  ],
   "closed_trade_count": 17
 }

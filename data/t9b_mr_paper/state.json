@@ -1,7 +1,7 @@
 {
   "system_name": "MR_RSI14_1D_T9B",
   "created_utc": "2026-06-01T09:28:48.389060+00:00",
-  "last_run_date": "2026-07-11",
+  "last_run_date": "2026-07-12",
   "paper_equity_usdt": 10000.0,
   "peak_equity_usdt": 10000.0,
   "drawdown_pct": 0.0,
@@ -9,7 +9,7 @@
   "open_positions": [
     {
       "position_id": "AAVE_USDT_20260605",
-      "symbol": "AAVE/USDT",
+      "symbol": "AAVEUSDT",
       "entry_date": "2026-06-05",
       "entry_price": 62.22301483,
       "stop_loss": 47.18314827,
@@ -22,7 +22,7 @@
     },
     {
       "position_id": "ADA_USDT_20260605",
-      "symbol": "ADA/USDT",
+      "symbol": "ADAUSDT",
       "entry_date": "2026-06-05",
       "entry_price": 0.156629,
       "stop_loss": 0.11829343,
@@ -35,7 +35,7 @@
     },
     {
       "position_id": "ARB_USDT_20260605",
-      "symbol": "ARB/USDT",
+      "symbol": "ARBUSDT",
       "entry_date": "2026-06-05",
       "entry_price": 0.000757,
       "stop_loss": -0.02482116,
@@ -48,7 +48,7 @@
     },
     {
       "position_id": "AVAX_USDT_20260605",
-      "symbol": "AVAX/USDT",
+      "symbol": "AVAXUSDT",
       "entry_date": "2026-06-05",
       "entry_price": 6.7077651,
       "stop_loss": 5.32547064,
@@ -61,7 +61,7 @@
     },
     {
       "position_id": "BCH_USDT_20260605",
-      "symbol": "BCH/USDT",
+      "symbol": "BCHUSDT",
       "entry_date": "2026-06-05",
       "entry_price": 209.42024231,
       "stop_loss": 147.24544993,
@@ -74,7 +74,7 @@
     },
     {
       "position_id": "BTC_USDT_20260605",
-      "symbol": "BTC/USDT",
+      "symbol": "BTCUSDT",
       "entry_date": "2026-06-05",
       "entry_price": 60922.66796875,
       "stop_loss": 53390.05981708,
@@ -87,7 +87,7 @@
     },
     {
       "position_id": "DOGE_USDT_20260605",
-      "symbol": "DOGE/USDT",
+      "symbol": "DOGEUSDT",
       "entry_date": "2026-06-05",
       "entry_price": 0.08136,
       "stop_loss": 0.06688163,
@@ -100,7 +100,7 @@
     },
     {
       "position_id": "DOT_USDT_20260605",
-      "symbol": "DOT/USDT",
+      "symbol": "DOTUSDT",
       "entry_date": "2026-06-05",
       "entry_price": 0.943703,
       "stop_loss": 0.7216484,
@@ -113,7 +113,7 @@
     },
     {
       "position_id": "ETH_USDT_20260605",
-      "symbol": "ETH/USDT",
+      "symbol": "ETHUSDT",
       "entry_date": "2026-06-05",
       "entry_price": 1580.86083984,
       "stop_loss": 1309.63130069,
