@@ -270,7 +270,8 @@ def load_4h_ohlcv(symbol: str, cutoff_ts_ms: Optional[int] = None) -> pd.DataFra
 
         df_live: pd.DataFrame = pd.DataFrame()
         if not _SKIP_LIVE_FETCH:
-            df_live = _fetch_binance_4h(symbol, limit=30) or pd.DataFrame()
+            fetched = _fetch_binance_4h(symbol, limit=30)
+            df_live = fetched if fetched is not None else pd.DataFrame()
 
         if not df_base.empty and not df_live.empty:
             merged = (pd.concat([df_base, df_live], ignore_index=True)
