@@ -1,4 +1,1 @@
-symbol,signal_ts_ms,consec,comp_low,atr,ema200,signal_close,stop_loss,risk_unit,funding_rate,run_date
-ETCUSDT,1783800000000,18,6.957,0.07057143,7.25645168,6.95,7.09114286,0.14114286,0.0001,2026-07-12
-GALAUSDT,1783800000000,18,0.002099,3.9e-05,0.0024431,0.002082,0.00216,7.8e-05,0.0001,2026-07-12
-HBARUSDT,1783756800000,15,0.06872,0.00122857,0.07586421,0.06708,0.06953714,0.00245714,0.0001,2026-07-12
+symbol,run_date,signal_ts_ms,signal_close,comp_low,consec,atr,ema200,funding_rate,stop_loss
