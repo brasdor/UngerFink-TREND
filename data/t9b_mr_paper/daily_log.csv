@@ -258,3 +258,30 @@ run_date,event,symbol,detail,entry_price,stop,risk_amount,equity
 2026-07-14,SIGNAL_SKIPPED,WLDUSDT,duplicate_cross_system
 2026-07-14,SIGNAL_SKIPPED,XLMUSDT,duplicate_cross_system
 2026-07-14,SIGNAL_SKIPPED,ZECUSDT,duplicate_cross_system
+2026-07-15,SIGNAL_SKIPPED,AKTUSDT,duplicate_cross_system,,,,,
+2026-07-15,ENTRY,ALCHUSDT,"RSI=20.3  price=0.02536  stop=0.00474514  risk=$19.69  bars_to_exit=20  equity=$10,000.00",0.02536,0.00474514,19.6875,10000.0,
+2026-07-15,SIGNAL_SKIPPED,ARCUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,BTCDOMUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,CELRUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,CHZUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,COOKIEUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,COSUSDT,cap 10 reached  (RSI=16.1  close=0.000485),,,,,0.000485
+2026-07-15,SIGNAL_SKIPPED,DEXEUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,DUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,DUSKUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,FETUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,HBARUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,HIGHUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,INJUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,JTOUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,MBOXUSDT,cap 10 reached  (RSI=23.1  close=0.0051),,,,,0.0051
+2026-07-15,SIGNAL_SKIPPED,NEARUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,PIPPINUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,REZUSDT,cap 10 reached  (RSI=23.9  close=0.002459),,,,,0.002459
+2026-07-15,SIGNAL_SKIPPED,RIFUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,RONINUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,STGUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,TRXUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,WLDUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,XLMUSDT,duplicate_cross_system,,,,,
+2026-07-15,SIGNAL_SKIPPED,ZECUSDT,duplicate_cross_system,,,,,
