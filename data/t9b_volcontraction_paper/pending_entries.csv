@@ -1,3 +1,1 @@
 symbol,signal_ts_ms,signal_close,stop_loss,comp_low,consec,atr,funding_rate
-ETCUSDT,1783800000000,6.95,7.09114286,6.957,18,0.07057143,0.0001
-GALAUSDT,1783800000000,0.002082,0.00216,0.002099,18,3.9e-05,0.0001
