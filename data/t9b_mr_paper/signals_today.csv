@@ -1,1 +1,4 @@
-symbol,signal_date,close,rsi,atr,stop_loss,signal
+symbol,signal_date,close,rsi,atr,stop_loss,risk_unit,signal
+CHZUSDT,2026-07-17,0.01597,24.4716,0.00126474,0.01217579,0.00379421,BUY_MR
+COSUSDT,2026-07-17,0.000485,16.0674,1.234e-05,0.00044799,3.701e-05,BUY_MR
+MBOXUSDT,2026-07-17,0.0051,23.093,0.00015783,0.0046265,0.0004735,BUY_MR
