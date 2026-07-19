@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-17",
+  "date": "2026-07-18",
   "trend_regime": "BEAR",
   "funding_regime": "LOW",
   "vol_multiplier": 0.75,
@@ -14,11 +14,11 @@
   },
   "allocator_version": "v4_ci",
   "breadth_raw": 4.83,
-  "breadth_ema3": 4.9535,
+  "breadth_ema3": 4.8905,
   "funding_raw": -7.24e-06,
-  "funding_ema5": -6.53e-06,
+  "funding_ema5": -6.77e-06,
   "last_trend_switch": "2026-07-02",
   "last_funding_switch": "2026-07-02",
   "btc_above_ema200": false,
-  "vol_percentile": 8.7
+  "vol_percentile": 2.0
 }
