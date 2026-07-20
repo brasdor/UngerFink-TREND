@@ -266,3 +266,16 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-07-18,SIGNAL_SKIPPED,CELR/USDT,duplicate_cross_system
 2026-07-18,SIGNAL_SKIPPED,HBAR/USDT,duplicate_cross_system
 2026-07-18,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system
+2026-07-19,SIGNAL_SKIPPED,VET/USDT,duplicate_cross_system
+2026-07-19,SIGNAL_SKIPPED,DEXE/USDT,duplicate_cross_system
+2026-07-19,SIGNAL_SKIPPED,ETC/USDT,duplicate_cross_system
+2026-07-19,SIGNAL_SKIPPED,ADA/USDT,duplicate_cross_system
+2026-07-19,SIGNAL_SKIPPED,AVAX/USDT,duplicate_cross_system
+2026-07-19,SIGNAL_SKIPPED,QTUM/USDT,duplicate_cross_system
+2026-07-19,SIGNAL_SKIPPED,IOST/USDT,duplicate_cross_system
+2026-07-19,SIGNAL_SKIPPED,MTL/USDT,duplicate_cross_system
+2026-07-19,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
+2026-07-19,SIGNAL_SKIPPED,ETH/USDT,duplicate_cross_system
+2026-07-19,SIGNAL_SKIPPED,CELR/USDT,duplicate_cross_system
+2026-07-19,SIGNAL_SKIPPED,HBAR/USDT,duplicate_cross_system
+2026-07-19,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system

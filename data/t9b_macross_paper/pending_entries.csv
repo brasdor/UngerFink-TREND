@@ -1,1 +1,2 @@
 symbol,signal_ts_ms,signal_close,stop_loss,ema_fast,ema_slow,atr,funding_rate
+MANAUSDT,1784404800000,0.06975,0.07299429,0.0708991,0.07093119,0.00162214,0.0001

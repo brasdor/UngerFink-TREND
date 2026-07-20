@@ -1,4 +1,1 @@
-symbol,signal_ts_ms,consec,comp_low,atr,ema200,signal_close,stop_loss,risk_unit,funding_rate,run_date
-CHZUSDT,1784260800000,29,0.01647,0.00032714,0.02076792,0.01633,0.01698429,0.00065429,0.0001,2026-07-18
-CKBUSDT,1784260800000,32,0.00089,1.457e-05,0.00099711,0.000889,0.00091814,2.914e-05,0.0001,2026-07-18
-VETUSDT,1784260800000,20,0.004685,7.164e-05,0.00491948,0.004634,0.00477729,0.00014329,0.0001,2026-07-18
+symbol,run_date,signal_ts_ms,signal_close,comp_low,consec,atr,ema200,funding_rate,stop_loss
