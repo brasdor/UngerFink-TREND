@@ -1,1 +1,3 @@
-symbol,run_date,signal_ts_ms,signal_close,comp_low,consec,atr,ema200,funding_rate,stop_loss
+symbol,signal_ts_ms,consec,comp_low,atr,ema200,signal_close,stop_loss,risk_unit,funding_rate,run_date
+IOTXUSDT,1784476800000,18,0.00235,4.421e-05,0.00289508,0.002343,0.00243143,8.843e-05,0.0001,2026-07-20
+MAVUSDT,1784448000000,16,0.00889,0.00013214,0.01006211,0.00887,0.00913429,0.00026429,0.0001,2026-07-20
