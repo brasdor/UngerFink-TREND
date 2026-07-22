@@ -1,3 +1,1 @@
-symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
-MINAUSDT,1784448000000,0.04396,0.04501029,0.04504557,0.04484024,0.00125571,0.04647143,0.00251143,0.0001,2026-07-20
-ZENUSDT,1784476800000,4.152,4.18160643,4.1821569,4.40541157,0.07028571,4.29257143,0.14057143,0.0001,2026-07-20
+symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss
