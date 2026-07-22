@@ -39,12 +39,17 @@ STATIC_WEIGHTS = {
 N_SYSTEMS = 7
 EQ_WEIGHT = 1.0 / N_SYSTEMS
 
-# Scheme C regime base weights
+# Scheme C regime base weights.
+# S2/S8 = single MR pool split 40/60 (finding #18); the corrected split
+# matches engines/regime_daily.py (enforced by tools/check_regime_weights_sync.py).
+# NOTE: the archived Step 20 outputs in data/research_combined_engine_oos/
+# (2026-06-19 run, Sharpe 2.446) were produced with the pre-fix table
+# (S2=0.15/0.25, S8=0.00 in BULL/BEAR). A re-run will differ slightly.
 SCHEME_C = {
-    "BULL":  {"S1": 0.25, "S2": 0.15, "S3": 0.15, "S5": 0.25,
-              "S6": 0.10, "S7": 0.10, "S8": 0.00},
-    "BEAR":  {"S1": 0.05, "S2": 0.25, "S3": 0.05, "S5": 0.15,
-              "S6": 0.25, "S7": 0.25, "S8": 0.00},
+    "BULL":  {"S1": 0.25, "S2": 0.06, "S3": 0.15, "S5": 0.25,
+              "S6": 0.10, "S7": 0.10, "S8": 0.09},
+    "BEAR":  {"S1": 0.05, "S2": 0.10, "S3": 0.05, "S5": 0.15,
+              "S6": 0.25, "S7": 0.25, "S8": 0.15},
     "MIXED": {"S1": 0.125, "S2": 0.125, "S3": 0.125, "S5": 0.125,
               "S6": 0.125, "S7": 0.125, "S8": 0.125},
 }

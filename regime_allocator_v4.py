@@ -25,11 +25,16 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 BT_START = pd.Timestamp("2021-01-01")
 BT_END   = pd.Timestamp("2026-06-15")
 
+# S2/S8 are a single MR pool split 40/60 (finding #18). The former combined
+# S2 weight is divided accordingly — the old S8=0.00 placeholders predated the
+# S8 engine and starved the bear amplifier in BULL/BEAR regimes (2022 was S8's
+# best year). Must stay in sync with engines/regime_daily.py — enforced by
+# tools/check_regime_weights_sync.py (CI).
 SCHEME_C = {
-    "BULL":  {"S1": 0.25, "S2": 0.15, "S3": 0.15, "S5": 0.25,
-              "S6": 0.10, "S7": 0.10, "S8": 0.00},
-    "BEAR":  {"S1": 0.05, "S2": 0.25, "S3": 0.05, "S5": 0.15,
-              "S6": 0.25, "S7": 0.25, "S8": 0.00},
+    "BULL":  {"S1": 0.25, "S2": 0.06, "S3": 0.15, "S5": 0.25,
+              "S6": 0.10, "S7": 0.10, "S8": 0.09},
+    "BEAR":  {"S1": 0.05, "S2": 0.10, "S3": 0.05, "S5": 0.15,
+              "S6": 0.25, "S7": 0.25, "S8": 0.15},
     "MIXED": {"S1": 0.125, "S2": 0.125, "S3": 0.125, "S5": 0.125,
               "S6": 0.125, "S7": 0.125, "S8": 0.125},
 }
