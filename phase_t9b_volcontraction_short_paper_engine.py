@@ -1099,6 +1099,24 @@ def main() -> int:
           f"open={n_open}  pending={n_pend}  closed={n_closed}  "
           f"last_ts_ms={last_ts}  "
           f"kill_sw={'YES' if state.get('kill_switch_triggered') else 'no'}")
+
+    # Staleness alert: this engine's bar-counting (row-count since
+    # last_processed_ts_ms) does NOT silently skip like the S2/S3/S8
+    # exact-date-match bug -- it correctly stays frozen when no new 4H bar
+    # has arrived. But a frozen counter with no new bars ALSO means the
+    # exit check hasn't re-run in that time, which is just as dangerous if
+    # it goes unnoticed (confirmed this session: the 4H OHLCV cache stalled
+    # 2026-07-19 -> 07-22 across multiple symbols, with ETCUSDT already at
+    # bars_held==HOLD_BARS and unable to time-exit). Fail loudly instead.
+    if last_ts > 0:
+        stale_hours = (pd.Timestamp.now(tz="UTC")
+                       - pd.Timestamp(last_ts, unit="ms", tz="UTC")).total_seconds() / 3600
+        if stale_hours > 24:
+            print(f"[DATA_GAP][CRITICAL] last_processed_ts_ms is {stale_hours:.1f}h stale "
+                  f"(expected <=~8-12h for a 4H engine). No new bars means exit checks "
+                  f"are NOT running for any open position -- investigate the 4H OHLCV "
+                  f"refresh pipeline before trusting bars_held on open positions.",
+                  flush=True)
     print()
 
     _reconcile_state(state)

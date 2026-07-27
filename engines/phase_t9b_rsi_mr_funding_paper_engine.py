@@ -413,6 +413,30 @@ def add_indicators(df: pd.DataFrame) -> pd.DataFrame:
 # SIGNAL DETECTION
 # =============================================================================
 
+FLAT_MARKET_LOOKBACK_BARS = 5  # consecutive zero-volume/zero-range bars -> treat as delisted
+
+
+def _is_flat_or_delisted(dfi: pd.DataFrame, day_idx: int) -> bool:
+    """
+    Detect a flat/zero-volume tape (delisting fingerprint). Confirmed root
+    cause of the S8 DUSDT/HIGHUSDT false-oversold entries (2026-07-10): once
+    a symbol's price goes perfectly flat, gain/loss both decay by the same
+    Wilder factor each bar, so RSI freezes at its pre-flatline value instead
+    of reverting to neutral -- looking oversold for weeks after trading
+    actually stopped. The ATR safety check (atr <= EPS) does NOT catch this
+    early enough (Wilder ATR decays slowly, ~(13/14)^n, and stays above EPS
+    for many bars after a flatline starts). This checks volume/range
+    directly instead of waiting for indicator decay.
+    """
+    lo = max(0, day_idx - FLAT_MARKET_LOOKBACK_BARS + 1)
+    window = dfi.iloc[lo:day_idx + 1]
+    if len(window) < FLAT_MARKET_LOOKBACK_BARS:
+        return False
+    zero_vol  = (window["volume"].fillna(0) <= EPS).all()
+    zero_range = ((window["high"] - window["low"]).abs() <= EPS).all()
+    return bool(zero_vol or zero_range)
+
+
 def check_entry_signal(symbol: str, df: pd.DataFrame, run_date: date) -> Optional[dict]:
     if df.empty or len(df) < MIN_BARS_REQUIRED:
         return None
@@ -421,6 +445,14 @@ def check_entry_signal(symbol: str, df: pd.DataFrame, run_date: date) -> Optiona
     day_ms = int(pd.Timestamp(str(run_date), tz="UTC").value // 1_000_000)
     day_rows = dfi[dfi["ts_ms"] == day_ms]
     if day_rows.empty:
+        return None
+
+    day_idx = day_rows.index[-1]
+    if _is_flat_or_delisted(dfi, day_idx):
+        print(f"  [FLAT_MARKET] {symbol}: last {FLAT_MARKET_LOOKBACK_BARS} bars have "
+              f"zero volume/range as of {run_date} -- likely delisted; skipping entry "
+              f"signal (RSI on flat data is unreliable, see finding this session).",
+              flush=True)
         return None
 
     row   = day_rows.iloc[-1]
@@ -460,20 +492,63 @@ def check_entry_signal(symbol: str, df: pd.DataFrame, run_date: date) -> Optiona
 # =============================================================================
 
 def update_and_check_exit(pos: S8Position, df: pd.DataFrame, run_date: date) -> tuple:
-    if df.empty:
-        return None, pos
+    """
+    bars_held = calendar days elapsed since entry_date, RECOMPUTED every
+    call (not incremented) -- fix for the 2026-07 data-gap bug: the old
+    `pos.bars_held += 1` only ran when df had an exact-date row, so a
+    missing OHLCV date silently stalled the counter (DUSDT/HIGHUSDT both
+    have flat, gap-ridden feeds -- see delisting note in load_1d_ohlcv).
+    Recomputing from entry_date self-heals drift and can never silently
+    stall.
+    """
+    entry_dt = date.fromisoformat(str(pos.entry_date))
+    calendar_days_elapsed = (run_date - entry_dt).days
+    prev_bars_held = pos.bars_held
+    pos.bars_held = calendar_days_elapsed
+    if pos.bars_held - prev_bars_held > 1:
+        print(f"  [DATA_GAP] {pos.symbol}: bars_held corrected {prev_bars_held} -> "
+              f"{pos.bars_held} (calendar days since entry {pos.entry_date}); "
+              f"OHLCV cache was missing {pos.bars_held - prev_bars_held - 1} "
+              f"intervening date(s).", flush=True)
+
     day_ms = int(pd.Timestamp(str(run_date), tz="UTC").value // 1_000_000)
-    day_rows = df[df["ts_ms"] == day_ms]
+    day_rows = df[df["ts_ms"] == day_ms] if not df.empty else df
+
     if day_rows.empty:
-        return None, pos
+        if pos.bars_held < TIME_EXIT_BARS:
+            print(f"  [DATA_GAP] {pos.symbol}: no OHLCV row for {run_date} "
+                  f"(cache/live both missing this date). bars_held={pos.bars_held} "
+                  f"via calendar-day count; safety stop cannot be checked today.",
+                  flush=True)
+            return None, pos
+        if df.empty:
+            print(f"  [DATA_GAP][CRITICAL] {pos.symbol}: time exit overdue "
+                  f"(bars_held={pos.bars_held} >= {TIME_EXIT_BARS}) but NO cached "
+                  f"price available at all -- cannot force exit. Manual "
+                  f"intervention required.", flush=True)
+            return None, pos
+        proxy_row   = df.iloc[-1]
+        proxy_close = float(proxy_row["close"])
+        proxy_date  = pd.to_datetime(int(proxy_row["ts_ms"]), unit="ms", utc=True).date()
+        print(f"  [DATA_GAP][FORCED_EXIT] {pos.symbol}: time exit overdue "
+              f"(bars_held={pos.bars_held}) with no price for {run_date} -- forcing "
+              f"exit at last available close {proxy_close} (as of {proxy_date}). "
+              f"True {run_date} price unavailable; treat this fill as approximate.",
+              flush=True)
+        gross_r  = (proxy_close - pos.entry_price) / max(pos.initial_risk_per_unit, EPS)
+        pnl_usdt = pos.risk_amount_usdt * gross_r
+        return {
+            "position_id": pos.position_id, "symbol": pos.symbol,
+            "entry_date": pos.entry_date, "exit_date": str(run_date),
+            "entry_price": pos.entry_price, "exit_price": proxy_close,
+            "bars_held": pos.bars_held, "gross_r": round(gross_r, 6),
+            "pnl_usdt": round(pnl_usdt, 4),
+            "exit_reason": "time_exit_25bars_data_gap_proxy",
+        }, pos
 
     row       = day_rows.iloc[-1]
     bar_low   = float(row["low"])
     bar_close = float(row["close"])
-
-    # Research convention: bars_held = i - e_bar at the CURRENT bar.
-    # Increment before checks so time exit fires exactly 25 bars after signal.
-    pos.bars_held += 1
 
     if bar_low <= pos.stop_loss:
         gross_r  = (pos.stop_loss - pos.entry_price) / max(pos.initial_risk_per_unit, EPS)

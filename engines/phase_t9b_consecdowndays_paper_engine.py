@@ -363,6 +363,8 @@ def _try_yfinance(symbol: str, n_bars: int) -> Optional[pd.DataFrame]:
         hist = yf.download(yf_sym, period="30d", interval="1d",
                            progress=False, auto_adjust=True)
         if hist is None or hist.empty:
+            print(f"    [yfinance] {symbol}: empty response for {yf_sym} "
+                  f"-- cache will not advance this run", flush=True)
             return None
         hist = hist.tail(n_bars).reset_index()
         if isinstance(hist.columns, pd.MultiIndex):
@@ -408,6 +410,34 @@ def refresh_ohlcv_cache(symbols: List[str]) -> None:
             n_updated += 1
         time.sleep(SLEEP_SEC)
     print(f"[DATA] Updated {n_updated}/{len(symbols)} caches")
+
+    # Staleness summary -- this cache (data/universe/ohlcv_1d/) has NO CI-level
+    # refresh job of its own (confirmed this session); it is only ever
+    # populated inline, here, via a per-symbol yfinance call that silently
+    # no-ops on failure with no retry. WLD/USDT froze at 2026-06-24 this way
+    # for a month with nothing surfacing it. Make staleness visible instead.
+    stale = []
+    for sym in symbols:
+        safe       = safe_sym(sym)
+        cache_path = COMMITTED_CACHE / f"{safe}_1d.csv"
+        if not cache_path.exists():
+            stale.append((sym, None))
+            continue
+        try:
+            last_row  = pd.read_csv(cache_path, usecols=["time"]).iloc[-1]["time"]
+            last_date = pd.to_datetime(last_row, utc=True).date()
+            gap_days  = (yesterday - last_date).days
+            if gap_days > 3:
+                stale.append((sym, gap_days))
+        except Exception:
+            stale.append((sym, "unreadable"))
+    if stale:
+        print(f"  [DATA_GAP][STALENESS] {len(stale)}/{len(symbols)} symbol(s) more "
+              f"than 3 days behind {yesterday} after refresh attempt "
+              f"(yfinance likely failing silently for these -- open positions "
+              f"in them cannot be exit-checked on price): "
+              f"{', '.join(f'{s}({g})' for s, g in stale[:15])}"
+              f"{' ...' if len(stale) > 15 else ''}", flush=True)
 
 
 # =============================================================================
@@ -503,14 +533,62 @@ def update_and_check_exit(
       1. Safety stop : bar low <= pos.stop_loss  -> exit at stop_loss price
       2. Time exit   : pos.bars_held >= TIME_EXIT_BARS -> exit at bar close
 
-    Non-exiting bar: increment bars_held.
+    bars_held = calendar days elapsed since entry_date, RECOMPUTED every
+    call (not incremented) -- fix for the 2026-07 data-gap bug: the old
+    `pos.bars_held += 1` only ran on the no-exit path when df had an
+    exact-date row, so a missing OHLCV date (e.g. WLD/USDT's cache froze at
+    2026-06-24) silently stalled the counter at bars_held=1 for 30+ real
+    days. Recomputing from entry_date self-heals drift and can never
+    silently stall.
     """
-    if df.empty:
-        return None, pos
+    entry_dt = date.fromisoformat(str(pos.entry_date))
+    calendar_days_elapsed = (run_date - entry_dt).days
+    prev_bars_held = pos.bars_held
+    pos.bars_held = calendar_days_elapsed
+    if pos.bars_held - prev_bars_held > 1:
+        print(f"  [DATA_GAP] {pos.symbol}: bars_held corrected {prev_bars_held} -> "
+              f"{pos.bars_held} (calendar days since entry {pos.entry_date}); "
+              f"OHLCV cache was missing {pos.bars_held - prev_bars_held - 1} "
+              f"intervening date(s).", flush=True)
 
-    day_rows = df[df["time"].dt.date == run_date]
+    day_rows = df[df["time"].dt.date == run_date] if not df.empty else df
+
     if day_rows.empty:
-        return None, pos
+        if pos.bars_held < TIME_EXIT_BARS:
+            print(f"  [DATA_GAP] {pos.symbol}: no OHLCV row for {run_date} "
+                  f"(cache/live both missing this date). bars_held={pos.bars_held} "
+                  f"via calendar-day count; safety stop cannot be checked today.",
+                  flush=True)
+            return None, pos
+        if df.empty:
+            print(f"  [DATA_GAP][CRITICAL] {pos.symbol}: time exit overdue "
+                  f"(bars_held={pos.bars_held} >= {TIME_EXIT_BARS}) but NO cached "
+                  f"price available at all -- cannot force exit. Manual "
+                  f"intervention required.", flush=True)
+            return None, pos
+        proxy_row   = df.iloc[-1]
+        proxy_close = float(proxy_row["close"])
+        proxy_date  = pd.Timestamp(proxy_row["time"]).date()
+        print(f"  [DATA_GAP][FORCED_EXIT] {pos.symbol}: time exit overdue "
+              f"(bars_held={pos.bars_held}) with no price for {run_date} -- forcing "
+              f"exit at last available close {proxy_close} (as of {proxy_date}). "
+              f"True {run_date} price unavailable; treat this fill as approximate.",
+              flush=True)
+        gross_r  = (proxy_close - pos.entry_price) / max(pos.initial_risk_per_unit, EPS)
+        pnl_usdt = pos.risk_amount_usdt * gross_r
+        return {
+            "position_id":   pos.position_id,
+            "symbol":        pos.symbol,
+            "entry_date":    pos.entry_date,
+            "exit_date":     str(run_date),
+            "entry_price":   pos.entry_price,
+            "exit_price":    proxy_close,
+            "stop_loss":     pos.stop_loss,
+            "bars_held":     pos.bars_held,
+            "gross_r":       round(gross_r, 6),
+            "pnl_usdt":      round(pnl_usdt, 4),
+            "exit_reason":   "time_exit_20bars_data_gap_proxy",
+        }, pos
 
     row       = day_rows.iloc[-1]
     bar_low   = float(row["low"])
@@ -552,8 +630,7 @@ def update_and_check_exit(
             "exit_reason":   "time_exit_20bars",
         }, pos
 
-    # No exit this bar
-    pos.bars_held += 1
+    # No exit this bar (bars_held already set to calendar-days-elapsed above)
     return None, pos
 
 

@@ -496,29 +496,75 @@ def update_and_check_exit(
     run_date: date,
 ) -> tuple:
     """
-    Process the closed 1D bar for run_date.
+    Process the bar for run_date.
 
     Exit logic (priority order):
       1. Safety stop: bar low <= pos.stop_loss  -> exit at stop_loss price
       2. Time exit  : bars_held >= TIME_EXIT_BARS -> exit at close
 
-    Research convention (step18): bars_held = i - e_bar at the CURRENT bar.
-    Increment BEFORE the checks so the time exit fires exactly 20 bars
-    after the signal bar.
+    Research convention (step18): bars_held = i - e_bar at the CURRENT bar,
+    i.e. calendar days elapsed since entry (1D bars = 1 calendar day by
+    design). bars_held is RECOMPUTED from entry_date every call rather than
+    incremented -- this is the fix for the 2026-07 data-gap bug: the old
+    `pos.bars_held += 1` only ran when df had an exact-date row, so a missing
+    OHLCV date silently froze the counter while last_run_date advanced
+    normally (positions held 46+ calendar days with bars_held stuck at 8-9).
+    Recomputing from entry_date self-heals any accumulated drift and can
+    never silently stall.
     """
-    if df.empty:
-        return None, pos
+    entry_dt = date.fromisoformat(str(pos.entry_date))
+    calendar_days_elapsed = (run_date - entry_dt).days
+    prev_bars_held = pos.bars_held
+    pos.bars_held = calendar_days_elapsed
+    if pos.bars_held - prev_bars_held > 1:
+        print(f"  [DATA_GAP] {pos.symbol}: bars_held corrected {prev_bars_held} -> "
+              f"{pos.bars_held} (calendar days since entry {pos.entry_date}); "
+              f"OHLCV cache was missing {pos.bars_held - prev_bars_held - 1} "
+              f"intervening date(s).", flush=True)
 
     day_ms = int(pd.Timestamp(str(run_date), tz="UTC").value // 1_000_000)
-    day_rows = df[df["ts_ms"] == day_ms]
+    day_rows = df[df["ts_ms"] == day_ms] if not df.empty else df
+
     if day_rows.empty:
-        return None, pos
+        if pos.bars_held < TIME_EXIT_BARS:
+            print(f"  [DATA_GAP] {pos.symbol}: no OHLCV row for {run_date} "
+                  f"(cache/live both missing this date). bars_held={pos.bars_held} "
+                  f"via calendar-day count; safety stop cannot be checked today.",
+                  flush=True)
+            return None, pos
+        if df.empty:
+            print(f"  [DATA_GAP][CRITICAL] {pos.symbol}: time exit overdue "
+                  f"(bars_held={pos.bars_held} >= {TIME_EXIT_BARS}) but NO cached "
+                  f"price available at all -- cannot force exit. Manual "
+                  f"intervention required.", flush=True)
+            return None, pos
+        proxy_row   = df.iloc[-1]
+        proxy_close = float(proxy_row["close"])
+        proxy_date  = pd.to_datetime(int(proxy_row["ts_ms"]), unit="ms", utc=True).date()
+        print(f"  [DATA_GAP][FORCED_EXIT] {pos.symbol}: time exit overdue "
+              f"(bars_held={pos.bars_held}) with no price for {run_date} -- forcing "
+              f"exit at last available close {proxy_close} (as of {proxy_date}). "
+              f"True {run_date} price unavailable; treat this fill as approximate.",
+              flush=True)
+        gross_r  = (proxy_close - pos.entry_price) / max(pos.initial_risk_per_unit, EPS)
+        pnl_usdt = pos.risk_amount_usdt * gross_r
+        return {
+            "position_id":   pos.position_id,
+            "symbol":        pos.symbol,
+            "entry_date":    pos.entry_date,
+            "exit_date":     str(run_date),
+            "entry_price":   pos.entry_price,
+            "exit_price":    proxy_close,
+            "stop_loss":     pos.stop_loss,
+            "bars_held":     pos.bars_held,
+            "gross_r":       round(gross_r, 6),
+            "pnl_usdt":      round(pnl_usdt, 4),
+            "exit_reason":   "time_exit_20bars_data_gap_proxy",
+        }, pos
 
     row       = day_rows.iloc[-1]
     bar_low   = float(row["low"])
     bar_close = float(row["close"])
-
-    pos.bars_held += 1
 
     # 1. Safety stop hit
     if bar_low <= pos.stop_loss:

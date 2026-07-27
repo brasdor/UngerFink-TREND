@@ -776,3 +776,12 @@ run_date,event,symbol,detail,entry_price,stop,risk_amount,equity
 2026-07-25,SIGNAL_SKIPPED,STXUSDT,duplicate_cross_system
 2026-07-25,SIGNAL_SKIPPED,VETUSDT,duplicate_cross_system
 2026-07-25,SIGNAL_SKIPPED,WLDUSDT,duplicate_cross_system
+2026-06-25,EXIT,AAVEUSDT,"reason=time_exit_20bars  bars=20  R=1.341  pnl=$33.52  equity=$10,033.52  [REMEDIATION: backdated exit for bars_held data-gap bug, see 2026-07-23 session]"
+2026-06-25,EXIT,ADAUSDT,"reason=time_exit_20bars  bars=20  R=-0.335  pnl=$-8.37  equity=$10,025.15  [REMEDIATION: backdated exit for bars_held data-gap bug, see 2026-07-23 session]"
+2026-06-25,EXIT,ARBUSDT,"reason=time_exit_20bars  bars=20  R=2.833  pnl=$70.83  equity=$10,095.98  [REMEDIATION: backdated exit for bars_held data-gap bug, see 2026-07-23 session]"
+2026-06-25,EXIT,AVAXUSDT,"reason=time_exit_20bars  bars=20  R=-0.345  pnl=$-8.62  equity=$10,087.36  [REMEDIATION: backdated exit for bars_held data-gap bug, see 2026-07-23 session]"
+2026-06-25,EXIT,BCHUSDT,"reason=time_exit_20bars  bars=20  R=-0.267  pnl=$-6.66  equity=$10,080.70  [REMEDIATION: backdated exit for bars_held data-gap bug, see 2026-07-23 session]"
+2026-06-25,EXIT,BTCUSDT,"reason=time_exit_20bars  bars=20  R=-0.153  pnl=$-3.82  equity=$10,076.88  [REMEDIATION: backdated exit for bars_held data-gap bug, see 2026-07-23 session]"
+2026-06-25,EXIT,DOGEUSDT,"reason=time_exit_20bars  bars=20  R=-0.448  pnl=$-11.19  equity=$10,065.69  [REMEDIATION: backdated exit for bars_held data-gap bug, see 2026-07-23 session]"
+2026-06-25,EXIT,DOTUSDT,"reason=time_exit_20bars  bars=20  R=-0.454  pnl=$-11.34  equity=$10,054.35  [REMEDIATION: backdated exit for bars_held data-gap bug, see 2026-07-23 session]"
+2026-06-25,EXIT,ETHUSDT,"reason=time_exit_20bars  bars=20  R=-0.051  pnl=$-1.28  equity=$10,053.07  [REMEDIATION: backdated exit for bars_held data-gap bug, see 2026-07-23 session]"

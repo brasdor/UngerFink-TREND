@@ -68,7 +68,9 @@ def fapi_refresh_klines(interval: str, cache_dir: Path, suffix: str) -> int:
         try:
             df = pd.read_csv(path)
             last_ts = int(df["timestamp"].max())
-        except Exception:
+        except Exception as exc:
+            print(f"  [{interval}] [WARN] {sym}: cache read failed ({exc}) -- skipping",
+                  flush=True)
             continue
         try:
             r = requests.get(f"{FAPI}/fapi/v1/klines",
@@ -77,7 +79,9 @@ def fapi_refresh_klines(interval: str, cache_dir: Path, suffix: str) -> int:
                              timeout=20)
             r.raise_for_status()
             data = r.json()
-        except Exception:
+        except Exception as exc:
+            print(f"  [{interval}] [WARN] {sym}: fapi fetch failed ({exc}) -- "
+                  f"will retry next run", flush=True)
             continue
         if not data:
             continue
@@ -130,53 +134,122 @@ def fapi_refresh_funding() -> int:
 # ---------------------------------------------------------------------------
 
 def vision_refresh_klines(interval: str, cache_dir: Path, suffix: str,
-                          day: date) -> int:
-    """Download {sym}-{interval}-{day}.zip for each symbol and merge."""
+                          upto_day: date) -> int:
+    """
+    Download and merge ALL missing {sym}-{interval}-{day}.zip dumps between
+    each symbol's own cache last_ts and upto_day (inclusive) -- not just
+    upto_day alone.
+
+    Fix for the 2026-07 gap bug (confirmed this session): the old version
+    only ever attempted the single most-recent day, so any day whose CDN
+    dump wasn't ready at fetch time (transient publish delay, rate limit,
+    a probe_fapi() flip mid-week) was silently and PERMANENTLY skipped --
+    the next run's target moved on to a new "yesterday" and never revisited
+    it. That produced exactly the sawtooth gap pattern found in
+    BTCUSDT_1d.csv (07-11 -> 07-15 -> 07-17 -> 07-18 -> 07-19, nothing
+    since), which in turn silently stalled bars_held-based exit tracking
+    in S2/S3/S8.
+    """
     updated = 0
-    failed = 0
-    day_str = day.strftime("%Y-%m-%d")
+    stale_symbols = []
     for sym in symbols_from(cache_dir, suffix):
         path = cache_dir / f"{sym}{suffix}.csv"
         try:
             df = pd.read_csv(path)
             last_ts = int(df["timestamp"].max())
-        except Exception:
+        except Exception as exc:
+            print(f"  [{interval}] [WARN] {sym}: cache read failed ({exc}) -- skipping",
+                  flush=True)
             continue
-        # Skip if cache already has bars for this day
-        day_start_ms = int(pd.Timestamp(day_str, tz="UTC").value // 1_000_000)
-        if last_ts >= day_start_ms + (0 if interval == "1d" else 20 * 3600 * 1000):
+
+        last_day = pd.Timestamp(last_ts, unit="ms", tz="UTC").date()
+        missing_days = []
+        d = last_day + timedelta(days=1)
+        while d <= upto_day:
+            missing_days.append(d)
+            d += timedelta(days=1)
+        if not missing_days:
             continue
-        url = f"{VISION}/{sym}/{interval}/{sym}-{interval}-{day_str}.zip"
-        try:
-            r = requests.get(url, timeout=20)
-            if r.status_code != 200:
-                failed += 1
+
+        got_any = False
+        still_missing = []
+        for day in missing_days:
+            day_str = day.strftime("%Y-%m-%d")
+            url = f"{VISION}/{sym}/{interval}/{sym}-{interval}-{day_str}.zip"
+            try:
+                r = requests.get(url, timeout=20)
+                if r.status_code != 200:
+                    still_missing.append(day_str)
+                    continue
+                zf = zipfile.ZipFile(io.BytesIO(r.content))
+                raw = pd.read_csv(zf.open(zf.namelist()[0]), header=None)
+                if isinstance(raw.iloc[0, 0], str) and not str(raw.iloc[0, 0]).isdigit():
+                    raw = raw.iloc[1:].reset_index(drop=True)
+            except Exception as exc:
+                still_missing.append(f"{day_str}({exc.__class__.__name__})")
                 continue
-            zf = zipfile.ZipFile(io.BytesIO(r.content))
-            raw = pd.read_csv(zf.open(zf.namelist()[0]), header=None)
-            # vision CSVs may or may not carry a header row
-            if isinstance(raw.iloc[0, 0], str) and not str(raw.iloc[0, 0]).isdigit():
-                raw = raw.iloc[1:].reset_index(drop=True)
-        except Exception:
-            failed += 1
-            continue
-        rows = pd.DataFrame({
-            "timestamp": pd.to_numeric(raw[0]),
-            "open":  pd.to_numeric(raw[1]), "high": pd.to_numeric(raw[2]),
-            "low":   pd.to_numeric(raw[3]), "close": pd.to_numeric(raw[4]),
-            "volume": pd.to_numeric(raw[5]),
-        })
-        fmt = "%Y-%m-%d" if interval == "1d" else "%Y-%m-%d %H:%M"
-        rows["date"] = pd.to_datetime(rows["timestamp"], unit="ms", utc=True).dt.strftime(fmt)
-        comb = (pd.concat([df, rows], ignore_index=True)
-                .drop_duplicates("timestamp").sort_values("timestamp"))
-        comb.to_csv(path, index=False)
-        updated += 1
-        time.sleep(0.02)
-    if failed:
-        print(f"  [{interval}] vision: {failed} symbols had no {day_str} dump "
-              f"(delisted or not yet published)")
+            rows = pd.DataFrame({
+                "timestamp": pd.to_numeric(raw[0]),
+                "open":  pd.to_numeric(raw[1]), "high": pd.to_numeric(raw[2]),
+                "low":   pd.to_numeric(raw[3]), "close": pd.to_numeric(raw[4]),
+                "volume": pd.to_numeric(raw[5]),
+            })
+            fmt = "%Y-%m-%d" if interval == "1d" else "%Y-%m-%d %H:%M"
+            rows["date"] = pd.to_datetime(rows["timestamp"], unit="ms", utc=True).dt.strftime(fmt)
+            df = (pd.concat([df, rows], ignore_index=True)
+                  .drop_duplicates("timestamp").sort_values("timestamp"))
+            got_any = True
+            time.sleep(0.02)
+
+        if got_any:
+            df.to_csv(path, index=False)
+            updated += 1
+        if still_missing:
+            print(f"  [{interval}] [WARN] {sym}: dump(s) unavailable for "
+                  f"{', '.join(still_missing)} (delisted or not yet published) "
+                  f"-- will retry next run", flush=True)
+            stale_symbols.append((sym, still_missing))
+
+    if stale_symbols:
+        max_gap = max(len(m) for _, m in stale_symbols)
+        print(f"  [{interval}] [SUMMARY] {len(stale_symbols)} symbol(s) still have "
+              f"unresolved gaps this run (worst case {max_gap} missing day(s) for a "
+              f"single symbol)", flush=True)
     return updated
+
+
+def check_cache_staleness(cache_dir: Path, suffix: str, label: str,
+                          upto_day: date, max_gap_days: int = 3) -> None:
+    """
+    Loud, explicit staleness summary across the whole cache -- run at the end
+    of every refresh so a growing gap (of the kind that silently stalled
+    bars_held in S2/S3/S8) shows up in the CI log instead of drifting
+    unnoticed. This does not fix gaps; it makes them visible.
+    """
+    worst_sym, worst_days = None, -1
+    stale_count = 0
+    for sym in symbols_from(cache_dir, suffix):
+        try:
+            df = pd.read_csv(cache_dir / f"{sym}{suffix}.csv")
+            last_ts = int(df["timestamp"].max())
+        except Exception:
+            continue
+        last_day = pd.Timestamp(last_ts, unit="ms", tz="UTC").date()
+        gap_days = (upto_day - last_day).days
+        if gap_days > max_gap_days:
+            stale_count += 1
+        if gap_days > worst_days:
+            worst_sym, worst_days = sym, gap_days
+    if stale_count:
+        print(f"  [{label}] [STALENESS] {stale_count} symbol(s) more than "
+              f"{max_gap_days} days behind {upto_day} -- worst: {worst_sym} "
+              f"({worst_days} days stale). Position-aging logic downstream "
+              f"depends on this cache; investigate before trusting bars_held.",
+              flush=True)
+    else:
+        print(f"  [{label}] [STALENESS] OK -- all symbols within "
+              f"{max_gap_days} days of {upto_day} (worst: {worst_sym}, "
+              f"{worst_days} days)", flush=True)
 
 
 def main() -> int:
@@ -192,6 +265,9 @@ def main() -> int:
         print(f"[4H] updated {n3} symbols via fapi")
     else:
         print("[MODE] fapi blocked — falling back to data.binance.vision dumps")
+        # Backfill ALL missing days per symbol up to yesterday, not just
+        # yesterday alone -- see vision_refresh_klines docstring for why the
+        # old single-day version silently produced permanent gaps.
         n2 = vision_refresh_klines("1d", D1_DIR, "_1d", YESTERDAY)
         print(f"[1D] updated {n2} symbols via binance.vision")
         n3 = vision_refresh_klines("4h", H4_DIR, "_4h", YESTERDAY)
@@ -209,6 +285,15 @@ def main() -> int:
                 print(f"[FUNDING] *** STALE > 7 DAYS — run local funding refresh NOW ***")
         except Exception as exc:
             print(f"[FUNDING] freshness check failed: {exc}")
+
+    # Explicit staleness summary every run, regardless of path taken -- makes
+    # a growing gap visible in the CI log instead of drifting unnoticed
+    # (this is what let BTCUSDT_1d.csv and the WLD/DUSDT/HIGHUSDT gaps go
+    # undetected for weeks before this session's audit).
+    print()
+    print("[STALENESS CHECK]")
+    check_cache_staleness(D1_DIR, "_1d", "1D", YESTERDAY)
+    check_cache_staleness(H4_DIR, "_4h", "4H", YESTERDAY)
 
     return 0
 

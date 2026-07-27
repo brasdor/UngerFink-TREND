@@ -956,6 +956,23 @@ def main() -> int:
           f"closed={state.get('closed_trade_count', 0)}  "
           f"last_ts_ms={state.get('last_processed_ts_ms', 0)}  "
           f"kill_sw={'YES' if state.get('kill_switch_triggered') else 'no'}", flush=True)
+
+    # Staleness alert: row-count bar-tracking (since last_processed_ts_ms)
+    # doesn't silently skip like the S2/S3/S8 exact-date-match bug, but a
+    # frozen counter with no new bars means exit checks aren't re-running
+    # either, which is just as dangerous unnoticed (confirmed this session:
+    # the 4H OHLCV cache stalled 2026-07-19 -> 07-22, leaving several S6/S7
+    # positions at or past HOLD_BARS unable to time-exit). Fail loudly.
+    _last_ts = state.get("last_processed_ts_ms", 0)
+    if _last_ts > 0:
+        _stale_hours = (pd.Timestamp.now(tz="UTC")
+                        - pd.Timestamp(_last_ts, unit="ms", tz="UTC")).total_seconds() / 3600
+        if _stale_hours > 24:
+            print(f"[DATA_GAP][CRITICAL] last_processed_ts_ms is {_stale_hours:.1f}h stale "
+                  f"(expected <=~8-12h for a 4H engine). No new bars means exit checks "
+                  f"are NOT running for any open position -- investigate the 4H OHLCV "
+                  f"refresh pipeline before trusting bars_held on open positions.",
+                  flush=True)
     print(flush=True)
 
     _reconcile_state(state)
