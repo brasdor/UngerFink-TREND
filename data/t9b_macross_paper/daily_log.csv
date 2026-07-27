@@ -537,3 +537,84 @@ run_date,bar_ts_ms,event,symbol,detail,close,funding,entry_price,stop,risk_amoun
 2026-07-20,1784491200000,SIGNAL_SKIPPED,SPELLUSDT,duplicate_cross_system,,,,,,,
 2026-07-20,1784491200000,SIGNAL,ZENUSDT,cross_down ema20<ema30  close=4.152  ema200=4.40541  funding=0.0100%  stop=4.29257,,,,,,4.152,0.0001
 2026-07-20,1784491200000,SIGNAL_SKIPPED,ZENUSDT,arbitrator: system_heat_exceeded  sys_heat=502  adding=26  limit=502,,,,,system_heat_exceeded  sys_heat=502  adding=26  limit=502,,
+2026-07-26,1785009600000,EXIT,1000RATSUSDT,"reason=time_exit_35bars  bars=35  R=0.946  pnl=$25.01  equity=$10,042.02",0.946137,25.0094,10042.02,-1.0454,,,
+2026-07-26,1785009600000,EXIT,ACHUSDT,"reason=time_exit_35bars  bars=35  R=0.920  pnl=$24.25  equity=$10,066.27",0.919879,24.2516,10066.27,-0.8065,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,AEROUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,AKTUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,ALCHUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL,ALGOUSDT,cross_down ema20<ema30  close=0.08248  ema200=0.0878547  funding=0.0100%  stop=0.0845857,,,,,0.08248,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,ALGOUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,SIGNAL,APEUSDT,cross_down ema20<ema30  close=0.1428  ema200=0.144342  funding=0.0100%  stop=0.149729,,,,,0.1428,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,APEUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,SIGNAL_SKIPPED,ARCUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,EXIT,ARUSDT,"reason=time_exit_35bars  bars=35  R=1.349  pnl=$35.66  equity=$10,101.93",1.349037,35.6594,10101.93,-0.4551,,,
+2026-07-26,1785009600000,EXIT,ASTRUSDT,"reason=stop_hit  bars=24  R=-1.000  pnl=$-26.36  equity=$10,075.57",-1.0,-26.3639,10075.57,-0.7149,,,
+2026-07-26,1785009600000,SIGNAL,ASTRUSDT,cross_down ema20<ema30  close=0.005078  ema200=0.00534592  funding=0.0100%  stop=0.00519814,,,,,0.005078,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,ASTRUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,EXIT,BANDUSDT,"reason=time_exit_35bars  bars=35  R=0.744  pnl=$19.62  equity=$10,095.19",0.744143,19.6185,10095.19,-0.5215,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,BELUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,BICOUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL,BNTUSDT,cross_down ema20<ema30  close=0.2728  ema200=0.274207  funding=0.0100%  stop=0.281686,,,,,0.2728,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,BNTUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,SIGNAL_SKIPPED,BTCDOMUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL,C98USDT,cross_down ema20<ema30  close=0.01281  ema200=0.0135947  funding=0.0100%  stop=0.0132329,,,,,0.01281,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,C98USDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,SIGNAL_SKIPPED,CATIUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,CHRUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,CHZUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL,CKBUSDT,cross_down ema20<ema30  close=0.000889  ema200=0.00096776  funding=0.0100%  stop=0.00091614,,,,,0.000889,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,CKBUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,SIGNAL,COMPUSDT,cross_down ema20<ema30  close=16.79  ema200=17.1665  funding=0.0100%  stop=17.2457,,,,,16.79,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,COMPUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,EXIT,CTSIUSDT,"reason=stop_hit  bars=27  R=-1.000  pnl=$-26.57  equity=$10,068.61",-1.0,-26.5726,10068.61,-0.7834,,,
+2026-07-26,1785009600000,SIGNAL,CTSIUSDT,cross_down ema20<ema30  close=0.02262  ema200=0.0234605  funding=0.0100%  stop=0.02329,,,,,0.02262,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,CTSIUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,SIGNAL_SKIPPED,DASHUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,DEXEUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,DODOXUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL,DOGEUSDT,cross_down ema20<ema30  close=0.07218  ema200=0.0772947  funding=0.0100%  stop=0.07436,,,,,0.07218,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,DOGEUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,SIGNAL_SKIPPED,DRIFTUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,DUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,EXIT,EDUUSDT,"reason=time_exit_35bars  bars=35  R=-0.093  pnl=$-2.45  equity=$10,066.16",-0.092628,-2.4485,10066.16,-0.8075,,,
+2026-07-26,1785009600000,SIGNAL,ENSUSDT,cross_down ema20<ema30  close=4.346  ema200=4.51935  funding=0.0100%  stop=4.507,,,,,4.346,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,ENSUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,SIGNAL_SKIPPED,FETUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,HIGHUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL,JASMYUSDT,cross_down ema20<ema30  close=0.004471  ema200=0.00463691  funding=0.0100%  stop=0.00468029,,,,,0.004471,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,JASMYUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,SIGNAL_SKIPPED,JTOUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,EXIT,KNCUSDT,"reason=stop_hit  bars=14  R=-1.000  pnl=$-26.43  equity=$10,039.73",-1.0,-26.4332,10039.73,-1.068,,,
+2026-07-26,1785009600000,SIGNAL,KNCUSDT,cross_down ema20<ema30  close=0.1088  ema200=0.113994  funding=0.0100%  stop=0.1155,,,,,0.1088,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,KNCUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,SIGNAL_SKIPPED,LUMIAUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL,MAVUSDT,cross_down ema20<ema30  close=0.00893  ema200=0.00976379  funding=0.0100%  stop=0.00956143,,,,,0.00893,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,MAVUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,SIGNAL_SKIPPED,MORPHOUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,EXIT,MTLUSDT,"reason=time_exit_35bars  bars=35  R=0.546  pnl=$14.39  equity=$10,054.12",0.5457,14.3868,10054.12,-0.9262,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,NEARUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,NMRUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,EXIT,OPUSDT,"reason=time_exit_35bars  bars=35  R=0.959  pnl=$25.35  equity=$10,079.47",0.959184,25.3543,10079.47,-0.6764,,,
+2026-07-26,1785009600000,EXIT,PEOPLEUSDT,"reason=time_exit_35bars  bars=35  R=0.213  pnl=$5.62  equity=$10,085.09",0.212993,5.6153,10085.09,-0.621,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,PHAUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,PORTALUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL,QTUMUSDT,cross_down ema20<ema30  close=0.6796  ema200=0.710885  funding=0.0100%  stop=0.713771,,,,,0.6796,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,QTUMUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,SIGNAL_SKIPPED,REZUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,RIFUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,EXIT,RLCUSDT,"reason=time_exit_35bars  bars=35  R=0.420  pnl=$11.07  equity=$10,096.16",0.419869,11.0694,10096.16,-0.512,,,
+2026-07-26,1785009600000,EXIT,ROSEUSDT,"reason=time_exit_35bars  bars=35  R=0.891  pnl=$23.55  equity=$10,119.70",0.890838,23.5477,10119.7,-0.2799,,,
+2026-07-26,1785009600000,EXIT,RSRUSDT,"reason=stop_hit  bars=12  R=-1.000  pnl=$-26.36  equity=$10,093.34",-1.0,-26.3639,10093.34,-0.5397,,,
+2026-07-26,1785009600000,SIGNAL,RSRUSDT,cross_down ema20<ema30  close=0.001214  ema200=0.00126966  funding=0.0100%  stop=0.00127371,,,,,0.001214,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,RSRUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=26  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=26  limit=501
+2026-07-26,1785009600000,EXIT,SFPUSDT,"reason=time_exit_35bars  bars=35  R=0.275  pnl=$7.27  equity=$10,100.61",0.275109,7.272,10100.61,-0.4681,,,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,SPELLUSDT,duplicate_cross_system,,,,,,,
+2026-07-26,1785009600000,EXIT,SSVUSDT,"reason=stop_hit  bars=29  R=-1.000  pnl=$-26.43  equity=$10,074.18",-1.0,-26.4332,10074.18,-0.7285,,,
+2026-07-26,1785009600000,EXIT,STXUSDT,"reason=time_exit_35bars  bars=35  R=3.289  pnl=$86.71  equity=$10,160.89",3.288985,86.7105,10160.89,0.0,,,
+2026-07-26,1785009600000,SIGNAL,SUSHIUSDT,cross_down ema20<ema30  close=0.1623  ema200=0.167729  funding=0.0100%  stop=0.169471,,,,,0.1623,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,SUSHIUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=27  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=27  limit=501
+2026-07-26,1785009600000,EXIT,VETUSDT,"reason=stop_hit  bars=9  R=-1.000  pnl=$-26.36  equity=$10,134.53",-1.0,-26.3639,10134.53,-0.2595,,,
+2026-07-26,1785009600000,SIGNAL,VETUSDT,cross_down ema20<ema30  close=0.004697  ema200=0.00486564  funding=0.0100%  stop=0.00481871,,,,,0.004697,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,VETUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=27  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=27  limit=501
+2026-07-26,1785009600000,SIGNAL,ZENUSDT,cross_down ema20<ema30  close=4.153  ema200=4.37205  funding=0.0100%  stop=4.266,,,,,4.153,0.0001,
+2026-07-26,1785009600000,SIGNAL_SKIPPED,ZENUSDT,arbitrator: system_heat_exceeded  sys_heat=475  adding=27  limit=501,,,,,,,system_heat_exceeded  sys_heat=475  adding=27  limit=501

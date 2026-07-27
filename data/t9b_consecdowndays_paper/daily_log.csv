@@ -538,3 +538,8 @@ run_date,event,symbol,detail
 2026-07-25,SIGNAL_SKIPPED,MORPHO/USDT,duplicate_cross_system
 2026-07-25,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
 2026-06-26,EXIT,WLD/USDT,"reason=safety_stop  bars=5  R=-1.000  pnl=$-25.00  equity=$9,975.00  [REMEDIATION: backdated exit for bars_held data-gap bug, see 2026-07-23 session]"
+2026-07-26,SIGNAL_SKIPPED,CHZ/USDT,duplicate_cross_system
+2026-07-26,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system
+2026-07-26,SIGNAL_SKIPPED,JTO/USDT,duplicate_cross_system
+2026-07-26,SIGNAL_SKIPPED,MORPHO/USDT,duplicate_cross_system
+2026-07-26,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
