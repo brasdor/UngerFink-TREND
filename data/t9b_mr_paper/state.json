@@ -1,7 +1,7 @@
 {
   "system_name": "MR_RSI14_1D_T9B",
   "created_utc": "2026-06-01T09:28:48.389060+00:00",
-  "last_run_date": "2026-07-26",
+  "last_run_date": "2026-07-27",
   "paper_equity_usdt": 10053.0694,
   "peak_equity_usdt": 10053.0694,
   "drawdown_pct": 0.0,
@@ -16,7 +16,7 @@
       "initial_risk_per_unit": 0.02061486,
       "risk_amount_usdt": 19.687499999999996,
       "qty": 955.0149746348021,
-      "bars_held": 11,
+      "bars_held": 12,
       "atr_at_entry": 0.00687162,
       "rsi_at_entry": 20.3044
     }

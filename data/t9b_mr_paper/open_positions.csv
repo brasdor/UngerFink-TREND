@@ -1,2 +1,2 @@
 position_id,symbol,entry_date,as_of_date,entry_price,stop_loss,bars_held,bars_remaining,rsi_at_entry,atr_at_entry,risk_amount_usdt,qty
-ALCHUSDT_20260715,ALCHUSDT,2026-07-15,2026-07-26,0.02536,0.00474514,11,9,20.3044,0.00687162,19.6875,955.0149746348021
+ALCHUSDT_20260715,ALCHUSDT,2026-07-15,2026-07-27,0.02536,0.00474514,12,8,20.3044,0.00687162,19.6875,955.0149746348021
