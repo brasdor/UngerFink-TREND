@@ -1,2 +1,2 @@
 position_id,symbol,entry_date,as_of_date,entry_price,initial_stop,current_stop,initial_risk_per_unit,risk_amount_usdt,qty,atr_at_entry,donchian_entry_level,highest_high,max_favorable_r,chandelier_active,chandelier_activated
-FET_USDT_20260530,FET/USDT,2026-05-30,2026-07-28,0.2719,0.22955107,0.22955107,0.04234893,25.0,590.3336872974122,0.02117446,0.2649,0.2832,0.2668,False,
+FET_USDT_20260530,FET/USDT,2026-05-30,2026-07-29,0.2719,0.22955107,0.22955107,0.04234893,25.0,590.3336872974122,0.02117446,0.2649,0.2832,0.2668,False,
