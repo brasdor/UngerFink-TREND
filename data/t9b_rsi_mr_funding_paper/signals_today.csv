@@ -1,1 +1,2 @@
-symbol,signal_date,close,rsi,atr,funding,stop_loss,signal
+symbol,signal_date,close,rsi,atr,funding,stop_loss,risk_unit,signal
+FIDAUSDT,2026-07-30,0.01719,17.9595,0.00117713,-4.89e-06,0.01483574,0.00235426,BUY_MR_FUNDING

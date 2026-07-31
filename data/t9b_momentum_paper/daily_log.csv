@@ -39,3 +39,5 @@ run_date,event,detail,equity
 2026-07-28,MTM,"MTM  unrealized_pnl=$-800.33  (-6.97%)  mtm_equity=$10,687.64  days_since_rebal=11",10687.6411
 2026-07-29,MTM,"MTM  unrealized_pnl=$-631.16  (-5.49%)  mtm_equity=$10,856.82  days_since_rebal=12",10856.8182
 2026-07-30,MTM,"MTM  unrealized_pnl=$-619.73  (-5.39%)  mtm_equity=$10,868.24  days_since_rebal=13",10868.2385
+2026-07-31,SKIP,"arbitrator_reject_reason=direction_conflict: RIFUSDT SHORT",10857.1589
+2026-07-31,REBAL,"REBAL #4  L=10 (7 new 3 held 7 closed)  S=9 (9 new 1 held 9 closed)  pnl=$-616.38  cost=0.133%  eq=$10,857.16",10857.1589

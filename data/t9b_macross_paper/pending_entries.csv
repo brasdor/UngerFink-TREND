@@ -1,1 +1,2 @@
 symbol,signal_ts_ms,signal_close,stop_loss,ema_fast,ema_slow,atr,funding_rate
+HFTUSDT,1785355200000,0.00902,0.00991714,0.00948134,0.00948791,0.00044857,0.0001
