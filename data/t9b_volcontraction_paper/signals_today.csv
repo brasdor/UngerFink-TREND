@@ -1,2 +1,1 @@
-symbol,signal_ts_ms,consec,comp_low,atr,ema200,signal_close,stop_loss,risk_unit,funding_rate,run_date
-MINAUSDT,1785600000000,15,0.04053,0.00064786,0.04409137,0.04052,0.04181571,0.00129571,0.0001,2026-08-02
+symbol,run_date,signal_ts_ms,signal_close,comp_low,consec,atr,ema200,funding_rate,stop_loss

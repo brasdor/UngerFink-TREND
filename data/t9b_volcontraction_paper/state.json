@@ -1,29 +1,13 @@
 {
   "system_name": "VolContractionShort_4H_T9B",
   "created_utc": "2026-06-11T19:20:09.618872+00:00",
-  "last_run_date": "2026-08-02",
-  "last_processed_ts_ms": 1785614400000,
-  "paper_equity_usdt": 10129.000400000003,
-  "peak_equity_usdt": 10129.000400000003,
+  "last_run_date": "2026-08-03",
+  "last_processed_ts_ms": 1785700800000,
+  "paper_equity_usdt": 10154.660200000002,
+  "peak_equity_usdt": 10154.660200000002,
   "drawdown_pct": 0.0,
   "kill_switch_triggered": false,
   "open_positions": [
-    {
-      "position_id": "ARUSDT_1785196800000",
-      "symbol": "ARUSDT",
-      "entry_ts_ms": 1785196800000,
-      "entry_date": "2026-07-28",
-      "entry_price": 1.808,
-      "stop_loss": 1.86742858,
-      "initial_risk_per_unit": 0.05942857,
-      "risk_amount_usdt": 25.4154,
-      "qty": 427.66309958,
-      "bars_held": 30,
-      "atr_at_entry": 0.02971429,
-      "funding_at_entry": 0.0001,
-      "compression_low": 1.809,
-      "consec_at_entry": 106
-    },
     {
       "position_id": "MINAUSDT_1785614400000",
       "symbol": "MINAUSDT",
@@ -34,7 +18,7 @@
       "initial_risk_per_unit": 0.00129571,
       "risk_amount_usdt": 26.4173,
       "qty": 20388.3067874,
-      "bars_held": 1,
+      "bars_held": 7,
       "atr_at_entry": 0.00064786,
       "funding_at_entry": 0.0001,
       "compression_low": 0.04053,
@@ -42,5 +26,5 @@
     }
   ],
   "pending_entries": [],
-  "closed_trade_count": 64
+  "closed_trade_count": 65
 }
