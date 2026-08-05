@@ -1,3 +1,1 @@
-symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
-ACHUSDT,1785700800000,0.00433,0.00447449,0.0044775,0.00453237,0.000136,0.004602,0.000272,0.0001,2026-08-03
-RLCUSDT,1785643200000,0.2606,0.27317269,0.27348019,0.29234413,0.0195,0.2996,0.039,0.0001,2026-08-03
+symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss

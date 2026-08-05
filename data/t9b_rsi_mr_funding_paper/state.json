@@ -1,40 +1,12 @@
 {
   "system_name": "RSI_MR_Futures_FundingGate_1D_T9B",
   "created_utc": "2026-07-11T00:25:51.899513+00:00",
-  "last_run_date": "2026-08-03",
+  "last_run_date": "2026-08-04",
   "paper_equity_usdt": 10000.0,
   "peak_equity_usdt": 10000.0,
   "drawdown_pct": 0.0,
   "kill_switch_triggered": false,
   "open_positions": [
-    {
-      "position_id": "DUSDT_20260710",
-      "symbol": "DUSDT",
-      "entry_date": "2026-07-10",
-      "entry_price": 0.005192,
-      "stop_loss": 0.00488757,
-      "initial_risk_per_unit": 0.00030443,
-      "risk_amount_usdt": 19.687499999999996,
-      "qty": 64670.03908944583,
-      "bars_held": 24,
-      "atr_at_entry": 0.00015222,
-      "rsi_at_entry": 16.8015,
-      "funding_at_entry": -0.00050479
-    },
-    {
-      "position_id": "HIGHUSDT_20260710",
-      "symbol": "HIGHUSDT",
-      "entry_date": "2026-07-10",
-      "entry_price": 0.0478,
-      "stop_loss": 0.0434706,
-      "initial_risk_per_unit": 0.0043294,
-      "risk_amount_usdt": 19.687499999999996,
-      "qty": 4547.396867926271,
-      "bars_held": 24,
-      "atr_at_entry": 0.0021647,
-      "rsi_at_entry": 11.6766,
-      "funding_at_entry": -0.00743014
-    },
     {
       "position_id": "FIDAUSDT_20260730",
       "symbol": "FIDAUSDT",
@@ -44,11 +16,11 @@
       "initial_risk_per_unit": 0.00235426,
       "risk_amount_usdt": 19.687499999999996,
       "qty": 8362.50031857144,
-      "bars_held": 4,
+      "bars_held": 5,
       "atr_at_entry": 0.00117713,
       "rsi_at_entry": 17.9595,
       "funding_at_entry": -4.89e-06
     }
   ],
-  "closed_trade_count": 0
+  "closed_trade_count": 2
 }

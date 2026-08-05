@@ -1,0 +1,3 @@
+exit_date,symbol,entry_date,bars_held,gross_r,pnl_usdt,equity,dd_pct,exit_reason
+2026-08-04,DUSDT,2026-07-10,25,0.0,0.0,10000.0,0.0,time_exit_25bars_data_gap_proxy
+2026-08-04,HIGHUSDT,2026-07-10,25,0.0,0.0,10000.0,0.0,time_exit_25bars_data_gap_proxy
