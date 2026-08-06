@@ -1,1 +1,2 @@
 symbol,signal_ts_ms,signal_close,stop_loss,ema_fast,ema_slow,atr,funding_rate
+SFPUSDT,1785873600000,0.2146,0.21982857,0.21520175,0.21520535,0.00261429,0.0001
