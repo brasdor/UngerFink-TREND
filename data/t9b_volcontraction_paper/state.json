@@ -1,11 +1,11 @@
 {
   "system_name": "VolContractionShort_4H_T9B",
   "created_utc": "2026-06-11T19:20:09.618872+00:00",
-  "last_run_date": "2026-08-05",
-  "last_processed_ts_ms": 1785873600000,
-  "paper_equity_usdt": 10154.660200000002,
+  "last_run_date": "2026-08-06",
+  "last_processed_ts_ms": 1785960000000,
+  "paper_equity_usdt": 10128.004200000001,
   "peak_equity_usdt": 10154.660200000002,
-  "drawdown_pct": 0.0,
+  "drawdown_pct": -0.2625,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -18,27 +18,11 @@
       "initial_risk_per_unit": 0.00129571,
       "risk_amount_usdt": 26.4173,
       "qty": 20388.3067874,
-      "bars_held": 19,
+      "bars_held": 25,
       "atr_at_entry": 0.00064786,
       "funding_at_entry": 0.0001,
       "compression_low": 0.04053,
       "consec_at_entry": 15
-    },
-    {
-      "position_id": "PENDLEUSDT_1785729600000",
-      "symbol": "PENDLEUSDT",
-      "entry_ts_ms": 1785729600000,
-      "entry_date": "2026-08-03",
-      "entry_price": 1.341,
-      "stop_loss": 1.39445714,
-      "initial_risk_per_unit": 0.05345714,
-      "risk_amount_usdt": 26.656,
-      "qty": 498.64214631,
-      "bars_held": 11,
-      "atr_at_entry": 0.02672857,
-      "funding_at_entry": 0.0001,
-      "compression_low": 1.362,
-      "consec_at_entry": 19
     },
     {
       "position_id": "CELOUSDT_1785816000000",
@@ -50,13 +34,45 @@
       "initial_risk_per_unit": 0.00190143,
       "risk_amount_usdt": 26.656,
       "qty": 14018.91367287,
-      "bars_held": 5,
+      "bars_held": 11,
       "atr_at_entry": 0.00095071,
       "funding_at_entry": 0.0001,
       "compression_low": 0.06058,
       "consec_at_entry": 19
+    },
+    {
+      "position_id": "JASMYUSDT_1785902400000",
+      "symbol": "JASMYUSDT",
+      "entry_ts_ms": 1785902400000,
+      "entry_date": "2026-08-05",
+      "entry_price": 0.004097,
+      "stop_loss": 0.00421228,
+      "initial_risk_per_unit": 0.00011529,
+      "risk_amount_usdt": 26.656,
+      "qty": 231208.11020036,
+      "bars_held": 5,
+      "atr_at_entry": 5.764e-05,
+      "funding_at_entry": 0.0001,
+      "compression_low": 0.004161,
+      "consec_at_entry": 15
+    },
+    {
+      "position_id": "STXUSDT_1785945600000",
+      "symbol": "STXUSDT",
+      "entry_ts_ms": 1785945600000,
+      "entry_date": "2026-08-05",
+      "entry_price": 0.1327,
+      "stop_loss": 0.13732858,
+      "initial_risk_per_unit": 0.00462857,
+      "risk_amount_usdt": 26.586,
+      "qty": 5743.89304364,
+      "bars_held": 2,
+      "atr_at_entry": 0.00231429,
+      "funding_at_entry": 0.0001,
+      "compression_low": 0.1333,
+      "consec_at_entry": 34
     }
   ],
   "pending_entries": [],
-  "closed_trade_count": 65
+  "closed_trade_count": 66
 }
