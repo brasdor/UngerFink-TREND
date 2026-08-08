@@ -644,3 +644,11 @@ run_date,event,symbol,detail
 2026-08-06,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
 2026-08-06,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
 2026-08-06,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-08-07,SIGNAL_SKIPPED,ATOM/USDT,duplicate_cross_system
+2026-08-07,SIGNAL_SKIPPED,CHZ/USDT,duplicate_cross_system
+2026-08-07,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system
+2026-08-07,SIGNAL_SKIPPED,MORPHO/USDT,duplicate_cross_system
+2026-08-07,SIGNAL_SKIPPED,ONDO/USDT,duplicate_cross_system
+2026-08-07,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
+2026-08-07,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
+2026-08-07,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system

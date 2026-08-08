@@ -1,29 +1,13 @@
 {
   "system_name": "VolContractionShort_4H_T9B",
   "created_utc": "2026-06-11T19:20:09.618872+00:00",
-  "last_run_date": "2026-08-06",
-  "last_processed_ts_ms": 1785960000000,
-  "paper_equity_usdt": 10128.004200000001,
+  "last_run_date": "2026-08-07",
+  "last_processed_ts_ms": 1786046400000,
+  "paper_equity_usdt": 10092.787400000001,
   "peak_equity_usdt": 10154.660200000002,
-  "drawdown_pct": -0.2625,
+  "drawdown_pct": -0.6093,
   "kill_switch_triggered": false,
   "open_positions": [
-    {
-      "position_id": "MINAUSDT_1785614400000",
-      "symbol": "MINAUSDT",
-      "entry_ts_ms": 1785614400000,
-      "entry_date": "2026-08-01",
-      "entry_price": 0.04052,
-      "stop_loss": 0.04181572,
-      "initial_risk_per_unit": 0.00129571,
-      "risk_amount_usdt": 26.4173,
-      "qty": 20388.3067874,
-      "bars_held": 25,
-      "atr_at_entry": 0.00064786,
-      "funding_at_entry": 0.0001,
-      "compression_low": 0.04053,
-      "consec_at_entry": 15
-    },
     {
       "position_id": "CELOUSDT_1785816000000",
       "symbol": "CELOUSDT",
@@ -34,27 +18,11 @@
       "initial_risk_per_unit": 0.00190143,
       "risk_amount_usdt": 26.656,
       "qty": 14018.91367287,
-      "bars_held": 11,
+      "bars_held": 17,
       "atr_at_entry": 0.00095071,
       "funding_at_entry": 0.0001,
       "compression_low": 0.06058,
       "consec_at_entry": 19
-    },
-    {
-      "position_id": "JASMYUSDT_1785902400000",
-      "symbol": "JASMYUSDT",
-      "entry_ts_ms": 1785902400000,
-      "entry_date": "2026-08-05",
-      "entry_price": 0.004097,
-      "stop_loss": 0.00421228,
-      "initial_risk_per_unit": 0.00011529,
-      "risk_amount_usdt": 26.656,
-      "qty": 231208.11020036,
-      "bars_held": 5,
-      "atr_at_entry": 5.764e-05,
-      "funding_at_entry": 0.0001,
-      "compression_low": 0.004161,
-      "consec_at_entry": 15
     },
     {
       "position_id": "STXUSDT_1785945600000",
@@ -66,13 +34,58 @@
       "initial_risk_per_unit": 0.00462857,
       "risk_amount_usdt": 26.586,
       "qty": 5743.89304364,
-      "bars_held": 2,
+      "bars_held": 8,
       "atr_at_entry": 0.00231429,
       "funding_at_entry": 0.0001,
       "compression_low": 0.1333,
       "consec_at_entry": 34
+    },
+    {
+      "position_id": "DASHUSDT_1785988800000",
+      "symbol": "DASHUSDT",
+      "entry_ts_ms": 1785988800000,
+      "entry_date": "2026-08-06",
+      "entry_price": 30.72,
+      "stop_loss": 31.49,
+      "initial_risk_per_unit": 0.77,
+      "risk_amount_usdt": 26.586,
+      "qty": 34.52728705,
+      "bars_held": 5,
+      "atr_at_entry": 0.385,
+      "funding_at_entry": 0.0001,
+      "compression_low": 30.73,
+      "consec_at_entry": 17
+    },
+    {
+      "position_id": "ENSUSDT_1785988800000",
+      "symbol": "ENSUSDT",
+      "entry_ts_ms": 1785988800000,
+      "entry_date": "2026-08-06",
+      "entry_price": 4.186,
+      "stop_loss": 4.28357142,
+      "initial_risk_per_unit": 0.09757143,
+      "risk_amount_usdt": 26.586,
+      "qty": 272.47741501,
+      "bars_held": 5,
+      "atr_at_entry": 0.04878571,
+      "funding_at_entry": 0.0001,
+      "compression_low": 4.189,
+      "consec_at_entry": 31
     }
   ],
-  "pending_entries": [],
-  "closed_trade_count": 66
+  "pending_entries": [
+    {
+      "symbol": "HOTUSDT",
+      "signal_ts_ms": 1786046400000,
+      "consec": 37,
+      "comp_low": 0.0003346,
+      "atr": 4.59e-06,
+      "ema200": 0.00033706,
+      "signal_close": 0.0003334,
+      "stop_loss": 0.00034259,
+      "risk_unit": 9.19e-06,
+      "funding_rate": 0.0001
+    }
+  ],
+  "closed_trade_count": 68
 }

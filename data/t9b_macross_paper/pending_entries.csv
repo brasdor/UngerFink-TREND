@@ -1,1 +1,2 @@
 symbol,signal_ts_ms,signal_close,stop_loss,ema_fast,ema_slow,atr,funding_rate
+OPUSDT,1786046400000,0.0862,0.08942857,0.08730096,0.08733742,0.00161429,0.0001
