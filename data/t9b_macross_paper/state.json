@@ -1,11 +1,11 @@
 {
   "system_name": "MACrossShort_4H_T9B",
   "created_utc": "2026-06-12T15:31:43.644778+00:00",
-  "last_run_date": "2026-08-07",
-  "last_processed_ts_ms": 1786046400000,
-  "paper_equity_usdt": 9953.2417,
+  "last_run_date": "2026-08-08",
+  "last_processed_ts_ms": 1786132800000,
+  "paper_equity_usdt": 9900.8071,
   "peak_equity_usdt": 10160.890200000003,
-  "drawdown_pct": -2.0436,
+  "drawdown_pct": -2.5596,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -18,7 +18,7 @@
       "initial_risk_per_unit": 0.039,
       "risk_amount_usdt": 26.254,
       "qty": 673.17861154,
-      "bars_held": 28,
+      "bars_held": 34,
       "atr_at_entry": 0.0195,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.27317269,
@@ -34,27 +34,11 @@
       "initial_risk_per_unit": 0.000272,
       "risk_amount_usdt": 26.2881,
       "qty": 96647.54241728,
-      "bars_held": 24,
+      "bars_held": 30,
       "atr_at_entry": 0.000136,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.00447449,
       "slow_ema_at_entry": 0.0044775
-    },
-    {
-      "position_id": "1000XECUSDT_1785844800000",
-      "symbol": "1000XECUSDT",
-      "entry_ts_ms": 1785844800000,
-      "entry_date": "2026-08-04",
-      "entry_price": 0.006267,
-      "stop_loss": 0.00673072,
-      "initial_risk_per_unit": 0.00046372,
-      "risk_amount_usdt": 26.3766,
-      "qty": 56880.49280816,
-      "bars_held": 15,
-      "atr_at_entry": 0.00023186,
-      "funding_at_entry": 0.0001,
-      "fast_ema_at_entry": 0.00657351,
-      "slow_ema_at_entry": 0.00657577
     },
     {
       "position_id": "MANAUSDT_1785902400000",
@@ -66,7 +50,7 @@
       "initial_risk_per_unit": 0.00189572,
       "risk_amount_usdt": 26.3345,
       "qty": 13891.53580829,
-      "bars_held": 11,
+      "bars_held": 17,
       "atr_at_entry": 0.00094786,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.06676032,
@@ -82,7 +66,7 @@
       "initial_risk_per_unit": 4.186e-05,
       "risk_amount_usdt": 26.3345,
       "qty": 629108.03302676,
-      "bars_held": 9,
+      "bars_held": 15,
       "atr_at_entry": 2.093e-05,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.00125151,
@@ -98,7 +82,7 @@
       "initial_risk_per_unit": 0.101,
       "risk_amount_usdt": 26.2653,
       "qty": 260.05281386,
-      "bars_held": 8,
+      "bars_held": 14,
       "atr_at_entry": 0.0505,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 2.21051821,
@@ -114,7 +98,7 @@
       "initial_risk_per_unit": 0.00011214,
       "risk_amount_usdt": 26.2653,
       "qty": 234219.13857678,
-      "bars_held": 8,
+      "bars_held": 14,
       "atr_at_entry": 5.607e-05,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.00467315,
@@ -130,26 +114,13 @@
       "initial_risk_per_unit": 0.00196714,
       "risk_amount_usdt": 26.2653,
       "qty": 13352.04113586,
-      "bars_held": 5,
+      "bars_held": 11,
       "atr_at_entry": 0.00098357,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.06941101,
       "slow_ema_at_entry": 0.06941652
     }
   ],
-  "pending_entries": [
-    {
-      "symbol": "OPUSDT",
-      "signal_ts_ms": 1786046400000,
-      "signal_close": 0.0862,
-      "ema_fast": 0.08730096,
-      "ema_slow": 0.08733742,
-      "ema200": 0.09420439,
-      "atr": 0.00161429,
-      "stop_loss": 0.08942857,
-      "risk_unit": 0.00322857,
-      "funding_rate": 0.0001
-    }
-  ],
-  "closed_trade_count": 62
+  "pending_entries": [],
+  "closed_trade_count": 64
 }
