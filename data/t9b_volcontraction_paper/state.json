@@ -1,29 +1,13 @@
 {
   "system_name": "VolContractionShort_4H_T9B",
   "created_utc": "2026-06-11T19:20:09.618872+00:00",
-  "last_run_date": "2026-08-08",
-  "last_processed_ts_ms": 1786132800000,
-  "paper_equity_usdt": 10092.787400000001,
+  "last_run_date": "2026-08-09",
+  "last_processed_ts_ms": 1786219200000,
+  "paper_equity_usdt": 10012.959500000003,
   "peak_equity_usdt": 10154.660200000002,
-  "drawdown_pct": -0.6093,
+  "drawdown_pct": -1.3954,
   "kill_switch_triggered": false,
   "open_positions": [
-    {
-      "position_id": "CELOUSDT_1785816000000",
-      "symbol": "CELOUSDT",
-      "entry_ts_ms": 1785816000000,
-      "entry_date": "2026-08-04",
-      "entry_price": 0.06045,
-      "stop_loss": 0.06235142,
-      "initial_risk_per_unit": 0.00190143,
-      "risk_amount_usdt": 26.656,
-      "qty": 14018.91367287,
-      "bars_held": 23,
-      "atr_at_entry": 0.00095071,
-      "funding_at_entry": 0.0001,
-      "compression_low": 0.06058,
-      "consec_at_entry": 19
-    },
     {
       "position_id": "STXUSDT_1785945600000",
       "symbol": "STXUSDT",
@@ -34,43 +18,11 @@
       "initial_risk_per_unit": 0.00462857,
       "risk_amount_usdt": 26.586,
       "qty": 5743.89304364,
-      "bars_held": 14,
+      "bars_held": 20,
       "atr_at_entry": 0.00231429,
       "funding_at_entry": 0.0001,
       "compression_low": 0.1333,
       "consec_at_entry": 34
-    },
-    {
-      "position_id": "DASHUSDT_1785988800000",
-      "symbol": "DASHUSDT",
-      "entry_ts_ms": 1785988800000,
-      "entry_date": "2026-08-06",
-      "entry_price": 30.72,
-      "stop_loss": 31.49,
-      "initial_risk_per_unit": 0.77,
-      "risk_amount_usdt": 26.586,
-      "qty": 34.52728705,
-      "bars_held": 11,
-      "atr_at_entry": 0.385,
-      "funding_at_entry": 0.0001,
-      "compression_low": 30.73,
-      "consec_at_entry": 17
-    },
-    {
-      "position_id": "ENSUSDT_1785988800000",
-      "symbol": "ENSUSDT",
-      "entry_ts_ms": 1785988800000,
-      "entry_date": "2026-08-06",
-      "entry_price": 4.186,
-      "stop_loss": 4.28357142,
-      "initial_risk_per_unit": 0.09757143,
-      "risk_amount_usdt": 26.586,
-      "qty": 272.47741501,
-      "bars_held": 11,
-      "atr_at_entry": 0.04878571,
-      "funding_at_entry": 0.0001,
-      "compression_low": 4.189,
-      "consec_at_entry": 31
     },
     {
       "position_id": "HOTUSDT_1786060800000",
@@ -82,7 +34,7 @@
       "initial_risk_per_unit": 9.19e-06,
       "risk_amount_usdt": 26.4936,
       "qty": 2882869.08868335,
-      "bars_held": 6,
+      "bars_held": 12,
       "atr_at_entry": 4.59e-06,
       "funding_at_entry": 0.0001,
       "compression_low": 0.0003346,
@@ -98,7 +50,7 @@
       "initial_risk_per_unit": 0.00014957,
       "risk_amount_usdt": 26.4936,
       "qty": 177131.556629,
-      "bars_held": 4,
+      "bars_held": 10,
       "atr_at_entry": 7.479e-05,
       "funding_at_entry": 0.0001,
       "compression_low": 0.004072,
@@ -106,5 +58,5 @@
     }
   ],
   "pending_entries": [],
-  "closed_trade_count": 68
+  "closed_trade_count": 71
 }

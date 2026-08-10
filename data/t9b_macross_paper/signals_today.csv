@@ -1,2 +1,1 @@
-symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
-OPUSDT,1786118400000,0.0864,0.08742771,0.08742784,0.09388769,0.00195714,0.09031429,0.00391429,0.0001,2026-08-08
+symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss
