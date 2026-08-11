@@ -1,1 +1,2 @@
-symbol,run_date,signal_ts_ms,signal_close,comp_low,consec,atr,ema200,funding_rate,stop_loss
+symbol,signal_ts_ms,consec,comp_low,atr,ema200,signal_close,stop_loss,risk_unit,funding_rate,run_date
+DOTUSDT,1786305600000,16,0.8008,0.00868571,0.83371412,0.7983,0.81567143,0.01737143,0.0001,2026-08-10

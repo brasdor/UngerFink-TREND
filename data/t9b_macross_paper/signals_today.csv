@@ -1,1 +1,3 @@
-symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss
+symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
+ALGOUSDT,1786305600000,0.08262,0.08672939,0.08685319,0.08586156,0.00119571,0.08501143,0.00239143,0.0001,2026-08-10
+DOTUSDT,1786262400000,0.8073,0.8174622,0.81752406,0.83457062,0.00890714,0.82511429,0.01781429,0.0001,2026-08-10

@@ -1,1 +1,2 @@
 symbol,signal_ts_ms,signal_close,stop_loss,ema_fast,ema_slow,atr,funding_rate
+ALGOUSDT,1786305600000,0.08262,0.08501143,0.08672939,0.08685319,0.00119571,0.0001

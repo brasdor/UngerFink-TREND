@@ -414,3 +414,8 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-08-09,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
 2026-08-09,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
 2026-08-09,SIGNAL_SKIPPED,HBAR/USDT,duplicate_cross_system
+2026-08-10,SIGNAL_SKIPPED,VET/USDT,duplicate_cross_system
+2026-08-10,SIGNAL_SKIPPED,DEXE/USDT,duplicate_cross_system
+2026-08-10,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-08-10,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
+2026-08-10,SIGNAL_SKIPPED,HBAR/USDT,duplicate_cross_system
