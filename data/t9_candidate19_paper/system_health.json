@@ -1,0 +1,15 @@
+{
+  "system_name": "T9_CANDIDATE19_MOMENTUM",
+  "timestamp_utc": "2026-08-15T20:38:03.134135+00:00",
+  "status": "OK",
+  "candidate_id": "19",
+  "open_positions": 20,
+  "closed_equity_usdt": 60000.0,
+  "drawdown_pct": 0.0,
+  "portfolio_heat_pct": 5.0,
+  "reserved_margin_pct": 22.018967779105385,
+  "entries_this_run": 20,
+  "closes_this_run": 0,
+  "skipped_this_run": 357,
+  "paper_only": true
+}

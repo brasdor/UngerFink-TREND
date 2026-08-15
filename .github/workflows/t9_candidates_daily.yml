@@ -1,0 +1,145 @@
+name: T9 Momentum Candidates Daily Paper Trading
+
+# Runs daily at 08:00 UTC -- 8 hours after the 1D candle closed at midnight UTC,
+# same schedule as the T9B daily workflow. Independent workflow (not merged into
+# t9b_daily.yml) because these two engines are self-contained $60k paper books,
+# deliberately not wired into t9b_shared.py's cross-system dedup, regime-weight
+# scaling, mark-to-market, GitHub-issue creation, or Telegram scripts -- all of
+# those are hardcoded to the existing 7 S1-S8 engines' data directories and
+# would need dedicated changes to extend, not attempted here.
+#
+# Also triggerable manually from the GitHub Actions tab (workflow_dispatch).
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    inputs:
+      run_date:
+        description: 'Date to run (YYYY-MM-DD). Leave blank to use today.'
+        required: false
+        default: ''
+
+jobs:
+  t9-candidates-daily:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # needed to push committed output files back
+
+    steps:
+      # ------------------------------------------------------------------
+      # 1. Checkout the full repo (depth 0 required for clean push)
+      # ------------------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # ------------------------------------------------------------------
+      # 2. Python setup with pip cache
+      # ------------------------------------------------------------------
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # ------------------------------------------------------------------
+      # 3. Install dependencies
+      # ------------------------------------------------------------------
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # ------------------------------------------------------------------
+      # 3a. Refresh futures data caches (funding + 1D klines).
+      #     Same script the T9B workflow uses -- both candidate engines read
+      #     the same data/futures_universe/ohlcv_1d/ + funding_rates/ caches.
+      #     Probes fapi.binance.com (geo-blocked from US runners as of
+      #     2026-07-11) and falls back to data.binance.vision daily dumps.
+      # ------------------------------------------------------------------
+      - name: Refresh futures data caches
+        continue-on-error: true
+        run: python .github/scripts/refresh_futures_data.py
+
+      # ------------------------------------------------------------------
+      # 4a. Run T9 engine for candidate 12 (cross-sectional rank momentum)
+      #     --no-download: data already refreshed in step 3a; the engine's
+      #     own ccxt delta-fetch is redundant here and just adds runtime.
+      # ------------------------------------------------------------------
+      - name: Run T9 candidate 12 paper engine
+        id: engine_c12
+        continue-on-error: true
+        run: |
+          if [ -n "${{ github.event.inputs.run_date }}" ]; then
+            echo "Candidate 12: running for ${{ github.event.inputs.run_date }}"
+            python engines/phase_t9_momentum_candidates_paper_engine.py \
+              --candidate 12 --date "${{ github.event.inputs.run_date }}" \
+              --no-download --notify
+          else
+            echo "Candidate 12: running for today"
+            python engines/phase_t9_momentum_candidates_paper_engine.py \
+              --candidate 12 --no-download --notify
+          fi
+
+      # ------------------------------------------------------------------
+      # 4b. Run T9 engine for candidate 19 (52-week-high proximity momentum)
+      # ------------------------------------------------------------------
+      - name: Run T9 candidate 19 paper engine
+        id: engine_c19
+        continue-on-error: true
+        run: |
+          if [ -n "${{ github.event.inputs.run_date }}" ]; then
+            echo "Candidate 19: running for ${{ github.event.inputs.run_date }}"
+            python engines/phase_t9_momentum_candidates_paper_engine.py \
+              --candidate 19 --date "${{ github.event.inputs.run_date }}" \
+              --no-download --notify
+          else
+            echo "Candidate 19: running for today"
+            python engines/phase_t9_momentum_candidates_paper_engine.py \
+              --candidate 19 --no-download --notify
+          fi
+
+      # ------------------------------------------------------------------
+      # 5. Commit all output files back to the repository.
+      #    Atomic add per directory -- one missing pathspec must never make
+      #    git add fail silently and discard another engine's state (this
+      #    exact bug hit the T9B workflow once, see its own commit history).
+      # ------------------------------------------------------------------
+      - name: Commit output files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add --force data/t9_candidate12_paper/ || true
+          git add --force data/t9_candidate19_paper/ || true
+
+          # Shared OHLCV/funding caches (both engines read/write here)
+          git add --force data/futures_universe/ohlcv_1d/ || true
+          git add --force data/futures_universe/funding_rates/ || true
+
+          if git diff --cached --quiet; then
+            echo "No output file changes to commit."
+          else
+            TODAY=$(date -u +%Y-%m-%d)
+            git commit -m "T9 candidates: daily update ${TODAY} [skip ci]"
+            git pull --rebase origin ${{ github.ref_name }} || true
+            git push origin ${{ github.ref_name }}
+          fi
+
+      # ------------------------------------------------------------------
+      # 6. Report engine exit statuses for visibility
+      # ------------------------------------------------------------------
+      - name: Report engine statuses
+        if: always()
+        run: |
+          echo "Engine exit statuses:"
+          echo "  Candidate 12 : ${{ steps.engine_c12.outcome }}"
+          echo "  Candidate 19 : ${{ steps.engine_c19.outcome }}"
+          if [ "${{ steps.engine_c12.outcome }}" = "failure" ] || \
+             [ "${{ steps.engine_c19.outcome }}" = "failure" ]; then
+            echo "WARNING: one or more engines failed -- check logs above"
+          else
+            echo "Both engines completed successfully"
+          fi
