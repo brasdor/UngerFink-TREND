@@ -1,2 +1,1 @@
 symbol,signal_ts_ms,signal_close,stop_loss,ema_fast,ema_slow,atr,funding_rate
-BANDUSDT,1786564800000,0.157,0.16402857,0.16372537,0.16380411,0.00351429,0.0001
