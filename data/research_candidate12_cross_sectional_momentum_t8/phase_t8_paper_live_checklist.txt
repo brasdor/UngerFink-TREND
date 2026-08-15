@@ -1,0 +1,12 @@
+- Verify Binance USDT-M futures data integrity for the 290-symbol universe
+- Use CLOSED candles only
+- No intrabar execution assumptions beyond the modeled liquidity-tiered slippage
+- No discretionary overrides
+- Implement periodic (monthly) rolling correlation-cluster recompute -- static full-window map from research is NOT valid point-in-time
+- Enforce leverage cap <=2x at the exchange/account level, not just in sizing logic
+- Monitor skipped signals (MAX_OPEN / MAX_CLUSTER_PCT rejections)
+- Monitor portfolio heat against the 5.0% theoretical ceiling
+- Monitor equity only from CLOSED trades
+- Do not optimise during observation
+- Observe at least 100-200 additional live signals before considering real deployment
+- Compare live equity trajectory to T7's rolling-window distribution (44.1% of historical 30-trade windows fell below the cost floor -- expect and tolerate stretches like this, do not kill-switch on that basis alone)

@@ -1,0 +1,30 @@
+{
+    "system_name": "CANDIDATE12_CROSS_SECTIONAL_MOMENTUM_FUTURES",
+    "timestamp_utc": "2026-08-09T19:47:03.569077+00:00",
+    "status": "READY_FOR_PAPER_LIVE",
+    "research_complete": {
+        "T1": true,
+        "T2": true,
+        "T3": true,
+        "T4": true,
+        "T5": true,
+        "T6": true,
+        "T7": true,
+        "T8": true
+    },
+    "warnings": [
+        "T4: fails 2x cost stress (avg_r 0.224R vs 0.25R floor) -- fee/spread assumptions must stay near current levels, do not assume worse cost environment without re-validating.",
+        "T6: liquidation exposure rises sharply with leverage (21.6% of trades at 3x) -- leverage MUST be capped at <=2x in T9.",
+        "No actual protective stop-loss is executed -- exits are signal-based only (see exit_note); do not assume ATRx2.0 caps single-trade loss.",
+        "Correlation cluster map is static/full-window from research -- T9 needs a periodic rolling recompute, not yet built.",
+        "290-symbol futures universe requires ongoing listing/delisting maintenance.",
+        "11u and 13u are set aside, not deployed -- separate future research track for a stricter asset-diversification entry gate."
+    ],
+    "strengths": [
+        "T7 PASSES all strict robustness tests on the locked, capped, slippage-adjusted trade set: cost stress to +0.15R, remove-top-5-assets, remove-top-2-months all clear the 0.25R floor.",
+        "Only 44.1% of rolling 30-trade windows fall below the cost floor (vs 73-78% for 11u/13u, which failed T7) -- edge is comparatively well-distributed across time and assets.",
+        "Position sizing at 0.25% risk never approaches the $100 min-notional floor (min observed $196).",
+        "Slippage impact is small under the liquidity-tiered T6 model (-1.4% return, -0.01 Sharpe vs pre-slippage capped baseline).",
+        "Market-at-open fills confirmed correct -- attempted limit fills show no edge improvement (slight adverse selection)."
+    ]
+}

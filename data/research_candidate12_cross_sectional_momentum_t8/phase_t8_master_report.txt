@@ -1,0 +1,57 @@
+PHASE T8 -- PAPER LIVE BLUEPRINT (Candidate 12)
+======================================================================
+
+SYSTEM STATUS
+----------------------------------------------------------------------
+Research phase completed (T1-T7). System frozen for paper-live observation.
+11u and 13u set aside pending future asset-diversification entry-gate research.
+
+FROZEN CORE
+----------------------------------------------------------------------
+Timeframe:           1d
+Entry:               cross_sectional_rank_momentum (5 pooled T1-survivor combos)
+Entry params:        [{'formation': 60, 'quantile': 0.2, 'rebalance_n': 7, 'side': 'long_only'}, {'formation': 60, 'quantile': 0.2, 'rebalance_n': 14, 'side': 'long_only'}, {'formation': 90, 'quantile': 0.1, 'rebalance_n': 14, 'side': 'long_only'}, {'formation': 90, 'quantile': 0.2, 'rebalance_n': 7, 'side': 'long_only'}, {'formation': 90, 'quantile': 0.2, 'rebalance_n': 14, 'side': 'long_only'}]
+Exit:                flat_opposite_signal (no executed stop -- see exit_note)
+Universe:            290-symbol Binance USDT-M futures
+
+PORTFOLIO
+----------------------------------------------------------------------
+Max open positions:  20
+Max position size:   10.0% of equity
+Max cluster conc.:   30.0% of equity
+Risk per trade:      0.25%
+Max portfolio heat:  5.0%
+
+EXECUTION
+----------------------------------------------------------------------
+Fill assumption:     market_at_next_bar_open
+Slippage model:      liquidity_tiered {'tier1_adv_ge_50m': 2.0, 'tier2_adv_ge_5m': 8.0, 'tier3_adv_lt_5m': 25.0}
+
+CAPITAL
+----------------------------------------------------------------------
+Initial capital:     $60,000 USDT
+Max leverage:        2.0x isolated margin
+Max margin usage:    85.0% of equity
+
+RISK CONTROL
+----------------------------------------------------------------------
+Kill-switch DD:      -35.0%
+Equity floor:        50.0% of initial capital
+
+IMPORTANT RULE
+----------------------------------------------------------------------
+NO NEW FILTERS
+NO OPTIMISATION
+NO LIVE CAPITAL YET
+
+NEXT PHASE
+----------------------------------------------------------------------
+T9 -- Binance Futures Paper Sim Engine
+- live Binance futures candles (closed-candle execution)
+- persistent state, CSV logging, dashboard monitoring
+- rolling correlation-cluster recompute (not yet built)
+- exchange-level leverage cap enforcement
+
+OBSERVATION OBJECTIVE
+----------------------------------------------------------------------
+Observe at least 100-200 additional paper signals before considering real deployment.

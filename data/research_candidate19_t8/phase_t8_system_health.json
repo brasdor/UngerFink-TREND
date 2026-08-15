@@ -1,0 +1,32 @@
+{
+    "system_name": "CANDIDATE19_PROXIMITY_HIGH_MOMENTUM_FUTURES",
+    "timestamp_utc": "2026-08-15T11:09:35.649812+00:00",
+    "status": "READY_FOR_PAPER_LIVE",
+    "research_complete": {
+        "T1": true,
+        "T2": true,
+        "T3": true,
+        "T4": true,
+        "T5": true,
+        "T6": true,
+        "T7": true,
+        "T8": true
+    },
+    "warnings": [
+        "T6: liquidation exposure rises sharply with leverage (18.3% of trades at 3x, nearly matching candidate 12's 21.6%) -- leverage MUST be capped at <=2x in T9. A dedicated stop-loss variant test post-T7 found no exit-side fix that meaningfully reduces this without giving up 26-43% of the edge -- leverage discipline is the only confirmed mitigation.",
+        "No actual protective stop-loss is executed -- exits are signal-based only (see exit_note); do not assume ATRx2.0 caps single-trade loss.",
+        "Correlation cluster map is static/full-window from research (though now deterministic) -- T9 needs a periodic rolling recompute, not yet built.",
+        "290-symbol futures universe requires ongoing listing/delisting maintenance.",
+        "T2 regime dependence flag=True (2022 net-negative year) -- same session-wide pattern seen in nearly every candidate, not a distinguishing weakness, but worth monitoring in live drawdown attribution.",
+        "11u and 13u remain set aside; 18 and 20 were eliminated earlier in the pipeline -- none of these are deployed alongside 19."
+    ],
+    "strengths": [
+        "T4: cleanest result of any candidate this session -- clears 2x cost stress outright (avg_r=0.3896R), no fragility on any test, lowest best-asset concentration seen (BTCUSDT, 9.8% of total R).",
+        "T5: strongest capped result of any candidate -- capped Sharpe 2.43-2.52 (vs 1.59-1.88 for 11u/12/13u), drawdown improved dramatically under capping (-28.5% to -14.1%).",
+        "T7 PASSES all strict robustness tests on the locked, capped, slippage-adjusted trade set: cost stress to +0.15R, remove-top-5-assets, remove-top-2-months all clear the 0.25R floor.",
+        "Only 44.5% of rolling 30-trade windows fall below the cost floor (vs 73-78% for 11u/13u, which failed T7; matches candidate 12's 44.1%) -- edge is comparatively well-distributed across time and assets.",
+        "Position sizing at 0.25% risk never approaches the $100 min-notional floor (min observed $184).",
+        "Slippage impact is small under the liquidity-tiered T6 model (-1.7% return, -0.01 Sharpe vs pre-slippage capped baseline).",
+        "Market-at-open fills confirmed correct -- attempted limit fills show no edge improvement (slight adverse selection)."
+    ]
+}

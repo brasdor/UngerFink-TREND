@@ -1,0 +1,11 @@
+{
+    "last_update_utc": null,
+    "system_status": "IDLE",
+    "kill_switch_triggered": false,
+    "open_positions": [],
+    "closed_equity": 60000,
+    "peak_equity": 60000,
+    "drawdown_pct": 0.0,
+    "portfolio_heat_pct": 0.0,
+    "last_error": null
+}

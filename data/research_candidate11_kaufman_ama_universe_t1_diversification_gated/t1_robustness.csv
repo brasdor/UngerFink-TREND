@@ -1,0 +1,2 @@
+n_ex,avg_r_ex,t_ex,clears_floor,clears_tstat,survives,er_n,fast_n,slow_n,side,avg_r_full,t_full,robustness_triggered
+7145,0.39393804267043103,9.195272852825521,True,True,True,10,5,20,long_only,0.42126510360414415,8.965264824125619,False
