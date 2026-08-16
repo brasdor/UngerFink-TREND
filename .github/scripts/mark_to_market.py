@@ -21,19 +21,28 @@ from pathlib import Path
 
 ROOT = Path.cwd()
 
+SPOT_OHLCV_DIR = ROOT / "data" / "universe" / "ohlcv_1d"
+FUTURES_OHLCV_DIR = ROOT / "data" / "futures_universe" / "ohlcv_1d"
+
+# (label, data_dir, ohlcv_dir) -- ohlcv_dir is per-system because candidates 12/19
+# trade the futures universe (data/futures_universe/ohlcv_1d/, symbols like
+# "BTCUSDT" with no separator) while the original three systems trade the spot
+# universe (data/universe/ohlcv_1d/, ccxt-style symbols like "BTC/USDT").
 SYSTEMS = [
-    ("Donchian", ROOT / "data" / "t9b_paper"),
-    ("RSI-MR", ROOT / "data" / "t9b_mr_paper"),
-    ("ConsecDown", ROOT / "data" / "t9b_consecdowndays_paper"),
+    ("Donchian", ROOT / "data" / "t9b_paper", SPOT_OHLCV_DIR),
+    ("RSI-MR", ROOT / "data" / "t9b_mr_paper", SPOT_OHLCV_DIR),
+    ("ConsecDown", ROOT / "data" / "t9b_consecdowndays_paper", SPOT_OHLCV_DIR),
+    ("Candidate12", ROOT / "data" / "t9_candidate12_paper", FUTURES_OHLCV_DIR),
+    ("Candidate19", ROOT / "data" / "t9_candidate19_paper", FUTURES_OHLCV_DIR),
 ]
 
-OHLCV_DIR = ROOT / "data" / "universe" / "ohlcv_1d"
 
-
-def latest_close(symbol: str) -> float | None:
-    """Read the last close price from the committed OHLCV cache."""
+def latest_close(symbol: str, ohlcv_dir: Path) -> float | None:
+    """Read the last close price from the committed OHLCV cache. `symbol.replace("/",
+    "_")` is a no-op for futures symbols (already slash-free, e.g. "BTCUSDT"), so this
+    stays correct for both spot ("BTC/USDT") and futures ("BTCUSDT") conventions."""
     ticker = symbol.replace("/", "_")
-    path = OHLCV_DIR / f"{ticker}_1d.csv"
+    path = ohlcv_dir / f"{ticker}_1d.csv"
     if not path.exists():
         return None
     last_line = ""
@@ -68,7 +77,7 @@ def read_state(data_dir: Path) -> dict:
         return json.load(f)
 
 
-def process_system(label: str, data_dir: Path, run_date: str) -> None:
+def process_system(label: str, data_dir: Path, ohlcv_dir: Path, run_date: str) -> None:
     positions = read_positions(data_dir)
     state = read_state(data_dir)
     paper_equity = state.get("paper_equity_usdt", 10000.0)
@@ -86,7 +95,7 @@ def process_system(label: str, data_dir: Path, run_date: str) -> None:
         except (ValueError, TypeError):
             continue
 
-        current_price = latest_close(symbol)
+        current_price = latest_close(symbol, ohlcv_dir)
         if current_price is None:
             continue
 
@@ -146,10 +155,10 @@ def main() -> None:
         run_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
     print(f"Mark-to-market: {run_date}")
-    for label, data_dir in SYSTEMS:
+    for label, data_dir, ohlcv_dir in SYSTEMS:
         if not data_dir.exists():
             continue
-        process_system(label, data_dir, run_date)
+        process_system(label, data_dir, ohlcv_dir, run_date)
 
 
 if __name__ == "__main__":

@@ -136,7 +136,13 @@ def paths_for(candidate_id: str) -> dict:
         log=out_dir / "daily_log.csv",
         open_positions=out_dir / "open_positions.csv",
         signals=out_dir / "signals_today.csv",
-        equity_curve=out_dir / "equity_curve.csv",
+        # NOT "equity_curve.csv" -- that filename is owned by .github/scripts/
+        # mark_to_market.py (different schema: date,paper_equity,unrealized_pnl,
+        # total_value,open_positions,total_cost,total_market_value), which the
+        # Cloudflare status_worker.js /pnl handler reads. Two different schemas
+        # writing to the same path corrupted the file on the first collision --
+        # keep this engine's own richer risk-tracking curve under a separate name.
+        equity_curve=out_dir / "engine_equity_curve.csv",
         health=out_dir / "system_health.json",
         cluster_cache=out_dir / "cluster_map_cache.json",
     )
@@ -576,6 +582,10 @@ def main() -> int:
     peak = max(float(state["peak_equity_usdt"]), equity)
     dd_pct = (equity - peak) / max(peak, EPS) * 100.0
     state["closed_equity_usdt"] = round(equity, 4)
+    # Alias for .github/scripts/mark_to_market.py, which reads paper_equity_usdt
+    # across every system -- kept in sync with closed_equity_usdt, not a separate
+    # value, so this engine's own logic is unaffected.
+    state["paper_equity_usdt"] = state["closed_equity_usdt"]
     state["peak_equity_usdt"] = round(peak, 4)
     state["drawdown_pct"] = round(dd_pct, 4)
     state["open_positions"] = open_positions
@@ -644,6 +654,11 @@ def _write_open_positions(paths, panel, open_positions, today):
             "symbol": pos["symbol"], "side": pos["side"], "combo_idx": pos["combo_idx"],
             "entry_date": pos["entry_date"], "entry_price": pos["entry_price"],
             "current_price": cur_price, "unrealized_r": round(gross_r, 4),
+            # qty in base-asset units, for compatibility with .github/scripts/
+            # mark_to_market.py's shared cost/market_value formula (entry_price*qty,
+            # current_price*qty) -- same convention the S1-S3 engines' open_positions.csv
+            # already use, so mark_to_market.py needs no per-system special-casing.
+            "qty": round(pos["notional_usdt"] / pos["entry_price"], 8),
             "notional_usdt": round(pos["notional_usdt"], 2), "cluster": pos["cluster"],
             "days_held": (today - Date.fromisoformat(pos["entry_date"])).days,
         })

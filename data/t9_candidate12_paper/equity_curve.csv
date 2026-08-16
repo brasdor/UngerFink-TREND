@@ -1,3 +1,2 @@
-date,equity,peak_equity,drawdown_pct,open_positions,open_risk_usdt,reserved_margin_usdt
-2026-08-15,60000.0000,60000.0000,0.0000,20,3000.0000,10435.9444
-2026-08-16,60000.0000,60000.0000,0.0000,20,3000.0000,10435.9444
+date,paper_equity,unrealized_pnl,total_value,open_positions,total_cost,total_market_value
+2026-08-18,60000.00,-33.09,59966.91,20,20871.89,20838.80

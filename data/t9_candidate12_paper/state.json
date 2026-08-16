@@ -2,7 +2,7 @@
   "system_name": "T9_CANDIDATE12_MOMENTUM",
   "created_utc": "2026-08-15T20:37:21.392009+00:00",
   "engine_start_date": "2026-08-15",
-  "last_run_date": "2026-08-16",
+  "last_run_date": "2026-08-18",
   "combo_last_rebalance": {
     "0": "2026-08-15",
     "1": "2026-08-15",
@@ -317,5 +317,6 @@
     }
   ],
   "closed_trade_count": 0,
-  "last_error": null
+  "last_error": null,
+  "paper_equity_usdt": 60000.0
 }

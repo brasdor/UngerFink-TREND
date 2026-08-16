@@ -20,6 +20,8 @@ const SYSTEMS = [
   ["Donchian", "data/t9b_paper"],
   ["RSI-MR", "data/t9b_mr_paper"],
   ["ConsecDown", "data/t9b_consecdowndays_paper"],
+  ["Candidate12", "data/t9_candidate12_paper"],
+  ["Candidate19", "data/t9_candidate19_paper"],
 ];
 
 export default {
@@ -224,3 +226,9 @@ async function sendMessage(token, chatId, text) {
     }),
   });
 }
+
+// Named exports alongside the default Workers `fetch` export -- unused by the
+// Workers runtime itself, but lets tools/test_status_worker_local.mjs (and any
+// future test) exercise the real buildStatus/buildPositions/buildPnl logic
+// directly, with only the network layer (ghFile's GitHub API call) mocked out.
+export { buildStatus, buildPositions, buildPnl, parseCsv, ghFile, SYSTEMS };
