@@ -1,2 +1,2 @@
 position_id,symbol,entry_date,as_of_date,entry_price,stop_loss,bars_held,bars_remaining,rsi_at_entry,funding_at_entry,atr_at_entry,risk_amount_usdt,qty
-FIDAUSDT_20260730,FIDAUSDT,2026-07-30,2026-08-15,0.01719,0.01483574,16,9,17.9595,-4.89e-06,0.00117713,19.6875,8362.50031857144
+FIDAUSDT_20260730,FIDAUSDT,2026-07-30,2026-08-17,0.01719,0.01483574,18,7,17.9595,-4.89e-06,0.00117713,19.6875,8362.50031857144
