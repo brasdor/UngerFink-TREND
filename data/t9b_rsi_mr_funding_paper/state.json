@@ -1,7 +1,7 @@
 {
   "system_name": "RSI_MR_Futures_FundingGate_1D_T9B",
   "created_utc": "2026-07-11T00:25:51.899513+00:00",
-  "last_run_date": "2026-08-17",
+  "last_run_date": "2026-08-18",
   "paper_equity_usdt": 10000.0,
   "peak_equity_usdt": 10000.0,
   "drawdown_pct": 0.0,
@@ -16,7 +16,7 @@
       "initial_risk_per_unit": 0.00235426,
       "risk_amount_usdt": 19.687499999999996,
       "qty": 8362.50031857144,
-      "bars_held": 18,
+      "bars_held": 19,
       "atr_at_entry": 0.00117713,
       "rsi_at_entry": 17.9595,
       "funding_at_entry": -4.89e-06

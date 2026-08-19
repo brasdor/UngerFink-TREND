@@ -1,3 +1,1 @@
-symbol,signal_ts_ms,consec,comp_low,atr,ema200,signal_close,stop_loss,risk_unit,funding_rate,run_date
-ENSUSDT,1786910400000,17,3.998,0.03942857,4.26992117,3.917,3.99585714,0.07885714,0.0001,2026-08-17
-RSRUSDT,1786910400000,18,0.001123,1.193e-05,0.00122776,0.001119,0.00114286,2.386e-05,0.0001,2026-08-17
+symbol,run_date,signal_ts_ms,signal_close,comp_low,consec,atr,ema200,funding_rate,stop_loss
