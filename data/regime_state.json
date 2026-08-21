@@ -1,24 +1,24 @@
 {
-  "date": "2026-08-18",
-  "trend_regime": "BEAR",
+  "date": "2026-08-20",
+  "trend_regime": "MIXED",
   "funding_regime": "LOW",
   "vol_multiplier": 0.75,
   "weights": {
-    "S1": 0.05,
-    "S2": 0.15,
-    "S3": 0.1,
-    "S5": 0.15,
-    "S6": 0.2,
-    "S7": 0.2,
-    "S8": 0.15
+    "S1": 0.1429,
+    "S2": 0.2,
+    "S3": 0.2,
+    "S5": 0.1429,
+    "S6": 0.0857,
+    "S7": 0.0857,
+    "S8": 0.1429
   },
   "allocator_version": "v4_ci",
-  "breadth_raw": 5.52,
-  "breadth_ema3": 5.5731,
+  "breadth_raw": 10.0,
+  "breadth_ema3": 7.7866,
   "funding_raw": -7.24e-06,
   "funding_ema5": -7.23e-06,
-  "last_trend_switch": "2026-07-02",
+  "last_trend_switch": "2026-08-20",
   "last_funding_switch": "2026-07-02",
-  "btc_above_ema200": false,
-  "vol_percentile": 0.8
+  "btc_above_ema200": true,
+  "vol_percentile": 12.7
 }
