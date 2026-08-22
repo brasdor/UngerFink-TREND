@@ -1,8 +1,8 @@
 {
   "system_name": "MACrossShort_4H_T9B",
   "created_utc": "2026-06-12T15:31:43.644778+00:00",
-  "last_run_date": "2026-08-20",
-  "last_processed_ts_ms": 1787169600000,
+  "last_run_date": "2026-08-21",
+  "last_processed_ts_ms": 1787256000000,
   "paper_equity_usdt": 10086.8221,
   "peak_equity_usdt": 10160.890200000003,
   "drawdown_pct": -0.729,

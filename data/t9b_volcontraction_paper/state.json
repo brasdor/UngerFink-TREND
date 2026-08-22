@@ -1,30 +1,13 @@
 {
   "system_name": "VolContractionShort_4H_T9B",
   "created_utc": "2026-06-11T19:20:09.618872+00:00",
-  "last_run_date": "2026-08-20",
-  "last_processed_ts_ms": 1787169600000,
-  "paper_equity_usdt": 10220.335799999999,
+  "last_run_date": "2026-08-21",
+  "last_processed_ts_ms": 1787256000000,
+  "paper_equity_usdt": 10208.783099999999,
   "peak_equity_usdt": 10393.928400000003,
-  "drawdown_pct": -1.6701,
+  "drawdown_pct": -1.7813,
   "kill_switch_triggered": false,
-  "open_positions": [
-    {
-      "position_id": "GALAUSDT_1787025600000",
-      "symbol": "GALAUSDT",
-      "entry_ts_ms": 1787025600000,
-      "entry_date": "2026-08-18",
-      "entry_price": 0.001398,
-      "stop_loss": 0.00148372,
-      "initial_risk_per_unit": 8.571e-05,
-      "risk_amount_usdt": 11.5514,
-      "qty": 134772.68858615,
-      "bars_held": 11,
-      "atr_at_entry": 4.286e-05,
-      "funding_at_entry": 0.0001,
-      "compression_low": 0.001612,
-      "consec_at_entry": 17
-    }
-  ],
+  "open_positions": [],
   "pending_entries": [],
-  "closed_trade_count": 96
+  "closed_trade_count": 97
 }
