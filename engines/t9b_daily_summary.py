@@ -50,6 +50,7 @@ SYSTEMS = [
         "name":      "RSI MeanReversion",
         "style":     "All-Weather",
         "data_dir":  ROOT / "data" / "t9b_mr_paper",
+        "equity_file": "engine_equity_curve.csv",
         "freeze":    date(2026, 6, 1),
         "pos_risk":  "initial_risk_per_unit",
     },
@@ -293,7 +294,7 @@ def print_combined(snaps: list[dict], today: date) -> None:
     # Trade performance (only if any closed trades exist)
     all_eq = [load_csv(ROOT / "data" / d / f)
               for d, f in [("t9b_paper", "engine_equity_curve.csv"),
-                           ("t9b_mr_paper", "equity_curve.csv"),
+                           ("t9b_mr_paper", "engine_equity_curve.csv"),
                            ("t9b_consecdowndays_paper", "engine_equity_curve.csv")]]
     non_empty = [df for df in all_eq if not df.empty]
     if non_empty:

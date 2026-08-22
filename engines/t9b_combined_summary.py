@@ -64,6 +64,7 @@ SYSTEMS = [
         "name":     "RSI_MR",
         "label":    "MeanReversionRSI 1D",
         "data_dir": ROOT / "data" / "t9b_mr_paper",
+        "equity_file": "engine_equity_curve.csv",
         "freeze":   date(2026, 6, 1),
         "type":     "spot_long",
         "pool":     "Spot",

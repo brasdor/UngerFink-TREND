@@ -34,10 +34,12 @@ SYSTEMS = [
 ]
 LEDGER = ROOT / "data" / "auto_orders" / "placed.csv"
 
-# Donchian/ConsecDown's own trade log is "engine_equity_curve.csv" -- their
-# "equity_curve.csv" is mark_to_market.py's daily snapshot (different schema).
+# Donchian/RSI-MR/ConsecDown's own trade log is "engine_equity_curve.csv" --
+# their "equity_curve.csv" is mark_to_market.py's daily snapshot (different
+# schema).
 _ENGINE_EQUITY_DIRS = {
     ROOT / "data" / "t9b_paper",
+    ROOT / "data" / "t9b_mr_paper",
     ROOT / "data" / "t9b_consecdowndays_paper",
 }
 

@@ -115,7 +115,11 @@ DATA_DIR        = ROOT / "data" / "t9b_mr_paper"
 STATE_PATH      = DATA_DIR / "state.json"
 OPEN_POS_CSV    = DATA_DIR / "open_positions.csv"
 SIGNALS_CSV     = DATA_DIR / "signals_today.csv"
-EQUITY_CSV      = DATA_DIR / "equity_curve.csv"
+# NOT "equity_curve.csv" -- owned by .github/scripts/mark_to_market.py
+# (different schema). Same collision/fix as the Donchian/ConsecDown engines
+# -- confirmed live here: 11 real trade-exit rows (2026-08-04 to 08-20)
+# were silently interleaved into the MTM file before this fix.
+EQUITY_CSV      = DATA_DIR / "engine_equity_curve.csv"
 DAILY_LOG_CSV   = DATA_DIR / "daily_log.csv"
 
 CACHE_1D        = ROOT / "data" / "futures_universe" / "ohlcv_1d"
