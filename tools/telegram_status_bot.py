@@ -34,6 +34,13 @@ SYSTEMS = [
 ]
 LEDGER = ROOT / "data" / "auto_orders" / "placed.csv"
 
+# Donchian/ConsecDown's own trade log is "engine_equity_curve.csv" -- their
+# "equity_curve.csv" is mark_to_market.py's daily snapshot (different schema).
+_ENGINE_EQUITY_DIRS = {
+    ROOT / "data" / "t9b_paper",
+    ROOT / "data" / "t9b_consecdowndays_paper",
+}
+
 
 # --------------------------------------------------------------------------- #
 def load_env() -> None:
@@ -72,7 +79,8 @@ def _open_positions(d: Path):
 
 
 def _last_equity(d: Path):
-    eq = d / "equity_curve.csv"
+    fname = "engine_equity_curve.csv" if d in _ENGINE_EQUITY_DIRS else "equity_curve.csv"
+    eq = d / fname
     if not eq.exists():
         return None
     try:

@@ -1,0 +1,3 @@
+exit_date,symbol,entry_date,gross_r,pnl_usdt,equity,dd_pct,exit_reason,max_favorable_r
+2026-06-05,FET/USDT,2026-05-30,-1.7625,-44.0625,9955.9375,-0.4406,donchian_exit,0.38962023361629244
+2026-07-21,DEXE/USDT,2026-07-06,-4.272089,-37.2161,9918.7214,-0.8128,donchian_exit,4.246866612176117

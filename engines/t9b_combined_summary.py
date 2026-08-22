@@ -52,6 +52,9 @@ SYSTEMS = [
         "name":     "Donchian",
         "label":    "DonchianLong_UniverseV2_ExitV2",
         "data_dir": ROOT / "data" / "t9b_paper",
+        # engine's own trade log -- "equity_curve.csv" in this dir is
+        # mark_to_market.py's daily snapshot, a different schema.
+        "equity_file": "engine_equity_curve.csv",
         "freeze":   date(2026, 5, 30),
         "type":     "spot_long",
         "pool":     "Spot",
@@ -70,6 +73,7 @@ SYSTEMS = [
         "name":     "ConsecDown",
         "label":    "ConsecDownDaysMR 1D",
         "data_dir": ROOT / "data" / "t9b_consecdowndays_paper",
+        "equity_file": "engine_equity_curve.csv",
         "freeze":   date(2026, 6, 2),
         "type":     "spot_long",
         "pool":     "Spot",
@@ -166,7 +170,7 @@ def detect_regime(today: date) -> str:
 def system_snapshot(cfg: dict, today: date) -> dict:
     """Load state + CSVs for one engine and build a snapshot dict."""
     state   = load_state(cfg["data_dir"])
-    eq_df   = load_csv(cfg["data_dir"] / "equity_curve.csv")
+    eq_df   = load_csv(cfg["data_dir"] / cfg.get("equity_file", "equity_curve.csv"))
     sig_df  = load_csv(cfg["data_dir"] / "signals_today.csv")
     open_df = load_csv(cfg["data_dir"] / "open_positions.csv")
 

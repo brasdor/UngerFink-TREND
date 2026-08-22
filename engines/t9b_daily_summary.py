@@ -41,6 +41,7 @@ SYSTEMS = [
         "name":      "DonchianLong",
         "style":     "Trend Following",
         "data_dir":  ROOT / "data" / "t9b_paper",
+        "equity_file": "engine_equity_curve.csv",
         "freeze":    date(2026, 5, 30),
         "pos_risk":  "initial_risk_per_unit",   # field in state open_positions
     },
@@ -57,6 +58,7 @@ SYSTEMS = [
         "name":      "ConsecDownDays",
         "style":     "Bull Specialist",
         "data_dir":  ROOT / "data" / "t9b_consecdowndays_paper",
+        "equity_file": "engine_equity_curve.csv",
         "freeze":    date(2026, 6, 2),
         "pos_risk":  "initial_risk_per_unit",
     },
@@ -121,7 +123,7 @@ def fmt_money(v: float) -> str:
 def system_snapshot(cfg: dict, today: date) -> dict:
     state   = load_json(cfg["data_dir"] / "state.json")
     sig_df  = load_csv(cfg["data_dir"] / "signals_today.csv")
-    eq_df   = load_csv(cfg["data_dir"] / "equity_curve.csv")
+    eq_df   = load_csv(cfg["data_dir"] / cfg.get("equity_file", "equity_curve.csv"))
 
     equity   = float(state.get("paper_equity_usdt", INITIAL_CAP))
     peak     = float(state.get("peak_equity_usdt", INITIAL_CAP))
@@ -289,8 +291,10 @@ def print_combined(snaps: list[dict], today: date) -> None:
         print(f"  *** KILL-SWITCH ACTIVE: {', '.join(kill_systems)} ***")
 
     # Trade performance (only if any closed trades exist)
-    all_eq = [load_csv(ROOT / "data" / d / "equity_curve.csv")
-              for d in ["t9b_paper", "t9b_mr_paper", "t9b_consecdowndays_paper"]]
+    all_eq = [load_csv(ROOT / "data" / d / f)
+              for d, f in [("t9b_paper", "engine_equity_curve.csv"),
+                           ("t9b_mr_paper", "equity_curve.csv"),
+                           ("t9b_consecdowndays_paper", "engine_equity_curve.csv")]]
     non_empty = [df for df in all_eq if not df.empty]
     if non_empty:
         combined_eq = pd.concat(non_empty, ignore_index=True)

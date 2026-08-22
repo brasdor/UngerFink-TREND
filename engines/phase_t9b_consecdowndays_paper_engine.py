@@ -19,15 +19,17 @@ Frozen config (2026-06-02):
   Leverage    : 1.0x  (Binance Spot, LONG only)
   Character   : BULL MARKET SPECIALIST (pairs with RSI MR for all-weather coverage)
 
-OHLCV data strategy (geo-unrestricted, works from GitHub Actions):
+OHLCV data strategy (works from GitHub Actions / US-based servers):
   1. Load committed historical cache: data/universe/ohlcv_1d/{sym}_1d.csv
-     Tracked in git, same cache shared with Donchian and RSI MR T9B engines.
-  2. Append latest bars via yfinance (geo-unrestricted, works on GitHub Actions).
-     Binance.com returns HTTP 451 from US IPs; ccxt/binanceus also fails.
+     Tracked in git, same cache shared with the Donchian T9B engine.
+  2. Backfill missing days per symbol -- see spot_data_refresh.py. Primary
+     source is the Binance public CDN (data.binance.vision daily kline
+     dumps, same pattern already proven for the futures universe); yfinance
+     is a per-symbol fallback for whatever the CDN can't serve.
+     Binance's own REST APIs return HTTP 451 from US-based GitHub Actions
+     runners, so neither is used directly.
   3. Commit updated files back via git in the workflow.
   4. --no-download: skip live fetch, use committed cache only.
-
-  Binance.com (global) is NOT used -- HTTP 451 from US-based servers.
 
 Usage:
   python phase_t9b_consecdowndays_paper_engine.py
@@ -52,7 +54,6 @@ from __future__ import annotations
 import argparse
 import dataclasses
 import json
-import time
 from dataclasses import asdict, dataclass
 from datetime import date, timedelta
 from pathlib import Path
@@ -64,6 +65,7 @@ import numpy as np
 import pandas as pd
 
 import t9b_shared
+import spot_data_refresh
 from signal_arbitrator import SignalArbitrator
 
 
@@ -87,9 +89,6 @@ INITIAL_CAPITAL     = 10_000.0
 LEVERAGE            = 1.0
 KILL_SWITCH_DD_PCT  = 35.0    # halt new entries if DD from peak exceeds this
 
-LIMIT_BARS          = 2000    # bars to load per symbol
-SLEEP_SEC           = 0.15
-MAX_RETRIES         = 3
 MIN_BARS_REQUIRED   = EMA_N + CONSEC_N + 10   # ~215 bars needed
 
 EPS = 1e-12
@@ -104,16 +103,13 @@ DATA_DIR        = ROOT / "data" / "t9b_consecdowndays_paper"
 STATE_PATH      = DATA_DIR / "state.json"
 OPEN_POS_CSV    = DATA_DIR / "open_positions.csv"
 SIGNALS_CSV     = DATA_DIR / "signals_today.csv"
-EQUITY_CSV      = DATA_DIR / "equity_curve.csv"
+# NOT "equity_curve.csv" -- owned by .github/scripts/mark_to_market.py
+# (different schema). Same collision/fix as the Donchian engine.
+EQUITY_CSV      = DATA_DIR / "engine_equity_curve.csv"
 DAILY_LOG_CSV   = DATA_DIR / "daily_log.csv"
 
-# Shared committed OHLCV cache (also used by Donchian + RSI MR T9B, tracked in git)
-COMMITTED_CACHE = ROOT / "data" / "universe" / "ohlcv_1d"
-
 DATA_DIR.mkdir(parents=True, exist_ok=True)
-COMMITTED_CACHE.mkdir(parents=True, exist_ok=True)
 
-_SESSION_OHLCV:   dict = {}
 _SKIP_LIVE_FETCH: bool = False
 
 
@@ -272,118 +268,18 @@ def append_csv(path: Path, rows: List[dict]) -> None:
 
 
 # =============================================================================
-# OHLCV LOADING  (identical strategy to Donchian + RSI MR T9B)
+# OHLCV LOADING
 # =============================================================================
+#
+# Live fetch + committed-cache refresh now lives in spot_data_refresh.py,
+# shared with the Donchian engine (previously each carried an independent
+# ~30-line copy of this logic, including an independent copy of the same
+# datetime-cast bug that froze this cache from 2026-06-04 to 2026-08-22).
+# refresh_ohlcv_cache() does the network I/O once per run; load_ohlcv() is a
+# pure disk read used inside the daily loop.
 
 def load_ohlcv(symbol: str, up_to_date: Optional[date] = None) -> pd.DataFrame:
-    global _SESSION_OHLCV
-
-    if symbol not in _SESSION_OHLCV:
-        safe       = safe_sym(symbol)
-        cache_path = COMMITTED_CACHE / f"{safe}_1d.csv"
-
-        raw_base: Optional[pd.DataFrame] = None
-        if cache_path.exists():
-            try:
-                raw_base = pd.read_csv(cache_path)
-            except Exception as exc:
-                print(f"  [WARN] {symbol}: cache read error -- {exc}")
-
-        raw_live: Optional[pd.DataFrame] = None
-        if not _SKIP_LIVE_FETCH:
-            raw_live = _fetch_latest_bars(symbol, n_bars=10)
-
-        df_base = _parse_ohlcv(raw_base) if raw_base is not None else pd.DataFrame()
-        df_live = _parse_ohlcv(raw_live) if raw_live is not None else pd.DataFrame()
-
-        if not df_base.empty and not df_live.empty:
-            merged = (pd.concat([df_base, df_live], ignore_index=True)
-                      .drop_duplicates("time").sort_values("time").reset_index(drop=True))
-        elif not df_base.empty:
-            merged = df_base
-        elif not df_live.empty:
-            merged = df_live
-        else:
-            merged = pd.DataFrame()
-
-        if not merged.empty and raw_live is not None and cache_path.parent.exists():
-            _save_committed_cache(merged, cache_path)
-
-        if len(merged) > LIMIT_BARS:
-            merged = merged.iloc[-LIMIT_BARS:].reset_index(drop=True)
-
-        _SESSION_OHLCV[symbol] = merged
-
-    df = _SESSION_OHLCV[symbol]
-    if up_to_date is not None:
-        df = df[df["time"].dt.date <= up_to_date].copy()
-    return df.reset_index(drop=True)
-
-
-def _save_committed_cache(df: pd.DataFrame, path: Path) -> None:
-    out = df[["time", "open", "high", "low", "close", "volume"]].copy()
-    out["time"] = out["time"].dt.strftime("%Y-%m-%d %H:%M:%S+00:00")
-    out.to_csv(path, index=False)
-
-
-def _parse_ohlcv(raw: pd.DataFrame) -> pd.DataFrame:
-    df = raw.copy()
-    if "timestamp" in df.columns:
-        df["time"] = pd.to_datetime(
-            pd.to_numeric(df["timestamp"], errors="coerce"),
-            unit="ms", utc=True, errors="coerce")
-    elif "time" in df.columns:
-        df["time"] = pd.to_datetime(df["time"], utc=True, errors="coerce")
-    elif "date" in df.columns:
-        df["time"] = pd.to_datetime(df["date"], utc=True, errors="coerce")
-    else:
-        return pd.DataFrame()
-
-    for col in ["open", "high", "low", "close", "volume"]:
-        df[col] = pd.to_numeric(df.get(col, np.nan), errors="coerce")
-
-    df = df.dropna(subset=["time", "open", "high", "low", "close"])
-    df = df.drop_duplicates("time").sort_values("time")
-    return df[["time", "open", "high", "low", "close", "volume"]].reset_index(drop=True)
-
-
-def _fetch_latest_bars(symbol: str, n_bars: int = 10) -> Optional[pd.DataFrame]:
-    """yfinance only -- geo-unrestricted, works from GitHub Actions US servers."""
-    return _try_yfinance(symbol, n_bars)
-
-
-def _try_yfinance(symbol: str, n_bars: int) -> Optional[pd.DataFrame]:
-    try:
-        import yfinance as yf
-    except ImportError:
-        return None
-    base   = symbol.split("/")[0]
-    yf_sym = f"{base}-USD"
-    try:
-        hist = yf.download(yf_sym, period="30d", interval="1d",
-                           progress=False, auto_adjust=True)
-        if hist is None or hist.empty:
-            print(f"    [yfinance] {symbol}: empty response for {yf_sym} "
-                  f"-- cache will not advance this run", flush=True)
-            return None
-        hist = hist.tail(n_bars).reset_index()
-        if isinstance(hist.columns, pd.MultiIndex):
-            hist.columns = [c[0].lower() for c in hist.columns]
-        else:
-            hist.columns = [str(c).lower() for c in hist.columns]
-        if "date" in hist.columns:
-            hist.rename(columns={"date": "time"}, inplace=True)
-        elif "datetime" in hist.columns:
-            hist.rename(columns={"datetime": "time"}, inplace=True)
-        hist["time"] = pd.to_datetime(hist["time"], utc=True, errors="coerce")
-        hist["timestamp"] = (hist["time"].astype(np.int64) // 1_000_000).astype(int)
-        for col in ["open","high","low","close","volume"]:
-            if col not in hist.columns:
-                hist[col] = np.nan
-        return hist[["timestamp","open","high","low","close","volume"]].copy()
-    except Exception as e:
-        print(f"    [yfinance] {symbol}: {e}")
-        return None
+    return spot_data_refresh.load_ohlcv(symbol, up_to_date=up_to_date)
 
 
 def refresh_ohlcv_cache(symbols: List[str]) -> None:
@@ -391,53 +287,7 @@ def refresh_ohlcv_cache(symbols: List[str]) -> None:
         print("[DATA] --no-download: using committed cache only")
         return
     yesterday = date.today() - timedelta(days=1)
-    n_updated = 0
-    print(f"[DATA] Refreshing OHLCV cache for {len(symbols)} symbols...")
-    for sym in symbols:
-        safe       = safe_sym(sym)
-        cache_path = COMMITTED_CACHE / f"{safe}_1d.csv"
-        if cache_path.exists():
-            try:
-                last_row  = pd.read_csv(cache_path, usecols=["time"]).iloc[-1]["time"]
-                last_date = pd.to_datetime(last_row, utc=True).date()
-                if last_date >= yesterday:
-                    continue
-            except Exception:
-                pass
-        _SESSION_OHLCV.pop(sym, None)
-        df = load_ohlcv(sym)
-        if not df.empty:
-            n_updated += 1
-        time.sleep(SLEEP_SEC)
-    print(f"[DATA] Updated {n_updated}/{len(symbols)} caches")
-
-    # Staleness summary -- this cache (data/universe/ohlcv_1d/) has NO CI-level
-    # refresh job of its own (confirmed this session); it is only ever
-    # populated inline, here, via a per-symbol yfinance call that silently
-    # no-ops on failure with no retry. WLD/USDT froze at 2026-06-24 this way
-    # for a month with nothing surfacing it. Make staleness visible instead.
-    stale = []
-    for sym in symbols:
-        safe       = safe_sym(sym)
-        cache_path = COMMITTED_CACHE / f"{safe}_1d.csv"
-        if not cache_path.exists():
-            stale.append((sym, None))
-            continue
-        try:
-            last_row  = pd.read_csv(cache_path, usecols=["time"]).iloc[-1]["time"]
-            last_date = pd.to_datetime(last_row, utc=True).date()
-            gap_days  = (yesterday - last_date).days
-            if gap_days > 3:
-                stale.append((sym, gap_days))
-        except Exception:
-            stale.append((sym, "unreadable"))
-    if stale:
-        print(f"  [DATA_GAP][STALENESS] {len(stale)}/{len(symbols)} symbol(s) more "
-              f"than 3 days behind {yesterday} after refresh attempt "
-              f"(yfinance likely failing silently for these -- open positions "
-              f"in them cannot be exit-checked on price): "
-              f"{', '.join(f'{s}({g})' for s, g in stale[:15])}"
-              f"{' ...' if len(stale) > 15 else ''}", flush=True)
+    spot_data_refresh.refresh_universe(symbols, upto_day=yesterday, label="CONSECDOWN")
 
 
 # =============================================================================
@@ -716,7 +566,7 @@ def run_one_day(run_date: date, symbols: List[str], state: dict) -> dict:
                      close=sig["close"])
                 continue
 
-            rw, rv = t9b_shared.get_regime_weight("consecdown")
+            rw, rv = t9b_shared.get_regime_weight("consecdown", run_date)
             regime_scale = rw * rv * 7
             risk_amount   = equity * RISK_PER_TRADE_PCT * regime_scale
             risk_per_unit = sig["risk_unit"]

@@ -1,1 +1,3 @@
-symbol,signal_date,close,ema200,don_entry_high,atr,initial_stop,signal
+symbol,signal_date,close,ema200,don_entry_high,don_exit_low,atr,initial_stop,initial_risk_unit,signal
+SOL/USDT,2026-08-21,93.72,89.34490574,88.1,74.1,3.10495604,87.51008793,6.20991207,BUY
+NEAR/USDT,2026-08-21,1.968,1.7830635,1.782,1.538,0.09419428,1.77961145,0.18838855,BUY
