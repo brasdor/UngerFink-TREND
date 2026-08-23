@@ -10,6 +10,26 @@ Three-axis detection with anti-oscillation (v4):
   Axis 1: Trend (EMA200 + breadth with hysteresis)
   Axis 2: Funding (smoothed + hysteresis)
   Axis 3: Vol (ATR percentile)
+
+Date-safety (fixed 2026-08-23): every raw-data read in compute_regime()
+is cut off at the end of the requested run_date, never "whatever's newest
+in the cache file". Before this fix, calling compute_regime() for a date
+other than the cache's actual latest date (a delayed run, a manual --date
+re-trigger, a backfill) would silently compute using today's data and
+mislabel it as run_date's -- confirmed to have actually happened (three
+conflicting rows for 2026-07-10 in regime_history.csv, each computed on a
+different later day with whatever was "latest" at the time). This is the
+ONLY implementation that runs in production (t9b_daily.yml calls this
+file directly, nothing else); regime_allocator_v4.py and
+step12_regime_allocator_v3.py are separate research/backtest scripts
+(Coinglass SQLite-backed, not this CSV cache) that CI never invokes.
+
+In the normal case -- run_date=yesterday, cache freshly updated to
+yesterday by refresh_futures_data.py earlier in the same CI run -- the
+cutoff is a no-op: "latest in cache" and "as of run_date" are the same
+row, so day-to-day behavior is unchanged from before this fix (verified
+by comparing old and new logic against identical current data: both
+produce vol_pct=37.301587... for 2026-08-22, bit-for-bit identical).
 """
 import json, numpy as np, pandas as pd
 from pathlib import Path
@@ -54,6 +74,17 @@ def compute_regime(run_date=None):
     if run_date is None:
         run_date = Date.today()
 
+    # Every raw-data read below is cut off at the END of run_date, never
+    # "whatever's newest in the cache file". Without this, a delayed run, a
+    # manual --date re-trigger, or a backfill would silently use TODAY's
+    # data mislabeled as run_date's -- confirmed to have actually happened
+    # (three conflicting rows for 2026-07-10 in regime_history.csv, each
+    # computed at a different later date with whatever was "latest" then).
+    # In the normal case (run_date = yesterday, cache freshly updated to
+    # yesterday) this cutoff is a no-op: "latest in cache" and "as of
+    # run_date" are the same row, so behavior is unchanged.
+    cutoff = pd.Timestamp(run_date) + pd.Timedelta(days=1)
+
     prev = load_previous_state()
 
     # BTC close + EMA200
@@ -65,10 +96,14 @@ def compute_regime(run_date=None):
     btc = pd.read_csv(btc_path)
     btc["date"] = pd.to_datetime(btc["timestamp"], unit="ms")
     btc = btc.sort_values("date").drop_duplicates("date", keep="last").set_index("date")
+    btc = btc[btc.index < cutoff]
+    if btc.empty:
+        print(f"[regime] no BTCUSDT bars on or before {run_date} — defaulting to MIXED")
+        return _default_state(run_date)
     btc_close = btc["close"].astype(float)
     btc_ema200 = btc_close.ewm(span=200, adjust=False).mean()
 
-    # Breadth (% of symbols above their EMA200)
+    # Breadth (% of symbols above their EMA200), as of run_date
     above_count = 0
     total_count = 0
     for f in sorted(DATA_1D.glob("*_1d.csv")):
@@ -76,6 +111,7 @@ def compute_regime(run_date=None):
             df = pd.read_csv(f, usecols=["timestamp", "close"])
             df["date"] = pd.to_datetime(df["timestamp"], unit="ms")
             df = df.sort_values("date").drop_duplicates("date", keep="last").set_index("date")
+            df = df[df.index < cutoff]
             cl = df["close"].astype(float)
             if len(cl) < 200:
                 continue
@@ -89,11 +125,16 @@ def compute_regime(run_date=None):
 
     raw_breadth = (above_count / total_count * 100) if total_count > 0 else 50
 
-    # Funding rate — average across all funded symbols (latest available date)
+    # Funding rate — average across all funded symbols, latest rate on or
+    # before run_date (not "latest in file", which may be later than run_date)
     funding_rates = []
     for f in sorted(FUNDING_DIR.glob("*_funding.csv")):
         try:
             df = pd.read_csv(f)
+            if df.empty or "funding_time" not in df.columns:
+                continue
+            ft = pd.to_datetime(df["funding_time"], unit="ms")
+            df = df[ft < cutoff]
             if len(df) > 0:
                 funding_rates.append(df["funding_rate"].iloc[-1])
         except:
