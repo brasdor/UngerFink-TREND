@@ -102,6 +102,21 @@ def _load_regime_history():
         import pandas as pd
         hist = pd.read_csv(_REGIME_HISTORY_PATH)
         hist["date"] = pd.to_datetime(hist["date"]).dt.date
+        dupes = hist["date"][hist["date"].duplicated(keep=False)].unique()
+        if len(dupes):
+            # Confirmed to happen (2026-07-10 had 3 conflicting rows from
+            # repeated out-of-order --date catch-up runs, each silently
+            # using whatever OHLCV/funding data was "latest" at the time
+            # rather than data as of 07-10). Resolve deterministically
+            # (last-written row wins) and say so loudly -- the old behavior
+            # let hist.loc[date] return a multi-row DataFrame, which threw
+            # inside float(row[wcol]) and was silently swallowed by the
+            # bare except below, falling back to equal weight with no
+            # indication anything was wrong.
+            print(f"[WARN] regime_history.csv has {len(dupes)} duplicated date(s): "
+                  f"{sorted(str(d) for d in dupes)} -- keeping the last row written "
+                  f"for each, discarding the earlier one(s).", flush=True)
+        hist = hist.drop_duplicates(subset="date", keep="last")
         _regime_history_cache = hist.set_index("date").sort_index()
     except Exception:
         _regime_history_cache = False

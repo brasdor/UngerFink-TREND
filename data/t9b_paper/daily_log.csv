@@ -550,7 +550,7 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-06-26,SIGNAL_SKIPPED,ICX/USDT,duplicate_cross_system
 2026-06-26,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
 2026-06-27,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,
-2026-06-27,ENTRY,JST/USDT,"price=0.08596  stop=0.0782604  risk=$8.71  qty=1131.4138  equity=$9,955.94",0.08596,0.07826039,8.7114,9955.94
+2026-06-27,ENTRY,JST/USDT,"price=0.08596  stop=0.0782604  risk=$6.53  qty=848.56038  equity=$9,955.94",0.08596,0.07826039,6.5336,9955.94
 2026-06-27,SIGNAL_SKIPPED,ICX/USDT,duplicate_cross_system,,,,
 2026-06-27,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system,,,,
 2026-06-28,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
@@ -724,3 +724,6 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-08-21,SIGNAL_SKIPPED,ICX/USDT,duplicate_cross_system,,,,
 2026-08-21,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system,,,,
 2026-08-21,ENTRY,NEAR/USDT,"price=1.968  stop=1.77961  risk=$18.60  qty=98.749005  equity=$9,918.72",1.968,1.77961145,18.6032,9918.72
+2026-08-22,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-08-22,SIGNAL_SKIPPED,ICX/USDT,duplicate_cross_system
+2026-08-22,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system

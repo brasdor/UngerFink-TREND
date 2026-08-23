@@ -637,7 +637,7 @@ def run_one_day(run_date: date, symbols: List[str], state: dict) -> dict:
                 continue
             signals_seen.append(sig)
 
-            rw, rv = t9b_shared.get_regime_weight("rsi_mr_funding")
+            rw, rv = t9b_shared.get_regime_weight("rsi_mr_funding", run_date)
             regime_scale  = rw * rv * 7
             risk_amount   = min(equity * RISK_PER_TRADE_PCT * regime_scale, CAPITAL_CEILING)
             risk_per_unit = sig["risk_unit"]

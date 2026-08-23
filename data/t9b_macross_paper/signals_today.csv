@@ -1,1 +1,2 @@
-symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss
+symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
+BANUSDT,1787328000000,0.07221,0.07252121,0.07252802,0.07289091,0.00122214,0.07465429,0.00244429,0.00037129,2026-08-22

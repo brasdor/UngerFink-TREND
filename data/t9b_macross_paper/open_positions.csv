@@ -1,1 +1,2 @@
 position_id,symbol,entry_date,as_of_date,entry_price,stop_loss,bars_held,bars_remaining,atr_at_entry,funding_at_entry,fast_ema_at_entry,slow_ema_at_entry,risk_amount_usdt,qty
+BANUSDT_1787342400000,BANUSDT,2026-08-21,2026-08-22,0.07215,0.07459428,1,34,0.00122214,0.037129,0.07252121,0.07252802,11.3458,4641.76918494

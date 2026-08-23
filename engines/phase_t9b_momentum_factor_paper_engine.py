@@ -582,7 +582,7 @@ def do_rebalance(state: dict, close: pd.DataFrame, today: Date,
     equity_after_cost = equity * (1.0 - cost_frac)
 
     # Scale allocation by regime weight
-    rw, rv = t9b_shared.get_regime_weight("momentum")
+    rw, rv = t9b_shared.get_regime_weight("momentum", today)
     regime_scale = rw * rv * 7
 
     # Build new position list
