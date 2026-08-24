@@ -43,6 +43,7 @@ Env:
 """
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import sys
@@ -79,6 +80,23 @@ def _spot_universe() -> set[str] | None:
     except Exception as exc:
         print(f"  [WARN] could not build spot universe allowlist ({exc}); checking every file")
         return None
+
+
+SUPPRESSION_FILE = ROOT / "data" / "halted_symbols_suppression.json"
+
+
+def _suppressed_symbols() -> set[str]:
+    """Confirmed-exchange-halted symbols (see check_halted_symbols.py) --
+    excluded from staleness alerting so a permanent halt doesn't page
+    forever. Missing/unreadable file just means nothing is suppressed."""
+    if not SUPPRESSION_FILE.exists():
+        return set()
+    try:
+        raw = json.loads(SUPPRESSION_FILE.read_text(encoding="utf-8"))
+        return {k for k in raw if not k.startswith("_")}
+    except Exception as exc:
+        print(f"  [WARN] could not read {SUPPRESSION_FILE} ({exc}); suppressing nothing")
+        return set()
 
 
 OHLCV_DIRS = [
@@ -137,7 +155,8 @@ def _send(token: str, chat_id: str, text: str) -> bool:
 
 
 def check_ohlcv_staleness(label: str, cache_dir: Path, today,
-                          allowlist: set[str] | None = None) -> tuple[str, int] | None:
+                          allowlist: set[str] | None = None,
+                          suppress: set[str] | None = None) -> tuple[str, int] | None:
     """
     Worst-case staleness across every symbol file in cache_dir (or, if
     allowlist is given, just the symbols actually traded -- avoids flagging
@@ -147,14 +166,24 @@ def check_ohlcv_staleness(label: str, cache_dir: Path, today,
     line. This is the check that would actually have caught the original
     spot-OHLCV freeze -- a missed-run or step-outcome check would not have,
     since that pipeline kept exiting 0 and committing daily throughout.
+
+    suppress excludes confirmed-exchange-halted symbols (see
+    data/halted_symbols_suppression.json) so a real, permanent exchange
+    halt doesn't fire this alert every single day forever. Re-verified
+    monthly, not trusted indefinitely -- see check_halted_symbols.py.
     """
     if not cache_dir.exists():
         return (f"{label}: cache dir missing ({cache_dir})", 9999)
 
     worst_sym, worst_days = None, -1
     n_checked = 0
+    n_suppressed = 0
     for f in cache_dir.glob("*_1d.csv"):
-        if allowlist is not None and f.stem.replace("_1d", "") not in allowlist:
+        sym = f.stem.replace("_1d", "")
+        if allowlist is not None and sym not in allowlist:
+            continue
+        if suppress is not None and sym in suppress:
+            n_suppressed += 1
             continue
         try:
             last_row = pd.read_csv(f, usecols=["time"]).iloc[-1]["time"]
@@ -169,13 +198,14 @@ def check_ohlcv_staleness(label: str, cache_dir: Path, today,
         n_checked += 1
         gap_days = (today - last_date).days
         if gap_days > worst_days:
-            worst_sym, worst_days = f.stem.replace("_1d", ""), gap_days
+            worst_sym, worst_days = sym, gap_days
 
+    suppressed_note = f", {n_suppressed} suppressed" if n_suppressed else ""
     if n_checked == 0 or worst_days <= MAX_OHLCV_STALE_DAYS:
-        print(f"  {label}: OK ({n_checked} symbols checked, worst: {worst_sym}, {worst_days}d)")
+        print(f"  {label}: OK ({n_checked} symbols checked{suppressed_note}, worst: {worst_sym}, {worst_days}d)")
         return None
-    print(f"  {label}: STALE -- worst: {worst_sym} ({worst_days}d)  *** STALE ***")
-    return (f"{label}: {worst_sym} is {worst_days}d behind (checked {n_checked} symbols)", worst_days)
+    print(f"  {label}: STALE -- worst: {worst_sym} ({worst_days}d){suppressed_note}  *** STALE ***")
+    return (f"{label}: {worst_sym} is {worst_days}d behind (checked {n_checked} symbols{suppressed_note})", worst_days)
 
 
 def main() -> int:
@@ -203,10 +233,14 @@ def main() -> int:
     print("[HEARTBEAT] checking OHLCV cache staleness (the check that would have "
           "caught the original incident -- a pipeline that keeps exiting 0 while "
           "silently processing frozen data)...")
+    suppressed = _suppressed_symbols()
+    if suppressed:
+        print(f"  (suppressing confirmed-halted symbols: {sorted(suppressed)})")
+
     data_issues: list[str] = []
     for label, cache_dir, allowlist_fn in OHLCV_DIRS:
         allowlist = allowlist_fn() if allowlist_fn is not None else None
-        result = check_ohlcv_staleness(label, cache_dir, now.date(), allowlist=allowlist)
+        result = check_ohlcv_staleness(label, cache_dir, now.date(), allowlist=allowlist, suppress=suppressed)
         if result is not None:
             data_issues.append(result[0])
 

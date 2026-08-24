@@ -1,0 +1,64 @@
+name: Monthly Halted-Symbol Re-verification
+
+# Re-verifies data/halted_symbols_suppression.json against Binance's live
+# exchangeInfo endpoint -- the same query originally used to confirm
+# TON_USDT/ARDR_USDT as exchange-halted (status=BREAK) rather than a
+# pipeline problem. A symbol whose status is no longer BREAK is dropped
+# from the suppression file in this same run, so the next daily heartbeat
+# (heartbeat_check.yml) evaluates it normally again.
+#
+# Deliberately its own cron, not a manually-run script: a suppression
+# list nobody re-checks is exactly the "silent staleness" failure mode
+# this alerting system exists to catch in the first place.
+#
+# Also triggerable manually from the GitHub Actions tab (workflow_dispatch).
+
+on:
+  schedule:
+    - cron: '0 12 1 * *'   # 1st of every month, 12:00 UTC
+  workflow_dispatch: {}
+
+jobs:
+  reverify:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # needed to commit the updated suppression file
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Re-verify halted symbols
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python .github/scripts/check_halted_symbols.py
+
+      - name: Commit updated suppression file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add --force data/halted_symbols_suppression.json || true
+
+          if git diff --cached --quiet; then
+            echo "No suppression list changes to commit."
+          else
+            TODAY=$(date -u +%Y-%m-%d)
+            git commit -m "Monthly halted-symbol re-verification ${TODAY} [skip ci]"
+            git pull --rebase origin ${{ github.ref_name }} || true
+            git push origin ${{ github.ref_name }}
+          fi

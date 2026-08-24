@@ -1,0 +1,15 @@
+{
+  "_comment": "Symbols excluded from the daily OHLCV staleness alert (check_missed_runs.py) because they're confirmed halted exchange-side, not a pipeline problem. Re-verified monthly by .github/scripts/check_halted_symbols.py (cron in .github/workflows/monthly_halted_symbol_check.yml) via Binance's live exchangeInfo endpoint -- a symbol is dropped from this file automatically the moment its status is no longer BREAK, and normal staleness alerting resumes for it from that point on. Do not edit last_verified/last_verified_status by hand; the monthly job owns those fields.",
+  "TON_USDT": {
+    "reason": "status=BREAK (exchange-side trading halt) on Binance Spot, confirmed via GET api.binance.com/api/v3/exchangeInfo?symbol=TONUSDT",
+    "suppressed_since": "2026-08-23",
+    "last_verified": "2026-08-24",
+    "last_verified_status": "BREAK"
+  },
+  "ARDR_USDT": {
+    "reason": "status=BREAK (exchange-side trading halt) on Binance Spot, confirmed via GET api.binance.com/api/v3/exchangeInfo?symbol=ARDRUSDT",
+    "suppressed_since": "2026-08-23",
+    "last_verified": "2026-08-24",
+    "last_verified_status": "BREAK"
+  }
+}
