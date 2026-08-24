@@ -321,3 +321,18 @@ jobs:
           else
             echo "All engines completed successfully"
           fi
+
+      # ------------------------------------------------------------------
+      # 9. Alert on step failures continue-on-error would otherwise hide.
+      #    Fires regardless of overall job status -- one consolidated
+      #    Telegram message only if something actually failed.
+      # ------------------------------------------------------------------
+      - name: Alert on step failures
+        if: always()
+        env:
+          WORKFLOW_LABEL: "T9B Daily"
+          STEP_OUTCOMES: "Donchian=${{ steps.engine_donchian.outcome }},RSI-MR=${{ steps.engine_mr.outcome }},ConsecDown=${{ steps.engine_cd.outcome }},VolContraction=${{ steps.engine_vc.outcome }},MACross=${{ steps.engine_mac.outcome }},Momentum=${{ steps.engine_mom.outcome }},RSI-MR-Funding=${{ steps.engine_s8.outcome }}"
+          RUN_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python .github/scripts/check_workflow_failures.py

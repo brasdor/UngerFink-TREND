@@ -1,0 +1,32 @@
+name: Daily Heartbeat Check
+
+# Detects a missed daily run across every T9B system (S1-S8) and both T9
+# candidates: compares each system's actual last commit on its state.json
+# against the expected daily cadence. Deliberately a SEPARATE workflow from
+# t9b_daily.yml / t9_candidates_daily.yml (08:00 UTC) -- a check embedded
+# inside those workflows can't catch the case where they don't fire at all,
+# and continue-on-error + "only commit when there's a diff" means an early
+# engine crash leaves nothing for a check inside that same run to see.
+#
+# Also triggerable manually from the GitHub Actions tab (workflow_dispatch).
+
+on:
+  schedule:
+    - cron: '0 11 * * *'   # 3h after the 08:00 UTC daily runs -- generous buffer
+  workflow_dispatch: {}
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history -- need each file's actual last commit
+
+      - name: Check for missed runs
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python .github/scripts/check_missed_runs.py
