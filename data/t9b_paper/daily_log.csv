@@ -727,3 +727,7 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-08-22,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
 2026-08-22,SIGNAL_SKIPPED,ICX/USDT,duplicate_cross_system
 2026-08-22,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
+2026-08-23,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-08-23,SIGNAL_SKIPPED,ICX/USDT,duplicate_cross_system
+2026-08-23,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
+2026-08-23,SIGNAL_SKIPPED,CELR/USDT,duplicate_cross_system
