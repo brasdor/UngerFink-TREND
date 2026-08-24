@@ -208,7 +208,13 @@ def check_ohlcv_staleness(label: str, cache_dir: Path, today,
     return (f"{label}: {worst_sym} is {worst_days}d behind (checked {n_checked} symbols{suppressed_note})", worst_days)
 
 
-def main() -> int:
+def compute_heartbeat() -> dict:
+    """
+    The actual checks, factored out of main() so build_status_snapshot.py
+    (the /status command's data source) can reuse the exact same logic
+    instead of a second, drift-prone copy of it. Returns a plain dict --
+    no alerting, no side effects, safe to call from anywhere.
+    """
     now = datetime.now(timezone.utc)
     stale: list[tuple[str, str]] = []
 
@@ -244,13 +250,26 @@ def main() -> int:
         if result is not None:
             data_issues.append(result[0])
 
+    return {
+        "checked_utc": now.isoformat(),
+        "missed_runs": [{"system": name, "detail": detail} for name, detail in stale],
+        "ohlcv_issues": data_issues,
+        "suppressed_symbols": sorted(suppressed),
+    }
+
+
+def main() -> int:
+    report = compute_heartbeat()
+    stale = [(r["system"], r["detail"]) for r in report["missed_runs"]]
+    data_issues = report["ohlcv_issues"]
+
     if not stale and not data_issues:
         print("[HEARTBEAT] all systems current, no alert sent")
         return 0
 
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
     chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
-    today = now.strftime("%Y-%m-%d %H:%M UTC")
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     lines = [f"🚨 <b>Daily heartbeat -- problem(s) found</b>  {today}"]
 
     if stale:

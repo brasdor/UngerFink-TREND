@@ -24,6 +24,20 @@ const SYSTEMS = [
   ["Candidate19", "data/t9_candidate19_paper"],
 ];
 
+// Full 9-system order for /status specifically -- /positions and /pnl above
+// intentionally keep using the narrower SYSTEMS list unchanged.
+const STATUS_SYSTEM_ORDER = [
+  ["S1", "Donchian"],
+  ["S2", "RSI-MR"],
+  ["S3", "ConsecDown"],
+  ["S5", "Momentum"],
+  ["S6", "VolContraction"],
+  ["S7", "MACross"],
+  ["S8", "RSI-MR-Funding"],
+  ["Candidate12", "Candidate 12"],
+  ["Candidate19", "Candidate 19"],
+];
+
 export default {
   async fetch(request, env) {
     if (request.method !== "POST") return new Response("UngerFink status worker");
@@ -63,7 +77,7 @@ export default {
       await sendMessage(env.BOT_TOKEN, chatId, pnl);
     } else if (text.startsWith("/start") || text.startsWith("/help")) {
       await sendMessage(env.BOT_TOKEN, chatId,
-        "Commands:\n/status — overview & last run\n/positions — each position with P&L\n/pnl — total P&L summary");
+        "Commands:\n/status — all 9 systems, regime, and alerts in one view\n/positions — each position with P&L\n/pnl — total P&L summary");
     }
     return new Response("ok");
   },
@@ -95,39 +109,106 @@ async function ghFile(env, path) {
   return await resp.text();
 }
 
+// Formats a UTC ISO string as "YYYY-MM-DD HH:MM UTC", or "?" if missing/bad.
+function fmtUtc(iso) {
+  if (!iso) return "?";
+  try {
+    return iso.slice(0, 16).replace("T", " ") + " UTC";
+  } catch (e) {
+    return "?";
+  }
+}
+
+function money(n, opts) {
+  const v = typeof n === "number" && Number.isFinite(n) ? n : null;
+  if (v === null) return "n/a";
+  const sign = opts && opts.signed ? (v >= 0 ? "+" : "") : "";
+  return `${sign}$${v.toFixed(2)}`;
+}
+
+// The single consolidated view: all 9 systems' equity/positions/P&L/
+// kill-switch, current regime + per-system weight, and an alert summary --
+// everything that otherwise requires checking regime_state.json,
+// check_missed_runs.py's own alerting, and 9 separate state.json files by
+// hand. Reads ONE file (data/status_snapshot.json), built once daily by
+// .github/scripts/build_status_snapshot.py (a step in heartbeat_check.yml,
+// timed after both daily engine workflows finish) -- computing this live
+// here would mean hundreds of GitHub API calls per /status message
+// (per-symbol OHLCV staleness across 290+66 files), which a Worker's
+// subrequest budget can't sustain. See that script's docstring for why.
 async function buildStatus(env) {
-  const now = new Date().toISOString().slice(0, 16).replace("T", " ") + " UTC";
-  const lines = [`\u{1F4CA} <b>UngerFink status</b> — ${now}`, ""];
-
-  for (const [label, dir] of SYSTEMS) {
-    let syms = [];
-    const op = await ghFile(env, `${dir}/open_positions.csv`);
-    if (op) syms = parseCsv(op).map((r) => r.symbol).filter(Boolean);
-
-    let runDate = "?";
-    const sj = await ghFile(env, `${dir}/state.json`);
-    if (sj) {
-      try {
-        runDate = JSON.parse(sj).last_run_date || "?";
-      } catch (e) {}
-    }
-    const shown = syms.join(", ");
-    lines.push(`<b>${label}</b>: ${syms.length} open${shown ? " — " + shown : ""}`);
-    lines.push(`   last run: ${runDate}`);
+  const raw = await ghFile(env, "data/status_snapshot.json");
+  if (!raw) {
+    return "⚠️ <b>status_snapshot.json not found.</b>\nHas heartbeat_check.yml run yet? " +
+           "(daily, 11:00 UTC — 3h after the main engine workflows).";
+  }
+  let snap;
+  try {
+    snap = JSON.parse(raw);
+  } catch (e) {
+    return "⚠️ status_snapshot.json exists but isn't valid JSON.";
   }
 
-  const led = await ghFile(env, "data/auto_orders/placed.csv");
-  const net = {};
-  if (led) {
-    for (const r of parseCsv(led)) {
-      const k = `${r.strategy}/${r.symbol}`;
-      const q = parseFloat(r.qty) || 0;
-      net[k] = (net[k] || 0) + (String(r.action).toUpperCase() === "BUY" ? q : -q);
-    }
-  }
-  const open = Object.entries(net).filter(([, v]) => v > 1e-9);
+  const lines = [`\u{1F4CA} <b>UngerFink /status</b>`,
+                 `<i>snapshot generated ${fmtUtc(snap.generated_utc)}</i>`, ""];
+
+  // --- Regime ---
+  const r = snap.regime || {};
+  const weights = r.weights || {};
+  lines.push(
+    `<b>Regime</b> (as of ${r.date || "?"}): trend=<b>${r.trend || "?"}</b>  ` +
+    `funding=<b>${r.funding || "?"}</b>  vol×${r.vol_multiplier ?? "?"}`
+  );
   lines.push("");
-  lines.push(open.length ? `<b>Auto-exec</b>: ${open.length} open position(s)` : "<b>Auto-exec</b>: no open positions");
+
+  // --- Systems ---
+  lines.push("<b>Systems</b>");
+  const systems = snap.systems || {};
+  let totalEquity = 0;
+  let totalUnrealized = 0;
+  let anyUnrealizedNA = false;
+  for (const [sid, label] of STATUS_SYSTEM_ORDER) {
+    const s = systems[sid];
+    if (!s) {
+      lines.push(`  <code>${sid}</code> ${label}: no data`);
+      continue;
+    }
+    const w = weights[sid];
+    const wTxt = typeof w === "number" ? `  w=${(w * 100).toFixed(1)}%` : "";
+    const ks = s.kill_switch ? "  \u{1F6D1}<b>KILL-SWITCH</b>" : "";
+    const unrealTxt = typeof s.unrealized_pnl === "number"
+      ? `${money(s.unrealized_pnl, { signed: true })} unreal`
+      : (anyUnrealizedNA = true, "unreal n/a");
+    const todayTxt = typeof s.today_realized_pnl === "number"
+      ? `, ${money(s.today_realized_pnl, { signed: true })} today`
+      : "";
+    lines.push(
+      `  <code>${sid}</code> ${label}: ${money(s.equity)}  ${s.open_positions} open  ` +
+      `${unrealTxt}${todayTxt}${wTxt}${ks}`
+    );
+    totalEquity += s.equity || 0;
+    if (typeof s.unrealized_pnl === "number") totalUnrealized += s.unrealized_pnl;
+  }
+  lines.push(
+    `<b>Total</b>: ${money(totalEquity)} equity, ${money(totalUnrealized, { signed: true })} unrealized` +
+    (anyUnrealizedNA ? " (partial — some systems n/a)" : "")
+  );
+  lines.push("");
+
+  // --- Alerts ---
+  const a = snap.alerts || {};
+  const missed = a.missed_runs || [];
+  const issues = a.ohlcv_issues || [];
+  lines.push(`<b>Alerts</b> <i>(checked ${fmtUtc(a.checked_utc)})</i>`);
+  if (missed.length === 0 && issues.length === 0) {
+    lines.push("  ✅ all clear");
+  } else {
+    for (const m of missed) lines.push(`  ⚠️ ${m.system}: ${m.detail}`);
+    for (const iss of issues) lines.push(`  ⚠️ ${iss}`);
+  }
+  if ((a.suppressed_symbols || []).length) {
+    lines.push(`  <i>(suppressed halted symbols excluded: ${a.suppressed_symbols.join(", ")})</i>`);
+  }
 
   return lines.join("\n");
 }

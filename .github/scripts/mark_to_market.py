@@ -30,7 +30,14 @@ FUTURES_OHLCV_DIR = ROOT / "data" / "futures_universe" / "ohlcv_1d"
 # universe (data/universe/ohlcv_1d/, ccxt-style symbols like "BTC/USDT").
 SYSTEMS = [
     ("Donchian", ROOT / "data" / "t9b_paper", SPOT_OHLCV_DIR),
-    ("RSI-MR", ROOT / "data" / "t9b_mr_paper", SPOT_OHLCV_DIR),
+    # RSI-MR migrated from spot to the futures universe on 2026-07-12
+    # (commit a3398556) but this mapping was never updated -- every price
+    # lookup for it has been silently failing (latest_close() -> None)
+    # ever since, so mtm_positions.csv has shown 0 positions/$0 unrealized
+    # for this system for over a month despite it holding real positions.
+    # Found via building the /status snapshot, which surfaced state.json's
+    # real open-position count disagreeing with mark_to_market's output.
+    ("RSI-MR", ROOT / "data" / "t9b_mr_paper", FUTURES_OHLCV_DIR),
     ("ConsecDown", ROOT / "data" / "t9b_consecdowndays_paper", SPOT_OHLCV_DIR),
     ("Candidate12", ROOT / "data" / "t9_candidate12_paper", FUTURES_OHLCV_DIR),
     ("Candidate19", ROOT / "data" / "t9_candidate19_paper", FUTURES_OHLCV_DIR),

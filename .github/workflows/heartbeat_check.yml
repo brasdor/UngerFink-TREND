@@ -8,6 +8,10 @@ name: Daily Heartbeat Check
 # and continue-on-error + "only commit when there's a diff" means an early
 # engine crash leaves nothing for a check inside that same run to see.
 #
+# Also builds data/status_snapshot.json, the data source behind the
+# Telegram /status command -- timed 3h after the daily engine workflows so
+# both have had a chance to finish first.
+#
 # Also triggerable manually from the GitHub Actions tab (workflow_dispatch).
 
 on:
@@ -19,14 +23,46 @@ jobs:
   heartbeat:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write   # needed to commit data/status_snapshot.json
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0   # full history -- need each file's actual last commit
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
       - name: Check for missed runs
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python .github/scripts/check_missed_runs.py
+
+      - name: Build /status snapshot
+        run: python .github/scripts/build_status_snapshot.py
+
+      - name: Commit status snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add --force data/status_snapshot.json || true
+
+          if git diff --cached --quiet; then
+            echo "No snapshot changes to commit."
+          else
+            TODAY=$(date -u +%Y-%m-%d)
+            git commit -m "Status snapshot ${TODAY} [skip ci]"
+            git pull --rebase origin ${{ github.ref_name }} || true
+            git push origin ${{ github.ref_name }}
+          fi

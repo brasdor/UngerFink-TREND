@@ -4,9 +4,13 @@ This makes `/status` answer 24/7 with **no PC and no cost** — a free Cloudflar
 Worker receives Telegram messages and reads the latest data committed in your
 GitHub repo. ~10 minutes, all in the browser (no command line).
 
-> The serverless `/status` shows open positions, last run, and the auto-exec
-> ledger. It does **not** show the exchange balance — API keys must never live in
-> a public worker. Use the local bot or the Trade Desk for balance.
+> The serverless `/status` shows all 9 systems (S1-S8 + both T9 candidates):
+> equity, open positions, today's realized/unrealized P&L, kill-switch state,
+> the current regime and each system's capital weight under it, and an alert
+> summary (missed runs, stale OHLCV/funding data). `/positions` and `/pnl`
+> remain the narrower per-position views. None of these show the exchange
+> balance — API keys must never live in a public worker. Use the local bot or
+> the Trade Desk for balance.
 
 ---
 
