@@ -1,8 +1,8 @@
 {
   "system_name": "VolContractionShort_4H_T9B",
   "created_utc": "2026-06-11T19:20:09.618872+00:00",
-  "last_run_date": "2026-08-23",
-  "last_processed_ts_ms": 1787428800000,
+  "last_run_date": "2026-08-26",
+  "last_processed_ts_ms": 1787688000000,
   "paper_equity_usdt": 10208.783099999999,
   "peak_equity_usdt": 10393.928400000003,
   "drawdown_pct": -1.7813,

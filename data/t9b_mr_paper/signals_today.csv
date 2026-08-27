@@ -1,1 +1,2 @@
-symbol,signal_date,close,rsi,atr,stop_loss,signal
+symbol,signal_date,close,rsi,atr,stop_loss,risk_unit,signal
+SCRTUSDT,2026-08-26,0.01262,23.6459,0.00486108,-0.00196324,0.01458324,BUY_MR
