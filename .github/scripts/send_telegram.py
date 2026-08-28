@@ -110,10 +110,39 @@ def _send(token: str, chat_id: str, text: str) -> bool:
         return False
 
 
+def recipients() -> list[str]:
+    """Chat ids to notify, from TELEGRAM_CHAT_ID.
+
+    Accepts a comma-separated list so more than one person can receive the
+    daily summary. It held a single id until 2026-08-28, which is why only
+    the one operator ever saw these messages -- a second reader had no way
+    to be added short of sharing the account or moving to a group chat.
+    A single id keeps working unchanged.
+    """
+    raw = os.environ.get("TELEGRAM_CHAT_ID", "")
+    seen: list[str] = []
+    for part in raw.split(","):
+        chat_id = part.strip()
+        if chat_id and chat_id not in seen:
+            seen.append(chat_id)
+    return seen
+
+
+def send_all(token: str, chat_ids: list[str], text: str) -> int:
+    """Send to every recipient. One failure must not silence the others."""
+    delivered = 0
+    for chat_id in chat_ids:
+        if _send(token, chat_id, text):
+            delivered += 1
+        else:
+            print(f"[TELEGRAM] delivery to {chat_id} failed")
+    return delivered
+
+
 def main() -> int:
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
-    if not token or not chat_id:
+    chat_ids = recipients()
+    if not token or not chat_ids:
         print("[TELEGRAM] TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set -- skipping")
         return 0
 
@@ -136,8 +165,8 @@ def main() -> int:
         title += "  (no new signals)"
     message = title + "\n\n" + "\n\n".join(blocks)
 
-    ok = _send(token, chat_id, message)
-    print(f"[TELEGRAM] sent={ok}  total_signals={total}")
+    delivered = send_all(token, chat_ids, message)
+    print(f"[TELEGRAM] delivered={delivered}/{len(chat_ids)}  total_signals={total}")
     return 0
 
 

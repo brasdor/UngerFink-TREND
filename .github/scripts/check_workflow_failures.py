@@ -67,8 +67,10 @@ def main() -> int:
     print(f"[ALERT] {workflow_label}: {len(failed)} step(s) not OK: {failed}")
 
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
-    if not token or not chat_id:
+    # Comma-separated so every operator gets the alert, not just the one whose
+    # chat id happens to be in the secret. A single id keeps working unchanged.
+    chat_ids = [c.strip() for c in os.environ.get("TELEGRAM_CHAT_ID", "").split(",") if c.strip()]
+    if not token or not chat_ids:
         print("[ALERT] TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set -- skipping send")
         return 0
 
@@ -80,8 +82,14 @@ def main() -> int:
         lines.append(f"\n{run_url}")
     lines.append("\n(continue-on-error kept the job green -- this step failed underneath it.)")
 
-    ok = _send(token, chat_id, "\n".join(lines))
-    print(f"[ALERT] sent={ok}")
+    text = "\n".join(lines)
+    delivered = 0
+    for chat_id in chat_ids:
+        if _send(token, chat_id, text):
+            delivered += 1
+        else:
+            print(f"[ALERT] delivery to {chat_id} failed")
+    print(f"[ALERT] delivered={delivered}/{len(chat_ids)}")
     return 0
 
 

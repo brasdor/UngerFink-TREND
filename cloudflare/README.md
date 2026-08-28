@@ -12,6 +12,29 @@ GitHub repo. ~10 minutes, all in the browser (no command line).
 > balance — API keys must never live in a public worker. Use the local bot or
 > the Trade Desk for balance.
 
+### Commands
+
+| Command | Shows |
+|---------|-------|
+| `/status` | all 9 systems, regime, weights, alerts — one view |
+| `/positions` | every open position with P&L |
+| `/pnl` | total P&L summary |
+| `/price` | USD price + 24h move of **every coin currently held** |
+| `/price BTC ETH` | USD price of the coins you name |
+| `/24h` | 24h move of every coin held, **biggest mover first**, with day low/high |
+| `/24h SOL` | 24h move of the coins you name |
+| `/systems` | list the per-system commands |
+| `/s1` … `/s8`, `/donchian`, `/rsimr`, `/consecdown`, `/momentum`, `/volcontraction`, `/macross`, `/c12`, `/c19` | one system in detail: equity, weight, kill-switch, open positions with P&L, today's signals |
+
+Symbols are forgiving: `btc`, `BTC`, `BTC_USDT` and `BTCUSDT` all resolve to
+`BTCUSDT`. Prices come from Binance `/ticker/24hr` — spot first, then futures
+for the futures-only symbols in the book (`BTCDOMUSDT`, `1000PEPEUSDT`, …).
+A symbol neither venue knows shows `n/a` rather than failing the command.
+
+`/price` and `/24h` need **no new secrets** — Binance's ticker endpoint is
+public and unauthenticated. Replies longer than Telegram's 4096-character
+limit are split across messages automatically.
+
 ---
 
 ## Step 1 — Create a GitHub read token (so the worker can read your private repo)
@@ -70,3 +93,34 @@ working forever, no PC required.
   local poller.
 - **Multiple users:** set `ALLOWED_CHAT` to a comma-separated list of chat ids, or
   `*` for anyone who messages the bot (remember `/status` reveals positions).
+
+## Adding a second person (e.g. a co-operator)
+
+There are **two separate channels**, and being added to one does not add you to
+the other. This is why a second person can be unable to see anything while the
+first sees everything:
+
+| Channel | Direction | Controlled by | Where to change it |
+|---------|-----------|---------------|--------------------|
+| Daily summary + failure alerts | bot **pushes** to you | `TELEGRAM_CHAT_ID` secret | GitHub → Settings → Secrets → Actions |
+| `/status`, `/price`, … | you **pull** by sending a command | `ALLOWED_CHAT` variable | Cloudflare Worker → Settings → Variables |
+
+To add someone to both:
+
+1. **Get their chat id.** They must message @ungertrend_bot at least once
+   (a bot cannot message a user first). Then open
+   `https://api.telegram.org/bot<BOT_TOKEN>/getUpdates` and read
+   `message.chat.id` for their message. A chat id cannot be derived from a
+   username — this step is unavoidable.
+2. **Push:** set the `TELEGRAM_CHAT_ID` secret to a comma-separated list,
+   e.g. `7804609823,123456789`. `send_telegram.py` and
+   `check_workflow_failures.py` fan out to every id, and one bad id no longer
+   silences the others.
+3. **Pull:** add the same id to the Worker's `ALLOWED_CHAT` variable, then
+   redeploy the Worker. A chat that is not listed is **silently ignored** —
+   no error is sent, which looks exactly like a dead bot.
+
+**Alternative — a group chat.** Put both people in one Telegram group, add the
+bot, and use the group's chat id (negative, e.g. `-1001234567890`) as the single
+value for both settings. One id to maintain, and new people are added by
+inviting them to the group rather than by editing configuration.
