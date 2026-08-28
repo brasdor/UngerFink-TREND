@@ -1,0 +1,92 @@
+name: Deploy Telegram Worker
+
+# The Worker was created in the Cloudflare dashboard, so shipping a change to
+# status_worker.js meant hand-copying the file into the web editor every time.
+# This deploys it on push instead.
+#
+# Requires, one-time:
+#   Secret   CLOUDFLARE_API_TOKEN  -- Cloudflare -> My Profile -> API Tokens,
+#                                     "Edit Cloudflare Workers" template.
+#   Variable CF_WORKER_NAME        -- the Worker's exact name in
+#                                     Workers & Pages. A wrong name deploys a
+#                                     SECOND Worker under that name while the
+#                                     Telegram webhook still points at the old
+#                                     one -- the bot looks unchanged and the
+#                                     deploy looks successful, so the job
+#                                     checks the name is set before running.
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'cloudflare/status_worker.js'
+      - 'cloudflare/wrangler.toml'
+      - '.github/workflows/deploy_worker.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Fail with a readable message rather than letting Wrangler invent a
+      # Worker name from the directory and deploy somewhere unintended.
+      - name: Check required configuration
+        env:
+          CF_WORKER_NAME: ${{ vars.CF_WORKER_NAME }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          missing=0
+          if [ -z "${CF_WORKER_NAME}" ]; then
+            echo "::error::Repository variable CF_WORKER_NAME is not set (Settings -> Secrets and variables -> Actions -> Variables). Set it to the Worker's exact name."
+            missing=1
+          fi
+          if [ -z "${CLOUDFLARE_API_TOKEN}" ]; then
+            echo "::error::Secret CLOUDFLARE_API_TOKEN is not set."
+            missing=1
+          fi
+          exit ${missing}
+
+      # Catches a syntax error before it reaches production, where the only
+      # symptom would be the bot silently not replying.
+      - name: Syntax-check the Worker
+        run: node --check cloudflare/status_worker.js
+
+      # Hits the real Binance API. The stubbed unit test could not catch the
+      # 2026-08-28 URL-encoding bug that made every coin render as "n/a";
+      # this would have. continue-on-error: Binance may be geo-blocked from
+      # GitHub's US runners (HTTP 451), and that must not block a deploy.
+      - name: Live price-path check
+        id: price_check
+        continue-on-error: true
+        run: node tools/test_price_live.mjs
+
+      - name: Deploy
+        id: deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        # --keep-vars is REQUIRED: without it Wrangler deletes every var not
+        # declared in wrangler.toml, which would strip the Worker's GH_TOKEN,
+        # ALLOWED_CHAT and friends and leave a deployed-but-dead bot.
+        run: |
+          npx --yes wrangler@4 deploy \
+            --config cloudflare/wrangler.toml \
+            --name "${{ vars.CF_WORKER_NAME }}" \
+            --keep-vars
+
+      - name: Report
+        if: always()
+        run: |
+          echo "Worker      : ${{ vars.CF_WORKER_NAME }}"
+          echo "Price check : ${{ steps.price_check.outcome }}"
+          echo "Deploy      : ${{ steps.deploy.outcome }}"
+          if [ "${{ steps.price_check.outcome }}" = "failure" ]; then
+            echo "::warning::The live price check failed. If Binance returned 451 this is just the runner's geo-block; if it returned 400 the symbols URL is malformed and /price will show n/a for every coin."
+          fi

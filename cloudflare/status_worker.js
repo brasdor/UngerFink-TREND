@@ -438,7 +438,13 @@ async function fetchTickers(symbols) {
   const errors = [];
   if (symbols.length === 0) return { tickers, errors };
 
-  const query = encodeURIComponent(JSON.stringify(symbols));
+  // Binance matches this parameter against ^\[("SYM"(,"SYM")*)?\]$ WITHOUT
+  // percent-decoding it first, so the brackets must arrive literal.
+  // encodeURIComponent() escaped them to %5B/%5D and every request came back
+  // HTTP 400 -- which surfaced as every single coin showing "n/a".
+  // Passing the raw JSON is correct: fetch percent-encodes only the quotes
+  // (to %22), and Binance accepts that form. Verified against the live API.
+  const query = JSON.stringify(symbols);
   const spot = await fetchJson(`https://api.binance.com/api/v3/ticker/24hr?symbols=${query}`);
   if (spot.data && Array.isArray(spot.data)) {
     for (const row of spot.data) tickers[row.symbol] = { ...row, venue: "spot" };
@@ -757,5 +763,5 @@ async function sendMessage(token, chatId, text) {
 export {
   buildStatus, buildPositions, buildPnl, parseCsv, ghFile, SYSTEMS,
   buildPrice, build24h, buildSystem, normalizeSymbol, findSystem,
-  chunkMessage, SYSTEM_REGISTRY,
+  chunkMessage, SYSTEM_REGISTRY, fetchTickers,
 };

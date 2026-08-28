@@ -1,0 +1,23 @@
+# Wrangler config for the always-on Telegram command Worker.
+#
+# The Worker was originally created in the Cloudflare dashboard, so every
+# deploy meant hand-copying status_worker.js into the web editor. This file
+# plus .github/workflows/deploy_worker.yml replaces that with a push.
+#
+# DELIBERATELY ABSENT: [vars]. Every binding the Worker needs -- BOT_TOKEN,
+# GH_TOKEN, GH_REPO, GH_BRANCH, ALLOWED_CHAT, WEBHOOK_SECRET -- stays owned by
+# the dashboard, and the deploy passes --keep-vars so Wrangler leaves them
+# alone. Without that flag Wrangler DELETES every var not listed here, which
+# would silently strip the Worker's GitHub credentials and chat allowlist and
+# leave a deployed-but-dead bot. Do not add [vars] here to "document" them:
+# whatever is written here becomes authoritative and overwrites the live
+# values on the next deploy.
+#
+# The Worker's NAME is not set here either -- the workflow passes it via
+# --name from the CF_WORKER_NAME repository variable, so a typo in a config
+# file cannot silently deploy a second Worker under a new name while the
+# Telegram webhook keeps pointing at the old one.
+
+main = "status_worker.js"
+compatibility_date = "2026-08-28"
+account_id = "260fbc093bbd2d095bd222a5dddfa68e"
