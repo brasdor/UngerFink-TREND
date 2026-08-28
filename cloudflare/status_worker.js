@@ -252,9 +252,14 @@ async function buildStatus(env) {
   let totalUnrealized = 0;
   let anyUnrealizedNA = false;
   for (const [sid, label] of STATUS_SYSTEM_ORDER) {
+    // The candidates' id already reads as their name, so printing id + label
+    // gave "Candidate12 Candidate 12". S1..S8 still want both.
+    const shown = sid.startsWith("Candidate")
+      ? `<code>${label}</code>`
+      : `<code>${sid}</code> ${label}`;
     const s = systems[sid];
     if (!s) {
-      lines.push(`  <code>${sid}</code> ${label}: no data`);
+      lines.push(`  ${shown}: no data`);
       continue;
     }
     const w = weights[sid];
@@ -267,7 +272,7 @@ async function buildStatus(env) {
       ? `, ${money(s.today_realized_pnl, { signed: true })} today`
       : "";
     lines.push(
-      `  <code>${sid}</code> ${label}: ${money(s.equity)}  ${s.open_positions} open  ` +
+      `  ${shown}: ${money(s.equity)}  ${s.open_positions} open  ` +
       `${unrealTxt}${todayTxt}${wTxt}${ks}`
     );
     totalEquity += s.equity || 0;
