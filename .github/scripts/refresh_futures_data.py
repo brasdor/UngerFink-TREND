@@ -106,21 +106,43 @@ def fapi_refresh_funding() -> int:
         try:
             df = pd.read_csv(path)
             last_ts = int(df["funding_time"].max())
-        except Exception:
-            continue
-        try:
-            r = requests.get(f"{FAPI}/fapi/v1/fundingRate",
-                             params={"symbol": sym, "startTime": last_ts + 1,
-                                     "limit": 1000},
-                             timeout=20)
-            r.raise_for_status()
-            data = r.json()
-        except Exception:
-            continue
-        if not data:
+        except Exception as exc:
+            # An unreadable file used to `continue`, which skipped it on every
+            # future run too -- so a corrupt file stayed corrupt forever and
+            # silently. Found 2026-08-28: JOEUSDT_funding.csv was 80,926 bytes
+            # of pure NUL (an interrupted write), had been skipped since, and
+            # nothing reported it. Rebuild from scratch instead of skipping.
+            print(f"[FUNDING] {sym}: unreadable ({exc}) -- rebuilding from scratch")
+            df = pd.DataFrame(columns=["funding_time", "funding_rate"])
+            last_ts = 0
+
+        # Binance caps fundingRate at 1000 rows (~333 days at 8h), so a full
+        # rebuild has to page forward rather than take the first response.
+        fetched: list[dict] = []
+        cursor = last_ts + 1
+        for _ in range(40):                     # 40k rows is far beyond any symbol's history
+            try:
+                r = requests.get(f"{FAPI}/fapi/v1/fundingRate",
+                                 params={"symbol": sym, "startTime": cursor,
+                                         "limit": 1000},
+                                 timeout=20)
+                r.raise_for_status()
+                page = r.json()
+            except Exception as exc:
+                print(f"[FUNDING] {sym}: fetch failed ({exc})")
+                break
+            if not page:
+                break
+            fetched.extend(page)
+            cursor = int(page[-1]["fundingTime"]) + 1
+            time.sleep(0.04)
+            if len(page) < 1000:                # last page
+                break
+
+        if not fetched:
             continue
         nd = pd.DataFrame([{"funding_time": int(d["fundingTime"]),
-                            "funding_rate": float(d["fundingRate"])} for d in data])
+                            "funding_rate": float(d["fundingRate"])} for d in fetched])
         comb = (pd.concat([df, nd], ignore_index=True)
                 .drop_duplicates("funding_time").sort_values("funding_time"))
         comb.to_csv(path, index=False)
