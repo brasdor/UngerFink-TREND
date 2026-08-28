@@ -21,5 +21,25 @@
 
 name = "ungerfink-status"
 main = "status_worker.js"
-compatibility_date = "2026-08-28"
 account_id = "260fbc093bbd2d095bd222a5dddfa68e"
+
+# Everything below mirrors what the Worker already had in the dashboard.
+#
+# A deploy overwrites remote configuration with this file wholesale -- vars
+# excepted, which --keep-vars protects. The first CI deploy proved the point:
+# it silently flipped compatibility_date 2026-06-15 -> 2026-08-28, turned
+# preview_urls on, and switched observability and logs OFF, because none of
+# them were declared here. Anything the dashboard has and this file omits is
+# not "left alone", it is reset. Keep these in sync when changing them there.
+
+compatibility_date = "2026-06-15"
+
+# Was disabled: with workers.dev routing on, leaving this unset publishes a
+# preview URL for every version.
+preview_urls = false
+
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
