@@ -5,15 +5,10 @@ name: Deploy Telegram Worker
 # This deploys it on push instead.
 #
 # Requires, one-time:
-#   Secret   CLOUDFLARE_API_TOKEN  -- Cloudflare -> My Profile -> API Tokens,
-#                                     "Edit Cloudflare Workers" template.
-#   Variable CF_WORKER_NAME        -- the Worker's exact name in
-#                                     Workers & Pages. A wrong name deploys a
-#                                     SECOND Worker under that name while the
-#                                     Telegram webhook still points at the old
-#                                     one -- the bot looks unchanged and the
-#                                     deploy looks successful, so the job
-#                                     checks the name is set before running.
+#   Secret CLOUDFLARE_API_TOKEN -- Cloudflare -> My Profile -> API Tokens,
+#                                  "Edit Cloudflare Workers" template.
+#
+# The Worker name and account id live in cloudflare/wrangler.toml.
 
 on:
   push:
@@ -36,23 +31,18 @@ jobs:
         with:
           node-version: '20'
 
-      # Fail with a readable message rather than letting Wrangler invent a
-      # Worker name from the directory and deploy somewhere unintended.
       - name: Check required configuration
         env:
-          CF_WORKER_NAME: ${{ vars.CF_WORKER_NAME }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          missing=0
-          if [ -z "${CF_WORKER_NAME}" ]; then
-            echo "::error::Repository variable CF_WORKER_NAME is not set (Settings -> Secrets and variables -> Actions -> Variables). Set it to the Worker's exact name."
-            missing=1
-          fi
           if [ -z "${CLOUDFLARE_API_TOKEN}" ]; then
-            echo "::error::Secret CLOUDFLARE_API_TOKEN is not set."
-            missing=1
+            echo "::error::Secret CLOUDFLARE_API_TOKEN is not set (Settings -> Secrets and variables -> Actions -> Secrets)."
+            exit 1
           fi
-          exit ${missing}
+          grep -q '^name = "ungerfink-status"' cloudflare/wrangler.toml || {
+            echo "::error::cloudflare/wrangler.toml no longer names the ungerfink-status Worker. A mismatched name deploys a SECOND Worker and still reports success."
+            exit 1
+          }
 
       # Catches a syntax error before it reaches production, where the only
       # symptom would be the bot silently not replying.
@@ -78,13 +68,12 @@ jobs:
         run: |
           npx --yes wrangler@4 deploy \
             --config cloudflare/wrangler.toml \
-            --name "${{ vars.CF_WORKER_NAME }}" \
             --keep-vars
 
       - name: Report
         if: always()
         run: |
-          echo "Worker      : ${{ vars.CF_WORKER_NAME }}"
+          echo "Worker      : ungerfink-status"
           echo "Price check : ${{ steps.price_check.outcome }}"
           echo "Deploy      : ${{ steps.deploy.outcome }}"
           if [ "${{ steps.price_check.outcome }}" = "failure" ]; then

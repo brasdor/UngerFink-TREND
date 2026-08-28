@@ -13,11 +13,13 @@
 # whatever is written here becomes authoritative and overwrites the live
 # values on the next deploy.
 #
-# The Worker's NAME is not set here either -- the workflow passes it via
-# --name from the CF_WORKER_NAME repository variable, so a typo in a config
-# file cannot silently deploy a second Worker under a new name while the
-# Telegram webhook keeps pointing at the old one.
+# The name must match the EXISTING Worker exactly. A wrong name does not
+# fail -- it creates a second Worker under that name and reports success,
+# while the Telegram webhook keeps pointing at the original, so the bot looks
+# unchanged and the deploy looks fine. Confirmed from the dashboard URL
+# .../workers/services/view/ungerfink-status/production/settings
 
+name = "ungerfink-status"
 main = "status_worker.js"
 compatibility_date = "2026-08-28"
 account_id = "260fbc093bbd2d095bd222a5dddfa68e"
