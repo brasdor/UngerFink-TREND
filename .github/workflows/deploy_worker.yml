@@ -51,8 +51,9 @@ jobs:
 
       # Hits the real Binance API. The stubbed unit test could not catch the
       # 2026-08-28 URL-encoding bug that made every coin render as "n/a";
-      # this would have. continue-on-error: Binance may be geo-blocked from
-      # GitHub's US runners (HTTP 451), and that must not block a deploy.
+      # this would have. The script exits 0 with SKIPPED when Binance blocks
+      # the runner's IP (403/451), which is always the case here, so a red
+      # step means a genuine defect rather than the environment.
       - name: Live price-path check
         id: price_check
         continue-on-error: true

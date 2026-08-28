@@ -32,6 +32,20 @@ check("full pair ETHBTC left alone", normalizeSymbol("ETHBTC") === "ETHBTC", nor
 
 console.log("\nspot tickers (live)");
 const spot = await fetchTickers(SPOT);
+
+// Binance blocks datacenter IPs: 403 from Cloudflare, 451 from GitHub's US
+// runners. That is the environment, not a defect, and this check runs in both
+// places -- so treat it as "cannot verify here" rather than failing forever
+// and training everyone to ignore a red step. A malformed request (400) is a
+// real bug and still fails, which is the case that shipped broken today.
+const blocked = spot.errors.some((e) => /HTTP (403|451)/.test(e));
+if (blocked) {
+  console.log("  skip  Binance is blocked from this IP (403/451) -- cannot verify here");
+  console.log(`        ${spot.errors.join("; ")}`);
+  console.log("\nRESULT: SKIPPED (environment blocked, not a code failure)\n");
+  process.exit(0);
+}
+
 check("no transport errors", spot.errors.length === 0, spot.errors.join("; "));
 for (const sym of SPOT) {
   const t = spot.tickers[sym];
