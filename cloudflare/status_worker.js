@@ -433,36 +433,81 @@ async function fetchJson(url) {
  * Ticker rows for the given symbols, keyed by symbol.
  * Returns { tickers, errors } -- errors is per-venue, not fatal.
  */
+// Binance's WAF answers HTTP 403 to api.binance.com from Cloudflare's
+// datacenter IPs (observed 2026-08-28 from this Worker, while the same
+// request succeeded from a residential IP). It is the same class of block
+// that returns 451 to GitHub's runners, so no amount of fixing the query
+// helps -- the host has to change.
+//
+// data-api.binance.vision is Binance's public market-data mirror and is the
+// one intended for unauthenticated access, so it leads. The rest are regional
+// aliases of the same API, tried in turn: whichever the edge can reach wins,
+// and if one starts being blocked later the next takes over on its own.
+const SPOT_HOSTS = [
+  "https://data-api.binance.vision",
+  "https://api-gcp.binance.com",
+  "https://api1.binance.com",
+  "https://api.binance.com",
+];
+
+// Futures has no public mirror, so this is the only host. If it is blocked,
+// futures-only symbols (BTCDOMUSDT, 1000PEPEUSDT, ...) degrade to "n/a" while
+// everything listed on spot still resolves.
+const FUTURES_HOSTS = ["https://fapi.binance.com"];
+
+/**
+ * GET the first host that answers, so one blocked host does not sink the call.
+ * Returns { data, tried } where tried records "host: failure" for diagnosis.
+ */
+async function fetchFirstReachable(hosts, path) {
+  const tried = [];
+  for (const host of hosts) {
+    const result = await fetchJson(host + path);
+    if (result.data) return { data: result.data, tried };
+    tried.push(`${host.replace("https://", "")}: ${result.error}`);
+  }
+  return { data: null, tried };
+}
+
 async function fetchTickers(symbols) {
   const tickers = {};
   const errors = [];
   if (symbols.length === 0) return { tickers, errors };
 
   // Binance matches this parameter against ^\[("SYM"(,"SYM")*)?\]$ WITHOUT
-  // percent-decoding it first, so the brackets must arrive literal.
-  // encodeURIComponent() escaped them to %5B/%5D and every request came back
-  // HTTP 400 -- which surfaced as every single coin showing "n/a".
-  // Passing the raw JSON is correct: fetch percent-encodes only the quotes
-  // (to %22), and Binance accepts that form. Verified against the live API.
+  // percent-decoding it first, so the brackets must arrive literal, and no
+  // spaces are allowed between entries. encodeURIComponent() escaped the
+  // brackets to %5B/%5D and every request came back HTTP 400 -- which
+  // surfaced as every coin showing "n/a". JSON.stringify is correct on both
+  // counts: it emits no spaces, and fetch percent-encodes only the quotes
+  // (to %22), a form Binance accepts.
   const query = JSON.stringify(symbols);
-  const spot = await fetchJson(`https://api.binance.com/api/v3/ticker/24hr?symbols=${query}`);
-  if (spot.data && Array.isArray(spot.data)) {
+
+  const spot = await fetchFirstReachable(SPOT_HOSTS, `/api/v3/ticker/24hr?symbols=${query}`);
+  if (Array.isArray(spot.data)) {
     for (const row of spot.data) tickers[row.symbol] = { ...row, venue: "spot" };
-  } else if (spot.error) {
-    errors.push(`spot: ${spot.error}`);
+  } else {
+    errors.push(`spot unreachable — ${spot.tried.join(", ")}`);
   }
 
-  // Anything spot didn't return is likely futures-only -- one bulk call, then index.
+  // Whatever spot did not return is either futures-only or delisted.
+  //
+  // Note fapi does NOT honour a `symbols` filter -- measured 2026-08-28, it
+  // returns all 751 symbols (~280KB) whether the parameter is present or not,
+  // unlike the spot endpoint. So there is no point sending one, and the rows
+  // we want get picked out here instead. 280KB parses well inside the
+  // Worker's 10ms CPU budget; the spot dump (3,688 symbols, ~1.9MB) would
+  // not, which is why spot is filtered server-side and futures is not.
   const missing = symbols.filter((s) => !tickers[s]);
   if (missing.length > 0) {
-    const fut = await fetchJson("https://fapi.binance.com/fapi/v1/ticker/24hr");
-    if (fut.data && Array.isArray(fut.data)) {
+    const fut = await fetchFirstReachable(FUTURES_HOSTS, "/fapi/v1/ticker/24hr");
+    if (Array.isArray(fut.data)) {
       const wanted = new Set(missing);
       for (const row of fut.data) {
         if (wanted.has(row.symbol)) tickers[row.symbol] = { ...row, venue: "futures" };
       }
-    } else if (fut.error) {
-      errors.push(`futures: ${fut.error}`);
+    } else {
+      errors.push(`futures unreachable — ${fut.tried.join(", ")}`);
     }
   }
   return { tickers, errors };
@@ -636,6 +681,11 @@ async function buildPrice(env, args) {
   lines.push(fromPositions
     ? `<i>coins currently held (${capped.length})</i>`
     : `<i>requested (${capped.length})</i>`);
+  // Errors go at the TOP, not in a footer: a 60-coin reply is split across
+  // messages, so a trailing diagnostic is the part nobody scrolls to -- which
+  // is exactly what happened while every row said "n/a" and the reason sat
+  // out of sight at the bottom.
+  if (errors.length) lines.push(`\u{26A0} <i>${errors.join(" | ")}</i>`);
   lines.push("");
 
   for (const sym of capped) {
@@ -657,8 +707,15 @@ async function buildPrice(env, args) {
   if (symbols.length > capped.length) {
     lines.push(`\n<i>… ${symbols.length - capped.length} more not shown (message limit)</i>`);
   }
-  if (errors.length) lines.push(`\n<i>source issues — ${errors.join("; ")}</i>`);
+  if (fromPositions) lines.push(systemLegend());
   return lines.join("\n");
+}
+
+// The italic tag after each coin is which system holds it. "S1" on its own is
+// opaque unless you already know the roster, so spell it out.
+function systemLegend() {
+  return "\n<i>held by: S1 Donchian · S2 RSI-MR · S3 ConsecDown · S5 Momentum · " +
+         "S6 VolContraction · S7 MACross · S8 RSI-MR-Funding · Candidate12/19</i>";
 }
 
 async function build24h(env, args) {
@@ -685,6 +742,7 @@ async function build24h(env, args) {
   lines.push(fromPositions
     ? `<i>coins currently held (${rows.length}), biggest mover first</i>`
     : `<i>requested (${rows.length}), biggest mover first</i>`);
+  if (errors.length) lines.push(`\u{26A0} <i>${errors.join(" | ")}</i>`);
   lines.push("");
 
   for (const { sym, t, pct } of rows) {
@@ -708,7 +766,7 @@ async function build24h(env, args) {
   if (symbols.length > capped.length) {
     lines.push(`<i>… ${symbols.length - capped.length} more not shown (message limit)</i>`);
   }
-  if (errors.length) lines.push(`<i>source issues — ${errors.join("; ")}</i>`);
+  if (fromPositions) lines.push(systemLegend());
   return lines.join("\n");
 }
 

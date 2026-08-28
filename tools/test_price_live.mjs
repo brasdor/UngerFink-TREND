@@ -47,9 +47,16 @@ for (const sym of FUTURES_ONLY) {
 }
 
 console.log("\nmixed batch, the shape /price actually sends");
-const mixed = await fetchTickers([...SPOT, ...FUTURES_ONLY]);
-const resolved = Object.keys(mixed.tickers).length;
-check("at least the spot half resolves", resolved >= SPOT.length, `${resolved}/${SPOT.length + FUTURES_ONLY.length} resolved`);
+const requested = [...SPOT, ...FUTURES_ONLY];
+const mixed = await fetchTickers(requested);
+// Count only what was asked for. fapi returns all 751 symbols regardless of
+// any filter, so Object.keys() on the whole map reports a meaningless 751.
+const resolved = requested.filter((s) => mixed.tickers[s]).length;
+check("every requested symbol resolves", resolved === requested.length,
+      `${resolved}/${requested.length} resolved`);
+check("no stray symbols leak into the map beyond those requested",
+      Object.keys(mixed.tickers).every((s) => requested.includes(s)),
+      `map holds ${Object.keys(mixed.tickers).length} keys`);
 
 console.log(failed ? "\nRESULT: FAIL\n" : "\nRESULT: PASS\n");
 process.exit(failed ? 1 : 0);
