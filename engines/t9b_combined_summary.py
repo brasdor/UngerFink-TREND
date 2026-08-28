@@ -121,6 +121,37 @@ def p(*a, **kw):
     print(*a, **kw)
 
 
+def fmt_num(value, width: int = 12) -> str:
+    """Format a numeric signal cell, tolerating cells that are not numbers.
+
+    Each engine writes its own signals_today.csv schema, so a column one
+    system has may be missing in another's -- row.get() then hands back the
+    "?" placeholder, and "?" has no %g formatting. Formatting it directly
+    raised ValueError and killed the whole summary (and every workflow step
+    after it) on any day S1 produced a signal. Non-numbers now print as
+    plain text instead of raising.
+    """
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return f"{str(value):<{width}}"
+    if number != number:                      # NaN
+        return f"{'n/a':<{width}}"
+    return f"{number:<{width}.6g}"
+
+
+def signal_stop(row) -> object:
+    """Stop-loss of a signal row, under whichever column the engine wrote it.
+
+    S1 (Donchian) writes "initial_stop"; every other system writes
+    "stop_loss". Reading only "stop_loss" silently dropped S1's stop.
+    """
+    for column in ("stop_loss", "initial_stop"):
+        if column in row and pd.notna(row[column]):
+            return row[column]
+    return "?"
+
+
 def load_state(data_dir: Path) -> dict:
     path = data_dir / "state.json"
     if not data_dir.exists():
@@ -397,7 +428,7 @@ def main() -> int:
                     rk  = int(row.get("rank", 0))
                     ret = row.get("period_return_pct", float("nan"))
                     rs  = f"{ret:>+6.1f}%" if ret == ret else "   n/a"
-                    p(f"      #{rk:<3} {sym:<18}  px={px:<12.6g}  20d_ret={rs}")
+                    p(f"      #{rk:<3} {sym:<18}  px={fmt_num(px)}  20d_ret={rs}")
             if not shorts.empty:
                 p(f"    SHORTS ({len(shorts)}):")
                 for _, row in shorts.iterrows():
@@ -406,31 +437,30 @@ def main() -> int:
                     rk  = int(row.get("rank", 0))
                     ret = row.get("period_return_pct", float("nan"))
                     rs  = f"{ret:>+6.1f}%" if ret == ret else "   n/a"
-                    p(f"      #{rk:<3} {sym:<18}  px={px:<12.6g}  20d_ret={rs}")
+                    p(f"      #{rk:<3} {sym:<18}  px={fmt_num(px)}  20d_ret={rs}")
         elif s["type"] == "futures_short":
             for _, row in sig_df.iterrows():
                 sym     = str(row.get("symbol", "?"))
                 close   = row.get("signal_close", row.get("close", "?"))
                 funding = row.get("funding_rate", "?")
-                stop    = row.get("stop_loss", "?")
+                stop    = signal_stop(row)
                 try:
                     funding_str = f"{float(funding)*100:.4f}%"
-                except Exception:
+                except (TypeError, ValueError):
                     funding_str = str(funding)
-                p(f"    SHORT  {sym:<18}  close={close:<12.6g}  "
-                  f"funding={funding_str}  stop={stop:.6g}" if isinstance(stop, float)
-                  else f"    SHORT  {sym:<18}  close={close}")
+                p(f"    SHORT  {sym:<18}  close={fmt_num(close)}  "
+                  f"funding={funding_str}  stop={fmt_num(stop)}")
         else:
             for _, row in sig_df.iterrows():
                 sym  = str(row.get("symbol", "?"))
                 cls  = row.get("close", "?")
-                stop = row.get("stop_loss", "?")
+                stop = signal_stop(row)
                 extra = ""
-                if "rsi" in row:
-                    extra = f"  RSI={row['rsi']:.1f}"
-                elif "consec" in row:
+                if "rsi" in row and pd.notna(row["rsi"]):
+                    extra = f"  RSI={float(row['rsi']):.1f}"
+                elif "consec" in row and pd.notna(row["consec"]):
                     extra = f"  consec={int(row['consec'])}"
-                p(f"    LONG  {sym:<18}  close={cls:<12.6g}  stop={stop:<12.6g}{extra}")
+                p(f"    LONG  {sym:<18}  close={fmt_num(cls)}  stop={fmt_num(stop)}{extra}")
     if not any_signal:
         p("  None today")
 

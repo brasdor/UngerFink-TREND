@@ -60,6 +60,7 @@ jobs:
       #     2026-07-11) and falls back to data.binance.vision daily dumps.
       # ------------------------------------------------------------------
       - name: Refresh futures data caches
+        id: refresh_data
         continue-on-error: true
         run: python .github/scripts/refresh_futures_data.py
 
@@ -108,6 +109,8 @@ jobs:
       #    exact bug hit the T9B workflow once, see its own commit history).
       # ------------------------------------------------------------------
       - name: Commit output files
+        id: commit
+        continue-on-error: true
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -124,25 +127,47 @@ jobs:
           else
             TODAY=$(date -u +%Y-%m-%d)
             git commit -m "T9 candidates: daily update ${TODAY} [skip ci]"
-            git pull --rebase origin ${{ github.ref_name }} || true
-            git push origin ${{ github.ref_name }}
+
+            # This workflow and T9B run minutes apart and both push to the
+            # same branch, so a non-fast-forward here is routine, not an
+            # error. The old "pull --rebase || true; push" aborted with
+            # "cannot pull with rebase: You have unstaged changes" (the
+            # engines leave unstaged files this step never adds), the
+            # || true swallowed it, and the push then failed -- which is
+            # why exactly one of the two workflows went red most days.
+            # autostash handles the unstaged files; retry handles the race.
+            pushed=0
+            for attempt in 1 2 3 4 5; do
+              if git push origin ${{ github.ref_name }}; then
+                pushed=1
+                break
+              fi
+              echo "push attempt ${attempt} failed (likely concurrent push) -- rebasing and retrying"
+              git -c rebase.autoStash=true pull --rebase origin ${{ github.ref_name }} || {
+                echo "rebase failed on attempt ${attempt}"
+                sleep $((attempt * 5))
+                continue
+              }
+              sleep $((attempt * 5))
+            done
+            if [ "${pushed}" != "1" ]; then
+              echo "ERROR: could not push output files after 5 attempts"
+              exit 1
+            fi
           fi
 
       # ------------------------------------------------------------------
       # 6. Report engine exit statuses for visibility
       # ------------------------------------------------------------------
-      - name: Report engine statuses
+      - name: Report step statuses
         if: always()
         run: |
           echo "Engine exit statuses:"
           echo "  Candidate 12 : ${{ steps.engine_c12.outcome }}"
           echo "  Candidate 19 : ${{ steps.engine_c19.outcome }}"
-          if [ "${{ steps.engine_c12.outcome }}" = "failure" ] || \
-             [ "${{ steps.engine_c19.outcome }}" = "failure" ]; then
-            echo "WARNING: one or more engines failed -- check logs above"
-          else
-            echo "Both engines completed successfully"
-          fi
+          echo "Pipeline step statuses:"
+          echo "  RefreshData  : ${{ steps.refresh_data.outcome }}"
+          echo "  Commit       : ${{ steps.commit.outcome }}"
 
       # ------------------------------------------------------------------
       # 7. Alert on step failures continue-on-error would otherwise hide.
@@ -153,8 +178,28 @@ jobs:
         if: always()
         env:
           WORKFLOW_LABEL: "T9 Candidates Daily"
-          STEP_OUTCOMES: "Candidate12=${{ steps.engine_c12.outcome }},Candidate19=${{ steps.engine_c19.outcome }}"
+          # Every step with an id belongs here -- the Commit step's push
+          # race went unalerted for weeks because only the engines were
+          # listed. Adding a step without adding it here re-opens that hole.
+          STEP_OUTCOMES: "Candidate12=${{ steps.engine_c12.outcome }},Candidate19=${{ steps.engine_c19.outcome }},RefreshData=${{ steps.refresh_data.outcome }},Commit=${{ steps.commit.outcome }}"
           RUN_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python .github/scripts/check_workflow_failures.py
+
+      # ------------------------------------------------------------------
+      # 8. Fail the job if any step failed. Keeps the red X in the Actions
+      #    list now that every step is continue-on-error.
+      # ------------------------------------------------------------------
+      - name: Fail job if any step failed
+        if: always()
+        env:
+          OUTCOMES: "${{ steps.engine_c12.outcome }} ${{ steps.engine_c19.outcome }} ${{ steps.refresh_data.outcome }} ${{ steps.commit.outcome }}"
+        run: |
+          for outcome in ${OUTCOMES}; do
+            if [ "${outcome}" = "failure" ]; then
+              echo "At least one step failed -- see 'Report step statuses' above."
+              exit 1
+            fi
+          done
+          echo "All steps completed successfully."

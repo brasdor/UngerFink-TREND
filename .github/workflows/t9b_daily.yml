@@ -55,6 +55,7 @@ jobs:
       #     the step prints a staleness warning instead.
       # ------------------------------------------------------------------
       - name: Refresh futures data caches
+        id: refresh_data
         continue-on-error: true
         run: python .github/scripts/refresh_futures_data.py
 
@@ -63,6 +64,7 @@ jobs:
       #     Writes data/regime_state.json read by all T9B engines.
       # ------------------------------------------------------------------
       - name: Compute regime state
+        id: regime
         continue-on-error: true
         run: |
           if [ -n "${{ github.event.inputs.run_date }}" ]; then
@@ -198,8 +200,16 @@ jobs:
 
       # ------------------------------------------------------------------
       # 5. Print combined summary (all six systems side-by-side)
+      #    continue-on-error: this step is a REPORT, not a producer of
+      #    state. On 2026-08-28 it raised on an unformattable cell and
+      #    took Mark-to-market, Commit and the Telegram summary down with
+      #    it -- a display bug silently cost a day of committed state.
+      #    A broken report must never block persistence again; the failure
+      #    is surfaced by the alert step below instead.
       # ------------------------------------------------------------------
       - name: Print combined T9B summary
+        id: summary
+        continue-on-error: true
         run: python engines/t9b_combined_summary.py
 
       # ------------------------------------------------------------------
@@ -207,6 +217,7 @@ jobs:
       #     Writes equity_curve.csv + mtm_positions.csv per strategy.
       # ------------------------------------------------------------------
       - name: Mark-to-market
+        id: mtm
         continue-on-error: true
         run: python .github/scripts/mark_to_market.py
 
@@ -216,6 +227,7 @@ jobs:
       #     problem never fails the run. Idempotent via data/auto_orders ledger.
       # ------------------------------------------------------------------
       - name: Auto-execute accepted signals
+        id: autoexec
         continue-on-error: true
         env:
           AUTO_EXECUTE_ENABLED: ${{ vars.AUTO_EXECUTE_ENABLED }}
@@ -234,6 +246,8 @@ jobs:
       #    Uses --force to commit files in .gitignore-adjacent directories.
       # ------------------------------------------------------------------
       - name: Commit output files
+        id: commit
+        continue-on-error: true
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -271,14 +285,41 @@ jobs:
           else
             TODAY=$(date -u +%Y-%m-%d)
             git commit -m "T9B: daily update ${TODAY} [skip ci]"
-            git pull --rebase origin ${{ github.ref_name }} || true
-            git push origin ${{ github.ref_name }}
+
+            # T9B and T9-candidates run minutes apart and both push to the
+            # same branch, so a non-fast-forward here is routine, not an
+            # error. The old "pull --rebase || true; push" aborted with
+            # "cannot pull with rebase: You have unstaged changes" (the
+            # engines leave unstaged files this step never adds), the
+            # || true swallowed it, and the push then failed -- which is
+            # why exactly one of the two workflows went red most days.
+            # autostash handles the unstaged files; retry handles the race.
+            pushed=0
+            for attempt in 1 2 3 4 5; do
+              if git push origin ${{ github.ref_name }}; then
+                pushed=1
+                break
+              fi
+              echo "push attempt ${attempt} failed (likely concurrent push) -- rebasing and retrying"
+              git -c rebase.autoStash=true pull --rebase origin ${{ github.ref_name }} || {
+                echo "rebase failed on attempt ${attempt}"
+                sleep $((attempt * 5))
+                continue
+              }
+              sleep $((attempt * 5))
+            done
+            if [ "${pushed}" != "1" ]; then
+              echo "ERROR: could not push output files after 5 attempts"
+              exit 1
+            fi
           fi
 
       # ------------------------------------------------------------------
       # 7. Create GitHub issues for new signals (all three systems)
       # ------------------------------------------------------------------
       - name: Create issues for new signals
+        id: issues
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -290,6 +331,7 @@ jobs:
       #     No-ops if the TELEGRAM_* secrets are not configured.
       # ------------------------------------------------------------------
       - name: Send Telegram summary
+        id: telegram
         continue-on-error: true
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -299,7 +341,7 @@ jobs:
       # ------------------------------------------------------------------
       # 8. Report engine exit statuses for visibility
       # ------------------------------------------------------------------
-      - name: Report engine statuses
+      - name: Report step statuses
         if: always()
         run: |
           echo "Engine exit statuses:"
@@ -310,17 +352,15 @@ jobs:
           echo "  MACross     : ${{ steps.engine_mac.outcome }}"
           echo "  Momentum    : ${{ steps.engine_mom.outcome }}"
           echo "  RSI MR Fund : ${{ steps.engine_s8.outcome }}"
-          if [ "${{ steps.engine_donchian.outcome }}" = "failure" ] || \
-             [ "${{ steps.engine_mr.outcome }}" = "failure" ] || \
-             [ "${{ steps.engine_cd.outcome }}" = "failure" ] || \
-             [ "${{ steps.engine_vc.outcome }}" = "failure" ] || \
-             [ "${{ steps.engine_mac.outcome }}" = "failure" ] || \
-             [ "${{ steps.engine_mom.outcome }}" = "failure" ] || \
-             [ "${{ steps.engine_s8.outcome }}" = "failure" ]; then
-            echo "WARNING: one or more engines failed -- check logs above"
-          else
-            echo "All engines completed successfully"
-          fi
+          echo "Pipeline step statuses:"
+          echo "  RefreshData : ${{ steps.refresh_data.outcome }}"
+          echo "  Regime      : ${{ steps.regime.outcome }}"
+          echo "  Summary     : ${{ steps.summary.outcome }}"
+          echo "  MarkToMarket: ${{ steps.mtm.outcome }}"
+          echo "  AutoExecute : ${{ steps.autoexec.outcome }}"
+          echo "  Commit      : ${{ steps.commit.outcome }}"
+          echo "  Issues      : ${{ steps.issues.outcome }}"
+          echo "  Telegram    : ${{ steps.telegram.outcome }}"
 
       # ------------------------------------------------------------------
       # 9. Alert on step failures continue-on-error would otherwise hide.
@@ -331,8 +371,34 @@ jobs:
         if: always()
         env:
           WORKFLOW_LABEL: "T9B Daily"
-          STEP_OUTCOMES: "Donchian=${{ steps.engine_donchian.outcome }},RSI-MR=${{ steps.engine_mr.outcome }},ConsecDown=${{ steps.engine_cd.outcome }},VolContraction=${{ steps.engine_vc.outcome }},MACross=${{ steps.engine_mac.outcome }},Momentum=${{ steps.engine_mom.outcome }},RSI-MR-Funding=${{ steps.engine_s8.outcome }}"
+          # Every step with an id belongs here. The engine steps alone were
+          # listed until 2026-08-28, when the summary step crashed and took
+          # Mark-to-market / Commit / Telegram with it while this alert
+          # printed "all steps OK" -- the silent failure the alert exists
+          # to catch. Adding a step without adding it here re-opens that hole.
+          STEP_OUTCOMES: "Donchian=${{ steps.engine_donchian.outcome }},RSI-MR=${{ steps.engine_mr.outcome }},ConsecDown=${{ steps.engine_cd.outcome }},VolContraction=${{ steps.engine_vc.outcome }},MACross=${{ steps.engine_mac.outcome }},Momentum=${{ steps.engine_mom.outcome }},RSI-MR-Funding=${{ steps.engine_s8.outcome }},RefreshData=${{ steps.refresh_data.outcome }},Regime=${{ steps.regime.outcome }},Summary=${{ steps.summary.outcome }},MarkToMarket=${{ steps.mtm.outcome }},AutoExecute=${{ steps.autoexec.outcome }},Commit=${{ steps.commit.outcome }},Issues=${{ steps.issues.outcome }},Telegram=${{ steps.telegram.outcome }}"
           RUN_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python .github/scripts/check_workflow_failures.py
+
+      # ------------------------------------------------------------------
+      # 10. Fail the job if any step failed.
+      #     Everything above is continue-on-error so one broken step can
+      #     never again stop the rest of the pipeline -- but that would
+      #     leave the job green and the Actions list would stop showing
+      #     trouble at a glance. This restores the red X without
+      #     restoring the "one failure kills the run" behaviour.
+      # ------------------------------------------------------------------
+      - name: Fail job if any step failed
+        if: always()
+        env:
+          OUTCOMES: "${{ steps.engine_donchian.outcome }} ${{ steps.engine_mr.outcome }} ${{ steps.engine_cd.outcome }} ${{ steps.engine_vc.outcome }} ${{ steps.engine_mac.outcome }} ${{ steps.engine_mom.outcome }} ${{ steps.engine_s8.outcome }} ${{ steps.refresh_data.outcome }} ${{ steps.regime.outcome }} ${{ steps.summary.outcome }} ${{ steps.mtm.outcome }} ${{ steps.autoexec.outcome }} ${{ steps.commit.outcome }} ${{ steps.issues.outcome }} ${{ steps.telegram.outcome }}"
+        run: |
+          for outcome in ${OUTCOMES}; do
+            if [ "${outcome}" = "failure" ]; then
+              echo "At least one step failed -- see 'Report step statuses' above."
+              exit 1
+            fi
+          done
+          echo "All steps completed successfully."
