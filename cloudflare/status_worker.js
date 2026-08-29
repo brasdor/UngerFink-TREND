@@ -139,6 +139,8 @@ export default {
       await sendMessage(env.BOT_TOKEN, chatId, moves);
     } else if (command === "/systems") {
       await sendMessage(env.BOT_TOKEN, chatId, systemsHelp());
+    } else if (command === "/diag") {
+      await sendMessage(env.BOT_TOKEN, chatId, await buildDiag());
     } else if (command === "/start" || command === "/help") {
       await sendMessage(env.BOT_TOKEN, chatId,
         "Commands:\n" +
@@ -513,17 +515,34 @@ async function fetchTickers(symbols) {
   return { tickers, errors };
 }
 
-/** Symbols we currently hold, in position order, de-duplicated. */
+/**
+ * Symbols we currently hold, de-duplicated, with the last price the daily
+ * workflow marked them at.
+ *
+ * That marked price is the fallback when Binance is unreachable. It is the
+ * same number /pnl reports -- mark_to_market.py computed it from OHLCV files
+ * committed in the repo -- so it needs no exchange call and cannot be
+ * blocked. It is a daily close, not a live quote, and is labelled as such
+ * wherever it is shown.
+ *
+ * Reads mtm_positions.csv, falling back to open_positions.csv (which carries
+ * current_price for the momentum-style engines) when mark-to-market has not
+ * run for that system.
+ */
 async function heldSymbols(env) {
-  const seen = new Map();   // normalized symbol -> [system labels]
+  const seen = new Map();   // normalized symbol -> { systems: [], marked: number|null }
   for (const [label, dir] of POSITION_DIRS) {
-    const csv = await ghFile(env, `${dir}/open_positions.csv`);
+    let csv = await ghFile(env, `${dir}/mtm_positions.csv`);
+    if (!csv) csv = await ghFile(env, `${dir}/open_positions.csv`);
     if (!csv) continue;
     for (const row of parseCsv(csv)) {
       const sym = normalizeSymbol(row.symbol);
       if (!sym) continue;
-      if (!seen.has(sym)) seen.set(sym, []);
-      seen.get(sym).push(label.split(" ")[0]);   // "S7 MACross" -> "S7"
+      if (!seen.has(sym)) seen.set(sym, { systems: [], marked: null });
+      const entry = seen.get(sym);
+      entry.systems.push(label.split(" ")[0]);   // "S7 MACross" -> "S7"
+      const marked = parseFloat(row.current_price);
+      if (isFinite(marked) && marked > 0) entry.marked = marked;
     }
   }
   return seen;
@@ -538,7 +557,9 @@ async function resolveSymbols(env, args) {
     const explicit = new Map();
     for (const a of args) {
       const sym = normalizeSymbol(a);
-      if (sym && !explicit.has(sym)) explicit.set(sym, []);
+      // No marked price for an arbitrary symbol we do not hold -- those can
+      // only come from a live source.
+      if (sym && !explicit.has(sym)) explicit.set(sym, { systems: [], marked: null });
     }
     return { symbolMap: explicit, fromPositions: false };
   }
@@ -655,6 +676,44 @@ async function buildSystem(env, sys) {
   return lines.join("\n");
 }
 
+/**
+ * Report which external price sources this Worker can actually reach.
+ *
+ * Binance answers 403 to Cloudflare's datacenter IPs, and every candidate
+ * replacement works fine from a residential IP, so testing locally proves
+ * nothing about what the edge can do. This probes each candidate from inside
+ * the Worker and reports the status, so the choice of source is made on
+ * evidence rather than on a third guess.
+ */
+async function buildDiag() {
+  const probes = [
+    ["binance spot", "https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT"],
+    ["binance vision", "https://data-api.binance.vision/api/v3/ticker/24hr?symbol=BTCUSDT"],
+    ["binance gcp", "https://api-gcp.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT"],
+    ["binance futures", "https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=BTCUSDT"],
+    ["bybit", "https://api.bybit.com/v5/market/tickers?category=spot&symbol=BTCUSDT"],
+    ["okx", "https://www.okx.com/api/v5/market/ticker?instId=BTC-USDT"],
+    ["coingecko", "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true"],
+    ["kraken", "https://api.kraken.com/0/public/Ticker?pair=XBTUSDT"],
+  ];
+
+  const lines = ["\u{1F527} <b>Source reachability</b> — from this Worker", ""];
+  for (const [label, url] of probes) {
+    let verdict;
+    try {
+      const res = await fetch(url, { headers: { "User-Agent": "UngerFink-Worker" } });
+      verdict = res.ok ? `\u{2705} ${res.status}` : `\u{274C} ${res.status}`;
+    } catch (e) {
+      verdict = `\u{274C} ${String(e).slice(0, 40)}`;
+    }
+    lines.push(`  ${verdict}  ${label}`);
+  }
+  lines.push("", "<i>A green line is a source /price can use. Binance is " +
+                 "expected to be blocked here (403) while working fine from " +
+                 "a home connection.</i>");
+  return lines.join("\n");
+}
+
 function systemsHelp() {
   const lines = ["\u{1F5C2} <b>Per-system commands</b>", ""];
   for (const s of SYSTEM_REGISTRY) {
@@ -688,20 +747,35 @@ async function buildPrice(env, args) {
   if (errors.length) lines.push(`\u{26A0} <i>${errors.join(" | ")}</i>`);
   lines.push("");
 
+  let usedMarked = 0;
   for (const sym of capped) {
     const t = tickers[sym];
-    const held = symbolMap.get(sym) || [];
-    const heldTxt = held.length ? `  <i>${[...new Set(held)].join(",")}</i>` : "";
-    if (!t) {
+    const info = symbolMap.get(sym) || { systems: [], marked: null };
+    const heldTxt = info.systems.length
+      ? `  <i>${[...new Set(info.systems)].join(",")}</i>` : "";
+
+    if (t) {
+      const pct = parseFloat(t.priceChangePercent);
+      const arrow = pct >= 0 ? "\u{2B06}" : "\u{2B07}";
+      lines.push(
+        `  <code>${displaySymbol(sym)}</code>: $${fmtPrice(t.lastPrice)}  ` +
+        `${signed(pct, 2)}% ${arrow}${heldTxt}`
+      );
+    } else if (info.marked !== null) {
+      // Live quote unavailable -- show the price the daily run marked this
+      // position at, flagged so it is never mistaken for a live number.
+      usedMarked += 1;
+      lines.push(
+        `  <code>${displaySymbol(sym)}</code>: $${fmtPrice(info.marked)}  ` +
+        `<i>marked</i>${heldTxt}`
+      );
+    } else {
       lines.push(`  <code>${displaySymbol(sym)}</code>: n/a${heldTxt}`);
-      continue;
     }
-    const pct = parseFloat(t.priceChangePercent);
-    const arrow = pct >= 0 ? "\u{2B06}" : "\u{2B07}";
-    lines.push(
-      `  <code>${displaySymbol(sym)}</code>: $${fmtPrice(t.lastPrice)}  ` +
-      `${signed(pct, 2)}% ${arrow}${heldTxt}`
-    );
+  }
+  if (usedMarked > 0) {
+    lines.push(`\n<i>${usedMarked} shown as “marked” — last daily close from ` +
+               `mark-to-market, not a live quote (live source unreachable).</i>`);
   }
 
   if (symbols.length > capped.length) {
@@ -747,12 +821,20 @@ async function build24h(env, args) {
 
   for (const { sym, t, pct } of rows) {
     const arrow = pct >= 0 ? "\u{2B06}" : "\u{2B07}";
-    const held = symbolMap.get(sym) || [];
-    const heldTxt = held.length ? `  <i>${[...new Set(held)].join(",")}</i>` : "";
+    const info = symbolMap.get(sym) || { systems: [] };
+    const heldTxt = info.systems.length
+      ? `  <i>${[...new Set(info.systems)].join(",")}</i>` : "";
     lines.push(
       `  <code>${displaySymbol(sym)}</code>: ${signed(pct, 2)}% ${arrow}  ` +
       `$${fmtPrice(t.lastPrice)}  <i>(l $${fmtPrice(t.lowPrice)} / h $${fmtPrice(t.highPrice)})</i>${heldTxt}`
     );
+  }
+  // /24h has no fallback: a 24-hour change cannot be derived from a single
+  // marked close, so an unreachable source means no rows rather than stale
+  // ones presented as current.
+  if (rows.length === 0 && errors.length) {
+    lines.push("  <i>No 24h data — the live price source is unreachable. " +
+               "/price still works and falls back to the last marked close.</i>");
   }
 
   const unresolved = capped.filter((s) => !tickers[s]);
