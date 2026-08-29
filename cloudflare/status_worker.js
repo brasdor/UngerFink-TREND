@@ -525,20 +525,31 @@ async function fetchTickers(symbols) {
     if (remaining.length > 0) {
       spot = await fetchSpotBatch(remaining);
 
-      // Still rejected: something in the remainder is delisted or unknown to
-      // both venues. Fall back to small batches so one bad symbol costs its
-      // own group rather than every coin in the reply.
+      // Still rejected: something in the remainder is unknown to spot and
+      // futures could not tell us which (its host is blocked too). Bisect to
+      // isolate the offenders, so the good symbols still resolve.
+      //
+      // Fixed-size chunking is not enough here: with fewer symbols than the
+      // chunk size everything lands in one group that still contains the bad
+      // entry, and nothing is gained. Halving always converges on it.
       if (!spot.ok) {
-        const CHUNK = 8;
-        for (let i = 0; i < remaining.length; i += CHUNK) {
-          const group = remaining.slice(i, i + CHUNK);
+        let budget = 24;   // cap requests; a Worker gets 50 subrequests total
+        const resolve = async (group) => {
+          if (group.length === 0 || budget <= 0) return;
+          budget -= 1;
           const part = await fetchSpotBatch(group);
           if (part.ok) {
             for (const row of part.rows) tickers[row.symbol] = { ...row, venue: "spot" };
+            return;
           }
-        }
-        const stillMissing = symbols.filter((s) => !tickers[s]);
-        if (stillMissing.length === symbols.length) {
+          if (group.length === 1) return;   // this one symbol is the bad one
+          const mid = Math.floor(group.length / 2);
+          await resolve(group.slice(0, mid));
+          await resolve(group.slice(mid));
+        };
+        await resolve(remaining);
+
+        if (Object.keys(tickers).length === 0) {
           errors.push(`spot unreachable — ${spot.tried.join(", ")}`);
         }
         return { tickers, errors };

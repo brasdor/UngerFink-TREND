@@ -86,5 +86,26 @@ check("no stray symbols leak into the map beyond those requested",
 check("an invalid symbol does not resolve", !mixed.tickers["NOTAREALCOINUSDT"],
       "and does not take the batch down with it");
 
+// The hardest case, and the one CI actually runs in: a batch containing
+// symbols spot rejects, while fapi is ALSO unreachable so it cannot say which
+// ones. Only bisection can isolate them. Simulated here by failing every fapi
+// request, because from an unblocked IP fapi works and this path never runs.
+console.log("\nfutures blocked + invalid symbols (the CI condition)");
+const realFetch = globalThis.fetch;
+globalThis.fetch = async (url, opts) =>
+  String(url).includes("fapi.binance.com")
+    ? { ok: false, status: 451, json: async () => null }
+    : realFetch(url, opts);
+
+const degraded = await fetchTickers([...SPOT, ...FUTURES_ONLY, "NOTAREALCOINUSDT"]);
+globalThis.fetch = realFetch;
+
+const spotOk = SPOT.filter((s) => degraded.tickers[s]).length;
+check("spot symbols still resolve without futures", spotOk === SPOT.length,
+      `${spotOk}/${SPOT.length} via bisection`);
+check("the invalid symbol is excluded", !degraded.tickers["NOTAREALCOINUSDT"]);
+console.log(`  note  futures-only unresolved as expected ` +
+            `(${FUTURES_ONLY.filter((s) => degraded.tickers[s]).length}/${FUTURES_ONLY.length})`);
+
 console.log(failed ? "\nRESULT: FAIL\n" : "\nRESULT: PASS\n");
 process.exit(failed ? 1 : 0);
