@@ -1,1 +1,2 @@
 position_id,symbol,entry_date,as_of_date,entry_price,stop_loss,bars_held,bars_remaining,atr_at_entry,funding_at_entry,fast_ema_at_entry,slow_ema_at_entry,risk_amount_usdt,qty
+WOOUSDT_1787760000000,WOOUSDT,2026-08-26,2026-08-28,0.01136,0.01196572,8,27,0.00030286,0.01,0.01159676,0.0115972,18.8884,31183.33466974

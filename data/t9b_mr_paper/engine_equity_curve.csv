@@ -20,3 +20,4 @@ exit_date,symbol,entry_date,bars_held,gross_r,pnl_usdt,equity,dd_pct,exit_reason
 2026-08-06,REZUSDT,2026-07-17,20,0.407163,8.0631,10053.347,-0.301,time_exit_20bars
 2026-08-26,COWUSDT,2026-08-06,20,0.986919,19.5336,10072.8806,-0.1073,time_exit_20bars
 2026-08-26,MOVEUSDT,2026-08-06,20,0.653323,12.9309,10085.8115,0.0,time_exit_20bars
+2026-08-28,BIGTIMEUSDT,2026-08-07,21,1.262448,24.987,10110.7985,0.0,time_exit_20bars

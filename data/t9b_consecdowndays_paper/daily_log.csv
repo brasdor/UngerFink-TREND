@@ -1302,3 +1302,10 @@ run_date,event,symbol,detail
 2026-08-26,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system
 2026-08-26,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
 2026-08-26,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-08-28,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system
+2026-08-28,SIGNAL_SKIPPED,ETH/USDT,duplicate_cross_system
+2026-08-28,SIGNAL_SKIPPED,MORPHO/USDT,duplicate_cross_system
+2026-08-28,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
+2026-08-28,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system
+2026-08-28,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
+2026-08-28,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
