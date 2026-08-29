@@ -1,6 +1,6 @@
 {
   "system_name": "T9_CANDIDATE12_MOMENTUM",
-  "timestamp_utc": "2026-08-28T11:51:55.027834+00:00",
+  "timestamp_utc": "2026-08-29T08:12:28.551103+00:00",
   "status": "OK",
   "candidate_id": "12",
   "open_positions": 20,
@@ -10,6 +10,6 @@
   "reserved_margin_pct": 18.26598574464838,
   "entries_this_run": 0,
   "closes_this_run": 0,
-  "skipped_this_run": 0,
+  "skipped_this_run": 145,
   "paper_only": true
 }
