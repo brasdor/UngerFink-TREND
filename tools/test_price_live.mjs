@@ -61,7 +61,10 @@ for (const sym of FUTURES_ONLY) {
 }
 
 console.log("\nmixed batch, the shape /price actually sends");
-const requested = [...SPOT, ...FUTURES_ONLY];
+// A delisted/unknown symbol alongside the real ones: Binance rejects a whole
+// spot batch containing anything invalid, so this asserts one bad entry can no
+// longer take the entire reply down with it.
+const requested = [...SPOT, ...FUTURES_ONLY, "NOTAREALCOINUSDT"];
 const mixed = await fetchTickers(requested);
 // Count only what was asked for. fapi returns all 751 symbols regardless of
 // any filter, so Object.keys() on the whole map reports a meaningless 751.
@@ -80,6 +83,8 @@ console.log(`  note  ${futResolved}/${FUTURES_ONLY.length} futures-only resolved
 check("no stray symbols leak into the map beyond those requested",
       Object.keys(mixed.tickers).every((s) => requested.includes(s)),
       `map holds ${Object.keys(mixed.tickers).length} keys`);
+check("an invalid symbol does not resolve", !mixed.tickers["NOTAREALCOINUSDT"],
+      "and does not take the batch down with it");
 
 console.log(failed ? "\nRESULT: FAIL\n" : "\nRESULT: PASS\n");
 process.exit(failed ? 1 : 0);

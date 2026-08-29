@@ -476,6 +476,24 @@ async function fetchFirstReachable(hosts, path) {
   return { data: null, tried };
 }
 
+/** One spot request. ok:false means the whole batch was rejected. */
+async function fetchSpotBatch(symbols) {
+  const path = `/api/v3/ticker/24hr?symbols=${JSON.stringify(symbols)}`;
+  const res = await fetchFirstReachable(SPOT_HOSTS, path);
+  return { ok: Array.isArray(res.data), rows: res.data || [], tried: res.tried };
+}
+
+/** Pull the whole futures ticker list and index the symbols we want from it. */
+async function fetchFuturesInto(tickers, wantedList) {
+  const wanted = new Set(wantedList);
+  const res = await fetchFirstReachable(FUTURES_HOSTS, "/fapi/v1/ticker/24hr");
+  if (!Array.isArray(res.data)) return { ok: false, tried: res.tried };
+  for (const row of res.data) {
+    if (wanted.has(row.symbol)) tickers[row.symbol] = { ...row, venue: "futures" };
+  }
+  return { ok: true, tried: res.tried };
+}
+
 async function fetchTickers(symbols) {
   const tickers = {};
   const errors = [];
@@ -488,14 +506,47 @@ async function fetchTickers(symbols) {
   // surfaced as every coin showing "n/a". JSON.stringify is correct on both
   // counts: it emits no spaces, and fetch percent-encodes only the quotes
   // (to %22), a form Binance accepts.
-  const query = JSON.stringify(symbols);
+  // Binance rejects the ENTIRE batch with 400 "Invalid symbol" if even one
+  // entry is not a valid spot symbol -- verified 2026-08-28. The book holds
+  // futures-only names (BTCDOMUSDT, 1000RATSUSDT, AVAAIUSDT), so a single one
+  // of them made all 60 coins come back empty. This is what actually broke
+  // /price in production; the earlier encoding and host fixes were both real
+  // but neither was sufficient on their own.
+  let spot = await fetchSpotBatch(symbols);
 
-  const spot = await fetchFirstReachable(SPOT_HOSTS, `/api/v3/ticker/24hr?symbols=${query}`);
-  if (Array.isArray(spot.data)) {
-    for (const row of spot.data) tickers[row.symbol] = { ...row, venue: "spot" };
-  } else {
-    errors.push(`spot unreachable — ${spot.tried.join(", ")}`);
+  if (!spot.ok) {
+    // Most likely one or more symbols are futures-only. Resolve those from
+    // the futures list first -- one request removes the whole class of
+    // offenders -- then ask spot again for what is left.
+    const futFirst = await fetchFuturesInto(tickers, symbols);
+    if (!futFirst.ok) errors.push(`futures unreachable — ${futFirst.tried.join(", ")}`);
+
+    const remaining = symbols.filter((s) => !tickers[s]);
+    if (remaining.length > 0) {
+      spot = await fetchSpotBatch(remaining);
+
+      // Still rejected: something in the remainder is delisted or unknown to
+      // both venues. Fall back to small batches so one bad symbol costs its
+      // own group rather than every coin in the reply.
+      if (!spot.ok) {
+        const CHUNK = 8;
+        for (let i = 0; i < remaining.length; i += CHUNK) {
+          const group = remaining.slice(i, i + CHUNK);
+          const part = await fetchSpotBatch(group);
+          if (part.ok) {
+            for (const row of part.rows) tickers[row.symbol] = { ...row, venue: "spot" };
+          }
+        }
+        const stillMissing = symbols.filter((s) => !tickers[s]);
+        if (stillMissing.length === symbols.length) {
+          errors.push(`spot unreachable — ${spot.tried.join(", ")}`);
+        }
+        return { tickers, errors };
+      }
+    }
   }
+
+  for (const row of spot.rows) tickers[row.symbol] = { ...row, venue: "spot" };
 
   // Whatever spot did not return is either futures-only or delisted.
   //
@@ -507,15 +558,8 @@ async function fetchTickers(symbols) {
   // not, which is why spot is filtered server-side and futures is not.
   const missing = symbols.filter((s) => !tickers[s]);
   if (missing.length > 0) {
-    const fut = await fetchFirstReachable(FUTURES_HOSTS, "/fapi/v1/ticker/24hr");
-    if (Array.isArray(fut.data)) {
-      const wanted = new Set(missing);
-      for (const row of fut.data) {
-        if (wanted.has(row.symbol)) tickers[row.symbol] = { ...row, venue: "futures" };
-      }
-    } else {
-      errors.push(`futures unreachable — ${fut.tried.join(", ")}`);
-    }
+    const fut = await fetchFuturesInto(tickers, missing);
+    if (!fut.ok) errors.push(`futures unreachable — ${fut.tried.join(", ")}`);
   }
   return { tickers, errors };
 }
