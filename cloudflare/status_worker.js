@@ -235,71 +235,76 @@ async function buildStatus(env) {
     return "⚠️ status_snapshot.json exists but isn't valid JSON.";
   }
 
-  const lines = [`\u{1F4CA} <b>UngerFink /status</b>`,
-                 `<i>snapshot generated ${fmtUtc(snap.generated_utc)}</i>`, ""];
-
-  // --- Regime ---
   const r = snap.regime || {};
   const weights = r.weights || {};
-  lines.push(
-    `<b>Regime</b> (as of ${r.date || "?"}): trend=<b>${r.trend || "?"}</b>  ` +
-    `funding=<b>${r.funding || "?"}</b>  vol×${r.vol_multiplier ?? "?"}`
-  );
-  lines.push("");
-
-  // --- Systems ---
-  lines.push("<b>Systems</b>");
   const systems = snap.systems || {};
+
   let totalEquity = 0;
   let totalUnrealized = 0;
   let anyUnrealizedNA = false;
+  let killed = [];
+
+  // One row per system, columns aligned: name, equity, open count, unrealized.
+  const rows = [];
   for (const [sid, label] of STATUS_SYSTEM_ORDER) {
     // The candidates' id already reads as their name, so printing id + label
     // gave "Candidate12 Candidate 12". S1..S8 still want both.
-    const shown = sid.startsWith("Candidate")
-      ? `<code>${label}</code>`
-      : `<code>${sid}</code> ${label}`;
+    const name = sid.startsWith("Candidate") ? label.replace(" ", "") : `${sid} ${label}`;
     const s = systems[sid];
     if (!s) {
-      lines.push(`  ${shown}: no data`);
+      rows.push(padEnd(name, 14) + padStart("no data", 10));
       continue;
     }
     const w = weights[sid];
-    const wTxt = typeof w === "number" ? `  w=${(w * 100).toFixed(1)}%` : "";
-    const ks = s.kill_switch ? "  \u{1F6D1}<b>KILL-SWITCH</b>" : "";
-    const unrealTxt = typeof s.unrealized_pnl === "number"
-      ? `${money(s.unrealized_pnl, { signed: true })} unreal`
-      : (anyUnrealizedNA = true, "unreal n/a");
-    const todayTxt = typeof s.today_realized_pnl === "number"
-      ? `, ${money(s.today_realized_pnl, { signed: true })} today`
-      : "";
-    lines.push(
-      `  ${shown}: ${money(s.equity)}  ${s.open_positions} open  ` +
-      `${unrealTxt}${todayTxt}${wTxt}${ks}`
+    // No "$" in the cells -- the header names the columns and every value is
+    // USD, so the symbol only costs width that a phone does not have.
+    const unreal = typeof s.unrealized_pnl === "number"
+      ? signed(s.unrealized_pnl, 0)
+      : (anyUnrealizedNA = true, "n/a");
+    rows.push(
+      padEnd(name, 14) +
+      padStart(Math.round(s.equity || 0).toLocaleString("en-US"), 7) +
+      padStart(String(s.open_positions), 4) +
+      padStart(unreal, 8) +
+      padStart(typeof w === "number" ? `${(w * 100).toFixed(0)}%` : "-", 5)
     );
+    if (s.kill_switch) killed.push(sid);
     totalEquity += s.equity || 0;
     if (typeof s.unrealized_pnl === "number") totalUnrealized += s.unrealized_pnl;
   }
-  lines.push(
-    `<b>Total</b>: ${money(totalEquity)} equity, ${money(totalUnrealized, { signed: true })} unrealized` +
-    (anyUnrealizedNA ? " (partial — some systems n/a)" : "")
-  );
+
+  const lines = [`\u{1F4CA} <b>UngerFink status</b>`];
+  // Headline first: the two numbers that matter, then the regime, then detail.
+  const equityTxt = "$" + Math.round(totalEquity).toLocaleString("en-US");
+  const unrealTxt = signed(totalUnrealized, 0);
+  lines.push(`<b>${equityTxt}</b> equity · <b>${unrealTxt}</b> unrealized` +
+             (anyUnrealizedNA ? " <i>(partial)</i>" : ""));
+  lines.push(`<i>${r.trend || "?"} trend · ${r.funding || "?"} funding · ` +
+             `vol×${r.vol_multiplier ?? "?"} · as of ${r.date || "?"}</i>`);
+  if (killed.length) lines.push(`\u{1F6D1} <b>KILL-SWITCH: ${killed.join(", ")}</b>`);
+  lines.push("");
+  lines.push(preBlock([
+    padEnd("SYSTEM", 14) + padStart("EQUITY", 7) + padStart("OPN", 4) +
+    padStart("UNREAL", 8) + padStart("WGT", 5),
+    ...rows,
+  ]));
   lines.push("");
 
   // --- Alerts ---
   const a = snap.alerts || {};
   const missed = a.missed_runs || [];
   const issues = a.ohlcv_issues || [];
-  lines.push(`<b>Alerts</b> <i>(checked ${fmtUtc(a.checked_utc)})</i>`);
   if (missed.length === 0 && issues.length === 0) {
-    lines.push("  ✅ all clear");
+    lines.push("\u{2705} <b>Alerts</b> — all clear");
   } else {
-    for (const m of missed) lines.push(`  ⚠️ ${m.system}: ${m.detail}`);
-    for (const iss of issues) lines.push(`  ⚠️ ${iss}`);
+    lines.push(`\u{26A0} <b>Alerts</b> — ${missed.length + issues.length} open`);
+    for (const m of missed) lines.push(`  • ${m.system}: ${m.detail}`);
+    for (const iss of issues) lines.push(`  • ${iss}`);
   }
   if ((a.suppressed_symbols || []).length) {
-    lines.push(`  <i>(suppressed halted symbols excluded: ${a.suppressed_symbols.join(", ")})</i>`);
+    lines.push(`<i>suppressed (halted): ${a.suppressed_symbols.join(", ")}</i>`);
   }
+  lines.push(`<i>snapshot ${fmtUtc(snap.generated_utc)} · checked ${fmtUtc(a.checked_utc)}</i>`);
 
   return lines.join("\n");
 }
@@ -570,6 +575,39 @@ function signed(n, digits) {
   return `${n >= 0 ? "+" : ""}${n.toFixed(digits)}`;
 }
 
+/* ── layout ──────────────────────────────────────────────────────────────
+ *
+ * Telegram renders <pre> in a monospace font and preserves whitespace, which
+ * is the only way to get columns that line up. It does NOT wrap inside <pre>:
+ * an over-long line scrolls sideways instead, so rows are kept under ~34
+ * characters to fit a phone without horizontal scrolling.
+ *
+ * Symbols are alphanumeric and prices are digits, so nothing here needs HTML
+ * escaping; anything free-form must not be put inside these blocks.
+ */
+const ROW_WIDTH = 34;
+
+function padEnd(text, width) {
+  const s = String(text);
+  return s.length >= width ? s.slice(0, width) : s + " ".repeat(width - s.length);
+}
+
+function padStart(text, width) {
+  const s = String(text);
+  return s.length >= width ? s.slice(0, width) : " ".repeat(width - s.length) + s;
+}
+
+/** Wrap pre-formatted rows as one monospace block, or nothing if empty. */
+function preBlock(rows) {
+  return rows.length ? `<pre>${rows.join("\n")}</pre>` : "";
+}
+
+// Long symbols (1MBABYDOGE) would push every other column out of alignment.
+function shortSymbol(sym) {
+  const s = displaySymbol(sym);
+  return s.length > 11 ? s.slice(0, 10) + "…" : s;
+}
+
 // Crypto prices span ~8 orders of magnitude; a fixed precision is unreadable.
 function fmtPrice(value) {
   const n = parseFloat(value);
@@ -735,51 +773,57 @@ async function buildPrice(env, args) {
   const capped = symbols.slice(0, TELEGRAM_MAX_SYMBOLS);
   const { tickers, errors } = await fetchTickers(capped);
 
-  const now = new Date().toISOString().slice(0, 16).replace("T", " ") + " UTC";
-  const lines = [`\u{1F4B5} <b>Price</b> — ${now}`];
-  lines.push(fromPositions
-    ? `<i>coins currently held (${capped.length})</i>`
-    : `<i>requested (${capped.length})</i>`);
+  const now = new Date().toISOString().slice(11, 16) + " UTC";
+
+  // Build rows first so the header can report what actually resolved.
+  let live = 0;
+  let usedMarked = 0;
+  const rows = [];
+  for (const sym of capped) {
+    const t = tickers[sym];
+    const info = symbolMap.get(sym) || { systems: [], marked: null };
+    const tag = [...new Set(info.systems)].join(",");
+
+    let priceCell;
+    let changeCell;
+    if (t) {
+      live += 1;
+      priceCell = fmtPrice(t.lastPrice);
+      changeCell = signed(parseFloat(t.priceChangePercent), 1) + "%";
+    } else if (info.marked !== null) {
+      // Live quote unavailable -- show the price the daily run marked this
+      // position at, flagged so it is never mistaken for a live number.
+      usedMarked += 1;
+      priceCell = fmtPrice(info.marked);
+      changeCell = "mark";
+    } else {
+      priceCell = "n/a";
+      changeCell = "";
+    }
+    rows.push(padEnd(shortSymbol(sym), 12) + padStart(priceCell, 11) +
+              padStart(changeCell, 7) + (tag ? "  " + tag : ""));
+  }
+
+  const lines = [`\u{1F4B5} <b>Price</b> · ${now}`];
+  // Headline before detail: what you need at a glance, before 60 rows of it.
+  const summary = fromPositions
+    ? `${capped.length} held · ${live} live · ${usedMarked} marked`
+    : `${capped.length} requested · ${live} live`;
+  lines.push(`<i>${summary}</i>`);
   // Errors go at the TOP, not in a footer: a 60-coin reply is split across
   // messages, so a trailing diagnostic is the part nobody scrolls to -- which
   // is exactly what happened while every row said "n/a" and the reason sat
   // out of sight at the bottom.
   if (errors.length) lines.push(`\u{26A0} <i>${errors.join(" | ")}</i>`);
   lines.push("");
+  lines.push(preBlock([padEnd("SYMBOL", 12) + padStart("PRICE", 11) + padStart("24H", 7), ...rows]));
 
-  let usedMarked = 0;
-  for (const sym of capped) {
-    const t = tickers[sym];
-    const info = symbolMap.get(sym) || { systems: [], marked: null };
-    const heldTxt = info.systems.length
-      ? `  <i>${[...new Set(info.systems)].join(",")}</i>` : "";
-
-    if (t) {
-      const pct = parseFloat(t.priceChangePercent);
-      const arrow = pct >= 0 ? "\u{2B06}" : "\u{2B07}";
-      lines.push(
-        `  <code>${displaySymbol(sym)}</code>: $${fmtPrice(t.lastPrice)}  ` +
-        `${signed(pct, 2)}% ${arrow}${heldTxt}`
-      );
-    } else if (info.marked !== null) {
-      // Live quote unavailable -- show the price the daily run marked this
-      // position at, flagged so it is never mistaken for a live number.
-      usedMarked += 1;
-      lines.push(
-        `  <code>${displaySymbol(sym)}</code>: $${fmtPrice(info.marked)}  ` +
-        `<i>marked</i>${heldTxt}`
-      );
-    } else {
-      lines.push(`  <code>${displaySymbol(sym)}</code>: n/a${heldTxt}`);
-    }
-  }
   if (usedMarked > 0) {
-    lines.push(`\n<i>${usedMarked} shown as “marked” — last daily close from ` +
-               `mark-to-market, not a live quote (live source unreachable).</i>`);
+    lines.push(`\n<i>“mark” = last daily close from mark-to-market, ` +
+               `not a live quote.</i>`);
   }
-
   if (symbols.length > capped.length) {
-    lines.push(`\n<i>… ${symbols.length - capped.length} more not shown (message limit)</i>`);
+    lines.push(`<i>… ${symbols.length - capped.length} more not shown (message limit)</i>`);
   }
   if (fromPositions) lines.push(systemLegend());
   return lines.join("\n");
@@ -811,39 +855,37 @@ async function build24h(env, args) {
     .map((r) => ({ ...r, pct: parseFloat(r.t.priceChangePercent) || 0 }))
     .sort((a, b) => b.pct - a.pct);
 
-  const now = new Date().toISOString().slice(0, 16).replace("T", " ") + " UTC";
-  const lines = [`\u{1F4C9} <b>24h change</b> — ${now}`];
-  lines.push(fromPositions
-    ? `<i>coins currently held (${rows.length}), biggest mover first</i>`
-    : `<i>requested (${rows.length}), biggest mover first</i>`);
+  const now = new Date().toISOString().slice(11, 16) + " UTC";
+  const up = rows.filter((r) => r.pct > 0).length;
+
+  const lines = [`\u{1F4C9} <b>24h change</b> · ${now}`];
+  lines.push(rows.length
+    ? `<i>${rows.length} coins · ${up} up · ${rows.length - up} down</i>`
+    : "<i>no data</i>");
   if (errors.length) lines.push(`\u{26A0} <i>${errors.join(" | ")}</i>`);
   lines.push("");
 
-  for (const { sym, t, pct } of rows) {
-    const arrow = pct >= 0 ? "\u{2B06}" : "\u{2B07}";
+  const table = rows.map(({ sym, t, pct }) => {
     const info = symbolMap.get(sym) || { systems: [] };
-    const heldTxt = info.systems.length
-      ? `  <i>${[...new Set(info.systems)].join(",")}</i>` : "";
-    lines.push(
-      `  <code>${displaySymbol(sym)}</code>: ${signed(pct, 2)}% ${arrow}  ` +
-      `$${fmtPrice(t.lastPrice)}  <i>(l $${fmtPrice(t.lowPrice)} / h $${fmtPrice(t.highPrice)})</i>${heldTxt}`
-    );
-  }
+    const tag = [...new Set(info.systems)].join(",");
+    return padEnd(shortSymbol(sym), 12) + padStart(signed(pct, 1) + "%", 8) +
+           padStart(fmtPrice(t.lastPrice), 11) + (tag ? "  " + tag : "");
+  });
+  lines.push(preBlock([padEnd("SYMBOL", 12) + padStart("24H", 8) + padStart("PRICE", 11), ...table]));
+
   // /24h has no fallback: a 24-hour change cannot be derived from a single
   // marked close, so an unreachable source means no rows rather than stale
   // ones presented as current.
   if (rows.length === 0 && errors.length) {
-    lines.push("  <i>No 24h data — the live price source is unreachable. " +
-               "/price still works and falls back to the last marked close.</i>");
+    lines.push("<i>The live price source is unreachable. /price still works " +
+               "and falls back to the last marked close.</i>");
   }
 
   const unresolved = capped.filter((s) => !tickers[s]);
   if (unresolved.length) {
-    lines.push(`\n<i>no data: ${unresolved.map(displaySymbol).join(", ")}</i>`);
-  }
-  if (rows.length) {
-    const up = rows.filter((r) => r.pct > 0).length;
-    lines.push(`\n<b>${up} up / ${rows.length - up} down</b>`);
+    lines.push(`\n<i>no data (${unresolved.length}): ` +
+               `${unresolved.slice(0, 12).map(displaySymbol).join(", ")}` +
+               `${unresolved.length > 12 ? ", …" : ""}</i>`);
   }
   if (symbols.length > capped.length) {
     lines.push(`<i>… ${symbols.length - capped.length} more not shown (message limit)</i>`);
@@ -862,21 +904,36 @@ function chunkMessage(text, limit = TELEGRAM_LIMIT) {
   if (text.length <= limit) return [text];
   const chunks = [];
   let current = "";
+  // Tables are wrapped in <pre> for monospace alignment. Splitting mid-block
+  // would emit an unclosed tag, and Telegram rejects a message whose HTML
+  // does not parse -- so the reply would vanish entirely rather than arrive
+  // split. Track the block and close/reopen it across the boundary.
+  let insidePre = false;
+
+  const flush = () => {
+    if (!current) return;
+    chunks.push(insidePre ? `${current}\n</pre>` : current);
+    current = insidePre ? "<pre>" : "";
+  };
+
   for (const line of text.split("\n")) {
     // A single line longer than the limit is hard-sliced; nothing sane emits one.
     if (line.length > limit) {
-      if (current) { chunks.push(current); current = ""; }
+      flush();
       for (let i = 0; i < line.length; i += limit) chunks.push(line.slice(i, i + limit));
       continue;
     }
-    if (current.length + line.length + 1 > limit) {
-      chunks.push(current);
-      current = line;
-    } else {
-      current = current ? `${current}\n${line}` : line;
-    }
+    // Reserve room for the "\n</pre>" that flush() appends when a split
+    // lands inside a table; without it every such chunk overshoots the limit
+    // by exactly that tag's length.
+    const reserve = insidePre ? "\n</pre>".length : 0;
+    if (current.length + line.length + 1 + reserve > limit) flush();
+    current = current ? `${current}\n${line}` : line;
+
+    if (line.includes("<pre>")) insidePre = true;
+    if (line.includes("</pre>")) insidePre = false;
   }
-  if (current) chunks.push(current);
+  if (current && current !== "<pre>") chunks.push(current);
   return chunks;
 }
 
