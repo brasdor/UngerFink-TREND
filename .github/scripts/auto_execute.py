@@ -21,7 +21,11 @@ Ledger: data/auto_orders/placed.csv is an append-only BUY/SELL record (committed
 back). Our net open position per (strategy, symbol) is the replay of BUYs minus
 SELLs, which makes both entries and exits idempotent across re-runs.
 
-Never fails the workflow: any error is logged and the script exits 0.
+Exit codes: 0 when there is nothing to do, when the switches are off, or when
+Binance geo-blocks the host (see _geo_blocked -- that is the environment, not a
+defect). Anything else raises, because the previous "never fail" contract meant
+an 11-week outage went unnoticed: from 2026-06-11 every run died at
+load_markets() with HTTP 451 and the workflow still reported success.
 """
 from __future__ import annotations
 
@@ -64,6 +68,20 @@ def _enabled() -> bool:
 
 def _testnet() -> bool:
     return _env_bool("EXCHANGE_TESTNET", True)
+
+
+def _geo_blocked(exc: Exception) -> bool:
+    """True when Binance refused us for being in a restricted location.
+
+    ccxt raises ExchangeNotAvailable carrying the HTTP status and Binance's
+    body, e.g.
+        binance GET https://testnet.binance.vision/api/v3/exchangeInfo 451
+        {"code":0,"msg":"Service unavailable from a restricted location ..."}
+    Matching the message text as well as the status keeps this working if
+    Binance switches to 403, which it already returns to Cloudflare's edge.
+    """
+    text = str(exc)
+    return "451" in text or "403" in text or "restricted location" in text.lower()
 
 
 # --------------------------------------------------------------------------- #
@@ -226,7 +244,22 @@ def main() -> int:
     })
     if testnet:
         client.set_sandbox_mode(True)
-    client.load_markets()
+
+    # Binance answers 451 to datacenter IPs, and GitHub's runners are exactly
+    # that, so this is the environment rather than a defect and the job should
+    # not go red for it. It is still worth saying loudly: this exact call threw
+    # on EVERY run from 2026-06-11 onward, no order was ever placed, and the
+    # workflow reported success the whole time because the step was
+    # continue-on-error. Nothing else here runs without markets loaded.
+    try:
+        client.load_markets()
+    except Exception as exc:
+        if _geo_blocked(exc):
+            print(f"[AUTO] SKIPPED -- Binance refuses this runner's IP: {exc}")
+            print("[AUTO] No orders placed. Run from an unblocked host to auto-execute.")
+            return 0
+        raise
+
     print(f"[AUTO] enabled -- mode={'TESTNET (fake money)' if testnet else 'LIVE (REAL MONEY)'}  "
           f"risk={risk_pct}  cap={max_order} USDT")
 
