@@ -22,3 +22,4 @@ exit_date,symbol,entry_date,bars_held,gross_r,pnl_usdt,equity,dd_pct,exit_reason
 2026-08-26,FIDAUSDT,2026-07-30,27,1.095886,21.5753,10182.5978,0.0,time_exit_25bars
 2026-08-26,ATOMUSDT,2026-07-30,27,2.070689,41.035,10223.6328,0.0,time_exit_25bars
 2026-08-26,GRTUSDT,2026-07-31,26,2.382984,47.2238,10270.8566,0.0,time_exit_25bars
+2026-08-29,KAVAUSDT,2026-08-04,25,1.979787,39.2336,10310.0902,0.0,time_exit_25bars

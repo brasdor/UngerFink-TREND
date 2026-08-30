@@ -1,1 +1,2 @@
 symbol,signal_ts_ms,signal_close,stop_loss,ema_fast,ema_slow,atr,funding_rate
+CHZUSDT,1787947200000,0.01366,0.01443143,0.0140054,0.01401628,0.00038571,0.0001
