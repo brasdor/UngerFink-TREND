@@ -1,29 +1,12 @@
 {
   "system_name": "TREND_1D_DONCHIAN_EXITV2_T9B",
   "created_utc": "2026-05-30T22:46:19.996708+00:00",
-  "last_run_date": "2026-08-29",
-  "paper_equity_usdt": 9918.7214,
+  "last_run_date": "2026-08-30",
+  "paper_equity_usdt": 9926.1887,
   "peak_equity_usdt": 10000.0,
-  "drawdown_pct": -0.8128,
+  "drawdown_pct": -0.7381,
   "kill_switch_triggered": false,
   "open_positions": [
-    {
-      "position_id": "JST_USDT_20260627",
-      "symbol": "JST/USDT",
-      "entry_date": "2026-06-27",
-      "entry_price": 0.08596,
-      "initial_stop": 0.07826039,
-      "current_stop": 0.07826039,
-      "initial_risk_per_unit": 0.00769961,
-      "risk_amount_usdt": 6.533583984375002,
-      "qty": 848.5603796003957,
-      "highest_high_since_entry": 0.10989,
-      "max_favorable_r": 3.107949623422486,
-      "chandelier_active": false,
-      "chandelier_activated_date": null,
-      "atr_at_entry": 0.0038498,
-      "donchian_entry_level": 0.08479
-    },
     {
       "position_id": "ETH_USDT_20260819",
       "symbol": "ETH/USDT",
@@ -93,5 +76,5 @@
       "donchian_entry_level": 1.782
     }
   ],
-  "closed_trade_count": 2
+  "closed_trade_count": 3
 }

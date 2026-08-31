@@ -740,3 +740,7 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-08-29,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
 2026-08-29,SIGNAL_SKIPPED,ICX/USDT,duplicate_cross_system
 2026-08-29,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
+2026-08-30,EXIT,JST/USDT,"reason=donchian_exit  R=1.143  pnl=$7.47  equity=$9,926.19",1.142915,7.4673,9926.19,-0.74
+2026-08-30,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,
+2026-08-30,SIGNAL_SKIPPED,ICX/USDT,duplicate_cross_system,,,,
+2026-08-30,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system,,,,
