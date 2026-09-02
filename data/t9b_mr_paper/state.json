@@ -1,7 +1,7 @@
 {
   "system_name": "MR_RSI14_1D_T9B",
   "created_utc": "2026-06-01T09:28:48.389060+00:00",
-  "last_run_date": "2026-08-31",
+  "last_run_date": "2026-09-01",
   "paper_equity_usdt": 10122.885799999996,
   "peak_equity_usdt": 10122.885799999996,
   "drawdown_pct": 0.0,
@@ -16,7 +16,7 @@
       "initial_risk_per_unit": 0.00382113,
       "risk_amount_usdt": 26.3795697375,
       "qty": 6903.604362452992,
-      "bars_held": 11,
+      "bars_held": 12,
       "atr_at_entry": 0.00127371,
       "rsi_at_entry": 24.503
     },
@@ -29,7 +29,7 @@
       "initial_risk_per_unit": 2.98e-06,
       "risk_amount_usdt": 26.3795697375,
       "qty": 8852204.609899329,
-      "bars_held": 11,
+      "bars_held": 12,
       "atr_at_entry": 9.9e-07,
       "rsi_at_entry": 16.0674
     },
@@ -42,7 +42,7 @@
       "initial_risk_per_unit": 2.943e-05,
       "risk_amount_usdt": 26.3795697375,
       "qty": 896349.6343017329,
-      "bars_held": 11,
+      "bars_held": 12,
       "atr_at_entry": 9.81e-06,
       "rsi_at_entry": 21.8912
     },
@@ -55,7 +55,7 @@
       "initial_risk_per_unit": 0.00041849,
       "risk_amount_usdt": 26.3795697375,
       "qty": 63035.12566011135,
-      "bars_held": 11,
+      "bars_held": 12,
       "atr_at_entry": 0.0001395,
       "rsi_at_entry": 17.9655
     },
@@ -68,7 +68,7 @@
       "initial_risk_per_unit": 0.00392451,
       "risk_amount_usdt": 26.3795697375,
       "qty": 6721.748635498444,
-      "bars_held": 11,
+      "bars_held": 12,
       "atr_at_entry": 0.00130817,
       "rsi_at_entry": 23.9495
     },
@@ -81,7 +81,7 @@
       "initial_risk_per_unit": 4.104e-05,
       "risk_amount_usdt": 26.3795697375,
       "qty": 642777.0403874269,
-      "bars_held": 11,
+      "bars_held": 12,
       "atr_at_entry": 1.368e-05,
       "rsi_at_entry": 23.093
     },
@@ -94,9 +94,22 @@
       "initial_risk_per_unit": 0.01458324,
       "risk_amount_usdt": 35.30034025,
       "qty": 2420.610251905612,
-      "bars_held": 5,
+      "bars_held": 6,
       "atr_at_entry": 0.00486108,
       "rsi_at_entry": 23.6459
+    },
+    {
+      "position_id": "SUNUSDT_20260901",
+      "symbol": "SUNUSDT",
+      "entry_date": "2026-09-01",
+      "entry_price": 0.016009,
+      "stop_loss": 0.0148019,
+      "initial_risk_per_unit": 0.0012071,
+      "risk_amount_usdt": 44.28762537499998,
+      "qty": 36689.27626128737,
+      "bars_held": 0,
+      "atr_at_entry": 0.00040237,
+      "rsi_at_entry": 24.9237
     }
   ],
   "closed_trade_count": 32
