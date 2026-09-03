@@ -1,2 +1,1 @@
-symbol,signal_date,close,rsi,atr,stop_loss,risk_unit,signal
-SUNUSDT,2026-09-01,0.016009,24.9237,0.00040237,0.0148019,0.0012071,BUY_MR
+symbol,signal_date,close,rsi,atr,stop_loss,signal
