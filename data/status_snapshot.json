@@ -1,7 +1,7 @@
 {
-  "generated_utc": "2026-09-04T14:52:31.669241+00:00",
+  "generated_utc": "2026-09-05T13:45:10.553293+00:00",
   "regime": {
-    "date": "2026-09-03",
+    "date": "2026-09-04",
     "trend": "MIXED",
     "funding": "LOW",
     "vol_multiplier": 1.25,
@@ -22,9 +22,9 @@
       "open_positions": 4,
       "closed_trades": 3,
       "kill_switch": false,
-      "unrealized_pnl": 84.07000000000001,
+      "unrealized_pnl": 88.67,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-09-03"
+      "last_run_date": "2026-09-04"
     },
     "S2": {
       "label": "RSI-MR",
@@ -32,9 +32,9 @@
       "open_positions": 8,
       "closed_trades": 32,
       "kill_switch": false,
-      "unrealized_pnl": 8.370000000000001,
+      "unrealized_pnl": 4.890000000000001,
       "today_realized_pnl": -0.0,
-      "last_run_date": "2026-09-03"
+      "last_run_date": "2026-09-04"
     },
     "S3": {
       "label": "ConsecDown",
@@ -44,7 +44,7 @@
       "kill_switch": false,
       "unrealized_pnl": 0.0,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-09-03"
+      "last_run_date": "2026-09-04"
     },
     "S5": {
       "label": "Momentum",
@@ -52,29 +52,29 @@
       "open_positions": 30,
       "closed_trades": 6,
       "kill_switch": false,
-      "unrealized_pnl": 0.0,
-      "today_realized_pnl": 273.5939,
-      "last_run_date": "2026-09-04"
+      "unrealized_pnl": 163.61829999999998,
+      "today_realized_pnl": 0.0,
+      "last_run_date": "2026-09-05"
     },
     "S6": {
       "label": "VolContraction",
       "equity": 10208.7831,
-      "open_positions": 0,
+      "open_positions": 1,
       "closed_trades": 97,
       "kill_switch": false,
-      "unrealized_pnl": 0.0,
+      "unrealized_pnl": -15.7898,
       "today_realized_pnl": -0.0,
-      "last_run_date": "2026-09-03"
+      "last_run_date": "2026-09-04"
     },
     "S7": {
       "label": "MACross",
-      "equity": 9926.318,
-      "open_positions": 3,
-      "closed_trades": 107,
+      "equity": 9908.0836,
+      "open_positions": 0,
+      "closed_trades": 111,
       "kill_switch": false,
-      "unrealized_pnl": -6.3329,
-      "today_realized_pnl": 0.0,
-      "last_run_date": "2026-09-03"
+      "unrealized_pnl": 0.0,
+      "today_realized_pnl": -18.2344,
+      "last_run_date": "2026-09-04"
     },
     "S8": {
       "label": "RSI-MR-Funding",
@@ -82,9 +82,9 @@
       "open_positions": 2,
       "closed_trades": 24,
       "kill_switch": false,
-      "unrealized_pnl": 100.1298,
+      "unrealized_pnl": 100.3524,
       "today_realized_pnl": -0.0,
-      "last_run_date": "2026-09-03"
+      "last_run_date": "2026-09-04"
     },
     "Candidate12": {
       "label": "Candidate 12",
@@ -94,7 +94,7 @@
       "kill_switch": false,
       "unrealized_pnl": 3694.1,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-09-04"
+      "last_run_date": "2026-09-05"
     },
     "Candidate19": {
       "label": "Candidate 19",
@@ -104,11 +104,11 @@
       "kill_switch": false,
       "unrealized_pnl": 4337.75,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-09-04"
+      "last_run_date": "2026-09-05"
     }
   },
   "alerts": {
-    "checked_utc": "2026-09-04T14:52:31.689122+00:00",
+    "checked_utc": "2026-09-05T13:45:10.568652+00:00",
     "missed_runs": [],
     "ohlcv_issues": [],
     "suppressed_symbols": [
