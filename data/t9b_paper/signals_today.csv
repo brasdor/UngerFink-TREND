@@ -1,1 +1,2 @@
-symbol,signal_date,close,ema200,don_entry_high,atr,initial_stop,signal
+symbol,signal_date,close,ema200,don_entry_high,don_exit_low,atr,initial_stop,initial_risk_unit,signal
+JST/USDT,2026-09-05,0.11033,0.08386985,0.10989,0.09373,0.00370359,0.10292281,0.00740719,BUY

@@ -1,2 +1,1 @@
-symbol,signal_ts_ms,consec,comp_low,atr,ema200,signal_close,stop_loss,risk_unit,funding_rate,run_date
-ZEREBROUSDT,1788393600000,22,0.03669,0.00077814,0.03868951,0.036601,0.03815729,0.00155629,0.00017307,2026-09-04
+symbol,run_date,signal_ts_ms,signal_close,comp_low,consec,atr,ema200,funding_rate,stop_loss

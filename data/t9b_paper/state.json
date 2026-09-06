@@ -1,7 +1,7 @@
 {
   "system_name": "TREND_1D_DONCHIAN_EXITV2_T9B",
   "created_utc": "2026-05-30T22:46:19.996708+00:00",
-  "last_run_date": "2026-09-04",
+  "last_run_date": "2026-09-05",
   "paper_equity_usdt": 9926.1887,
   "peak_equity_usdt": 10000.0,
   "drawdown_pct": -0.7381,
@@ -68,12 +68,29 @@
       "initial_risk_per_unit": 0.18838855,
       "risk_amount_usdt": 18.6031819057875,
       "qty": 98.74900521176846,
-      "highest_high_since_entry": 2.197,
-      "max_favorable_r": 1.215572814802174,
+      "highest_high_since_entry": 2.289,
+      "max_favorable_r": 1.7039252120152748,
       "chandelier_active": false,
       "chandelier_activated_date": null,
       "atr_at_entry": 0.09419428,
       "donchian_entry_level": 1.782
+    },
+    {
+      "position_id": "JST_USDT_20260905",
+      "symbol": "JST/USDT",
+      "entry_date": "2026-09-05",
+      "entry_price": 0.11033,
+      "initial_stop": 0.10292281,
+      "current_stop": 0.10292281,
+      "initial_risk_per_unit": 0.00740719,
+      "risk_amount_usdt": 24.822916391525,
+      "qty": 3351.192070343139,
+      "highest_high_since_entry": 0.11033,
+      "max_favorable_r": 0.0,
+      "chandelier_active": false,
+      "chandelier_activated_date": null,
+      "atr_at_entry": 0.00370359,
+      "donchian_entry_level": 0.10989
     }
   ],
   "closed_trade_count": 3

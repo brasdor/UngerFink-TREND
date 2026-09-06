@@ -1370,3 +1370,17 @@ run_date,event,symbol,detail
 2026-09-04,SIGNAL_SKIPPED,XRP/USDT,duplicate_cross_system
 2026-09-04,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
 2026-09-04,SIGNAL_SKIPPED,ZEN/USDT,duplicate_cross_system
+2026-09-05,SIGNAL_SKIPPED,AAVE/USDT,duplicate_cross_system
+2026-09-05,SIGNAL_SKIPPED,ARB/USDT,duplicate_cross_system
+2026-09-05,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system
+2026-09-05,SIGNAL_SKIPPED,DASH/USDT,duplicate_cross_system
+2026-09-05,SIGNAL_SKIPPED,ENA/USDT,duplicate_cross_system
+2026-09-05,SIGNAL_SKIPPED,ETH/USDT,duplicate_cross_system
+2026-09-05,SIGNAL_SKIPPED,JTO/USDT,duplicate_cross_system
+2026-09-05,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
+2026-09-05,SIGNAL_SKIPPED,PENDLE/USDT,duplicate_cross_system
+2026-09-05,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system
+2026-09-05,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
+2026-09-05,SIGNAL_SKIPPED,XRP/USDT,duplicate_cross_system
+2026-09-05,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-09-05,SIGNAL_SKIPPED,ZEN/USDT,duplicate_cross_system

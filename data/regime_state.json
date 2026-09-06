@@ -1,8 +1,8 @@
 {
-  "date": "2026-09-04",
+  "date": "2026-09-05",
   "trend_regime": "MIXED",
   "funding_regime": "LOW",
-  "vol_multiplier": 1.25,
+  "vol_multiplier": 1.0,
   "weights": {
     "S1": 0.1429,
     "S2": 0.2,
@@ -13,12 +13,12 @@
     "S8": 0.1429
   },
   "allocator_version": "v4_ci",
-  "breadth_raw": 18.62,
-  "breadth_ema3": 17.8637,
+  "breadth_raw": 22.07,
+  "breadth_ema3": 19.9663,
   "funding_raw": 6.72e-06,
-  "funding_ema5": 6.86e-06,
+  "funding_ema5": 6.81e-06,
   "last_trend_switch": "2026-08-20",
   "last_funding_switch": "2026-01-01",
   "btc_above_ema200": true,
-  "vol_percentile": 77.4
+  "vol_percentile": 66.7
 }
