@@ -1,2 +1,1 @@
-symbol,signal_date,close,ema200,don_entry_high,don_exit_low,atr,initial_stop,initial_risk_unit,signal
-ZRX/USDT,2026-09-06,0.1063,0.10412636,0.1058,0.0924,0.00482783,0.09664434,0.00965566,BUY
+symbol,signal_date,close,ema200,don_entry_high,atr,initial_stop,signal
