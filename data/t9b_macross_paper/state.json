@@ -1,11 +1,11 @@
 {
   "system_name": "MACrossShort_4H_T9B",
   "created_utc": "2026-06-12T15:31:43.644778+00:00",
-  "last_run_date": "2026-09-08",
-  "last_processed_ts_ms": 1788811200000,
-  "paper_equity_usdt": 9908.0836,
+  "last_run_date": "2026-09-09",
+  "last_processed_ts_ms": 1788897600000,
+  "paper_equity_usdt": 9893.224,
   "peak_equity_usdt": 10160.890200000003,
-  "drawdown_pct": -2.488,
+  "drawdown_pct": -2.6343,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -18,27 +18,11 @@
       "initial_risk_per_unit": 62.77142858,
       "risk_amount_usdt": 14.8596,
       "qty": 0.23672631,
-      "bars_held": 14,
+      "bars_held": 20,
       "atr_at_entry": 31.38571429,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 5375.93645829,
       "slow_ema_at_entry": 5377.4215504
-    },
-    {
-      "position_id": "GTCUSDT_1788796800000",
-      "symbol": "GTCUSDT",
-      "entry_ts_ms": 1788796800000,
-      "entry_date": "2026-09-07",
-      "entry_price": 0.07997,
-      "stop_loss": 0.08245858,
-      "initial_risk_per_unit": 0.00248858,
-      "risk_amount_usdt": 14.8596,
-      "qty": 5971.1354986,
-      "bars_held": 2,
-      "atr_at_entry": 0.00124429,
-      "funding_at_entry": 0.0001,
-      "fast_ema_at_entry": 0.08139895,
-      "slow_ema_at_entry": 0.08143056
     },
     {
       "position_id": "PEOPLEUSDT_1788768000000",
@@ -50,7 +34,7 @@
       "initial_risk_per_unit": 0.00046442,
       "risk_amount_usdt": 14.8596,
       "qty": 31996.14224,
-      "bars_held": 4,
+      "bars_held": 10,
       "atr_at_entry": 0.00023221,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.00808973,
@@ -66,7 +50,7 @@
       "initial_risk_per_unit": 0.00160514,
       "risk_amount_usdt": 14.8596,
       "qty": 9257.54038844,
-      "bars_held": 4,
+      "bars_held": 10,
       "atr_at_entry": 0.00080257,
       "funding_at_entry": 0.00017307,
       "fast_ema_at_entry": 0.03821662,
@@ -74,5 +58,5 @@
     }
   ],
   "pending_entries": [],
-  "closed_trade_count": 111
+  "closed_trade_count": 112
 }

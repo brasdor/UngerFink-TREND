@@ -770,3 +770,6 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-09-08,ENTRY,VET/USDT,"price=0.008063  stop=0.00716715  risk=$24.82  qty=27708.787  equity=$9,926.19",0.008063,0.00716715,24.8229,9926.19
 2026-09-08,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,
 2026-09-08,SIGNAL_SKIPPED,ICX/USDT,duplicate_cross_system,,,,
+2026-09-09,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,
+2026-09-09,ENTRY,IOST/USDT,"price=0.001886  stop=0.0014901  risk=$24.82  qty=62699.966  equity=$9,926.19",0.001886,0.0014901,24.8229,9926.19
+2026-09-09,SIGNAL_SKIPPED,ICX/USDT,duplicate_cross_system,,,,
