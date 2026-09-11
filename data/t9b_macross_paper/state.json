@@ -1,8 +1,8 @@
 {
   "system_name": "MACrossShort_4H_T9B",
   "created_utc": "2026-06-12T15:31:43.644778+00:00",
-  "last_run_date": "2026-09-09",
-  "last_processed_ts_ms": 1788897600000,
+  "last_run_date": "2026-09-10",
+  "last_processed_ts_ms": 1788984000000,
   "paper_equity_usdt": 9893.224,
   "peak_equity_usdt": 10160.890200000003,
   "drawdown_pct": -2.6343,
@@ -18,7 +18,7 @@
       "initial_risk_per_unit": 62.77142858,
       "risk_amount_usdt": 14.8596,
       "qty": 0.23672631,
-      "bars_held": 20,
+      "bars_held": 26,
       "atr_at_entry": 31.38571429,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 5375.93645829,
@@ -34,7 +34,7 @@
       "initial_risk_per_unit": 0.00046442,
       "risk_amount_usdt": 14.8596,
       "qty": 31996.14224,
-      "bars_held": 10,
+      "bars_held": 16,
       "atr_at_entry": 0.00023221,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.00808973,
@@ -50,13 +50,42 @@
       "initial_risk_per_unit": 0.00160514,
       "risk_amount_usdt": 14.8596,
       "qty": 9257.54038844,
-      "bars_held": 10,
+      "bars_held": 16,
       "atr_at_entry": 0.00080257,
       "funding_at_entry": 0.00017307,
       "fast_ema_at_entry": 0.03821662,
       "slow_ema_at_entry": 0.0382194
+    },
+    {
+      "position_id": "WOOUSDT_1788969600000",
+      "symbol": "WOOUSDT",
+      "entry_ts_ms": 1788969600000,
+      "entry_date": "2026-09-09",
+      "entry_price": 0.01143,
+      "stop_loss": 0.01194572,
+      "initial_risk_per_unit": 0.00051572,
+      "risk_amount_usdt": 14.8374,
+      "qty": 28770.19059567,
+      "bars_held": 2,
+      "atr_at_entry": 0.00025786,
+      "funding_at_entry": 0.0001,
+      "fast_ema_at_entry": 0.01163217,
+      "slow_ema_at_entry": 0.01163901
     }
   ],
-  "pending_entries": [],
+  "pending_entries": [
+    {
+      "symbol": "GTCUSDT",
+      "signal_ts_ms": 1788984000000,
+      "signal_close": 0.07847,
+      "ema_fast": 0.08148548,
+      "ema_slow": 0.08151188,
+      "ema200": 0.08194682,
+      "atr": 0.00236357,
+      "stop_loss": 0.08319714,
+      "risk_unit": 0.00472714,
+      "funding_rate": 0.0001
+    }
+  ],
   "closed_trade_count": 112
 }

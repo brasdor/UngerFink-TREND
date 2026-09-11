@@ -1,1 +1,2 @@
 symbol,signal_ts_ms,signal_close,stop_loss,ema_fast,ema_slow,atr,funding_rate
+GTCUSDT,1788984000000,0.07847,0.08319714,0.08148548,0.08151188,0.00236357,0.0001

@@ -1,1 +1,3 @@
-symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss
+symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
+GTCUSDT,1788984000000,0.07847,0.08148548,0.08151188,0.08194682,0.00236357,0.08319714,0.00472714,0.0001,2026-09-10
+WOOUSDT,1788955200000,0.01143,0.01163217,0.01163901,0.01151998,0.00025786,0.01194571,0.00051571,0.0001,2026-09-10

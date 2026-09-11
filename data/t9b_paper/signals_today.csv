@@ -1,2 +1,2 @@
 symbol,signal_date,close,ema200,don_entry_high,don_exit_low,atr,initial_stop,initial_risk_unit,signal
-IOST/USDT,2026-09-09,0.001886,0.00099058,0.001189,0.000564,0.00019795,0.0014901,0.0003959,BUY
+VTHO/USDT,2026-09-10,0.000581,0.00052409,0.00046,0.00038,4.291e-05,0.00049518,8.582e-05,BUY
