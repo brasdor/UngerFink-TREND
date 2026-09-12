@@ -1,1 +1,2 @@
-symbol,signal_date,close,rsi,atr,funding,stop_loss,signal
+symbol,signal_date,close,rsi,atr,funding,stop_loss,risk_unit,signal
+RVNUSDT,2026-09-11,0.002235,19.7311,0.00023628,-0.0001593,0.00176245,0.00047255,BUY_MR_FUNDING

@@ -1,7 +1,7 @@
 {
   "system_name": "MR_RSI14_1D_T9B",
   "created_utc": "2026-06-01T09:28:48.389060+00:00",
-  "last_run_date": "2026-09-10",
+  "last_run_date": "2026-09-11",
   "paper_equity_usdt": 10105.359899999996,
   "peak_equity_usdt": 10122.885799999996,
   "drawdown_pct": -0.1731,
@@ -16,7 +16,7 @@
       "initial_risk_per_unit": 0.01458324,
       "risk_amount_usdt": 35.30034025,
       "qty": 2420.610251905612,
-      "bars_held": 15,
+      "bars_held": 16,
       "atr_at_entry": 0.00486108,
       "rsi_at_entry": 23.6459
     },
@@ -29,7 +29,7 @@
       "initial_risk_per_unit": 0.0012071,
       "risk_amount_usdt": 44.28762537499998,
       "qty": 36689.27626128737,
-      "bars_held": 9,
+      "bars_held": 10,
       "atr_at_entry": 0.00040237,
       "rsi_at_entry": 24.9237
     },
@@ -42,7 +42,7 @@
       "initial_risk_per_unit": 6.8e-07,
       "risk_amount_usdt": 35.36875964999999,
       "qty": 52012881.83823528,
-      "bars_held": 1,
+      "bars_held": 2,
       "atr_at_entry": 2.3e-07,
       "rsi_at_entry": 16.0674
     },
@@ -55,7 +55,7 @@
       "initial_risk_per_unit": 6.68e-06,
       "risk_amount_usdt": 35.36875964999999,
       "qty": 5294724.498502992,
-      "bars_held": 1,
+      "bars_held": 2,
       "atr_at_entry": 2.23e-06,
       "rsi_at_entry": 21.8912
     },
@@ -68,7 +68,7 @@
       "initial_risk_per_unit": 9.506e-05,
       "risk_amount_usdt": 35.36875964999999,
       "qty": 372067.7430044181,
-      "bars_held": 1,
+      "bars_held": 2,
       "atr_at_entry": 3.169e-05,
       "rsi_at_entry": 17.9655
     },
@@ -81,7 +81,7 @@
       "initial_risk_per_unit": 9.32e-06,
       "risk_amount_usdt": 35.36875964999999,
       "qty": 3794931.2929184535,
-      "bars_held": 1,
+      "bars_held": 2,
       "atr_at_entry": 3.11e-06,
       "rsi_at_entry": 23.093
     }

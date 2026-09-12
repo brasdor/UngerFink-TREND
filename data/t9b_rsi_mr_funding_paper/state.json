@@ -1,7 +1,7 @@
 {
   "system_name": "RSI_MR_Futures_FundingGate_1D_T9B",
   "created_utc": "2026-07-11T00:25:51.899513+00:00",
-  "last_run_date": "2026-09-10",
+  "last_run_date": "2026-09-11",
   "paper_equity_usdt": 10310.090199999999,
   "peak_equity_usdt": 10310.090199999999,
   "drawdown_pct": 0.0,
@@ -16,7 +16,7 @@
       "initial_risk_per_unit": 0.00020402,
       "risk_amount_usdt": 19.681731759374994,
       "qty": 96469.61944601017,
-      "bars_held": 23,
+      "bars_held": 24,
       "atr_at_entry": 0.00010201,
       "rsi_at_entry": 16.9258,
       "funding_at_entry": -1.818e-05
@@ -30,10 +30,24 @@
       "initial_risk_per_unit": 0.00254014,
       "risk_amount_usdt": 19.681731759374994,
       "qty": 7748.28622019849,
-      "bars_held": 23,
+      "bars_held": 24,
       "atr_at_entry": 0.00127007,
       "rsi_at_entry": 15.9438,
       "funding_at_entry": -4.142e-05
+    },
+    {
+      "position_id": "RVNUSDT_20260911",
+      "symbol": "RVNUSDT",
+      "entry_date": "2026-09-11",
+      "entry_price": 0.002235,
+      "stop_loss": 0.00176245,
+      "initial_risk_per_unit": 0.00047255,
+      "risk_amount_usdt": 25.782958067649997,
+      "qty": 54561.33333541423,
+      "bars_held": 0,
+      "atr_at_entry": 0.00023628,
+      "rsi_at_entry": 19.7311,
+      "funding_at_entry": -0.0001593
     }
   ],
   "closed_trade_count": 24
