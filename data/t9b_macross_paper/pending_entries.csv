@@ -1,2 +1,1 @@
 symbol,signal_ts_ms,signal_close,stop_loss,ema_fast,ema_slow,atr,funding_rate
-IOTAUSDT,1789070400000,0.03925,0.04167143,0.04124724,0.04130757,0.00121071,0.0001

@@ -1,1 +1,2 @@
-symbol,signal_date,close,ema200,don_entry_high,atr,initial_stop,signal
+symbol,signal_date,close,ema200,don_entry_high,don_exit_low,atr,initial_stop,initial_risk_unit,signal
+MTL/USDT,2026-09-12,0.315,0.27453288,0.301,0.228,0.01995736,0.27508528,0.03991472,BUY
