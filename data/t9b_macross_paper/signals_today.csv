@@ -1,3 +1,1 @@
-symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
-ALGOUSDT,1789113600000,0.08936,0.09529606,0.09546643,0.09015215,0.00326214,0.09588429,0.00652429,0.0001,2026-09-12
-CHZUSDT,1789084800000,0.01361,0.01390105,0.01390832,0.01387691,0.00038214,0.01437429,0.00076429,0.0001,2026-09-12
+symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss
