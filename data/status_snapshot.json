@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-15T11:14:34.936587+00:00",
+  "generated_utc": "2026-09-15T14:16:59.338916+00:00",
   "regime": {
     "date": "2026-09-14",
     "trend": "MIXED",
@@ -73,7 +73,7 @@
       "closed_trades": 124,
       "kill_switch": false,
       "unrealized_pnl": 5.0786,
-      "today_realized_pnl": -23.6937,
+      "today_realized_pnl": -0.0,
       "last_run_date": "2026-09-14"
     },
     "S8": {
@@ -108,7 +108,7 @@
     }
   },
   "alerts": {
-    "checked_utc": "2026-09-15T11:14:34.963304+00:00",
+    "checked_utc": "2026-09-15T14:16:59.474586+00:00",
     "missed_runs": [],
     "ohlcv_issues": [],
     "suppressed_symbols": [

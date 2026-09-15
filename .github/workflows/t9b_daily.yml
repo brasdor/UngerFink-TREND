@@ -265,6 +265,17 @@ jobs:
           git add --force data/t9b_momentum_paper/ || true
           git add --force data/t9b_rsi_mr_funding_paper/ || true
 
+          # Candidate 12/19 directories -- mark_to_market.py (step 5a above)
+          # writes fresh mtm_positions.csv/equity_curve.csv into these every
+          # run, but this add was missing entirely: the computation happened
+          # successfully and was then silently discarded when the runner
+          # tore down, since nothing ever committed it. Confirmed live --
+          # mtm_positions.csv for both candidates was stuck at 2026-08-24
+          # values (the one time it was committed manually) for three weeks
+          # of real daily runs before this fix.
+          git add --force data/t9_candidate12_paper/ || true
+          git add --force data/t9_candidate19_paper/ || true
+
           # Shared OHLCV caches (all engines read/write here)
           git add --force data/universe/ohlcv_1d/ || true
           git add --force data/futures_universe/ohlcv_4h/ || true
