@@ -1,2 +1,1 @@
-symbol,signal_date,close,ema200,don_entry_high,don_exit_low,atr,initial_stop,initial_risk_unit,signal
-QTUM/USDT,2026-09-13,0.965,0.89741723,0.935,0.813,0.04811125,0.86877751,0.09622249,BUY
+symbol,signal_date,close,ema200,don_entry_high,atr,initial_stop,signal
