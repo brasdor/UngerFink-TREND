@@ -1,63 +1,12 @@
 {
   "system_name": "TREND_1D_DONCHIAN_EXITV2_T9B",
   "created_utc": "2026-05-30T22:46:19.996708+00:00",
-  "last_run_date": "2026-09-14",
-  "paper_equity_usdt": 9926.1887,
+  "last_run_date": "2026-09-15",
+  "paper_equity_usdt": 9955.8781,
   "peak_equity_usdt": 10000.0,
-  "drawdown_pct": -0.7381,
+  "drawdown_pct": -0.4412,
   "kill_switch_triggered": false,
   "open_positions": [
-    {
-      "position_id": "ETH_USDT_20260819",
-      "symbol": "ETH/USDT",
-      "entry_date": "2026-08-19",
-      "entry_price": 2252.8,
-      "initial_stop": 2106.17811246,
-      "current_stop": 2106.17811246,
-      "initial_risk_per_unit": 146.62188754,
-      "risk_amount_usdt": 6.509160918750003,
-      "qty": 0.04439419671891917,
-      "highest_high_since_entry": 2665.99,
-      "max_favorable_r": 2.818064935136489,
-      "chandelier_active": false,
-      "chandelier_activated_date": null,
-      "atr_at_entry": 73.31094377,
-      "donchian_entry_level": 1943.02
-    },
-    {
-      "position_id": "BTC_USDT_20260820",
-      "symbol": "BTC/USDT",
-      "entry_date": "2026-08-20",
-      "entry_price": 73032.7578125,
-      "initial_stop": 69503.14104124,
-      "current_stop": 69503.14104124,
-      "initial_risk_per_unit": 3529.61677126,
-      "risk_amount_usdt": 18.6031819057875,
-      "qty": 0.005270595396436354,
-      "highest_high_since_entry": 82300.0,
-      "max_favorable_r": 2.625566113284244,
-      "chandelier_active": false,
-      "chandelier_activated_date": null,
-      "atr_at_entry": 1764.80838563,
-      "donchian_entry_level": 69996.953125
-    },
-    {
-      "position_id": "SOL_USDT_20260821",
-      "symbol": "SOL/USDT",
-      "entry_date": "2026-08-21",
-      "entry_price": 93.72,
-      "initial_stop": 87.51008793,
-      "current_stop": 87.51008793,
-      "initial_risk_per_unit": 6.20991207,
-      "risk_amount_usdt": 18.6031819057875,
-      "qty": 2.995723884023933,
-      "highest_high_since_entry": 110.0,
-      "max_favorable_r": 2.6216152203907135,
-      "chandelier_active": false,
-      "chandelier_activated_date": null,
-      "atr_at_entry": 3.10495604,
-      "donchian_entry_level": 88.1
-    },
     {
       "position_id": "NEAR_USDT_20260821",
       "symbol": "NEAR/USDT",
@@ -85,8 +34,8 @@
       "initial_risk_per_unit": 0.00740719,
       "risk_amount_usdt": 24.822916391525,
       "qty": 3351.192070343139,
-      "highest_high_since_entry": 0.11447,
-      "max_favorable_r": 0.5589164041964638,
+      "highest_high_since_entry": 0.1162,
+      "max_favorable_r": 0.7924732590901543,
       "chandelier_active": false,
       "chandelier_activated_date": null,
       "atr_at_entry": 0.00370359,
@@ -144,5 +93,5 @@
       "donchian_entry_level": 0.001189
     }
   ],
-  "closed_trade_count": 3
+  "closed_trade_count": 6
 }

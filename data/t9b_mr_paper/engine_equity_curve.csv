@@ -28,3 +28,4 @@ exit_date,symbol,entry_date,bars_held,gross_r,pnl_usdt,equity,dd_pct,exit_reason
 2026-09-09,HIGHUSDT,2026-08-20,20,0.0,0.0,10113.3588,-0.0941,time_exit_20bars
 2026-09-09,ICXUSDT,2026-08-20,20,-0.303223,-7.9989,10105.3599,-0.1731,time_exit_20bars
 2026-09-09,MBOXUSDT,2026-08-20,20,0.0,0.0,10105.3599,-0.1731,time_exit_20bars
+2026-09-15,SCRTUSDT,2026-08-26,20,0.0,0.0,10105.3599,-0.1731,time_exit_20bars

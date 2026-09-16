@@ -781,3 +781,7 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-09-13,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,
 2026-09-13,SIGNAL_SKIPPED,QTUM/USDT,portfolio cap 8 reached  (close=0.965),0.965
 2026-09-14,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-09-15,EXIT,ETH/USDT,"reason=donchian_exit  R=0.992  pnl=$6.46  equity=$9,932.65",0.992076,6.4576,9932.65,-0.67
+2026-09-15,EXIT,BTC/USDT,"reason=donchian_exit  R=0.740  pnl=$13.77  equity=$9,946.41",0.739945,13.7653,9946.41,-0.54
+2026-09-15,EXIT,SOL/USDT,"reason=donchian_exit  R=0.509  pnl=$9.47  equity=$9,955.88",0.508864,9.4665,9955.88,-0.44
+2026-09-15,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,
