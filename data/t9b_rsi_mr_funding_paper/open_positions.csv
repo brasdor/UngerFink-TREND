@@ -1,2 +1,2 @@
 position_id,symbol,entry_date,as_of_date,entry_price,stop_loss,bars_held,bars_remaining,rsi_at_entry,funding_at_entry,atr_at_entry,risk_amount_usdt,qty
-RVNUSDT_20260911,RVNUSDT,2026-09-11,2026-09-15,0.002235,0.00176245,4,21,19.7311,-0.0001593,0.00023628,25.783,54561.33333541423
+RVNUSDT_20260911,RVNUSDT,2026-09-11,2026-09-16,0.002235,0.00176245,5,20,19.7311,-0.0001593,0.00023628,25.783,54561.33333541423
