@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-17T11:14:59.439553+00:00",
+  "generated_utc": "2026-09-18T11:14:15.000998+00:00",
   "regime": {
     "date": "2026-09-16",
     "trend": "MIXED",
@@ -72,8 +72,8 @@
       "open_positions": 11,
       "closed_trades": 127,
       "kill_switch": false,
-      "unrealized_pnl": 100.5798,
-      "today_realized_pnl": 32.8093,
+      "unrealized_pnl": -9.0819,
+      "today_realized_pnl": 0.0,
       "last_run_date": "2026-09-16"
     },
     "S8": {
@@ -82,7 +82,7 @@
       "open_positions": 1,
       "closed_trades": 26,
       "kill_switch": false,
-      "unrealized_pnl": -7.2567,
+      "unrealized_pnl": -7.8023,
       "today_realized_pnl": -0.0,
       "last_run_date": "2026-09-16"
     },
@@ -94,7 +94,7 @@
       "kill_switch": false,
       "unrealized_pnl": 120.66000000000011,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-09-17"
+      "last_run_date": "2026-09-18"
     },
     "Candidate19": {
       "label": "Candidate 19",
@@ -104,11 +104,11 @@
       "kill_switch": false,
       "unrealized_pnl": 484.24,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-09-17"
+      "last_run_date": "2026-09-18"
     }
   },
   "alerts": {
-    "checked_utc": "2026-09-17T11:14:59.470258+00:00",
+    "checked_utc": "2026-09-18T11:14:15.028513+00:00",
     "missed_runs": [],
     "ohlcv_issues": [],
     "suppressed_symbols": [
