@@ -1,1 +1,2 @@
-symbol,signal_date,close,ema200,don_entry_high,atr,initial_stop,signal
+symbol,signal_date,close,ema200,don_entry_high,don_exit_low,atr,initial_stop,initial_risk_unit,signal
+SOL/USDT,2026-09-18,112.72,92.40118115,107.48,95.82,5.21366011,102.29267978,10.42732022,BUY
