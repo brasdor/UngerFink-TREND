@@ -789,3 +789,8 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-09-18,ENTRY,SOL/USDT,"price=112.72  stop=102.293  risk=$24.90  qty=2.3876856  equity=$9,955.88",112.72,102.29267978,24.8972,9955.88
 2026-09-18,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,
 2026-09-18,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system,,,,
+2026-09-19,RECONCILE_WARN,,NEAR/USDT: stop=2.4927471053988377 >= entry_price=1.968 (invalid for LONG)
+2026-09-19,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,
+2026-09-19,ENTRY,AVAX/USDT,"price=10.094  stop=9.10574  risk=$24.90  qty=25.192811  equity=$9,955.88",10.094,9.10573544,24.8972,9955.88
+2026-09-19,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system,,,,
+2026-09-19,ENTRY,CELR/USDT,"price=0.003347  stop=0.00287664  risk=$24.90  qty=52932.142  equity=$9,955.88",0.003347,0.00287664,24.8972,9955.88
