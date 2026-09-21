@@ -1,11 +1,11 @@
 {
   "system_name": "MACrossShort_4H_T9B",
   "created_utc": "2026-06-12T15:31:43.644778+00:00",
-  "last_run_date": "2026-09-19",
-  "last_processed_ts_ms": 1789761600000,
-  "paper_equity_usdt": 9724.401200000004,
+  "last_run_date": "2026-09-20",
+  "last_processed_ts_ms": 1789848000000,
+  "paper_equity_usdt": 9709.559300000004,
   "peak_equity_usdt": 10160.890200000003,
-  "drawdown_pct": -4.2958,
+  "drawdown_pct": -4.4418,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -18,7 +18,7 @@
       "initial_risk_per_unit": 0.00817,
       "risk_amount_usdt": 14.8126,
       "qty": 1813.04814214,
-      "bars_held": 7,
+      "bars_held": 13,
       "atr_at_entry": 0.004085,
       "funding_at_entry": 0.00033976,
       "fast_ema_at_entry": 0.07375608,
@@ -34,29 +34,13 @@
       "initial_risk_per_unit": 83.24285714,
       "risk_amount_usdt": 14.8126,
       "qty": 0.17794444,
-      "bars_held": 7,
+      "bars_held": 13,
       "atr_at_entry": 41.62142857,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 5226.74158345,
       "slow_ema_at_entry": 5227.13639476
-    },
-    {
-      "position_id": "IOTXUSDT_1789531200000",
-      "symbol": "IOTXUSDT",
-      "entry_ts_ms": 1789531200000,
-      "entry_date": "2026-09-16",
-      "entry_price": 0.00289,
-      "stop_loss": 0.003207,
-      "initial_risk_per_unit": 0.000317,
-      "risk_amount_usdt": 14.8419,
-      "qty": 46819.77505639,
-      "bars_held": 17,
-      "atr_at_entry": 0.0001585,
-      "funding_at_entry": 0.0001,
-      "fast_ema_at_entry": 0.00308156,
-      "slow_ema_at_entry": 0.00308446
     }
   ],
   "pending_entries": [],
-  "closed_trade_count": 145
+  "closed_trade_count": 146
 }
