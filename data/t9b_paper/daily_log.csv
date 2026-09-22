@@ -797,3 +797,11 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-09-20,RECONCILE_WARN,,NEAR/USDT: stop=2.4927471053988377 >= entry_price=1.968 (invalid for LONG)
 2026-09-20,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,
 2026-09-20,SIGNAL_SKIPPED,HBAR/USDT,portfolio cap 8 reached  (close=0.08653),0.08653
+2026-09-21,RECONCILE_WARN,,NEAR/USDT: stop=2.663542147002059 >= entry_price=1.968 (invalid for LONG)
+2026-09-21,SIGNAL_SKIPPED,FET/USDT,portfolio cap 8 reached  (close=0.205),0.205
+2026-09-21,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,
+2026-09-21,SIGNAL_SKIPPED,ADA/USDT,portfolio cap 8 reached  (close=0.2451),0.2451
+2026-09-21,SIGNAL_SKIPPED,DUSK/USDT,portfolio cap 8 reached  (close=0.0875),0.0875
+2026-09-21,SIGNAL_SKIPPED,ETH/USDT,portfolio cap 8 reached  (close=2776.19),2776.19
+2026-09-21,SIGNAL_SKIPPED,HBAR/USDT,portfolio cap 8 reached  (close=0.09336),0.09336
+2026-09-21,SIGNAL_SKIPPED,BTC/USDT,portfolio cap 8 reached  (close=86620),86620.0
