@@ -1,30 +1,13 @@
 {
   "system_name": "MACrossShort_4H_T9B",
   "created_utc": "2026-06-12T15:31:43.644778+00:00",
-  "last_run_date": "2026-09-23",
-  "last_processed_ts_ms": 1790107200000,
-  "paper_equity_usdt": 9680.184800000005,
+  "last_run_date": "2026-09-24",
+  "last_processed_ts_ms": 1790193600000,
+  "paper_equity_usdt": 9676.216600000005,
   "peak_equity_usdt": 10160.890200000003,
-  "drawdown_pct": -4.7309,
+  "drawdown_pct": -4.77,
   "kill_switch_triggered": false,
-  "open_positions": [
-    {
-      "position_id": "BTCDOMUSDT_1789675200000",
-      "symbol": "BTCDOMUSDT",
-      "entry_ts_ms": 1789675200000,
-      "entry_date": "2026-09-17",
-      "entry_price": 5179.0,
-      "stop_loss": 5262.24285714,
-      "initial_risk_per_unit": 83.24285714,
-      "risk_amount_usdt": 14.8126,
-      "qty": 0.17794444,
-      "bars_held": 31,
-      "atr_at_entry": 41.62142857,
-      "funding_at_entry": 0.0001,
-      "fast_ema_at_entry": 5226.74158345,
-      "slow_ema_at_entry": 5227.13639476
-    }
-  ],
+  "open_positions": [],
   "pending_entries": [],
-  "closed_trade_count": 148
+  "closed_trade_count": 149
 }

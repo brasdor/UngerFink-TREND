@@ -1,2 +1,1 @@
 position_id,symbol,entry_date,as_of_date,entry_price,stop_loss,bars_held,bars_remaining,atr_at_entry,funding_at_entry,fast_ema_at_entry,slow_ema_at_entry,risk_amount_usdt,qty
-BTCDOMUSDT_1789675200000,BTCDOMUSDT,2026-09-17,2026-09-23,5179.0,5262.24285714,31,4,41.62142857,0.01,5226.74158345,5227.13639476,14.8126,0.17794444
