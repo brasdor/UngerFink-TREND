@@ -1,1 +1,2 @@
-symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss
+symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
+ARCUSDT,1790337600000,0.0701,0.07523593,0.07532804,0.07250914,0.00305929,0.07621857,0.00611857,0.00033976,2026-09-26
