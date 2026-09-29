@@ -1,1 +1,2 @@
-symbol,signal_date,close,ema200,don_entry_high,atr,initial_stop,signal
+symbol,signal_date,close,ema200,don_entry_high,don_exit_low,atr,initial_stop,initial_risk_unit,signal
+HBAR/USDT,2026-09-28,0.12205,0.08731027,0.10133,0.07434,0.0075187,0.10701259,0.01503741,BUY
