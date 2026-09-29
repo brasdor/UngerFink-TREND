@@ -1,7 +1,7 @@
 {
-  "generated_utc": "2026-09-28T11:15:34.919345+00:00",
+  "generated_utc": "2026-09-29T11:15:21.335388+00:00",
   "regime": {
-    "date": "2026-09-27",
+    "date": "2026-09-28",
     "trend": "MIXED",
     "funding": "LOW",
     "vol_multiplier": 1.0,
@@ -22,9 +22,9 @@
       "open_positions": 8,
       "closed_trades": 6,
       "kill_switch": false,
-      "unrealized_pnl": 441.94,
+      "unrealized_pnl": 361.23,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-09-27"
+      "last_run_date": "2026-09-28"
     },
     "S2": {
       "label": "RSI-MR",
@@ -34,7 +34,7 @@
       "kill_switch": false,
       "unrealized_pnl": 0.0,
       "today_realized_pnl": -0.0,
-      "last_run_date": "2026-09-27"
+      "last_run_date": "2026-09-28"
     },
     "S3": {
       "label": "ConsecDown",
@@ -44,7 +44,7 @@
       "kill_switch": false,
       "unrealized_pnl": 0.0,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-09-27"
+      "last_run_date": "2026-09-28"
     },
     "S5": {
       "label": "Momentum",
@@ -52,9 +52,9 @@
       "open_positions": 29,
       "closed_trades": 7,
       "kill_switch": false,
-      "unrealized_pnl": 94.24500000000002,
+      "unrealized_pnl": -136.42350000000002,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-09-28"
+      "last_run_date": "2026-09-29"
     },
     "S6": {
       "label": "VolContraction",
@@ -64,7 +64,7 @@
       "kill_switch": false,
       "unrealized_pnl": 0.0,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-09-27"
+      "last_run_date": "2026-09-28"
     },
     "S7": {
       "label": "MACross",
@@ -72,9 +72,9 @@
       "open_positions": 1,
       "closed_trades": 149,
       "kill_switch": false,
-      "unrealized_pnl": -7.566,
+      "unrealized_pnl": -0.166,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-09-27"
+      "last_run_date": "2026-09-28"
     },
     "S8": {
       "label": "RSI-MR-Funding",
@@ -82,9 +82,9 @@
       "open_positions": 1,
       "closed_trades": 26,
       "kill_switch": false,
-      "unrealized_pnl": 11.076,
+      "unrealized_pnl": 3.2737,
       "today_realized_pnl": -0.0,
-      "last_run_date": "2026-09-27"
+      "last_run_date": "2026-09-28"
     },
     "Candidate12": {
       "label": "Candidate 12",
@@ -92,7 +92,7 @@
       "open_positions": 20,
       "closed_trades": 30,
       "kill_switch": false,
-      "unrealized_pnl": 3677.0,
+      "unrealized_pnl": 2650.4499999999994,
       "today_realized_pnl": 0.0,
       "last_run_date": "2026-09-28"
     },
@@ -102,13 +102,13 @@
       "open_positions": 20,
       "closed_trades": 39,
       "kill_switch": false,
-      "unrealized_pnl": 2898.62,
+      "unrealized_pnl": 1852.5700000000002,
       "today_realized_pnl": 0.0,
       "last_run_date": "2026-09-28"
     }
   },
   "alerts": {
-    "checked_utc": "2026-09-28T11:15:34.934178+00:00",
+    "checked_utc": "2026-09-29T11:15:21.346822+00:00",
     "missed_runs": [],
     "ohlcv_issues": [],
     "suppressed_symbols": [
