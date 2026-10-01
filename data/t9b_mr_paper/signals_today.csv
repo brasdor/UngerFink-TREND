@@ -1,5 +1,1 @@
-symbol,signal_date,close,rsi,atr,stop_loss,risk_unit,signal
-COSUSDT,2026-09-29,0.000485,16.0674,5e-08,0.00048485,1.5e-07,BUY_MR
-DUSDT,2026-09-29,0.005192,21.8912,5.1e-07,0.00519048,1.52e-06,BUY_MR
-HIGHUSDT,2026-09-29,0.0478,17.9655,7.2e-06,0.04777841,2.159e-05,BUY_MR
-MBOXUSDT,2026-09-29,0.0051,23.093,7.1e-07,0.00509788,2.12e-06,BUY_MR
+symbol,signal_date,close,rsi,atr,stop_loss,signal

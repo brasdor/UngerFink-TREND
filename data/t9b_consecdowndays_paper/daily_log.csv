@@ -1675,3 +1675,14 @@ run_date,event,symbol,detail
 2026-09-29,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system
 2026-09-29,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
 2026-09-29,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-09-30,SIGNAL_SKIPPED,ARB/USDT,duplicate_cross_system,,,,
+2026-09-30,SIGNAL_SKIPPED,AVAX/USDT,duplicate_cross_system,,,,
+2026-09-30,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system,,,,
+2026-09-30,SIGNAL_SKIPPED,GRT/USDT,duplicate_cross_system,,,,
+2026-09-30,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system,,,,
+2026-09-30,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system,,,,
+2026-09-30,SIGNAL_SKIPPED,SAGA/USDT,duplicate_cross_system,,,,
+2026-09-30,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system,,,,
+2026-09-30,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system,,,,
+2026-09-30,ENTRY,XRP/USDT,"consec=5  price=1.49  ema200=1.37301  stop=1.3069  risk=$34.91  bars_to_exit=20  equity=$9,975.00",1.49,1.3069,34.9125,9975.0
+2026-09-30,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,
