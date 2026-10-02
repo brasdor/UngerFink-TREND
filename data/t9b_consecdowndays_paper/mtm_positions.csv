@@ -1,2 +1,3 @@
 symbol,entry_date,entry_price,current_price,qty,cost_usdt,market_value_usdt,unrealized_pnl,pnl_pct
-XRP/USDT,2026-09-30,1.490000,1.490000,190.674495,284.10,284.10,0.00,0.00
+XRP/USDT,2026-09-30,1.490000,1.493900,190.674495,284.10,284.85,0.74,0.26
+DASH/USDT,2026-10-01,58.250000,58.250000,2.682629,156.26,156.26,0.00,0.00
