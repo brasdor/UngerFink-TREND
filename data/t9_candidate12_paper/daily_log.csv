@@ -39,3 +39,4 @@ run_date,event,detail,equity
 2026-09-28,RUN,"closed=0 opened=0 skipped=0 open_now=20 equity=$63,156.27 dd=0.00%",63156.2715
 2026-09-30,RUN,"closed=0 opened=0 skipped=0 open_now=20 equity=$63,156.27 dd=0.00%",63156.2715
 2026-10-01,RUN,"closed=0 opened=0 skipped=0 open_now=20 equity=$63,156.27 dd=0.00%",63156.2715
+2026-10-02,RUN,"closed=0 opened=0 skipped=0 open_now=20 equity=$63,156.27 dd=0.00%",63156.2715
