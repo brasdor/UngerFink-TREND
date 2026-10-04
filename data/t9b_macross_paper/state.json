@@ -1,30 +1,13 @@
 {
   "system_name": "MACrossShort_4H_T9B",
   "created_utc": "2026-06-12T15:31:43.644778+00:00",
-  "last_run_date": "2026-10-02",
-  "last_processed_ts_ms": 1790884800000,
-  "paper_equity_usdt": 9669.480800000005,
+  "last_run_date": "2026-10-03",
+  "last_processed_ts_ms": 1790971200000,
+  "paper_equity_usdt": 9654.979000000005,
   "peak_equity_usdt": 10160.890200000003,
-  "drawdown_pct": -4.8363,
+  "drawdown_pct": -4.979,
   "kill_switch_triggered": false,
-  "open_positions": [
-    {
-      "position_id": "TRXUSDT_1790856000000",
-      "symbol": "TRXUSDT",
-      "entry_ts_ms": 1790856000000,
-      "entry_date": "2026-10-01",
-      "entry_price": 0.33194,
-      "stop_loss": 0.33634858,
-      "initial_risk_per_unit": 0.00440858,
-      "risk_amount_usdt": 14.5018,
-      "qty": 3289.45007912,
-      "bars_held": 3,
-      "atr_at_entry": 0.00220429,
-      "funding_at_entry": 0.0001,
-      "fast_ema_at_entry": 0.33619209,
-      "slow_ema_at_entry": 0.33632578
-    }
-  ],
+  "open_positions": [],
   "pending_entries": [],
-  "closed_trade_count": 150
+  "closed_trade_count": 151
 }

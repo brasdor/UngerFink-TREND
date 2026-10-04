@@ -1,2 +1,1 @@
-symbol,signal_date,close,consec,atr,ema200,stop_loss,risk_unit,signal
-ONDO/USDT,2026-10-02,0.4927,5,0.05446429,0.38340981,0.38377143,0.10892857,BUY_CD
+symbol,signal_date,close,consec,atr,ema200,stop_loss,signal
