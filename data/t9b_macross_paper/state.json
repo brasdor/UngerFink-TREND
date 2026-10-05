@@ -1,13 +1,30 @@
 {
   "system_name": "MACrossShort_4H_T9B",
   "created_utc": "2026-06-12T15:31:43.644778+00:00",
-  "last_run_date": "2026-10-03",
-  "last_processed_ts_ms": 1790971200000,
+  "last_run_date": "2026-10-04",
+  "last_processed_ts_ms": 1791057600000,
   "paper_equity_usdt": 9654.979000000005,
   "peak_equity_usdt": 10160.890200000003,
   "drawdown_pct": -4.979,
   "kill_switch_triggered": false,
-  "open_positions": [],
+  "open_positions": [
+    {
+      "position_id": "ARCUSDT_1791000000000",
+      "symbol": "ARCUSDT",
+      "entry_ts_ms": 1791000000000,
+      "entry_date": "2026-10-03",
+      "entry_price": 0.07008,
+      "stop_loss": 0.07413286,
+      "initial_risk_per_unit": 0.00405286,
+      "risk_amount_usdt": 14.4801,
+      "qty": 3572.79914807,
+      "bars_held": 5,
+      "atr_at_entry": 0.00202643,
+      "funding_at_entry": 0.00033976,
+      "fast_ema_at_entry": 0.07197855,
+      "slow_ema_at_entry": 0.07203616
+    }
+  ],
   "pending_entries": [],
   "closed_trade_count": 151
 }
