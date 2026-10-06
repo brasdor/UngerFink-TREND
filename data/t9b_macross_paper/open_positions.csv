@@ -1,2 +1,2 @@
 position_id,symbol,entry_date,as_of_date,entry_price,stop_loss,bars_held,bars_remaining,atr_at_entry,funding_at_entry,fast_ema_at_entry,slow_ema_at_entry,risk_amount_usdt,qty
-ARCUSDT_1791000000000,ARCUSDT,2026-10-03,2026-10-04,0.07008,0.07413286,5,30,0.00202643,0.033976,0.07197855,0.07203616,14.4801,3572.79914807
+ARCUSDT_1791000000000,ARCUSDT,2026-10-03,2026-10-05,0.07008,0.07413286,11,24,0.00202643,0.033976,0.07197855,0.07203616,14.4801,3572.79914807
