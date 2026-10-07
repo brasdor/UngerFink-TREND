@@ -1,2 +1,1 @@
-symbol,signal_date,close,ema200,don_entry_high,don_exit_low,atr,initial_stop,initial_risk_unit,signal
-ADA/USDT,2026-10-05,0.2704,0.24109991,0.2685,0.2369,0.01608167,0.23823665,0.03216335,BUY
+symbol,signal_date,close,ema200,don_entry_high,atr,initial_stop,signal

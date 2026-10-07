@@ -25,3 +25,4 @@ exit_date,symbol,entry_date,bars_held,gross_r,pnl_usdt,equity,dd_pct,exit_reason
 2026-08-29,KAVAUSDT,2026-08-04,25,1.979787,39.2336,10310.0902,0.0,time_exit_25bars
 2026-09-12,GALAUSDT,2026-08-18,25,1.382217,27.2044,10337.2946,0.0,time_exit_25bars
 2026-09-12,KAIAUSDT,2026-08-18,25,2.791185,54.9353,10392.2299,0.0,time_exit_25bars
+2026-10-06,RVNUSDT,2026-09-11,25,0.177759,4.5832,10396.8131,0.0,time_exit_25bars
