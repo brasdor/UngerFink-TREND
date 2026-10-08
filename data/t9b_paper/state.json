@@ -1,10 +1,10 @@
 {
   "system_name": "TREND_1D_DONCHIAN_EXITV2_T9B",
   "created_utc": "2026-05-30T22:46:19.996708+00:00",
-  "last_run_date": "2026-10-06",
-  "paper_equity_usdt": 9955.8781,
+  "last_run_date": "2026-10-07",
+  "paper_equity_usdt": 9898.491899999999,
   "peak_equity_usdt": 10000.0,
-  "drawdown_pct": -0.4412,
+  "drawdown_pct": -1.0151,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -34,8 +34,8 @@
       "initial_risk_per_unit": 0.00740719,
       "risk_amount_usdt": 24.822916391525,
       "qty": 3351.192070343139,
-      "highest_high_since_entry": 0.14144,
-      "max_favorable_r": 4.199973269215453,
+      "highest_high_since_entry": 0.14259,
+      "max_favorable_r": 4.355227825936691,
       "chandelier_active": false,
       "chandelier_activated_date": null,
       "atr_at_entry": 0.00370359,
@@ -57,57 +57,6 @@
       "chandelier_activated_date": null,
       "atr_at_entry": 0.00482783,
       "donchian_entry_level": 0.1058
-    },
-    {
-      "position_id": "VET_USDT_20260908",
-      "symbol": "VET/USDT",
-      "entry_date": "2026-09-08",
-      "entry_price": 0.008063,
-      "initial_stop": 0.00716715,
-      "current_stop": 0.00716715,
-      "initial_risk_per_unit": 0.00089585,
-      "risk_amount_usdt": 24.822916391525,
-      "qty": 27708.78650613942,
-      "highest_high_since_entry": 0.009918,
-      "max_favorable_r": 2.070659150527431,
-      "chandelier_active": false,
-      "chandelier_activated_date": null,
-      "atr_at_entry": 0.00044793,
-      "donchian_entry_level": 0.007628
-    },
-    {
-      "position_id": "IOST_USDT_20260909",
-      "symbol": "IOST/USDT",
-      "entry_date": "2026-09-09",
-      "entry_price": 0.001886,
-      "initial_stop": 0.0014901,
-      "current_stop": 0.0014901,
-      "initial_risk_per_unit": 0.0003959,
-      "risk_amount_usdt": 24.822916391525,
-      "qty": 62699.96562648396,
-      "highest_high_since_entry": 0.001899,
-      "max_favorable_r": 0.032836574892649635,
-      "chandelier_active": false,
-      "chandelier_activated_date": null,
-      "atr_at_entry": 0.00019795,
-      "donchian_entry_level": 0.001189
-    },
-    {
-      "position_id": "SOL_USDT_20260918",
-      "symbol": "SOL/USDT",
-      "entry_date": "2026-09-18",
-      "entry_price": 112.72,
-      "initial_stop": 102.29267978,
-      "current_stop": 102.29267978,
-      "initial_risk_per_unit": 10.42732022,
-      "risk_amount_usdt": 24.897162158574996,
-      "qty": 2.3876855829958386,
-      "highest_high_since_entry": 124.95,
-      "max_favorable_r": 1.1728804469380727,
-      "chandelier_active": false,
-      "chandelier_activated_date": null,
-      "atr_at_entry": 5.21366011,
-      "donchian_entry_level": 107.48
     },
     {
       "position_id": "AVAX_USDT_20260919",
@@ -144,5 +93,5 @@
       "donchian_entry_level": 0.002463
     }
   ],
-  "closed_trade_count": 6
+  "closed_trade_count": 9
 }

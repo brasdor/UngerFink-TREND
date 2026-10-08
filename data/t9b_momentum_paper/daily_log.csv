@@ -103,3 +103,4 @@ run_date,event,detail,equity
 2026-10-05,MTM,"MTM  unrealized_pnl=$-207.30  (-1.82%)  mtm_equity=$11,151.86  days_since_rebal=10",11151.8574
 2026-10-06,MTM,"MTM  unrealized_pnl=$-389.15  (-3.43%)  mtm_equity=$10,970.01  days_since_rebal=11",10970.0144
 2026-10-07,MTM,"MTM  unrealized_pnl=$-477.82  (-4.21%)  mtm_equity=$10,881.34  days_since_rebal=12",10881.3389
+2026-10-08,MTM,"MTM  unrealized_pnl=$-505.90  (-4.45%)  mtm_equity=$10,853.26  days_since_rebal=13",10853.2564

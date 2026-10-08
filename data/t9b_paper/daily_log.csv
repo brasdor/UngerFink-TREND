@@ -870,3 +870,10 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-10-06,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system
 2026-10-06,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
 2026-10-06,SIGNAL_SKIPPED,VTHO/USDT,duplicate_cross_system
+2026-10-07,RECONCILE_WARN,,NEAR/USDT: stop=3.403911014839002 >= entry_price=1.968 (invalid for LONG)
+2026-10-07,EXIT,VET/USDT,"reason=donchian_exit  R=0.011  pnl=$0.28  equity=$9,956.16",0.011163,0.2771,9956.16,-0.44
+2026-10-07,EXIT,IOST/USDT,"reason=donchian_exit  R=-2.667  pnl=$-66.21  equity=$9,889.94",-2.66734,-66.2112,9889.94,-1.1
+2026-10-07,EXIT,SOL/USDT,"reason=donchian_exit  R=0.343  pnl=$8.55  equity=$9,898.49",0.343329,8.5479,9898.49,-1.02
+2026-10-07,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system,,,,
+2026-10-07,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,
+2026-10-07,SIGNAL_SKIPPED,VTHO/USDT,duplicate_cross_system,,,,
