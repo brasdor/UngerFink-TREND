@@ -1,7 +1,7 @@
 {
   "system_name": "ConsecDownDaysMR_1D_T9B",
   "created_utc": "2026-06-03T09:15:18.584881+00:00",
-  "last_run_date": "2026-10-07",
+  "last_run_date": "2026-10-08",
   "paper_equity_usdt": 9975.0,
   "peak_equity_usdt": 10000.0,
   "drawdown_pct": -0.25,
@@ -16,7 +16,7 @@
       "initial_risk_per_unit": 0.1831,
       "risk_amount_usdt": 34.9125,
       "qty": 190.67449481157837,
-      "bars_held": 7,
+      "bars_held": 8,
       "atr_at_entry": 0.09155,
       "consec_at_entry": 5
     },
@@ -29,7 +29,7 @@
       "initial_risk_per_unit": 13.01428571,
       "risk_amount_usdt": 34.9125,
       "qty": 2.6826289800272107,
-      "bars_held": 6,
+      "bars_held": 7,
       "atr_at_entry": 6.50714286,
       "consec_at_entry": 5
     },
@@ -42,8 +42,34 @@
       "initial_risk_per_unit": 0.10892857,
       "risk_amount_usdt": 34.9125,
       "qty": 320.50820092469775,
-      "bars_held": 5,
+      "bars_held": 6,
       "atr_at_entry": 0.05446429,
+      "consec_at_entry": 5
+    },
+    {
+      "position_id": "MORPHO_USDT_20261008",
+      "symbol": "MORPHO/USDT",
+      "entry_date": "2026-10-08",
+      "entry_price": 2.354,
+      "stop_loss": 1.96,
+      "initial_risk_per_unit": 0.394,
+      "risk_amount_usdt": 26.184375000000006,
+      "qty": 66.45780456852793,
+      "bars_held": 0,
+      "atr_at_entry": 0.197,
+      "consec_at_entry": 5
+    },
+    {
+      "position_id": "WLD_USDT_20261008",
+      "symbol": "WLD/USDT",
+      "entry_date": "2026-10-08",
+      "entry_price": 0.4797,
+      "stop_loss": 0.35144286,
+      "initial_risk_per_unit": 0.12825714,
+      "risk_amount_usdt": 26.184375000000006,
+      "qty": 204.15530082769666,
+      "bars_held": 0,
+      "atr_at_entry": 0.06412857,
       "consec_at_entry": 5
     }
   ],

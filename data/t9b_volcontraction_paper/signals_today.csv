@@ -1,1 +1,4 @@
-symbol,run_date,signal_ts_ms,signal_close,comp_low,consec,atr,ema200,funding_rate,stop_loss
+symbol,signal_ts_ms,consec,comp_low,atr,ema200,signal_close,stop_loss,risk_unit,funding_rate,run_date
+BELUSDT,1791360000000,16,0.12118,0.00236286,0.12354024,0.11949,0.12421571,0.00472571,0.0001,2026-10-08
+SSVUSDT,1791331200000,21,3.031,0.06857143,2.99730486,2.969,3.10614286,0.13714286,0.0001,2026-10-08
+XVGUSDT,1791331200000,18,0.003051,8.2e-05,0.00297488,0.002951,0.003115,0.000164,0.0001,2026-10-08

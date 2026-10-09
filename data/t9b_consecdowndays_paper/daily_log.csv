@@ -1758,3 +1758,13 @@ run_date,event,symbol,detail
 2026-10-07,SIGNAL_SKIPPED,SAGA/USDT,duplicate_cross_system
 2026-10-07,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
 2026-10-07,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-10-08,SIGNAL_SKIPPED,ARB/USDT,duplicate_cross_system,,,,
+2026-10-08,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system,,,,
+2026-10-08,SIGNAL_SKIPPED,GRT/USDT,duplicate_cross_system,,,,
+2026-10-08,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system,,,,
+2026-10-08,ENTRY,MORPHO/USDT,"consec=5  price=2.354  ema200=2.11469  stop=1.96  risk=$26.18  bars_to_exit=20  equity=$9,975.00",2.354,1.96,26.1844,9975.0
+2026-10-08,SIGNAL_SKIPPED,SAGA/USDT,duplicate_cross_system,,,,
+2026-10-08,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system,,,,
+2026-10-08,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system,,,,
+2026-10-08,ENTRY,WLD/USDT,"consec=5  price=0.4797  ema200=0.43417  stop=0.351443  risk=$26.18  bars_to_exit=20  equity=$9,975.00",0.4797,0.35144286,26.1844,9975.0
+2026-10-08,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,

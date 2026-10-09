@@ -1,1 +1,3 @@
-symbol,signal_date,close,consec,atr,ema200,stop_loss,signal
+symbol,signal_date,close,consec,atr,ema200,stop_loss,risk_unit,signal
+MORPHO/USDT,2026-10-08,2.354,5,0.197,2.11469417,1.96,0.394,BUY_CD
+WLD/USDT,2026-10-08,0.4797,5,0.06412857,0.4341698,0.35144286,0.12825714,BUY_CD
