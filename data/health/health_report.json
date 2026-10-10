@@ -1,5 +1,6 @@
 {
-  "generated_at": "2026-10-10T13:08:08.640988+00:00",
+  "schema_version": "1.0",
+  "generated_at": "2026-10-10T13:33:35.744835+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -18,8 +19,8 @@
       "n_findings": 1
     },
     "timestamps_1970": {
-      "status": "fail",
-      "n_findings": 1
+      "status": "pass",
+      "n_findings": 0
     },
     "symbol_gaps": {
       "status": "fail",
@@ -46,16 +47,16 @@
       "n_findings": 0
     },
     "regime_history_integrity": {
-      "status": "fail",
-      "n_findings": 1
+      "status": "pass",
+      "n_findings": 0
     },
     "drawdown_vs_kill_switch": {
       "status": "pass",
       "n_findings": 0
     },
     "no_kill_switch_configured": {
-      "status": "fail",
-      "n_findings": 1
+      "status": "pass",
+      "n_findings": 0
     },
     "position_cap": {
       "status": "pass",
@@ -150,19 +151,6 @@
         "error": "Error tokenizing data. C error: Expected 4 fields in line 101, saw 8\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-10"
-    },
-    {
-      "id": "S5:no_kill_switch_configured",
-      "severity": "WARNING",
-      "system": "S5",
-      "check": "no_kill_switch_configured",
-      "message": "state.json has no kill_switch_triggered field -- this system has no safety net, regardless of what its drawdown currently is",
-      "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
-      "status": "open",
-      "evidence": {},
-      "suggested_action": "Confirm whether the engine code checks KILL_SWITCH_DD_PCT but never persists the field, or never checks it at all; propose a threshold consistent with the other systems (35% DD) before applying.",
       "run_date": "2026-10-10"
     },
     {
@@ -268,106 +256,16 @@
       "severity": "WARNING",
       "system": "data/regime_history.csv",
       "check": "frozen_value_detection",
-      "message": "regime_history.funding_avg has been exactly 6.73e-06 for the last 28 rows -- check the upstream feed, not just this file",
+      "message": "regime_history.funding_avg has been exactly 6.73e-06 for the last 21 rows -- check the upstream feed, not just this file",
       "first_seen": "2026-10-10",
       "last_seen": "2026-10-10",
       "status": "open",
       "evidence": {
         "column": "funding_avg",
         "value": 6.73e-06,
-        "run_length": 28
+        "run_length": 21
       },
       "suggested_action": "Check whether the upstream source (e.g. funding cache) is stale.",
-      "run_date": "2026-10-10"
-    },
-    {
-      "id": "data/regime_history.csv:regime_history_missing_dates",
-      "severity": "WARNING",
-      "system": "data/regime_history.csv",
-      "check": "regime_history_missing_dates",
-      "message": "4 date(s) missing inside the file's own covered range: ['2026-08-24', '2026-08-25', '2026-08-27', '2026-09-17']",
-      "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
-      "status": "open",
-      "evidence": {
-        "dates": [
-          "2026-08-24",
-          "2026-08-25",
-          "2026-08-27",
-          "2026-09-17"
-        ]
-      },
-      "suggested_action": "Any T9B/candidate run on a missing date fell back to equal weight via get_regime_weight()'s own fallback -- rebuild these rows via the date-sliced re-simulation.",
-      "run_date": "2026-10-10"
-    },
-    {
-      "id": "data/universe/ohlcv_1d:timestamps_1970",
-      "severity": "WARNING",
-      "system": "data/universe/ohlcv_1d",
-      "check": "timestamps_1970",
-      "message": "53 spot OHLCV file(s) still carry a residual 1970-01-01 row from the pre-fix era (first few: ['AAVE_USDT_1d', 'ADA_USDT_1d', 'ARB_USDT_1d', 'ARDR_USDT_1d', 'ARKM_USDT_1d'])",
-      "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
-      "status": "open",
-      "evidence": {
-        "n_files": 53,
-        "symbols": [
-          "AAVE_USDT_1d",
-          "ADA_USDT_1d",
-          "ARB_USDT_1d",
-          "ARDR_USDT_1d",
-          "ARKM_USDT_1d",
-          "ATOM_USDT_1d",
-          "AVAX_USDT_1d",
-          "BCH_USDT_1d",
-          "BNB_USDT_1d",
-          "BTC_USDT_1d",
-          "CELR_USDT_1d",
-          "CHZ_USDT_1d",
-          "DASH_USDT_1d",
-          "DEXE_USDT_1d",
-          "DOGE_USDT_1d",
-          "DOT_USDT_1d",
-          "DUSK_USDT_1d",
-          "EIGEN_USDT_1d",
-          "ENA_USDT_1d",
-          "ETC_USDT_1d",
-          "ETH_USDT_1d",
-          "FET_USDT_1d",
-          "FIL_USDT_1d",
-          "HBAR_USDT_1d",
-          "ICP_USDT_1d",
-          "ICX_USDT_1d",
-          "INJ_USDT_1d",
-          "IOST_USDT_1d",
-          "JST_USDT_1d",
-          "JTO_USDT_1d",
-          "LINK_USDT_1d",
-          "LPT_USDT_1d",
-          "LTC_USDT_1d",
-          "MTL_USDT_1d",
-          "NEAR_USDT_1d",
-          "ONDO_USDT_1d",
-          "ORDI_USDT_1d",
-          "PENDLE_USDT_1d",
-          "QTUM_USDT_1d",
-          "RENDER_USDT_1d",
-          "SC_USDT_1d",
-          "SEI_USDT_1d",
-          "SOL_USDT_1d",
-          "TIA_USDT_1d",
-          "TON_USDT_1d",
-          "TRX_USDT_1d",
-          "VET_USDT_1d",
-          "VTHO_USDT_1d",
-          "WLD_USDT_1d",
-          "XRP_USDT_1d",
-          "ZEC_USDT_1d",
-          "ZEN_USDT_1d",
-          "ZRX_USDT_1d"
-        ]
-      },
-      "suggested_action": "One-time cleanup: drop any row with a 1970-01-01 timestamp from these files. Does not affect current trading (sits before all real history) but corrupts anything computing min(date) or full-history stats.",
       "run_date": "2026-10-10"
     },
     {

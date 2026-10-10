@@ -6,6 +6,7 @@
   "paper_equity_usdt": 10728.8235,
   "peak_equity_usdt": 11487.9734,
   "drawdown_pct": -6.6082,
+  "kill_switch_triggered": false,
   "total_rebal_count": 8,
   "long_positions": [
     {

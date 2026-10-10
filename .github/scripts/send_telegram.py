@@ -62,7 +62,20 @@ def _classify(data_dir: Path, run_date: str) -> tuple[set, set]:
     sys_id = data_dir.name
     if daily_log.exists() and run_date:
         try:
-            log = pd.read_csv(daily_log, on_bad_lines="skip")
+            bad_lines: list = []
+            log = pd.read_csv(daily_log, on_bad_lines=bad_lines.append, engine="python")
+            if bad_lines:
+                emit(sys_id, "daily_log_ragged_rows", "WARNING",
+                     f"{len(bad_lines)} row(s) in daily_log.csv skipped by the CSV "
+                     f"parser (don't match the header's column count)",
+                     evidence={"path": str(daily_log), "n_skipped": len(bad_lines)},
+                     suggested_action="Rows written before the append_csv header-"
+                                       "reindex fix (2026-10-10) stay ragged forever -- "
+                                       "this is expected for old rows, not new ones. "
+                                       "If this count keeps growing, the writer fix "
+                                       "didn't take for this system.")
+            else:
+                resolve(sys_id, "daily_log_ragged_rows")
             today = log[log["run_date"] == run_date]
             accepted = set(today[today["event"] == "ENTRY"]["symbol"].dropna().tolist())
             skipped = set(today[today["event"] == "SIGNAL_SKIPPED"]["symbol"].dropna().tolist())

@@ -50,6 +50,13 @@ HEALTH_DIR = ROOT / "data" / "health"
 REPORT_PATH = HEALTH_DIR / "health_report.json"
 EVENTS_PATH = HEALTH_DIR / "health_events.jsonl"
 
+# Bump on any breaking change to the finding schema or the report/events
+# shape (field renamed/removed, id scheme changed, etc.) -- a non-breaking
+# addition (a new optional field, a new check) does not need a bump. A
+# consumer reading these files should check this before assuming field
+# names/shapes match what docs/HEALTH_CONTRACT.md currently documents.
+SCHEMA_VERSION = "1.0"
+
 TODAY = date.today()
 TODAY_STR = TODAY.isoformat()
 
@@ -1036,6 +1043,7 @@ def _reconcile(prior_events: list[dict], this_run_findings: list[dict]) -> tuple
         fid = _finding_id(f)
         this_run_ids.add(fid)
         event = {
+            "schema_version": SCHEMA_VERSION,
             "event": "open", "id": fid, "severity": f["severity"], "system": f["system"],
             "check": f["check"], "message": f["message"], "evidence": f["evidence"],
             "suggested_action": f["suggested_action"], "run_date": TODAY_STR, "ts": now,
@@ -1052,7 +1060,8 @@ def _reconcile(prior_events: list[dict], this_run_findings: list[dict]) -> tuple
     for fid in prior_open_ids - this_run_ids:
         check_name = by_id[fid]["latest"].get("check") if by_id[fid]["latest"] else None
         if check_name in REGISTRY_CHECK_NAMES:
-            new_events.append({"event": "resolve", "id": fid, "run_date": TODAY_STR, "ts": now})
+            new_events.append({"schema_version": SCHEMA_VERSION, "event": "resolve",
+                                "id": fid, "run_date": TODAY_STR, "ts": now})
             by_id[fid]["open"] = False
             by_id[fid]["first_seen"] = None
 
@@ -1095,6 +1104,7 @@ def main() -> int:
     _append_events(new_events)
 
     report = {
+        "schema_version": SCHEMA_VERSION,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "checks": checks_summary,
         "findings": current_open,

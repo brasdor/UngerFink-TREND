@@ -48,6 +48,10 @@ ROOT = Path(__file__).resolve().parents[1]
 HEALTH_DIR = ROOT / "data" / "health"
 EVENTS_PATH = HEALTH_DIR / "health_events.jsonl"
 
+# Must match tools/health/run_checks.py's SCHEMA_VERSION -- both write
+# events to the same file and must agree on the schema they claim.
+SCHEMA_VERSION = "1.0"
+
 _LOCK = threading.Lock()
 
 
@@ -78,6 +82,7 @@ def emit(system: str, check: str, severity: str, message: str, *,
         today = run_date or _now_iso()[:10]
         finding_id = make_id(system, check, key)
         _append({
+            "schema_version": SCHEMA_VERSION,
             "event": "open",
             "id": finding_id,
             "severity": severity,
@@ -115,6 +120,7 @@ def resolve(system: str, check: str, *, key: str = "", run_date: str | None = No
         today = run_date or _now_iso()[:10]
         finding_id = make_id(system, check, key)
         _append({
+            "schema_version": SCHEMA_VERSION,
             "event": "resolve",
             "id": finding_id,
             "run_date": today,

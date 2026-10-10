@@ -41,6 +41,8 @@ from typing import Dict, List, Optional
 import numpy as np
 import pandas as pd
 
+from health_emit import emit
+
 ROOT = Path(__file__).resolve().parent.parent
 COMMITTED_CACHE = ROOT / "data" / "universe" / "ohlcv_1d"
 
@@ -71,6 +73,18 @@ def _yf_symbol(symbol: str) -> str:
 # CACHE READ / WRITE  (no datetime<->int64 round trip anywhere)
 # =============================================================================
 
+# No symbol in this universe listed before Binance Spot itself existed.
+# A row dated before this is definitionally corrupt -- the residual
+# 1970-01-01 rows from the original datetime64[s]->int64 cast bug (fixed
+# in this module, but never purged from 53 files written before the fix)
+# are the exact, confirmed shape this guards against. Self-healing: every
+# load_ohlcv()/refresh_universe() call reads through this function, so a
+# corrupt row silently drops out of what every engine sees even before
+# the one-time file cleanup below runs, and the next refresh's
+# _write_cache() naturally omits it from then on.
+MIN_VALID_DATE = pd.Timestamp("2017-01-01", tz="UTC")
+
+
 def _read_cache(path: Path) -> pd.DataFrame:
     if not path.exists():
         return pd.DataFrame()
@@ -85,6 +99,17 @@ def _read_cache(path: Path) -> pd.DataFrame:
     for col in ["open", "high", "low", "close", "volume"]:
         df[col] = pd.to_numeric(df.get(col, np.nan), errors="coerce")
     df = df.dropna(subset=["time", "open", "high", "low", "close"])
+    n_before = len(df)
+    df = df[df["time"] >= MIN_VALID_DATE]
+    if len(df) < n_before:
+        emit("data/universe/ohlcv_1d", "timestamps_1970_reintroduced", "WARNING",
+             f"{path.name}: dropped {n_before - len(df)} row(s) dated before "
+             f"{MIN_VALID_DATE.date()} on read -- should be a one-time historical "
+             f"artifact, not a recurring one",
+             key=path.name, evidence={"path": str(path), "n_dropped": n_before - len(df)},
+             suggested_action="If this keeps firing for the same file, something is "
+                               "producing bad timestamps again -- re-check "
+                               "_epoch_col_to_datetime's magnitude detection.")
     return df[["time", "open", "high", "low", "close", "volume"]].reset_index(drop=True)
 
 

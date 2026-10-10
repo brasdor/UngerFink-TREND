@@ -167,12 +167,24 @@ def process_system(system: dict, gh_ok: bool) -> int:
     skipped_symbols:  set = set()
     if daily_log.exists() and run_date:
         try:
-            # on_bad_lines="skip": daily_log.csv is a heterogeneous event
-            # log by design (SIGNAL_SKIPPED rows are narrower than ENTRY
-            # rows), which makes pandas' default parser raise on S2/S3/S6/
-            # S8's files -- confirmed live 2026-10-10. Matches the fix in
-            # send_telegram.py / the pattern already in auto_execute.py.
-            log       = pd.read_csv(daily_log, on_bad_lines="skip")
+            # daily_log.csv is a heterogeneous event log by design
+            # (SIGNAL_SKIPPED rows are narrower than ENTRY rows), which
+            # makes pandas' default parser raise on S2/S3/S6/S8's files --
+            # confirmed live 2026-10-10. on_bad_lines=bad_lines.append
+            # (requires engine="python") counts what it skips instead of
+            # just discarding it, so a real writer regression (vs. old,
+            # pre-fix rows) shows up as a growing count, not silence.
+            bad_lines: list = []
+            log       = pd.read_csv(daily_log, on_bad_lines=bad_lines.append, engine="python")
+            if bad_lines:
+                emit(data_dir.name, "daily_log_ragged_rows", "WARNING",
+                     f"{len(bad_lines)} row(s) in daily_log.csv skipped by the CSV parser",
+                     evidence={"path": str(daily_log), "n_skipped": len(bad_lines)},
+                     suggested_action="Expected for rows predating the append_csv "
+                                       "header-reindex fix (2026-10-10); investigate "
+                                       "only if this count keeps growing.")
+            else:
+                resolve(data_dir.name, "daily_log_ragged_rows")
             today_log = log[log["run_date"] == run_date]
             accepted_symbols = set(
                 today_log[today_log["event"] == "ENTRY"]["symbol"].dropna().tolist()

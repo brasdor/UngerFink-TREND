@@ -124,9 +124,22 @@ def _empty_state() -> dict:
 
 
 def load_state() -> dict:
+    """Merged over _empty_state()'s defaults, not returned verbatim.
+
+    Fix (2026-10-10): a state.json written before a key existed in
+    _empty_state() stayed missing that key forever -- load_state() never
+    backfilled it, and save_state() only ever persists what's already in
+    the dict. Confirmed live: kill_switch_triggered was never set to False
+    on disk because the only assignment to it is the breach branch below
+    (dd_now <= -KILL_SWITCH_DD_PCT), which had simply never fired -- so
+    the field was absent, not False, and this system had no persisted
+    safety-net state at all despite the switch logic existing and running
+    every day. Same risk for any future field added to _empty_state().
+    """
     if STATE_FILE.exists():
         with open(STATE_FILE, encoding='utf-8') as f:
-            return json.load(f)
+            loaded = json.load(f)
+        return {**_empty_state(), **loaded}
     return _empty_state()
 
 

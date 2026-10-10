@@ -200,7 +200,27 @@ def positions_to_state(state: dict, positions: Dict[str, S8Position]) -> None:
 def append_csv(path: Path, rows: List[dict]) -> None:
     if not rows:
         return
-    pd.DataFrame(rows).to_csv(path, mode="a", index=False, header=not path.exists())
+    df = pd.DataFrame(rows)
+    if path.exists():
+        # Fix (2026-10-10): this used to write whatever columns THIS call's
+        # rows happened to have, with no regard for the file's already-
+        # established header -- different _log() call sites pass different
+        # **extra kwargs, so the column layout silently drifted over months
+        # and left every row a different width depending on which call site
+        # logged it, which is why plain pd.read_csv() on this file has been
+        # failing for every consumer not already using on_bad_lines="skip"
+        # (confirmed live: S2/S3/S6/S8, 2026-10-10). Reindex to the file's
+        # actual header before appending -- a column this call doesn't have
+        # becomes blank (matching how a narrower event like SIGNAL_SKIPPED
+        # already looks), and a column not in the header is dropped with a
+        # loud warning instead of silently drifting the layout further.
+        existing_header = pd.read_csv(path, nrows=0).columns.tolist()
+        extra = [c for c in df.columns if c not in existing_header]
+        if extra:
+            print(f"[WARN] append_csv({path.name}): dropping column(s) not in "
+                  f"the established header {existing_header}: {extra}", flush=True)
+        df = df.reindex(columns=existing_header)
+    df.to_csv(path, mode="a", index=False, header=not path.exists())
 
 
 def _reconcile_state(state: dict, run_date: date) -> None:

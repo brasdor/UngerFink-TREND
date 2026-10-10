@@ -75,6 +75,7 @@ import numpy as np
 import pandas as pd
 
 import t9b_shared
+from health_emit import emit, resolve
 from signal_arbitrator import SignalArbitrator
 
 
@@ -97,6 +98,20 @@ MIN_ORDER_SIZE_USDT = 15.0    # Fix 2: minimum position notional
 MAX_OPEN_POSITIONS  = 10
 INITIAL_CAPITAL     = 12_000.0  # Scheme C: $12k MR pool (40% S2 within pool)
 LEVERAGE            = 1.0
+
+# Fix 4 (2026-10-10): qty = risk_amount / risk_per_unit has no ceiling, and
+# risk_per_unit (= ATR_STOP_MULT * atr) has no floor. Confirmed live:
+# COSUSDT/DUSDT/MBOXUSDT/HIGHUSDT all had a literally flat OHLC feed (open
+# == high == low == close, unchanged for 38+ consecutive days) -- ATR on a
+# flat series is ~0, risk_per_unit collapsed to ~1e-7, and qty blew up to
+# ~39x LEVERAGE's notional on the 2026-09-29 entries. Two independent
+# guards, since either one failing alone should not reopen this:
+#   1. MIN_RISK_PER_UNIT_PCT floors the SIZING input only -- pos.stop_loss
+#      itself (the actual exit trigger) is untouched, so this never changes
+#      when a position exits, only how big it is sized while open.
+#   2. The notional cap below is the authoritative backstop regardless of
+#      whether the floor above was aggressive enough.
+MIN_RISK_PER_UNIT_PCT = 0.001  # stop distance floored at 0.10% of price
 KILL_SWITCH_DD_PCT  = 35.0    # halt new entries if DD from peak exceeds this
 COST_FLOOR_R        = 0.25    # Futures long cost floor (research gate, doc only)
 
@@ -214,7 +229,27 @@ def positions_to_state(state: dict, positions: Dict[str, MRPosition]) -> None:
 def append_csv(path: Path, rows: List[dict]) -> None:
     if not rows:
         return
-    pd.DataFrame(rows).to_csv(path, mode="a", index=False, header=not path.exists())
+    df = pd.DataFrame(rows)
+    if path.exists():
+        # Fix (2026-10-10): this used to write whatever columns THIS call's
+        # rows happened to have, with no regard for the file's already-
+        # established header -- different _log() call sites pass different
+        # **extra kwargs, so the column layout silently drifted over months
+        # and left every row a different width depending on which call site
+        # logged it, which is why plain pd.read_csv() on this file has been
+        # failing for every consumer not already using on_bad_lines="skip"
+        # (confirmed live: S2/S3/S6/S8, 2026-10-10). Reindex to the file's
+        # actual header before appending -- a column this call doesn't have
+        # becomes blank (matching how a narrower event like SIGNAL_SKIPPED
+        # already looks), and a column not in the header is dropped with a
+        # loud warning instead of silently drifting the layout further.
+        existing_header = pd.read_csv(path, nrows=0).columns.tolist()
+        extra = [c for c in df.columns if c not in existing_header]
+        if extra:
+            print(f"[WARN] append_csv({path.name}): dropping column(s) not in "
+                  f"the established header {existing_header}: {extra}", flush=True)
+        df = df.reindex(columns=existing_header)
+    df.to_csv(path, mode="a", index=False, header=not path.exists())
 
 
 def _reconcile_state(state: dict, run_date: date) -> None:
@@ -689,9 +724,45 @@ def run_one_day(run_date: date, symbols: List[str], state: dict) -> dict:
 
             rw, rv = t9b_shared.get_regime_weight("rsi_mr", run_date)
             regime_scale = rw * rv * 7
-            risk_amount   = equity * RISK_PER_TRADE_PCT * regime_scale
-            risk_per_unit = sig["risk_unit"]
-            qty           = risk_amount / max(risk_per_unit, EPS)
+            risk_amount    = equity * RISK_PER_TRADE_PCT * regime_scale
+            risk_per_unit_raw = sig["risk_unit"]
+            risk_per_unit  = max(risk_per_unit_raw, MIN_RISK_PER_UNIT_PCT * sig["close"], EPS)
+            if risk_per_unit > risk_per_unit_raw * 1.0000001:
+                emit("S2", "risk_per_unit_floored", "WARNING",
+                     f"{sym}: ATR-derived stop distance {risk_per_unit_raw:.8g} is below "
+                     f"the {MIN_RISK_PER_UNIT_PCT:.2%} price floor -- sizing input only, "
+                     f"stop_loss itself is unchanged",
+                     key=sym, evidence={"symbol": sym, "risk_per_unit_raw": risk_per_unit_raw,
+                                         "risk_per_unit_floored": risk_per_unit, "close": sig["close"]},
+                     suggested_action="Check whether this symbol's OHLCV feed is frozen "
+                                       "(flat open=high=low=close) -- confirmed the cause "
+                                       "for COSUSDT/DUSDT/MBOXUSDT/HIGHUSDT on 2026-10-10.",
+                     run_date=str(run_date))
+            else:
+                resolve("S2", "risk_per_unit_floored", key=sym, run_date=str(run_date))
+            qty = risk_amount / risk_per_unit
+
+            # Fix 4: notional cap at LEVERAGE x equity. qty is sizing-only
+            # (pos.risk_amount_usdt and pos.initial_risk_per_unit -- not
+            # qty -- drive every P&L calc at exit, so capping qty changes
+            # reported notional/leverage exposure, never the simulated P&L
+            # of a trade that already has a risk_amount and a stop).
+            max_notional = equity * LEVERAGE
+            notional = qty * sig["close"]
+            if notional > max_notional:
+                emit("S2", "leverage_cap_bound", "CRITICAL",
+                     f"{sym}: sized notional ${notional:,.2f} ({notional / equity:.2f}x) "
+                     f"exceeds the {LEVERAGE:.2f}x cap -- capping qty to fit",
+                     key=sym, evidence={"symbol": sym, "notional_before": notional,
+                                         "implied_leverage_before": notional / equity,
+                                         "leverage_cap": LEVERAGE, "equity": equity},
+                     suggested_action="Capped automatically -- no action needed unless "
+                                       "this fires repeatedly for the same symbol, which "
+                                       "points at a frozen/flat price feed for it.",
+                     run_date=str(run_date))
+                qty = max_notional / sig["close"]
+            else:
+                resolve("S2", "leverage_cap_bound", key=sym, run_date=str(run_date))
 
             # Fix 2: minimum order size validation
             if qty * sig["close"] < MIN_ORDER_SIZE_USDT:

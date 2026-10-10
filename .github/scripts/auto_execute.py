@@ -39,6 +39,8 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(ROOT / "engines"))
+from health_emit import emit, resolve  # noqa: E402
 LEDGER = ROOT / "data" / "auto_orders" / "placed.csv"
 LEDGER_FIELDS = [
     "key", "timestamp", "action", "strategy", "symbol", "qty",
@@ -111,9 +113,26 @@ def _accepted_entries(system: dict, run_date: str):
         return
 
     accepted: set = set()
+    sys_id = system["data_dir"].name
     if daily_log.exists() and run_date:
         try:
-            log = pd.read_csv(daily_log, on_bad_lines="skip")
+            bad_lines: list = []
+            log = pd.read_csv(daily_log, on_bad_lines=bad_lines.append, engine="python")
+            if bad_lines:
+                # This is the real-order path (even though AUTO_EXECUTE_ENABLED
+                # defaults off) -- a skipped ENTRY row here means a real
+                # accepted signal silently never gets placed, not just a
+                # cosmetic Telegram tag. CRITICAL, not WARNING, unlike the
+                # same count in send_telegram.py.
+                emit(sys_id, "daily_log_ragged_rows_autoexec", "CRITICAL",
+                     f"{len(bad_lines)} row(s) in daily_log.csv skipped while "
+                     f"determining accepted entries for auto-execution",
+                     evidence={"path": str(daily_log), "n_skipped": len(bad_lines)},
+                     suggested_action="Confirm none of the skipped rows were a real "
+                                       "ENTRY this run -- a skipped ENTRY here means a "
+                                       "signal silently never got placed.")
+            else:
+                resolve(sys_id, "daily_log_ragged_rows_autoexec")
             today = log[log["run_date"] == run_date]
             accepted = set(today[today["event"] == "ENTRY"]["symbol"].dropna().tolist())
         except Exception:

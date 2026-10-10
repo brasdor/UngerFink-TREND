@@ -7,6 +7,20 @@ makes no assumption about the consumer -- no Telegram call lives in
 being built outside this repo) polls or watches the two files below and
 decides how/whether to notify.
 
+## Schema version
+
+Both files carry a top-level (and, for `health_events.jsonl`, per-line)
+`schema_version` string, currently `"1.0"`. Bump it on any BREAKING change
+to the finding schema or the report/events shape -- a field renamed or
+removed, the id scheme changed, a file's top-level shape changed. Do not
+bump it for a non-breaking addition (a new optional field, a new check, a
+new `system`/`check` value). A consumer should check this field before
+assuming field names/shapes match what this document currently says, and
+`tools/health/run_checks.py`'s `SCHEMA_VERSION` and
+`engines/health_emit.py`'s copy of the same constant must be bumped
+together -- both write events into the same file and must agree on the
+schema they claim.
+
 ## Files
 
 ### `data/health/health_report.json`
@@ -17,6 +31,7 @@ needs to read this one file for "what's wrong today."
 
 ```json
 {
+  "schema_version": "1.0",
   "generated_at": "2026-10-10T15:32:00+00:00",
   "checks": {
     "ohlcv_staleness_spot":  {"status": "pass", "n_findings": 0},
@@ -46,8 +61,8 @@ needs to read this one file for "what's wrong today."
 Append-only. One JSON object per line, one of two `event` values:
 
 ```json
-{"event": "open",    "id": "...", "severity": "...", "system": "...", "check": "...", "message": "...", "evidence": {}, "suggested_action": "...", "run_date": "2026-10-10", "ts": "2026-10-10T15:32:00+00:00"}
-{"event": "resolve",  "id": "...", "run_date": "2026-10-10", "ts": "2026-10-10T15:32:00+00:00"}
+{"schema_version": "1.0", "event": "open",    "id": "...", "severity": "...", "system": "...", "check": "...", "message": "...", "evidence": {}, "suggested_action": "...", "run_date": "2026-10-10", "ts": "2026-10-10T15:32:00+00:00"}
+{"schema_version": "1.0", "event": "resolve",  "id": "...", "run_date": "2026-10-10", "ts": "2026-10-10T15:32:00+00:00"}
 ```
 
 This is the audit trail `health_report.json` is computed from (by replaying
