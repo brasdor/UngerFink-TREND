@@ -11,6 +11,8 @@ import traceback
 from datetime import datetime, timezone
 from pathlib import Path
 
+from health_emit import emit, resolve
+
 ROOT = Path(__file__).resolve().parents[1]
 ERROR_LOG = ROOT / "logs" / "t9b_task_scheduler.log"
 
@@ -118,7 +120,14 @@ def _load_regime_history():
                   f"for each, discarding the earlier one(s).", flush=True)
         hist = hist.drop_duplicates(subset="date", keep="last")
         _regime_history_cache = hist.set_index("date").sort_index()
-    except Exception:
+        resolve("shared/t9b_shared", "regime_history_unreadable")
+    except Exception as exc:
+        emit("shared/t9b_shared", "regime_history_unreadable", "CRITICAL",
+             f"regime_history.csv exists but failed to load: {exc} -- every "
+             f"historical get_regime_weight() call this run falls back to equal weight",
+             evidence={"path": str(_REGIME_HISTORY_PATH), "error": str(exc)},
+             suggested_action="Inspect regime_history.csv directly; a malformed row "
+                               "here silently mis-sizes every backfill/catch-up run.")
         _regime_history_cache = False
     return _regime_history_cache
 
@@ -159,9 +168,19 @@ def get_regime_weight(engine_name: str, run_date=None) -> tuple[float, float]:
             row_date = avail.max() if len(avail) else hist.index.min()
             try:
                 row = hist.loc[row_date]
-                return float(row[wcol]), float(row["vol_mult"])
-            except Exception:
-                pass
+                weight, vol_mult = float(row[wcol]), float(row["vol_mult"])
+                resolve(sys_id, "regime_weight_row_lookup_failed")
+                return weight, vol_mult
+            except Exception as exc:
+                emit(sys_id, "regime_weight_row_lookup_failed", "CRITICAL",
+                     f"row lookup for {row_date} failed ({exc}) -- falling back to "
+                     f"equal weight for run_date={run_date}, mis-sizing this entry",
+                     key=str(run_date),
+                     evidence={"row_date": str(row_date), "run_date": str(run_date),
+                               "error": str(exc)},
+                     suggested_action="hist.loc[row_date] likely returned multiple rows "
+                                       "(a duplicate date slipped past drop_duplicates) "
+                                       "or wcol/vol_mult is missing -- inspect that row.")
         return _EQ_WEIGHT, 1.0
 
     if not _REGIME_STATE_PATH.exists():
@@ -172,8 +191,15 @@ def get_regime_weight(engine_name: str, run_date=None) -> tuple[float, float]:
         weights = state.get("weights", {})
         vol_mult = float(state.get("vol_multiplier", 1.0))
         weight = float(weights.get(sys_id, _EQ_WEIGHT))
+        resolve(sys_id, "regime_state_unreadable")
         return weight, vol_mult
-    except Exception:
+    except Exception as exc:
+        emit(sys_id, "regime_state_unreadable", "CRITICAL",
+             f"regime_state.json exists but failed to load ({exc}) -- falling back "
+             f"to equal weight for today's live run",
+             evidence={"path": str(_REGIME_STATE_PATH), "error": str(exc)},
+             suggested_action="Inspect regime_state.json; regime_daily.py likely "
+                               "wrote something malformed today.")
         return _EQ_WEIGHT, 1.0
 
 

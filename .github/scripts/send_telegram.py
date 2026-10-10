@@ -28,6 +28,8 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(ROOT / "engines"))
+from health_emit import emit, resolve  # noqa: E402
 
 SYSTEMS = [
     {"name": "Donchian",   "label": "DonchianLong",    "data_dir": ROOT / "data" / "t9b_paper"},
@@ -44,18 +46,34 @@ def _fmt(val, decimals: int = 6) -> str:
 
 
 def _classify(data_dir: Path, run_date: str) -> tuple[set, set]:
-    """Return (accepted_symbols, skipped_symbols) from today's daily_log."""
+    """Return (accepted_symbols, skipped_symbols) from today's daily_log.
+
+    on_bad_lines="skip" (added 2026-10-10, matching auto_execute.py's
+    already-correct call): daily_log.csv is a heterogeneous event log by
+    design -- SIGNAL_SKIPPED rows are narrower than ENTRY rows -- which
+    makes pandas' default parser raise on S2/S3/S6/S8's files (confirmed
+    live). Before this fix, the plain pd.read_csv() here failed every time
+    for those systems, was swallowed silently, and every signal for them
+    showed as a bare "detected" instead of ENTRY/SKIP in the Telegram
+    summary -- with no error anywhere."""
     accepted: set = set()
     skipped: set = set()
     daily_log = data_dir / "daily_log.csv"
+    sys_id = data_dir.name
     if daily_log.exists() and run_date:
         try:
-            log = pd.read_csv(daily_log)
+            log = pd.read_csv(daily_log, on_bad_lines="skip")
             today = log[log["run_date"] == run_date]
             accepted = set(today[today["event"] == "ENTRY"]["symbol"].dropna().tolist())
             skipped = set(today[today["event"] == "SIGNAL_SKIPPED"]["symbol"].dropna().tolist())
-        except Exception:
-            pass
+            resolve(sys_id, "daily_log_unclassifiable")
+        except Exception as exc:
+            emit(sys_id, "daily_log_unclassifiable", "WARNING",
+                 f"daily_log.csv exists but could not be classified ({exc}) -- "
+                 f"today's Telegram summary will show every signal as bare "
+                 f"'detected' instead of ENTRY/SKIP",
+                 evidence={"path": str(daily_log), "run_date": run_date, "error": str(exc)},
+                 suggested_action="Inspect daily_log.csv directly for this system.")
     return accepted, skipped
 
 

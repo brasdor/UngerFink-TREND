@@ -326,6 +326,69 @@ jobs:
           fi
 
       # ------------------------------------------------------------------
+      # 6a. Run the health-check registry (tools/health/run_checks.py).
+      #     Always AFTER the state commit above, never before -- a health
+      #     check that could block persistence would defeat its own
+      #     purpose. See docs/HEALTH_CONTRACT.md.
+      #     HEALTH_SAME_DAY_CHECK=1: this step runs after today's state
+      #     commit in this very job, so missed_run_single_day's tighter
+      #     floor is valid (today's run_date really should be committed
+      #     by now).
+      # ------------------------------------------------------------------
+      - name: Run health checks
+        id: health
+        if: always()
+        continue-on-error: true
+        env:
+          HEALTH_SAME_DAY_CHECK: '1'
+          WORKFLOW_LABEL: 'T9B Daily'
+          STEP_OUTCOMES: "Donchian=${{ steps.engine_donchian.outcome }},RSI-MR=${{ steps.engine_mr.outcome }},ConsecDown=${{ steps.engine_cd.outcome }},VolContraction=${{ steps.engine_vc.outcome }},MACross=${{ steps.engine_mac.outcome }},Momentum=${{ steps.engine_mom.outcome }},RSI-MR-Funding=${{ steps.engine_s8.outcome }},RefreshData=${{ steps.refresh_data.outcome }},Regime=${{ steps.regime.outcome }},Commit=${{ steps.commit.outcome }}"
+        run: python tools/health/run_checks.py
+
+      # ------------------------------------------------------------------
+      # 6b. Commit the two health files SEPARATELY from the state commit
+      #     above -- a distinct commit keeps a health-runner hiccup from
+      #     ever entangling with the critical state commit, and this
+      #     workflow + t9_candidates_daily.yml + health_check.yml can all
+      #     push data/health/ minutes apart, so the same retry-with-
+      #     autostash pattern applies here too.
+      # ------------------------------------------------------------------
+      - name: Commit health files
+        id: commit_health
+        if: always()
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add --force data/health/ || true
+
+          if git diff --cached --quiet; then
+            echo "No health file changes to commit."
+          else
+            TODAY=$(date -u +%Y-%m-%d)
+            git commit -m "Health check (T9B) ${TODAY} [skip ci]"
+
+            pushed=0
+            for attempt in 1 2 3 4 5; do
+              if git push origin ${{ github.ref_name }}; then
+                pushed=1
+                break
+              fi
+              echo "push attempt ${attempt} failed -- rebasing and retrying"
+              git -c rebase.autoStash=true pull --rebase origin ${{ github.ref_name }} || {
+                sleep $((attempt * 5))
+                continue
+              }
+              sleep $((attempt * 5))
+            done
+            if [ "${pushed}" != "1" ]; then
+              echo "ERROR: could not push data/health/ after 5 attempts"
+              exit 1
+            fi
+          fi
+
+      # ------------------------------------------------------------------
       # 7. Create GitHub issues for new signals (all three systems)
       # ------------------------------------------------------------------
       - name: Create issues for new signals
@@ -387,7 +450,7 @@ jobs:
           # Mark-to-market / Commit / Telegram with it while this alert
           # printed "all steps OK" -- the silent failure the alert exists
           # to catch. Adding a step without adding it here re-opens that hole.
-          STEP_OUTCOMES: "Donchian=${{ steps.engine_donchian.outcome }},RSI-MR=${{ steps.engine_mr.outcome }},ConsecDown=${{ steps.engine_cd.outcome }},VolContraction=${{ steps.engine_vc.outcome }},MACross=${{ steps.engine_mac.outcome }},Momentum=${{ steps.engine_mom.outcome }},RSI-MR-Funding=${{ steps.engine_s8.outcome }},RefreshData=${{ steps.refresh_data.outcome }},Regime=${{ steps.regime.outcome }},Summary=${{ steps.summary.outcome }},MarkToMarket=${{ steps.mtm.outcome }},AutoExecute=${{ steps.autoexec.outcome }},Commit=${{ steps.commit.outcome }},Issues=${{ steps.issues.outcome }},Telegram=${{ steps.telegram.outcome }}"
+          STEP_OUTCOMES: "Donchian=${{ steps.engine_donchian.outcome }},RSI-MR=${{ steps.engine_mr.outcome }},ConsecDown=${{ steps.engine_cd.outcome }},VolContraction=${{ steps.engine_vc.outcome }},MACross=${{ steps.engine_mac.outcome }},Momentum=${{ steps.engine_mom.outcome }},RSI-MR-Funding=${{ steps.engine_s8.outcome }},RefreshData=${{ steps.refresh_data.outcome }},Regime=${{ steps.regime.outcome }},Summary=${{ steps.summary.outcome }},MarkToMarket=${{ steps.mtm.outcome }},AutoExecute=${{ steps.autoexec.outcome }},Commit=${{ steps.commit.outcome }},Health=${{ steps.health.outcome }},CommitHealth=${{ steps.commit_health.outcome }},Issues=${{ steps.issues.outcome }},Telegram=${{ steps.telegram.outcome }}"
           RUN_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

@@ -44,7 +44,9 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(ROOT / "engines"))
 import check_missed_runs as heartbeat  # noqa: E402 -- reuse, don't duplicate
+from health_emit import emit, resolve  # noqa: E402
 
 SNAPSHOT_PATH = ROOT / "data" / "status_snapshot.json"
 FUTURES_OHLCV = ROOT / "data" / "futures_universe" / "ohlcv_1d"
@@ -63,12 +65,19 @@ SYSTEMS = [
 ]
 
 
-def _load_json(path: Path) -> dict:
+def _load_json(path: Path, sys_id: str = "unknown") -> dict:
     if not path.exists():
         return {}
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        resolve(sys_id, "state_json_unreadable")
+        return data
+    except Exception as exc:
+        emit(sys_id, "state_json_unreadable", "CRITICAL",
+             f"{path.name} exists but failed to load ({exc}) -- /status will show "
+             f"this system as all-zero",
+             evidence={"path": str(path), "error": str(exc)},
+             suggested_action="Inspect state.json directly for this system.")
         return {}
 
 
@@ -80,39 +89,57 @@ def _latest_close(symbol: str) -> float | None:
     try:
         df = pd.read_csv(path, usecols=["close"])
         vals = pd.to_numeric(df["close"], errors="coerce").dropna()
-        return float(vals.iloc[-1]) if len(vals) else None
-    except Exception:
+        close = float(vals.iloc[-1]) if len(vals) else None
+        resolve("data/futures_universe/ohlcv_1d", "latest_close_unreadable", key=symbol)
+        return close
+    except Exception as exc:
+        emit("data/futures_universe/ohlcv_1d", "latest_close_unreadable", "WARNING",
+             f"{symbol}_1d.csv exists but close price lookup failed ({exc})",
+             key=symbol, evidence={"symbol": symbol, "error": str(exc)},
+             suggested_action="Inspect this symbol's OHLCV cache file.")
         return None
 
 
-def _mtm_unrealized(data_dir: Path) -> float | None:
+def _mtm_unrealized(data_dir: Path, sys_id: str) -> float | None:
     path = data_dir / "mtm_positions.csv"
     if not path.exists():
         return None
     try:
         df = pd.read_csv(path)
+        resolve(sys_id, "mtm_positions_unreadable")
         if df.empty or "unrealized_pnl" not in df.columns:
             return 0.0
         return float(pd.to_numeric(df["unrealized_pnl"], errors="coerce").fillna(0).sum())
-    except Exception:
+    except Exception as exc:
+        emit(sys_id, "mtm_positions_unreadable", "WARNING",
+             f"mtm_positions.csv exists but failed to parse ({exc}) -- /status will "
+             f"show $0 unrealized for this system",
+             evidence={"path": str(path), "error": str(exc)},
+             suggested_action="Inspect mtm_positions.csv directly.")
         return None
 
 
-def _own_column_unrealized(data_dir: Path) -> float | None:
+def _own_column_unrealized(data_dir: Path, sys_id: str) -> float | None:
     """S5: open_positions.csv already has an unrealized_pnl column."""
     path = data_dir / "open_positions.csv"
     if not path.exists():
         return None
     try:
         df = pd.read_csv(path)
+        resolve(sys_id, "open_positions_unreadable")
         if df.empty or "unrealized_pnl" not in df.columns:
             return 0.0
         return float(pd.to_numeric(df["unrealized_pnl"], errors="coerce").fillna(0).sum())
-    except Exception:
+    except Exception as exc:
+        emit(sys_id, "open_positions_unreadable", "WARNING",
+             f"open_positions.csv exists but failed to parse ({exc}) -- /status will "
+             f"show $0 unrealized for this system",
+             evidence={"path": str(path), "error": str(exc)},
+             suggested_action="Inspect open_positions.csv directly.")
         return None
 
 
-def _compute_unrealized(data_dir: Path, side: str) -> float | None:
+def _compute_unrealized(data_dir: Path, side: str, sys_id: str) -> float | None:
     """S6/S7/S8: entry_price + qty from open_positions.csv, current close
     from the local futures OHLCV cache. side='short' -> (entry-close)*qty,
     'long' -> (close-entry)*qty."""
@@ -121,7 +148,13 @@ def _compute_unrealized(data_dir: Path, side: str) -> float | None:
         return None
     try:
         df = pd.read_csv(path)
-    except Exception:
+        resolve(sys_id, "open_positions_unreadable")
+    except Exception as exc:
+        emit(sys_id, "open_positions_unreadable", "WARNING",
+             f"open_positions.csv exists but failed to parse ({exc}) -- /status will "
+             f"show $0 unrealized for this system",
+             evidence={"path": str(path), "error": str(exc)},
+             suggested_action="Inspect open_positions.csv directly.")
         return None
     if df.empty:
         return 0.0
@@ -142,7 +175,7 @@ def _compute_unrealized(data_dir: Path, side: str) -> float | None:
 def build_system_snapshot(sys_id: str, label: str, rel_dir: str, side: str | None,
                           prev_snapshot: dict) -> dict:
     data_dir = ROOT / rel_dir
-    state = _load_json(data_dir / "state.json")
+    state = _load_json(data_dir / "state.json", sys_id)
 
     equity = float(state.get("paper_equity_usdt", state.get("closed_equity_usdt", 0.0)))
     open_positions = state.get("open_positions")
@@ -155,11 +188,11 @@ def build_system_snapshot(sys_id: str, label: str, rel_dir: str, side: str | Non
     last_run = state.get("last_run_date")
 
     if side is None and (data_dir / "mtm_positions.csv").exists():
-        unrealized = _mtm_unrealized(data_dir)
+        unrealized = _mtm_unrealized(data_dir, sys_id)
     elif side is None:
-        unrealized = _own_column_unrealized(data_dir)
+        unrealized = _own_column_unrealized(data_dir, sys_id)
     else:
-        unrealized = _compute_unrealized(data_dir, side)
+        unrealized = _compute_unrealized(data_dir, side, sys_id)
 
     prev_equity = None
     prev_sys = (prev_snapshot.get("systems") or {}).get(sys_id)
@@ -181,9 +214,9 @@ def build_system_snapshot(sys_id: str, label: str, rel_dir: str, side: str | Non
 
 def main() -> int:
     now = datetime.now(timezone.utc)
-    prev_snapshot = _load_json(SNAPSHOT_PATH)
+    prev_snapshot = _load_json(SNAPSHOT_PATH, "data/status_snapshot.json")
 
-    regime_state = _load_json(ROOT / "data" / "regime_state.json")
+    regime_state = _load_json(ROOT / "data" / "regime_state.json", "data/regime_state.json")
     regime = {
         "date": regime_state.get("date"),
         "trend": regime_state.get("trend_regime"),

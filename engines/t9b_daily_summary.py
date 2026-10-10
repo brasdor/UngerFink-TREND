@@ -29,6 +29,8 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 
+from health_emit import emit, resolve
+
 ROOT          = Path(__file__).resolve().parents[1]
 OHLCV_CACHE   = ROOT / "data" / "universe" / "ohlcv_1d"
 INITIAL_CAP   = 10_000.0
@@ -70,21 +72,38 @@ SYSTEMS = [
 # HELPERS
 # =============================================================================
 
+def _rel(path: Path) -> str:
+    try:
+        return path.relative_to(ROOT).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
 def load_json(path: Path) -> dict:
     if path.exists():
         try:
-            return json.loads(path.read_text(encoding="utf-8"))
-        except Exception:
-            pass
+            data = json.loads(path.read_text(encoding="utf-8"))
+            resolve(_rel(path.parent), "json_unreadable", key=path.name)
+            return data
+        except Exception as exc:
+            emit(_rel(path.parent), "json_unreadable", "CRITICAL",
+                 f"{path.name} exists but failed to load ({exc})",
+                 key=path.name, evidence={"path": str(path), "error": str(exc)},
+                 suggested_action=f"Inspect {path} directly.")
     return {}
 
 
 def load_csv(path: Path) -> pd.DataFrame:
     if path.exists():
         try:
-            return pd.read_csv(path)
-        except Exception:
-            pass
+            df = pd.read_csv(path)
+            resolve(_rel(path.parent), "csv_unreadable", key=path.name)
+            return df
+        except Exception as exc:
+            emit(_rel(path.parent), "csv_unreadable", "WARNING",
+                 f"{path.name} exists but pd.read_csv() failed ({exc})",
+                 key=path.name, evidence={"path": str(path), "error": str(exc)},
+                 suggested_action=f"Inspect {path} directly -- likely a ragged row.")
     return pd.DataFrame()
 
 
@@ -97,8 +116,14 @@ def latest_close(symbol: str) -> Optional[float]:
     try:
         df = pd.read_csv(path, usecols=["close"])
         vals = pd.to_numeric(df["close"], errors="coerce").dropna()
-        return float(vals.iloc[-1]) if len(vals) > 0 else None
-    except Exception:
+        close = float(vals.iloc[-1]) if len(vals) > 0 else None
+        resolve(_rel(OHLCV_CACHE), "latest_close_unreadable", key=symbol)
+        return close
+    except Exception as exc:
+        emit(_rel(OHLCV_CACHE), "latest_close_unreadable", "WARNING",
+             f"{safe}_1d.csv exists but close price lookup failed ({exc})",
+             key=symbol, evidence={"symbol": symbol, "error": str(exc)},
+             suggested_action="Inspect this symbol's OHLCV cache file.")
         return None
 
 

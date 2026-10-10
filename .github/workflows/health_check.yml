@@ -1,0 +1,98 @@
+name: Daily Health Check
+
+# Runs the health-check registry (tools/health/run_checks.py) and commits
+# data/health/health_report.json + health_events.jsonl. See
+# docs/HEALTH_CONTRACT.md for what these files mean.
+#
+# Deliberately a SEPARATE workflow from t9b_daily.yml / t9_candidates_daily.yml
+# / heartbeat_check.yml, on its own schedule -- same reasoning heartbeat_check.yml
+# already documents: a check embedded only inside the daily engine workflows
+# can't detect them not firing at all. Timed after both daily engine workflows
+# AND heartbeat_check.yml so HEALTH_SAME_DAY_CHECK=1's tighter missed-run floor
+# is meaningful (today's run_date should already be committed by the time this
+# runs).
+#
+# This workflow has NO Telegram code and reads no Telegram secrets -- it only
+# writes the two health files. A separate consumer (outside this repo) is
+# responsible for turning an open CRITICAL finding into an actual alert.
+#
+# Also triggerable manually from the GitHub Actions tab (workflow_dispatch).
+
+on:
+  schedule:
+    - cron: '30 11 * * *'   # 30min after heartbeat_check.yml's snapshot
+  workflow_dispatch: {}
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write   # needed to commit data/health/
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history -- heartbeat_36h needs each file's last commit
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run health checks
+        id: health
+        continue-on-error: true
+        env:
+          HEALTH_SAME_DAY_CHECK: '1'
+        run: python tools/health/run_checks.py
+
+      - name: Commit health files
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add --force data/health/ || true
+
+          if git diff --cached --quiet; then
+            echo "No health file changes to commit."
+          else
+            TODAY=$(date -u +%Y-%m-%d)
+            git commit -m "Health check ${TODAY} [skip ci]"
+
+            pushed=0
+            for attempt in 1 2 3 4 5; do
+              if git push origin ${{ github.ref_name }}; then
+                pushed=1
+                break
+              fi
+              echo "push attempt ${attempt} failed (likely concurrent push) -- rebasing and retrying"
+              git -c rebase.autoStash=true pull --rebase origin ${{ github.ref_name }} || {
+                echo "rebase failed on attempt ${attempt}"
+                sleep $((attempt * 5))
+                continue
+              }
+              sleep $((attempt * 5))
+            done
+            if [ "${pushed}" != "1" ]; then
+              echo "ERROR: could not push data/health/ after 5 attempts"
+              exit 1
+            fi
+          fi
+
+      - name: Fail job if any CRITICAL finding is open
+        if: always()
+        run: |
+          if [ "${{ steps.health.outcome }}" = "failure" ]; then
+            echo "run_checks.py exited non-zero -- at least one CRITICAL finding is open."
+            echo "See data/health/health_report.json (just committed) for details."
+            exit 1
+          fi
+          echo "No open CRITICAL finding."

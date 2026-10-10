@@ -30,6 +30,8 @@ _sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import pandas as pd
 
+from health_emit import emit, resolve
+
 ROOT        = Path(__file__).resolve().parent.parent  # engines/ -> project root
 
 # Scheme C regime-tilted allocation (confirmed 2026-06-17)
@@ -152,6 +154,13 @@ def signal_stop(row) -> object:
     return "?"
 
 
+def _rel(path: Path) -> str:
+    try:
+        return path.relative_to(ROOT).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
 def load_state(data_dir: Path) -> dict:
     path = data_dir / "state.json"
     if not data_dir.exists():
@@ -159,8 +168,15 @@ def load_state(data_dir: Path) -> dict:
     if path.exists():
         try:
             with open(path, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception:
+                state = json.load(f)
+            resolve(_rel(data_dir), "state_json_unreadable")
+            return state
+        except Exception as exc:
+            emit(_rel(data_dir), "state_json_unreadable", "CRITICAL",
+                 f"state.json exists but failed to load ({exc}) -- summary will show "
+                 f"this system as NOT STARTED/empty",
+                 evidence={"path": str(path), "error": str(exc)},
+                 suggested_action="Inspect state.json directly for this system.")
             return {}
     return {}
 
@@ -168,14 +184,22 @@ def load_state(data_dir: Path) -> dict:
 def load_csv(path: Path) -> pd.DataFrame:
     if path.exists():
         try:
-            return pd.read_csv(path)
-        except Exception:
-            pass
+            df = pd.read_csv(path)
+            resolve(_rel(path.parent), "csv_unreadable", key=path.name)
+            return df
+        except Exception as exc:
+            emit(_rel(path.parent), "csv_unreadable", "WARNING",
+                 f"{path.name} exists but pd.read_csv() failed ({exc}) -- summary "
+                 f"will treat it as empty",
+                 key=path.name, evidence={"path": str(path), "error": str(exc)},
+                 suggested_action=f"Inspect {path.name} directly; likely a ragged row "
+                                   f"or duplicate header -- see csv_integrity check.")
     return pd.DataFrame()
 
 
 def detect_regime(today: date) -> str:
     """BULL / BEAR based on BTC close vs EMA200. MIXED if data unavailable."""
+    last_exc = None
     for path in _BTC_PATHS:
         if not path.exists():
             continue
@@ -193,9 +217,16 @@ def detect_regime(today: date) -> str:
             last  = cutoff[-1]
             price = float(closes.loc[last])
             ema   = float(ema200.loc[last])
+            resolve("shared/t9b_combined_summary", "detect_regime_unavailable")
             return "BULL" if price > ema else "BEAR"
-        except Exception:
+        except Exception as exc:
+            last_exc = exc
             continue
+    emit("shared/t9b_combined_summary", "detect_regime_unavailable", "WARNING",
+         f"could not derive BULL/BEAR from any BTC price file -- summary reports "
+         f"MIXED by default" + (f" (last error: {last_exc})" if last_exc else ""),
+         evidence={"checked_paths": [str(p) for p in _BTC_PATHS], "error": str(last_exc)},
+         suggested_action="Confirm at least one _BTC_PATHS file exists and parses.")
     return "MIXED"
 
 
@@ -548,7 +579,12 @@ def main() -> int:
             n_skipped = len(today_rows[today_rows.iloc[:, 2] == "SIGNAL_SKIPPED"])
             n_allowed = len(today_rows[today_rows.iloc[:, 2] == "SIGNAL_ALLOWED"])
             arb_str = f"Arb today: {n_allowed} allowed  {n_skipped} skipped"
-        except Exception:
+            resolve("data/t9b_arbitration", "arb_log_unreadable")
+        except Exception as exc:
+            emit("data/t9b_arbitration", "arb_log_unreadable", "WARNING",
+                 f"daily_log.csv exists but failed to parse ({exc})",
+                 evidence={"path": str(arb_log), "error": str(exc)},
+                 suggested_action="Inspect data/t9b_arbitration/daily_log.csv directly.")
             arb_str = "Arb log: (parse error)"
     else:
         arb_str = "Arb log: (not found)"

@@ -157,6 +157,60 @@ jobs:
           fi
 
       # ------------------------------------------------------------------
+      # 5a. Run the health-check registry -- always AFTER the state commit
+      #     above, never before. See t9b_daily.yml's identical step for
+      #     the full rationale and docs/HEALTH_CONTRACT.md.
+      # ------------------------------------------------------------------
+      - name: Run health checks
+        id: health
+        if: always()
+        continue-on-error: true
+        env:
+          HEALTH_SAME_DAY_CHECK: '1'
+          WORKFLOW_LABEL: 'T9 Candidates Daily'
+          STEP_OUTCOMES: "Candidate12=${{ steps.engine_c12.outcome }},Candidate19=${{ steps.engine_c19.outcome }},RefreshData=${{ steps.refresh_data.outcome }},Commit=${{ steps.commit.outcome }}"
+        run: python tools/health/run_checks.py
+
+      # ------------------------------------------------------------------
+      # 5b. Commit the two health files SEPARATELY from the state commit
+      #     above -- see t9b_daily.yml's identical step for why.
+      # ------------------------------------------------------------------
+      - name: Commit health files
+        id: commit_health
+        if: always()
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add --force data/health/ || true
+
+          if git diff --cached --quiet; then
+            echo "No health file changes to commit."
+          else
+            TODAY=$(date -u +%Y-%m-%d)
+            git commit -m "Health check (candidates) ${TODAY} [skip ci]"
+
+            pushed=0
+            for attempt in 1 2 3 4 5; do
+              if git push origin ${{ github.ref_name }}; then
+                pushed=1
+                break
+              fi
+              echo "push attempt ${attempt} failed -- rebasing and retrying"
+              git -c rebase.autoStash=true pull --rebase origin ${{ github.ref_name }} || {
+                sleep $((attempt * 5))
+                continue
+              }
+              sleep $((attempt * 5))
+            done
+            if [ "${pushed}" != "1" ]; then
+              echo "ERROR: could not push data/health/ after 5 attempts"
+              exit 1
+            fi
+          fi
+
+      # ------------------------------------------------------------------
       # 6. Report engine exit statuses for visibility
       # ------------------------------------------------------------------
       - name: Report step statuses
@@ -181,7 +235,7 @@ jobs:
           # Every step with an id belongs here -- the Commit step's push
           # race went unalerted for weeks because only the engines were
           # listed. Adding a step without adding it here re-opens that hole.
-          STEP_OUTCOMES: "Candidate12=${{ steps.engine_c12.outcome }},Candidate19=${{ steps.engine_c19.outcome }},RefreshData=${{ steps.refresh_data.outcome }},Commit=${{ steps.commit.outcome }}"
+          STEP_OUTCOMES: "Candidate12=${{ steps.engine_c12.outcome }},Candidate19=${{ steps.engine_c19.outcome }},RefreshData=${{ steps.refresh_data.outcome }},Commit=${{ steps.commit.outcome }},Health=${{ steps.health.outcome }},CommitHealth=${{ steps.commit_health.outcome }}"
           RUN_URL: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

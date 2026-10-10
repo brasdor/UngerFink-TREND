@@ -28,6 +28,8 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(ROOT / "engines"))
+from health_emit import emit, resolve  # noqa: E402
 
 # System registry -- one entry per T9B engine
 SYSTEMS = [
@@ -165,7 +167,12 @@ def process_system(system: dict, gh_ok: bool) -> int:
     skipped_symbols:  set = set()
     if daily_log.exists() and run_date:
         try:
-            log       = pd.read_csv(daily_log)
+            # on_bad_lines="skip": daily_log.csv is a heterogeneous event
+            # log by design (SIGNAL_SKIPPED rows are narrower than ENTRY
+            # rows), which makes pandas' default parser raise on S2/S3/S6/
+            # S8's files -- confirmed live 2026-10-10. Matches the fix in
+            # send_telegram.py / the pattern already in auto_execute.py.
+            log       = pd.read_csv(daily_log, on_bad_lines="skip")
             today_log = log[log["run_date"] == run_date]
             accepted_symbols = set(
                 today_log[today_log["event"] == "ENTRY"]["symbol"].dropna().tolist()
@@ -173,8 +180,13 @@ def process_system(system: dict, gh_ok: bool) -> int:
             skipped_symbols = set(
                 today_log[today_log["event"] == "SIGNAL_SKIPPED"]["symbol"].dropna().tolist()
             )
+            resolve(data_dir.name, "daily_log_unclassifiable")
         except Exception as exc:
             print(f"[{system['name']}] Could not read daily_log: {exc}")
+            emit(data_dir.name, "daily_log_unclassifiable", "WARNING",
+                 f"daily_log.csv exists but could not be classified ({exc})",
+                 evidence={"path": str(daily_log), "run_date": run_date, "error": str(exc)},
+                 suggested_action="Inspect daily_log.csv directly for this system.")
 
     print(f"[{system['name']}] {len(sig_df)} signal(s) today  "
           f"(accepted={len(accepted_symbols)}  skipped={len(skipped_symbols)})")

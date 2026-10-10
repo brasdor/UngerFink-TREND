@@ -16,10 +16,13 @@ from __future__ import annotations
 import csv
 import json
 import os
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path.cwd()
+sys.path.insert(0, str(ROOT / "engines"))
+from health_emit import emit, resolve  # noqa: E402
 
 SPOT_OHLCV_DIR = ROOT / "data" / "universe" / "ohlcv_1d"
 FUTURES_OHLCV_DIR = ROOT / "data" / "futures_universe" / "ohlcv_1d"
@@ -63,8 +66,14 @@ def latest_close(symbol: str, ohlcv_dir: Path) -> float | None:
     parts = last_line.split(",")
     # OHLCV format: timestamp,open,high,low,close,volume
     try:
-        return float(parts[4])
-    except (IndexError, ValueError):
+        close = float(parts[4])
+        resolve("data/mark_to_market", "latest_close_malformed", key=ticker)
+        return close
+    except (IndexError, ValueError) as exc:
+        emit("data/mark_to_market", "latest_close_malformed", "WARNING",
+             f"{path.name}: last line doesn't parse as a close price ({exc})",
+             key=ticker, evidence={"path": str(path), "last_line": last_line, "error": str(exc)},
+             suggested_action=f"Inspect the last line of {path} directly.")
         return None
 
 
