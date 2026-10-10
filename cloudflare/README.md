@@ -84,6 +84,45 @@ working forever, no PC required.
 
 ---
 
+## Telegram delivery configuration (as of 2026-10-10)
+
+The daily-summary and alert path (`send_telegram.py`, `check_workflow_failures.py`,
+`check_missed_runs.py`, `send_daily_digest.py`, all under `.github/scripts/`) reads
+two GitHub Actions secrets:
+
+| Secret name | Used for |
+|---|---|
+| `TELEGRAM_BOT_TOKEN` | the bot's API token from @BotFather |
+| `TELEGRAM_CHAT_ID` | where to send -- comma-separated for more than one recipient |
+
+These are configured under **GitHub → Settings → Secrets and variables → Actions**
+on the repo, separately from the Cloudflare Worker's own `BOT_TOKEN` /
+`ALLOWED_CHAT` variables (Step 3 above), which answer `/status` and friends --
+see "Adding a second person" below for why the two channels are configured
+independently.
+
+> **TODO (JP):** delivery was reportedly fixed externally (2026-10). Please fill
+> in here: who holds the bot token now, whether `TELEGRAM_BOT_TOKEN` /
+> `TELEGRAM_CHAT_ID` are already set as repo secrets or still need to be, and
+> whether this bot is the same `@ungertrend_bot` the Worker answers through.
+> Until this is confirmed, treat the Actions-side alert path as unverified --
+> see the fail-closed behaviour below for how that shows up.
+
+**Fail-closed, since 2026-10-10:** `send_telegram.py` and
+`check_workflow_failures.py` used to log a warning and exit 0 if the secrets
+were missing or a send failed -- so a dead alert path and a clean day looked
+identical in the Actions UI. They now exit non-zero in that case, which turns
+the job red and triggers GitHub's own failure-notification email as a second,
+independent channel. **Until the two secrets above are confirmed set, expect
+these jobs to show red every day** -- that red is the signal, not a bug.
+
+**Daily digest:** `heartbeat_check.yml` now also runs `send_daily_digest.py`
+every day after committing `status_snapshot.json`: one line with systems
+current, data freshness, and the regime. It fails closed the same way, so its
+own silence -- not just a bad reading inside it -- is the alarm. The first
+real delivery of this digest (and of a deliberately-forced test send) is the
+acceptance bar for this phase.
+
 ## Notes
 
 - **Webhook vs local poller:** setting a webhook **disables** `getUpdates`, so do

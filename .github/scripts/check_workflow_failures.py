@@ -12,9 +12,15 @@ step to pick up, and nothing else in the run ever complains.
 
 Reads step outcomes passed in via STEP_OUTCOMES ("Label=outcome,..."),
 sends one consolidated Telegram alert if any step outcome isn't
-success/skipped. No-ops (exit 0, logs to stdout) if everything is clean,
-if Telegram secrets aren't configured, or on any send error -- this
-script must never fail the workflow it's reporting on.
+success/skipped. Exits 0 (nothing to report) if every step is clean.
+
+Fails closed otherwise: once there IS something to alert on, a missing
+secret or an incomplete delivery exits non-zero so this step itself shows
+red (it has no continue-on-error) and the run's final "fail job if any
+step failed" gate catches it too. Until 2026-10-10 this returned 0 no
+matter what, including when Telegram secrets were never configured --
+so a real step failure plus a dead alert path together looked identical
+to a clean run.
 
 Env:
   WORKFLOW_LABEL     human-readable name for the alert header
@@ -71,8 +77,9 @@ def main() -> int:
     # chat id happens to be in the secret. A single id keeps working unchanged.
     chat_ids = [c.strip() for c in os.environ.get("TELEGRAM_CHAT_ID", "").split(",") if c.strip()]
     if not token or not chat_ids:
-        print("[ALERT] TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set -- skipping send")
-        return 0
+        print("[ALERT] TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set -- failing closed "
+              f"({len(failed)} step failure(s) could not be reported)")
+        return 1
 
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     lines = [f"⚠️ <b>{workflow_label} -- step failure(s)</b>  {today}"]
@@ -90,6 +97,9 @@ def main() -> int:
         else:
             print(f"[ALERT] delivery to {chat_id} failed")
     print(f"[ALERT] delivered={delivered}/{len(chat_ids)}")
+    if delivered < len(chat_ids):
+        print(f"[ALERT] delivery incomplete ({delivered}/{len(chat_ids)}) -- failing closed")
+        return 1
     return 0
 
 

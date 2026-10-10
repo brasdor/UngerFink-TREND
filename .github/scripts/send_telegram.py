@@ -10,7 +10,11 @@ chat. Mirrors the system registry in create_signal_issues.py.
 Env:
   TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID  (from @BotFather / your chat id)
 
-Never fails the workflow: any error is logged and the script exits 0.
+Fails closed: a missing secret or an incomplete delivery exits non-zero so
+the job shows red in the Actions list and GitHub's own failure email fires
+as a second channel. Until 2026-10-10 this exited 0 unconditionally,
+including when the secrets were never set -- which is exactly why alerts
+were silently going nowhere with no trace in the Actions UI.
 """
 from __future__ import annotations
 
@@ -143,8 +147,8 @@ def main() -> int:
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
     chat_ids = recipients()
     if not token or not chat_ids:
-        print("[TELEGRAM] TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set -- skipping")
-        return 0
+        print("[TELEGRAM] TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set -- failing closed")
+        return 1
 
     blocks = []
     total = 0
@@ -167,6 +171,9 @@ def main() -> int:
 
     delivered = send_all(token, chat_ids, message)
     print(f"[TELEGRAM] delivered={delivered}/{len(chat_ids)}  total_signals={total}")
+    if delivered < len(chat_ids):
+        print(f"[TELEGRAM] delivery incomplete ({delivered}/{len(chat_ids)}) -- failing closed")
+        return 1
     return 0
 
 

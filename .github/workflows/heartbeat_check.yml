@@ -66,3 +66,13 @@ jobs:
             git pull --rebase origin ${{ github.ref_name }} || true
             git push origin ${{ github.ref_name }}
           fi
+
+      # Sent every day on purpose, after the snapshot is committed so a
+      # digest failure (bad secret, Telegram outage) can never block the
+      # data commit above. Fails closed -- see send_daily_digest.py --
+      # so its own absence shows up as a red job, not silence.
+      - name: Send daily digest
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python .github/scripts/send_daily_digest.py
