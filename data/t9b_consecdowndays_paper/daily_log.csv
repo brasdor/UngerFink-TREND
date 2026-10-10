@@ -1768,3 +1768,11 @@ run_date,event,symbol,detail
 2026-10-08,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system,,,,
 2026-10-08,ENTRY,WLD/USDT,"consec=5  price=0.4797  ema200=0.43417  stop=0.351443  risk=$26.18  bars_to_exit=20  equity=$9,975.00",0.4797,0.35144286,26.1844,9975.0
 2026-10-08,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,
+2026-10-09,SIGNAL_SKIPPED,ARB/USDT,duplicate_cross_system
+2026-10-09,SIGNAL_SKIPPED,PENDLE/USDT,duplicate_cross_system
+2026-10-09,SIGNAL_SKIPPED,SEI/USDT,duplicate_cross_system
+2026-10-09,ENTRY,SOL/USDT,"consec=5  price=109.13  ema200=97.1605  stop=99.9114  risk=$26.18  bars_to_exit=20  equity=$9,975.00"
+2026-10-09,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
+2026-10-09,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
+2026-10-09,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-10-09,SIGNAL_SKIPPED,ZEN/USDT,duplicate_cross_system
