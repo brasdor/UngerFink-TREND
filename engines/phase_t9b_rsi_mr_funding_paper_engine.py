@@ -392,6 +392,10 @@ def funding_at(symbol: str, bar_close_ms: int) -> Optional[float]:
 # =============================================================================
 
 def _compute_rsi(close: np.ndarray, n: int) -> np.ndarray:
+    """Validity guard -- see phase_t9b_meanreversion_paper_engine.py's
+    identical function for the confirmed root cause (avg_g/avg_l decay by
+    the same factor on a zero-delta bar, locking RSI at its pre-flatline
+    value forever, not a fallback)."""
     delta = np.diff(close, prepend=close[0])
     gain = np.maximum(delta, 0.0)
     loss = np.maximum(-delta, 0.0)
@@ -408,6 +412,10 @@ def _compute_rsi(close: np.ndarray, n: int) -> np.ndarray:
     rs = np.where(avg_l > 0, avg_g / avg_l, 100.0)
     rsi = 100.0 - 100.0 / (1.0 + rs)
     rsi[:n] = np.nan
+    for i in range(n, len(close)):
+        window = close[i - n:i + 1]
+        if np.nanmax(window) == np.nanmin(window):
+            rsi[i] = np.nan
     return rsi
 
 
@@ -474,11 +482,16 @@ def check_entry_signal(symbol: str, df: pd.DataFrame, run_date: date) -> Optiona
 
     day_idx = day_rows.index[-1]
     if _is_flat_or_delisted(dfi, day_idx):
-        print(f"  [FLAT_MARKET] {symbol}: last {FLAT_MARKET_LOOKBACK_BARS} bars have "
-              f"zero volume/range as of {run_date} -- likely delisted; skipping entry "
-              f"signal (RSI on flat data is unreliable, see finding this session).",
-              flush=True)
+        emit("S8", "flat_window_rsi_invalidated", "WARNING",
+             f"{symbol}: last {FLAT_MARKET_LOOKBACK_BARS} bars have zero volume/range "
+             f"as of {run_date} -- likely delisted; skipping entry signal",
+             key=symbol, evidence={"symbol": symbol, "lookback_bars": FLAT_MARKET_LOOKBACK_BARS},
+             suggested_action="Likely a SETTLING futures contract; check "
+                               "data/exchange_status_cache.json.",
+             run_date=str(run_date))
         return None
+    else:
+        resolve("S8", "flat_window_rsi_invalidated", key=symbol, run_date=str(run_date))
 
     row   = day_rows.iloc[-1]
     close = float(row["close"])

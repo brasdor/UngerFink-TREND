@@ -377,6 +377,21 @@ def check_entry_signal(symbol: str, df: pd.DataFrame, run_date: date) -> Optiona
     if not all(np.isfinite([close, atr, ema200])) or atr <= EPS:
         return None
 
+    # Validity guard, defense-in-depth: flat data already gives
+    # consec_down=0 (strict < comparison never counts a flat day) and
+    # atr<=EPS already returns None above -- structurally immune, unlike
+    # S2/S8's RSI. Kept for observability.
+    recent = df["close"].values[-(CONSEC_N + 1):]
+    if len(recent) and np.nanmax(recent) == np.nanmin(recent):
+        emit("S3", "flat_window_detected", "WARNING",
+             f"{symbol}: last {len(recent)} closes are identical as of {run_date} "
+             f"-- consec_down structurally cannot accumulate on flat data",
+             key=symbol, evidence={"symbol": symbol, "n_flat_bars": len(recent)},
+             suggested_action="Likely a SETTLING futures contract; check "
+                               "data/exchange_status_cache.json.",
+             run_date=str(run_date))
+        return None
+
     # Both conditions required
     if consec >= CONSEC_N and close > ema200:
         stop = close - ATR_STOP_MULT * atr

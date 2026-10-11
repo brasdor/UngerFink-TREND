@@ -53,6 +53,7 @@ import pandas as pd
 
 import t9b_shared
 from signal_arbitrator import SignalArbitrator
+from health_emit import emit, resolve
 
 # ── Paths ─────────────────────────────────────────────────────────────────
 ROOT       = Path(__file__).resolve().parents[1]
@@ -416,6 +417,28 @@ def compute_basket(close: pd.DataFrame, as_of: Date,
     close_tlb = close.loc[t_lb]
 
     ret = (close_t0 / close_tlb - 1).replace([np.inf, -np.inf], np.nan).dropna()
+
+    # Validity guard (2026-10-11, confirmed root cause of S5's STGUSDT
+    # entry on 2026-10-09 -- after its own settlement): a flat window
+    # gives ret=0 exactly, a perfectly legitimate float that this
+    # cross-sectional ranking has no way to distinguish from "genuinely
+    # flat momentum" -- and 0% can rank INSIDE the top basket whenever
+    # enough real symbols have negative returns, which is common in a
+    # down market. Invalidate (drop, not zero) any symbol whose entire
+    # lookback window had zero range -- it has no real momentum to rank.
+    window = close.loc[t_lb:t0]
+    flat_syms = [s for s in ret.index if s in window.columns
+                 and window[s].notna().all()
+                 and window[s].max() == window[s].min()]
+    for s in flat_syms:
+        emit("S5", "flat_window_momentum_invalidated", "WARNING",
+             f"{s}: zero range over the full {LOOKBACK}-bar lookback -- "
+             f"excluded from basket ranking rather than ranked at 0% return",
+             key=s, evidence={"symbol": s, "lookback": LOOKBACK},
+             suggested_action="Likely a SETTLING futures contract; check "
+                               "data/exchange_status_cache.json.",
+             run_date=str(as_of))
+    ret = ret.drop(index=flat_syms, errors="ignore")
 
     # EMA200 at t0
     ema200_series = close.ewm(span=EMA_SPAN, min_periods=20, adjust=False).mean().loc[t0]

@@ -362,6 +362,24 @@ def check_entry_signal(
     if atr <= EPS or don_high <= EPS:
         return None
 
+    # Validity guard, defense-in-depth: a flat window already can't breach
+    # don_entry_high (close == the rolling high always on constant data),
+    # so this never actually changes the outcome here -- unlike S2/S8's
+    # RSI, this engine's signal condition is structurally immune. Kept for
+    # observability (confirms *why* nothing fired) and so a future change
+    # to the entry condition doesn't silently reopen the hole.
+    recent = df["close"].values[-(DONCHIAN_ENTRY_N + 1):]
+    if len(recent) and np.nanmax(recent) == np.nanmin(recent):
+        emit("S1", "flat_window_detected", "WARNING",
+             f"{symbol}: last {len(recent)} closes are identical as of {run_date} "
+             f"-- Donchian breakout structurally cannot fire on flat data, confirming "
+             f"no false signal, but flagging the underlying data issue",
+             key=symbol, evidence={"symbol": symbol, "n_flat_bars": len(recent)},
+             suggested_action="Likely a SETTLING futures contract; check "
+                               "data/exchange_status_cache.json.",
+             run_date=str(run_date))
+        return None
+
     if close > don_high and close > ema200:
         return {
             "symbol":              symbol,

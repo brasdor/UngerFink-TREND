@@ -22,6 +22,8 @@ from __future__ import annotations
 
 import pandas as pd
 
+from engines.health_emit import emit
+
 
 def generate_universe_positions(panel: dict[str, pd.DataFrame], params: dict) -> dict[str, pd.Series]:
     """Returns {symbol: position_series} for every symbol in panel, each aligned to
@@ -46,6 +48,27 @@ def generate_universe_positions(panel: dict[str, pd.DataFrame], params: dict) ->
     for date in all_dates:
         if date in rebalance_dates:
             row = trailing_ret.loc[date].dropna()
+            # Validity guard (2026-10-11): a symbol flat over its ENTIRE
+            # formation window gives trailing_ret=0 exactly -- a legitimate
+            # float .dropna() can't catch, and 0% can rank inside the top
+            # decile whenever enough real peers have negative returns (any
+            # down market). Exclude it from ranking rather than letting a
+            # dead/SETTLING contract's "flat momentum" compete with real
+            # signals -- it has none to rank.
+            window = closes.loc[:date].tail(formation + 1)
+            flat_syms = [s for s in row.index if s in window.columns
+                         and window[s].notna().all()
+                         and window[s].max() == window[s].min()]
+            if flat_syms:
+                for s in flat_syms:
+                    emit("Candidate12", "flat_window_momentum_invalidated", "WARNING",
+                         f"{s}: zero range over the full {formation}-bar formation "
+                         f"window as of {date.date()} -- excluded from ranking",
+                         key=s, evidence={"symbol": s, "formation": formation},
+                         suggested_action="Likely a SETTLING futures contract; check "
+                                           "data/exchange_status_cache.json.",
+                         run_date=str(date.date()))
+                row = row.drop(index=flat_syms, errors="ignore")
             if len(row) >= min_universe:
                 n_select = max(1, int(len(row) * quantile))
                 ranked = row.sort_values(ascending=False)

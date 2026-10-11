@@ -443,6 +443,22 @@ def _fetch_binance_1d(symbol: str, limit: int = 15) -> Optional[pd.DataFrame]:
 # =============================================================================
 
 def _compute_rsi(close: np.ndarray, n: int) -> np.ndarray:
+    """
+    Validity guard (2026-10-11, confirmed root cause of S2/S8's repeat
+    entries into dead symbols): avg_g and avg_l both decay by the exact
+    same factor (1-alpha) on a zero-delta bar, so their RATIO -- and
+    therefore RSI -- is mathematically LOCKED at whatever value it had
+    the moment real price action stopped, forever, not a fallback value.
+    Confirmed on COSUSDT's real history: RSI froze at 16.067355 on
+    2026-06-10 (the day its price went flat) and stayed bit-identical for
+    122+ consecutive days -- reading as "oversold" (<25) every single
+    time the engine checked it, long after the number stopped meaning
+    anything. Fix: once the trailing n+1 closes have zero range (the
+    exact window this RSI value is computed from), the value is
+    definitionally stale -- force it to NaN so every caller's existing
+    "if not finite: no signal" guard rejects it, rather than silently
+    inheriting a frozen number from before the freeze began.
+    """
     delta = np.diff(close, prepend=close[0])
     gain = np.maximum(delta, 0.0)
     loss = np.maximum(-delta, 0.0)
@@ -459,6 +475,10 @@ def _compute_rsi(close: np.ndarray, n: int) -> np.ndarray:
     rs = np.where(avg_l > 0, avg_g / avg_l, 100.0)
     rsi = 100.0 - 100.0 / (1.0 + rs)
     rsi[:n] = np.nan
+    for i in range(n, len(close)):
+        window = close[i - n:i + 1]
+        if np.nanmax(window) == np.nanmin(window):
+            rsi[i] = np.nan
     return rsi
 
 
@@ -503,6 +523,17 @@ def check_entry_signal(symbol: str, df: pd.DataFrame, run_date: date) -> Optiona
     close = float(row["close"])
     rsi   = float(row["rsi"])
     atr   = float(row["atr"])
+
+    if not np.isfinite(rsi):
+        recent = df["close"].values[-(RSI_N + 1):]
+        if len(recent) and np.nanmax(recent) == np.nanmin(recent):
+            emit("S2", "flat_window_rsi_invalidated", "WARNING",
+                 f"{symbol}: last {len(recent)} closes are identical -- RSI "
+                 f"invalidated rather than using a frozen pre-flatline value",
+                 key=symbol, evidence={"symbol": symbol, "n_flat_bars": len(recent)},
+                 suggested_action="Likely a SETTLING futures contract; check "
+                                   "data/exchange_status_cache.json.",
+                 run_date=str(run_date))
 
     if not all(np.isfinite([close, rsi, atr])) or atr <= EPS:
         return None

@@ -20,6 +20,8 @@ from __future__ import annotations
 
 import pandas as pd
 
+from engines.health_emit import emit
+
 
 def generate_universe_positions(panel: dict[str, pd.DataFrame], params: dict) -> dict[str, pd.Series]:
     lookback = params["lookback"]
@@ -40,6 +42,27 @@ def generate_universe_positions(panel: dict[str, pd.DataFrame], params: dict) ->
     for date in all_dates:
         if date in rebalance_dates:
             row = proximity.loc[date].dropna()
+            # Validity guard (2026-10-11): once a symbol's ENTIRE lookback
+            # window is flat, rolling_high converges to the frozen price
+            # and proximity = closes/rolling_high = 1.0 EXACTLY -- the
+            # theoretical maximum of this metric, not a merely-competitive
+            # value like candidate 12's 0% return. A dead/SETTLING
+            # contract would win every top-decile selection forever.
+            window = closes.loc[:date].tail(lookback + 1)
+            flat_syms = [s for s in row.index if s in window.columns
+                         and window[s].notna().all()
+                         and window[s].max() == window[s].min()]
+            if flat_syms:
+                for s in flat_syms:
+                    emit("Candidate19", "flat_window_proximity_invalidated", "WARNING",
+                         f"{s}: zero range over the full {lookback}-bar lookback as of "
+                         f"{date.date()} -- proximity would read 1.0 (the metric's "
+                         f"maximum) -- excluded from ranking",
+                         key=s, evidence={"symbol": s, "lookback": lookback},
+                         suggested_action="Likely a SETTLING futures contract; check "
+                                           "data/exchange_status_cache.json.",
+                         run_date=str(date.date()))
+                row = row.drop(index=flat_syms, errors="ignore")
             if len(row) >= min_universe:
                 n_select = max(1, int(len(row) * quantile))
                 ranked = row.sort_values(ascending=False)
