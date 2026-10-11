@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-11T09:33:55.126786+00:00",
+  "generated_at": "2026-10-11T11:41:15.975856+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -89,6 +89,10 @@
     "suppression_list_stale": {
       "status": "fail",
       "n_findings": 2
+    },
+    "funding_refresh_job_alive": {
+      "status": "pass",
+      "n_findings": 0
     }
   },
   "findings": [
@@ -349,12 +353,12 @@
       "severity": "CRITICAL",
       "system": "data/futures_universe/funding_rates",
       "check": "funding_staleness",
-      "message": "funding_rates: 13/290 symbol(s) stale (median across the universe is 0d, fine); worst is COSUSDT at 122d",
+      "message": "funding_rates: 13/290 symbol(s) stale (median across the universe is 0d, fine); worst is DUSDT at 122d",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
-        "worst_symbol": "COSUSDT",
+        "worst_symbol": "DUSDT",
         "worst_days": 122,
         "median_days": 0,
         "n_stale": 13,
@@ -381,6 +385,38 @@
       "run_date": "2026-10-11"
     },
     {
+      "id": "Candidate12:flat_window_momentum_invalidated:FLATUSDT",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "flat_window_momentum_invalidated",
+      "message": "FLATUSDT: zero range over the full 30-bar formation window as of 2026-09-11 -- excluded from ranking",
+      "first_seen": "2026-07-13",
+      "last_seen": "2026-09-11",
+      "status": "open",
+      "evidence": {
+        "symbol": "FLATUSDT",
+        "formation": 30
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-09-11"
+    },
+    {
+      "id": "Candidate19:flat_window_proximity_invalidated:FLATUSDT",
+      "severity": "WARNING",
+      "system": "Candidate19",
+      "check": "flat_window_proximity_invalidated",
+      "message": "FLATUSDT: zero range over the full 60-bar lookback as of 2026-09-11 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "first_seen": "2026-08-12",
+      "last_seen": "2026-09-11",
+      "status": "open",
+      "evidence": {
+        "symbol": "FLATUSDT",
+        "lookback": 60
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-09-11"
+    },
+    {
       "id": "S2:csv_not_pandas_parseable:daily_log.csv",
       "severity": "WARNING",
       "system": "S2",
@@ -397,6 +433,22 @@
       "run_date": "2026-10-11"
     },
     {
+      "id": "S2:flat_window_rsi_invalidated:FLATUSDT",
+      "severity": "WARNING",
+      "system": "S2",
+      "check": "flat_window_rsi_invalidated",
+      "message": "FLATUSDT: last 15 closes are identical -- RSI invalidated rather than using a frozen pre-flatline value",
+      "first_seen": "2026-10-10",
+      "last_seen": "2026-10-10",
+      "status": "open",
+      "evidence": {
+        "symbol": "FLATUSDT",
+        "n_flat_bars": 15
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-10"
+    },
+    {
       "id": "S3:csv_not_pandas_parseable:daily_log.csv",
       "severity": "WARNING",
       "system": "S3",
@@ -411,6 +463,22 @@
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
       "run_date": "2026-10-11"
+    },
+    {
+      "id": "S5:flat_window_momentum_invalidated:FLATUSDT",
+      "severity": "WARNING",
+      "system": "S5",
+      "check": "flat_window_momentum_invalidated",
+      "message": "FLATUSDT: zero range over the full 20-bar lookback -- excluded from basket ranking rather than ranked at 0% return",
+      "first_seen": "2026-10-10",
+      "last_seen": "2026-10-10",
+      "status": "open",
+      "evidence": {
+        "symbol": "FLATUSDT",
+        "lookback": 20
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-10"
     },
     {
       "id": "S6:csv_not_pandas_parseable:daily_log.csv",
@@ -477,6 +545,22 @@
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
       "run_date": "2026-10-11"
+    },
+    {
+      "id": "S8:flat_window_rsi_invalidated:FLATUSDT",
+      "severity": "WARNING",
+      "system": "S8",
+      "check": "flat_window_rsi_invalidated",
+      "message": "FLATUSDT: last 5 bars have zero volume/range as of 2026-10-10 -- likely delisted; skipping entry signal",
+      "first_seen": "2026-10-10",
+      "last_seen": "2026-10-10",
+      "status": "open",
+      "evidence": {
+        "symbol": "FLATUSDT",
+        "lookback_bars": 5
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-10"
     },
     {
       "id": "data/halted_symbols_suppression.json:suppression_list_stale:ARDR_USDT",
@@ -736,16 +820,16 @@
       "run_date": "2026-10-11"
     },
     {
-      "id": "futures_universe:symbol_gaps:WUSDT_1d",
+      "id": "futures_universe:symbol_gaps:ZRXUSDT_1d",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "symbol_gaps",
-      "message": "futures universe: WUSDT_1d has 7 missing calendar day(s) inside its own covered history",
+      "message": "futures universe: ZRXUSDT_1d has 7 missing calendar day(s) inside its own covered history",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
-        "symbol": "WUSDT_1d",
+        "symbol": "ZRXUSDT_1d",
         "n_gaps": 7
       },
       "suggested_action": "Re-backfill this symbol from the CDN; check for an exchange halt around the gap date(s).",
