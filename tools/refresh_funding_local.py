@@ -96,8 +96,14 @@ def git(*args: str) -> subprocess.CompletedProcess:
     return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)
 
 
+OI_DIR = ROOT / "data" / "riskoff" / "forward"
+
+
 def commit_and_push(push: bool) -> int:
-    add = git("add", "--force", str(FUND_DIR.relative_to(ROOT).as_posix()))
+    paths = [FUND_DIR.relative_to(ROOT).as_posix()]
+    if OI_DIR.exists():
+        paths.append(OI_DIR.relative_to(ROOT).as_posix())
+    add = git("add", "--force", *paths)
     if add.returncode != 0:
         print(f"[GIT] add failed: {add.stderr.strip()}")
         return 1
@@ -107,7 +113,7 @@ def commit_and_push(push: bool) -> int:
         return 0
 
     today = pd.Timestamp.utcnow().strftime("%Y-%m-%d")
-    message = f"Funding rates: local refresh {today} [skip ci]"
+    message = f"Funding rates + OI snapshot: local refresh {today} [skip ci]"
     commit = git("commit", "-m", message)
     if commit.returncode != 0:
         print(f"[GIT] commit failed: {commit.stderr.strip()}")
@@ -161,6 +167,17 @@ def main() -> int:
     print(f"[FUNDING] updated {updated} symbols")
 
     report(funding_ages(), "after")
+
+    # Risk-off forward test: append-only BTCUSDT open-interest log (docs/RISKOFF_OI_FORWARD_PREREG.md).
+    # Failure here must not stop the funding refresh from being committed.
+    try:
+        spec = importlib.util.spec_from_file_location("oi_snapshot", ROOT / "tools" / "oi_snapshot.py")
+        oi = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(oi)
+        oi.run()
+    except Exception as exc:
+        print(f"[OI] snapshot step crashed: {type(exc).__name__}: {exc}")
+
     return commit_and_push(push=not args.no_push)
 
 
