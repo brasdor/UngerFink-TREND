@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-11T09:19:15.424710+00:00",
+  "generated_at": "2026-10-11T09:33:55.126786+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -16,7 +16,7 @@
     },
     "frozen_value_detection": {
       "status": "fail",
-      "n_findings": 2
+      "n_findings": 1
     },
     "timestamps_1970": {
       "status": "pass",
@@ -349,18 +349,18 @@
       "severity": "CRITICAL",
       "system": "data/futures_universe/funding_rates",
       "check": "funding_staleness",
-      "message": "funding_rates: 278/290 symbols are 44d behind (a mass freeze, not a few stragglers); worst is COSUSDT at 122d",
+      "message": "funding_rates: 13/290 symbol(s) stale (median across the universe is 0d, fine); worst is COSUSDT at 122d",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "worst_symbol": "COSUSDT",
         "worst_days": 122,
-        "median_days": 44,
-        "n_at_median": 278,
+        "median_days": 0,
+        "n_stale": 13,
         "n_checked": 290
       },
-      "suggested_action": "Funding refresh needs a reachable (non-US) host -- GH runners are geo-blocked from fapi.binance.com. Feeds S6/S7 gates, S8's filter, and the regime funding axis.",
+      "suggested_action": "Funding refresh needs a reachable (non-US) host -- GH runners are geo-blocked from fapi.binance.com. Feeds S6/S7 gates, S8's filter, and the regime funding axis. If n_stale matches the SETTLING symbols in data/exchange_status_cache.json, this is expected and benign.",
       "run_date": "2026-10-11"
     },
     {
@@ -508,23 +508,6 @@
         "age_days": 48
       },
       "suggested_action": "Check monthly_halted_symbol_check.yml's recent runs.",
-      "run_date": "2026-10-11"
-    },
-    {
-      "id": "data/regime_history.csv:frozen_value_detection:funding_avg",
-      "severity": "WARNING",
-      "system": "data/regime_history.csv",
-      "check": "frozen_value_detection",
-      "message": "regime_history.funding_avg has been exactly 6.73e-06 for the last 23 rows -- check the upstream feed, not just this file",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-11",
-      "status": "open",
-      "evidence": {
-        "column": "funding_avg",
-        "value": 6.73e-06,
-        "run_length": 23
-      },
-      "suggested_action": "Check whether the upstream source (e.g. funding cache) is stale.",
       "run_date": "2026-10-11"
     },
     {

@@ -1,0 +1,90 @@
+name: Funding Refresh (self-hosted)
+
+# Runs ONLY on a dedicated self-hosted runner on a non-US host -- fapi.binance.com
+# is geo-blocked from GitHub's US-hosted runners, confirmed repeatedly elsewhere
+# in this project (klines, exchange status, funding itself).
+#
+# Hardening (per 2026-10-11 review -- this workflow executes repository code
+# on a machine you own, treat it accordingly):
+#   - runs-on: [self-hosted, funding-refresh] -- a label unique to ONE runner
+#     dedicated to this workflow alone. Do not reuse this runner/label for
+#     anything else, and do not add this label to a runner that also serves
+#     other workflows.
+#   - No pull_request / pull_request_target trigger, ever. Only schedule and
+#     workflow_dispatch -- neither can be triggered by a fork or an external
+#     contributor. If you ever add a trigger to this file, it must stay that
+#     way; a self-hosted runner executing code from an untrusted PR is the
+#     textbook way to compromise the host.
+#   - This repo should be private. A public repo + self-hosted runner lets
+#     anyone who can open a PR run code on your machine, trigger or not --
+#     GitHub's own docs call this out explicitly for public repos.
+#   - The runner's registration token/service should run as a dedicated
+#     non-root user with no other secrets on that host. This workflow itself
+#     requests no secrets and should never be given any beyond GITHUB_TOKEN.
+#   - contents: write is the only permission needed (push the funding CSVs
+#     back). No issues/PR/admin scopes.
+#
+# Setup (one-time, on the host):
+#   1. Settings -> Actions -> Runners -> New self-hosted runner. Choose the
+#      OS shown there and follow its exact download/config commands.
+#   2. When prompted for labels, add: funding-refresh  (keep the default
+#      "self-hosted" label too -- both apply to the same runner).
+#   3. Install as a service running under a DEDICATED non-root user:
+#        sudo ./svc.sh install <that-user>
+#        sudo ./svc.sh start
+#   4. Confirm reachability from that host before relying on it:
+#        curl -s -o /dev/null -w '%{http_code}\n' https://fapi.binance.com/fapi/v1/ping
+#      Expect 200. If you get 451 or a timeout, this host is also blocked
+#      and this whole approach needs a different host.
+#   5. python3 -m pip install -r requirements.txt once, so the venv/deps the
+#      runner uses are already warm (this workflow also runs it every time,
+#      cheap if already satisfied).
+
+on:
+  schedule:
+    - cron: '0 13 * * *'   # after the daily engine workflows + heartbeat + health check
+  workflow_dispatch: {}
+
+jobs:
+  funding-refresh:
+    runs-on: [self-hosted, funding-refresh]
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Install dependencies
+        run: python3 -m pip install -r requirements.txt
+
+      - name: Refresh funding rates
+        id: refresh
+        run: python3 tools/refresh_funding_local.py --no-push
+
+      - name: Push
+        if: always()
+        run: |
+          # tools/refresh_funding_local.py already committed locally;
+          # this just pushes, with the same retry-with-autostash pattern
+          # used everywhere else in this repo for a concurrent push.
+          if ! git diff --quiet HEAD~1 HEAD -- data/futures_universe/funding_rates/ 2>/dev/null; then
+            pushed=0
+            for attempt in 1 2 3 4 5; do
+              if git push origin ${{ github.ref_name }}; then
+                pushed=1
+                break
+              fi
+              git -c rebase.autoStash=true pull --rebase origin ${{ github.ref_name }} || true
+              sleep $((attempt * 5))
+            done
+            if [ "${pushed}" != "1" ]; then
+              echo "ERROR: could not push funding refresh after 5 attempts"
+              exit 1
+            fi
+          else
+            echo "No funding changes to push."
+          fi

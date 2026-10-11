@@ -35,6 +35,8 @@ import json, numpy as np, pandas as pd
 from pathlib import Path
 from datetime import date as Date
 
+from health_emit import emit, resolve
+
 ROOT = Path(__file__).resolve().parents[1]
 DATA_1D = ROOT / "data" / "futures_universe" / "ohlcv_1d"
 FUNDING_DIR = ROOT / "data" / "futures_universe" / "funding_rates"
@@ -128,6 +130,7 @@ def compute_regime(run_date=None):
     # Funding rate — average across all funded symbols, latest rate on or
     # before run_date (not "latest in file", which may be later than run_date)
     funding_rates = []
+    funding_gap_days = []
     for f in sorted(FUNDING_DIR.glob("*_funding.csv")):
         try:
             df = pd.read_csv(f)
@@ -137,10 +140,36 @@ def compute_regime(run_date=None):
             df = df[ft < cutoff]
             if len(df) > 0:
                 funding_rates.append(df["funding_rate"].iloc[-1])
+                last_dt = ft[ft < cutoff].iloc[-1]
+                funding_gap_days.append((pd.Timestamp(run_date) - last_dt).days)
         except:
             continue
 
     raw_funding = np.mean(funding_rates) if funding_rates else 0.0001
+
+    # Fail-closed (enabled 2026-10-11): if the BULK of the funding universe
+    # is stale as of run_date -- not one straggler, the same "mass freeze"
+    # shape confirmed 2026-08-28 to 2026-10-11 -- the funding axis falls
+    # back to NEUTRAL rather than trusting a smoothed average built mostly
+    # from old data. Median, not worst-case, so one still-SETTLING symbol
+    # (which will never update again) can't hold this axis hostage forever.
+    MAX_FUNDING_STALE_DAYS = 3
+    funding_data_stale = (
+        len(funding_gap_days) > 0
+        and float(np.median(funding_gap_days)) > MAX_FUNDING_STALE_DAYS
+    )
+    if funding_data_stale:
+        emit("regime", "funding_axis_stale_fallback", "CRITICAL",
+             f"funding data median age {np.median(funding_gap_days):.1f}d as of "
+             f"{run_date} (threshold {MAX_FUNDING_STALE_DAYS}d) -- funding axis "
+             f"forced to NEUTRAL rather than computed from stale data",
+             evidence={"median_gap_days": float(np.median(funding_gap_days)),
+                       "n_symbols": len(funding_gap_days)},
+             suggested_action="Run tools/refresh_funding_local.py (fapi is "
+                               "geo-blocked from CI).",
+             run_date=str(run_date))
+    else:
+        resolve("regime", "funding_axis_stale_fallback", run_date=str(run_date))
 
     # Apply EMA smoothing using previous state if available
     if prev and "breadth_ema3" in prev and "funding_ema5" in prev:
@@ -183,7 +212,12 @@ def compute_regime(run_date=None):
     days_since_funding = (run_date - Date.fromisoformat(last_funding_switch)).days
 
     new_funding = current_funding
-    if days_since_funding >= MIN_HOLD_DAYS:
+    if funding_data_stale:
+        # Fail-closed overrides hysteresis/min-hold entirely -- a stale
+        # read must never be trusted just because the axis "isn't due" to
+        # reconsider yet.
+        new_funding = "NEUTRAL"
+    elif days_since_funding >= MIN_HOLD_DAYS:
         if current_funding != "HIGH" and funding_smooth > FUNDING_ENTER_HIGH:
             new_funding = "HIGH"
         elif current_funding == "HIGH" and funding_smooth < FUNDING_EXIT_HIGH:

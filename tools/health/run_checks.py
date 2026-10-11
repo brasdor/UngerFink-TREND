@@ -224,16 +224,28 @@ def check_funding_staleness() -> list[dict]:
     worst_days = ages[worst_sym]
     sorted_ages = sorted(ages.values())
     median_days = sorted_ages[len(sorted_ages) // 2]
-    n_bulk = sum(1 for v in ages.values() if v == median_days)
+    n_stale = sum(1 for v in ages.values() if v > MAX_FUNDING_STALE_DAYS)
+    if median_days > MAX_FUNDING_STALE_DAYS:
+        # The bulk of the universe is stale, not a handful of stragglers --
+        # confirmed shape of the 2026-08-28 freeze.
+        shape = (f"{n_stale}/{len(ages)} symbols are {median_days}d behind "
+                 f"(a mass freeze, not a few stragglers)")
+    else:
+        # Median is fine -- this is a small number of individually-stale
+        # symbols (confirmed shape once the bulk refresh is current: the
+        # SETTLING symbols, which will never update again).
+        shape = (f"{n_stale}/{len(ages)} symbol(s) stale (median across the "
+                 f"universe is {median_days}d, fine)")
     return [finding(
         "data/futures_universe/funding_rates", "funding_staleness", "CRITICAL",
-        f"funding_rates: {n_bulk}/{len(ages)} symbols are {median_days}d behind "
-        f"(a mass freeze, not a few stragglers); worst is {worst_sym} at {worst_days}d",
+        f"funding_rates: {shape}; worst is {worst_sym} at {worst_days}d",
         evidence={"worst_symbol": worst_sym, "worst_days": worst_days,
-                  "median_days": median_days, "n_at_median": n_bulk, "n_checked": len(ages)},
+                  "median_days": median_days, "n_stale": n_stale, "n_checked": len(ages)},
         suggested_action="Funding refresh needs a reachable (non-US) host -- "
                           "GH runners are geo-blocked from fapi.binance.com. "
-                          "Feeds S6/S7 gates, S8's filter, and the regime funding axis.",
+                          "Feeds S6/S7 gates, S8's filter, and the regime funding axis. "
+                          "If n_stale matches the SETTLING symbols in "
+                          "data/exchange_status_cache.json, this is expected and benign.",
     )]
 
 

@@ -386,6 +386,43 @@ def funding_at(symbol: str, bar_close_ms: int) -> Optional[float]:
     return float(sub["funding_rate"].iloc[-1])
 
 
+MAX_FUNDING_STALE_DAYS = 3  # enabled 2026-10-11 -- see S6/S7's identical constant.
+
+
+def funding_is_stale(symbol: str, bar_close_ms: int) -> bool:
+    df = load_funding(symbol)
+    if df.empty:
+        return True
+    sub = df[df["funding_time"] <= bar_close_ms]
+    if sub.empty:
+        return True
+    gap_days = (bar_close_ms - int(sub["funding_time"].iloc[-1])) / 86_400_000.0
+    return gap_days > MAX_FUNDING_STALE_DAYS
+
+
+MAX_OHLCV_STALE_DAYS = 3  # enabled 2026-10-11 -- see S6/S7's identical constant.
+_OHLCV_STALENESS_CACHE: dict = {}
+
+
+def ohlcv_is_stale(symbol: str, run_date) -> bool:
+    """See S6/S7's identical function for the full rationale."""
+    if symbol in _OHLCV_STALENESS_CACHE:
+        return _OHLCV_STALENESS_CACHE[symbol]
+    path = CACHE_1D / f"{symbol}_1d.csv"
+    stale = True
+    try:
+        if path.exists():
+            df = pd.read_csv(path, usecols=["timestamp"])
+            last_ms = int(pd.to_numeric(df["timestamp"], errors="coerce").dropna().iloc[-1])
+            last_date = pd.to_datetime(last_ms, unit="ms", utc=True).date()
+            gap_days = (pd.Timestamp(run_date).date() - last_date).days
+            stale = gap_days > MAX_OHLCV_STALE_DAYS
+    except Exception:
+        stale = True
+    _OHLCV_STALENESS_CACHE[symbol] = stale
+    return stale
+
+
 # =============================================================================
 # INDICATORS  -- ported VERBATIM from step4_rsi_mr_futures_funding_t1.py
 # (SMA-seeded Wilder recursion; verified 257/257 exact trade match vs frozen)
@@ -503,6 +540,29 @@ def check_entry_signal(symbol: str, df: pd.DataFrame, run_date: date) -> Optiona
 
     if rsi >= OVERSOLD_THR:
         return None
+
+    if ohlcv_is_stale(symbol, run_date):
+        emit("S8", "ohlcv_stale_no_entry", "CRITICAL",
+             f"{symbol}: 1D OHLCV cache older than {MAX_OHLCV_STALE_DAYS}d as of "
+             f"{run_date} -- no new entry",
+             key=symbol, evidence={"symbol": symbol, "run_date": str(run_date)},
+             suggested_action="Check refresh_futures_data.py's coverage for this symbol.",
+             run_date=str(run_date))
+        return None
+    else:
+        resolve("S8", "ohlcv_stale_no_entry", key=symbol, run_date=str(run_date))
+
+    if funding_is_stale(symbol, day_ms):
+        emit("S8", "funding_stale_no_entry", "CRITICAL",
+             f"{symbol}: funding data older than {MAX_FUNDING_STALE_DAYS}d as of "
+             f"{run_date} -- no new entry (S8 is funding-gated)",
+             key=symbol, evidence={"symbol": symbol, "run_date": str(run_date)},
+             suggested_action="Run tools/refresh_funding_local.py (fapi is "
+                               "geo-blocked from CI).",
+             run_date=str(run_date))
+        return None
+    else:
+        resolve("S8", "funding_stale_no_entry", key=symbol, run_date=str(run_date))
 
     # Funding gate: rate < 0, referenced at signal bar OPEN timestamp --
     # identical to research script get_rate(fp, ts_arr[i]).
