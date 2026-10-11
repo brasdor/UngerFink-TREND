@@ -361,6 +361,178 @@ def check_symbol_gaps() -> list[dict]:
     return out
 
 
+FLAT_PRICE_MIN_STREAK = 3  # confirmed 2026-10-11: COSUSDT/DUSDT/MBOXUSDT/HIGHUSDT
+                           # were all 100+ days flat by the time anyone noticed --
+                           # 3 is deliberately tight, not a late warning.
+EXCHANGE_STATUS_CACHE = ROOT / "data" / "exchange_status_cache.json"
+EXCHANGE_STATUS_MAX_AGE_DAYS = 35  # same cadence as the halted-symbol suppression re-check
+
+
+def _trailing_zero_range_streak(df: pd.DataFrame) -> int:
+    """Longest run of high==low days ending at the LAST row. Catches the
+    exact shape Binance itself serves for a SETTLING contract -- flat OHLC,
+    zero volume, served by the exchange's own API (confirmed live,
+    2026-10-11: fapi klines for COSUSDT return this verbatim) -- which a
+    staleness-by-last-date check can never see, since new rows keep
+    arriving on schedule. Caller already restricts the universe checked."""
+    try:
+        h = pd.to_numeric(df["high"], errors="coerce")
+        l = pd.to_numeric(df["low"], errors="coerce")
+    except KeyError:
+        return 0
+    zero = (h == l).to_numpy()
+    streak = 0
+    for z in zero[::-1]:
+        if z:
+            streak += 1
+        else:
+            break
+    return streak
+
+
+def check_flat_price() -> list[dict]:
+    """A symbol whose OHLCV feed has been reporting zero daily range for
+    FLAT_PRICE_MIN_STREAK+ days running -- real exchange behavior for a
+    SETTLING futures contract (Binance keeps serving the frozen settlement
+    price at zero volume rather than stopping the feed), not a local bug.
+    Independent of check_ohlcv_staleness_*: staleness watches the LAST
+    date, which never falls behind for a dead-but-still-updating symbol."""
+    out = []
+    for label, cache_dir in (
+        ("futures_universe", ROOT / "data" / "futures_universe" / "ohlcv_1d"),
+        ("universe", ROOT / "data" / "universe" / "ohlcv_1d"),
+    ):
+        if not cache_dir.exists():
+            continue
+        for f in cache_dir.glob("*_1d.csv"):
+            sym = f.stem.replace("_1d", "")
+            try:
+                df = pd.read_csv(f)
+            except Exception:
+                continue
+            streak = _trailing_zero_range_streak(df)
+            if streak >= FLAT_PRICE_MIN_STREAK:
+                out.append(finding(
+                    label, "flat_price", "WARNING",
+                    f"{sym}: {streak} consecutive zero-range day(s) (open==high==low==close) "
+                    f"-- check exchange status, likely SETTLING/delisted",
+                    key=sym, evidence={"symbol": sym, "streak_days": streak},
+                    suggested_action="Cross-check check_exchange_status's cache; exclude "
+                                      "from signals/rankings if confirmed non-TRADING "
+                                      "(see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
+                ))
+    return out
+
+
+def _normalize_for_cache(sym: str, venue: str) -> str:
+    plain = sym.replace("/", "").replace("_", "").upper()
+    return f"FUT:{plain}" if venue == "futures" else plain
+
+
+def check_exchange_status() -> list[dict]:
+    """Reads data/exchange_status_cache.json (written by
+    tools/health/refresh_exchange_status_cache.py, a local/manual-run
+    script -- fapi.binance.com is geo-blocked from CI, same constraint as
+    funding). Never calls either exchangeInfo endpoint itself. Flags:
+      1. the cache missing or older than EXCHANGE_STATUS_MAX_AGE_DAYS,
+      2. any symbol flagged by check_flat_price(), or currently held open
+         by any SYSTEMS entry, whose cached status isn't TRADING.
+    """
+    out: list[dict] = []
+    if not EXCHANGE_STATUS_CACHE.exists():
+        out.append(finding(
+            "data/exchange_status_cache.json", "exchange_status_cache_missing", "WARNING",
+            "no exchange status cache on disk -- check_exchange_status cannot "
+            "cross-reference flat-price symbols against real exchange status",
+            suggested_action="Run tools/health/refresh_exchange_status_cache.py "
+                              "(locally -- futures side is geo-blocked from CI).",
+        ))
+        return out
+
+    try:
+        cache = json.loads(EXCHANGE_STATUS_CACHE.read_text(encoding="utf-8"))
+    except Exception as exc:
+        out.append(finding(
+            "data/exchange_status_cache.json", "exchange_status_cache_unreadable", "WARNING",
+            f"cache exists but failed to parse: {exc}",
+            suggested_action="Re-run tools/health/refresh_exchange_status_cache.py.",
+        ))
+        return out
+
+    fetched_at = cache.get("fetched_at")
+    if fetched_at:
+        try:
+            age_days = (datetime.now(timezone.utc) - datetime.fromisoformat(fetched_at)).days
+            if age_days > EXCHANGE_STATUS_MAX_AGE_DAYS:
+                out.append(finding(
+                    "data/exchange_status_cache.json", "exchange_status_cache_stale", "WARNING",
+                    f"cache is {age_days}d old (threshold {EXCHANGE_STATUS_MAX_AGE_DAYS}d)",
+                    evidence={"age_days": age_days},
+                    suggested_action="Re-run tools/health/refresh_exchange_status_cache.py.",
+                ))
+        except Exception:
+            pass
+
+    symbols_cache = cache.get("symbols", {})
+    if not symbols_cache:
+        return out
+
+    # Symbols worth checking: anything flagged by check_flat_price(), plus
+    # every symbol any system currently holds open -- the two together
+    # cover both "about to become a problem" and "already is one."
+    candidates: dict[str, str] = {}  # normalized symbol -> venue
+    for label, cache_dir, venue in (
+        ("futures_universe", ROOT / "data" / "futures_universe" / "ohlcv_1d", "futures"),
+        ("universe", ROOT / "data" / "universe" / "ohlcv_1d", "spot"),
+    ):
+        if not cache_dir.exists():
+            continue
+        for f in cache_dir.glob("*_1d.csv"):
+            sym = f.stem.replace("_1d", "")
+            try:
+                df = pd.read_csv(f)
+            except Exception:
+                continue
+            if _trailing_zero_range_streak(df) >= FLAT_PRICE_MIN_STREAK:
+                candidates[_normalize_for_cache(sym, venue)] = sym
+
+    for sysconf in SYSTEMS:
+        state_path = sysconf["data_dir"] / "state.json"
+        if not state_path.exists():
+            continue
+        try:
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        op = state.get("open_positions")
+        if op is None:
+            op = (state.get("long_positions") or []) + (state.get("short_positions") or [])
+        for p in op:
+            sym = str(p.get("symbol", ""))
+            if sym:
+                venue = "spot" if sysconf["id"] in ("S1", "S3") else "futures"
+                candidates[_normalize_for_cache(sym, venue)] = sym
+
+    for norm_sym, display_sym in candidates.items():
+        entry = symbols_cache.get(norm_sym)
+        if entry is None:
+            continue  # not in either venue's exchangeInfo -- can't say anything
+        status = entry.get("status")
+        if status and status != "TRADING":
+            out.append(finding(
+                "data/exchange_status_cache.json", "exchange_status_not_trading", "CRITICAL",
+                f"{display_sym}: exchange status is '{status}', not TRADING "
+                f"(delivery: {entry.get('delivery_date')})",
+                key=norm_sym, evidence={"symbol": display_sym, "status": status,
+                                         "venue": entry.get("venue"),
+                                         "delivery_date": entry.get("delivery_date")},
+                suggested_action="Confirmed non-tradable -- exclude from new signals/"
+                                  "rankings (see docs/HEALTH_CONTRACT.md); any OPEN "
+                                  "position in it needs a decision, not an automatic one.",
+            ))
+    return out
+
+
 # ---------------------------------------------------------------------------
 # RUNS checks
 # ---------------------------------------------------------------------------
@@ -950,6 +1122,8 @@ REGISTRY: list[tuple[str, Callable[[], list[dict]]]] = [
     ("frozen_value_detection", check_frozen_values),
     ("timestamps_1970", check_timestamps_1970),
     ("symbol_gaps", check_symbol_gaps),
+    ("flat_price", check_flat_price),
+    ("exchange_status", check_exchange_status),
     ("heartbeat_36h", check_heartbeat_36h),
     ("missed_run_single_day", check_missed_run_single_day),
     ("step_failure", check_step_failure),

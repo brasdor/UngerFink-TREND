@@ -255,6 +255,15 @@ def main() -> int:
     max_order = float(os.environ.get("MAX_ORDER_USDT", "100"))
     equity_env = os.environ.get("EQUITY_USDT")
 
+    # Same root cause as S2's leverage bug (confirmed 2026-10-10, same
+    # formula shape): raw_qty = (equity*risk_pct)/per_unit_risk has no
+    # floor on the denominator. This path is disabled by default
+    # (AUTO_EXECUTE_ENABLED), but if it were live, a frozen/flat price
+    # feed here would size a REAL order, not just distort a paper report
+    # -- floor it the same way the paper engines now do.
+    MIN_RISK_PER_UNIT_PCT = 0.001
+    LEVERAGE = 1.0
+
     import ccxt
 
     client = ccxt.binance({
@@ -337,8 +346,33 @@ def main() -> int:
                 print(f"[AUTO] {key} already placed -- skip (idempotent)")
                 continue
 
-            per_unit_risk = entry - stop
+            per_unit_risk_raw = entry - stop
+            per_unit_risk = max(per_unit_risk_raw, MIN_RISK_PER_UNIT_PCT * entry, 1e-12)
+            if per_unit_risk > per_unit_risk_raw * 1.0000001:
+                emit(strat, "risk_per_unit_floored", "WARNING",
+                     f"{symbol}: stop distance {per_unit_risk_raw:.8g} is below the "
+                     f"{MIN_RISK_PER_UNIT_PCT:.2%} price floor -- sizing input only",
+                     key=symbol, evidence={"symbol": symbol, "per_unit_risk_raw": per_unit_risk_raw,
+                                            "per_unit_risk_floored": per_unit_risk, "entry": entry},
+                     suggested_action="Check whether this symbol's OHLCV feed is frozen "
+                                       "(e.g. a SETTLING futures contract) before this "
+                                       "path is ever enabled.")
+            else:
+                resolve(strat, "risk_per_unit_floored", key=symbol)
             raw_qty = (equity * risk_pct) / per_unit_risk
+
+            max_notional = equity * LEVERAGE
+            if raw_qty * entry > max_notional:
+                emit(strat, "leverage_cap_bound", "CRITICAL",
+                     f"{symbol}: sized notional ${raw_qty * entry:,.2f} exceeds the "
+                     f"{LEVERAGE:.2f}x cap -- capping qty to fit",
+                     key=symbol, evidence={"symbol": symbol, "notional_before": raw_qty * entry,
+                                            "leverage_cap": LEVERAGE, "equity": equity},
+                     suggested_action="Capped automatically.")
+                raw_qty = max_notional / entry
+            else:
+                resolve(strat, "leverage_cap_bound", key=symbol)
+
             try:
                 qty = float(client.amount_to_precision(symbol, raw_qty))
             except Exception as e:

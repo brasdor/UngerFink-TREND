@@ -67,6 +67,7 @@ import numpy as np
 import pandas as pd
 
 import t9b_shared
+from health_emit import emit, resolve
 import spot_data_refresh
 from signal_arbitrator import SignalArbitrator
 
@@ -92,6 +93,13 @@ MIN_ORDER_SIZE_USDT    = 15.0     # Fix 2: minimum position notional
 MAX_OPEN_POSITIONS     = 8
 INITIAL_CAPITAL        = 8_000.0   # Scheme C allocation: $8k of $30k Spot
 LEVERAGE               = 1.0
+
+# Shared fix (2026-10-10/11, same root cause as S2's leverage bug): qty =
+# risk_amount / risk_per_unit has no ceiling, and risk_per_unit has no
+# floor. See phase_t9b_meanreversion_paper_engine.py's MIN_RISK_PER_UNIT_PCT
+# comment for the confirmed real-world trigger (a SETTLING futures
+# contract's frozen price collapses ATR to ~0).
+MIN_RISK_PER_UNIT_PCT = 0.001  # stop distance floored at 0.10% of price
 KILL_SWITCH_DD_PCT     = 35.0     # halt new entries if DD exceeds this from peak
 
 EPS = 1e-12
@@ -591,10 +599,44 @@ def run_one_day(
             rw, rv = t9b_shared.get_regime_weight("donchian", run_date)
             regime_scale = rw * rv * 7
             risk_amount    = equity * RISK_PER_TRADE_PCT * regime_scale
-            risk_per_unit  = sig["initial_risk_unit"]
-            qty            = risk_amount / max(risk_per_unit, EPS)
             entry_price    = sig["close"]
             initial_stop   = sig["initial_stop"]
+            risk_per_unit = sig["initial_risk_unit"]  # UNCHANGED -- stored on the
+                                                        # position below, drives gross_r/
+                                                        # mfe_r at exit. Only the SIZING
+                                                        # copy below is floored.
+            risk_per_unit_for_sizing = max(risk_per_unit, MIN_RISK_PER_UNIT_PCT * entry_price, EPS)
+            if risk_per_unit_for_sizing > risk_per_unit * 1.0000001:
+                emit("S1", "risk_per_unit_floored", "WARNING",
+                     f"{sym}: ATR-derived stop distance {risk_per_unit:.8g} is below "
+                     f"the {MIN_RISK_PER_UNIT_PCT:.2%} price floor -- sizing input only, "
+                     f"initial_stop and the P&L denominator are both unchanged",
+                     key=sym, evidence={"symbol": sym, "risk_per_unit_raw": risk_per_unit,
+                                         "risk_per_unit_floored": risk_per_unit_for_sizing,
+                                         "close": entry_price},
+                     suggested_action="Check whether this symbol's OHLCV feed is frozen "
+                                       "(flat open=high=low=close, e.g. a SETTLING futures "
+                                       "contract).",
+                     run_date=str(run_date))
+            else:
+                resolve("S1", "risk_per_unit_floored", key=sym, run_date=str(run_date))
+            qty = risk_amount / risk_per_unit_for_sizing
+
+            max_notional = equity * LEVERAGE
+            notional = qty * entry_price
+            if notional > max_notional:
+                emit("S1", "leverage_cap_bound", "CRITICAL",
+                     f"{sym}: sized notional ${notional:,.2f} ({notional / equity:.2f}x) "
+                     f"exceeds the {LEVERAGE:.2f}x cap -- capping qty to fit",
+                     key=sym, evidence={"symbol": sym, "notional_before": notional,
+                                         "implied_leverage_before": notional / equity,
+                                         "leverage_cap": LEVERAGE, "equity": equity},
+                     suggested_action="Capped automatically -- repeated firing for the "
+                                       "same symbol points at a frozen/flat price feed.",
+                     run_date=str(run_date))
+                qty = max_notional / entry_price
+            else:
+                resolve("S1", "leverage_cap_bound", key=sym, run_date=str(run_date))
 
             # Fix 2: minimum order size validation
             if qty * entry_price < MIN_ORDER_SIZE_USDT:

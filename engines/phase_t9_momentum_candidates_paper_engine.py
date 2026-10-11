@@ -63,6 +63,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 import engines.t9b_shared as t9b_shared  # noqa: E402
+from engines.health_emit import emit, resolve  # noqa: E402
 from modules.asset_clustering import compute_static_clusters  # noqa: E402
 from signal_generators import candidate_12_cross_sectional_momentum as c12  # noqa: E402
 from signal_generators import candidate_19_proximity_high_momentum as c19  # noqa: E402
@@ -545,7 +546,31 @@ def main() -> int:
             skipped_rows.append({**entry, "reason": "MAX_OPEN"})
             continue
 
-        target_notional_pct = min(cfg.risk_per_trade_pct / stop_distance_pct, cfg.max_position_pct)
+        # Candidates were already structurally safe against the T9B engines'
+        # qty-blowup shape: max_position_pct caps the result regardless of
+        # how small stop_distance_pct gets, and atr<=0 is already rejected
+        # above (INVALID_ATR) before reaching this division -- no floor
+        # needed on top of that. What was missing is observability: nothing
+        # distinguished "normal sizing" from "the cap just bound because
+        # this symbol's stop distance collapsed" (the exact shape behind
+        # S2's leverage bug, were it to show up here).
+        uncapped_pct = cfg.risk_per_trade_pct / stop_distance_pct
+        target_notional_pct = min(uncapped_pct, cfg.max_position_pct)
+        if target_notional_pct < uncapped_pct * 0.9999999:
+            emit(f"Candidate{cfg.candidate_id}", "position_pct_cap_bound", "WARNING",
+                 f"{sym}: stop distance {stop_distance_pct:.4%} of price gives an "
+                 f"uncapped size of {uncapped_pct:.2%} of equity -- capped at "
+                 f"max_position_pct={cfg.max_position_pct:.2%}",
+                 key=sym, evidence={"symbol": sym, "stop_distance_pct": stop_distance_pct,
+                                     "uncapped_pct": uncapped_pct,
+                                     "max_position_pct": cfg.max_position_pct},
+                 suggested_action="Repeated firing for the same symbol points at a "
+                                   "frozen/flat price feed (e.g. a SETTLING futures "
+                                   "contract) collapsing its ATR.",
+                 run_date=str(today))
+        else:
+            resolve(f"Candidate{cfg.candidate_id}", "position_pct_cap_bound", key=sym,
+                    run_date=str(today))
         if cluster_pct_open + target_notional_pct > cfg.max_cluster_pct:
             skipped_rows.append({**entry, "reason": "MAX_CLUSTER_PCT"})
             continue

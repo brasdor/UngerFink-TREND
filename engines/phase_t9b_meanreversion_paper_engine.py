@@ -725,28 +725,37 @@ def run_one_day(run_date: date, symbols: List[str], state: dict) -> dict:
             rw, rv = t9b_shared.get_regime_weight("rsi_mr", run_date)
             regime_scale = rw * rv * 7
             risk_amount    = equity * RISK_PER_TRADE_PCT * regime_scale
-            risk_per_unit_raw = sig["risk_unit"]
-            risk_per_unit  = max(risk_per_unit_raw, MIN_RISK_PER_UNIT_PCT * sig["close"], EPS)
-            if risk_per_unit > risk_per_unit_raw * 1.0000001:
+            risk_per_unit = sig["risk_unit"]  # UNCHANGED -- stored on the position below,
+                                               # drives gross_r at exit. Flooring this value
+                                               # (not just qty) would change simulated P&L
+                                               # for any trade where the floor engages and
+                                               # price later moves -- caught in review before
+                                               # this shipped anywhere; a sizing-only floor
+                                               # must stay out of the P&L path entirely.
+            risk_per_unit_for_sizing = max(risk_per_unit, MIN_RISK_PER_UNIT_PCT * sig["close"], EPS)
+            if risk_per_unit_for_sizing > risk_per_unit * 1.0000001:
                 emit("S2", "risk_per_unit_floored", "WARNING",
-                     f"{sym}: ATR-derived stop distance {risk_per_unit_raw:.8g} is below "
+                     f"{sym}: ATR-derived stop distance {risk_per_unit:.8g} is below "
                      f"the {MIN_RISK_PER_UNIT_PCT:.2%} price floor -- sizing input only, "
-                     f"stop_loss itself is unchanged",
-                     key=sym, evidence={"symbol": sym, "risk_per_unit_raw": risk_per_unit_raw,
-                                         "risk_per_unit_floored": risk_per_unit, "close": sig["close"]},
+                     f"stop_loss and the P&L denominator are both unchanged",
+                     key=sym, evidence={"symbol": sym, "risk_per_unit_raw": risk_per_unit,
+                                         "risk_per_unit_floored": risk_per_unit_for_sizing,
+                                         "close": sig["close"]},
                      suggested_action="Check whether this symbol's OHLCV feed is frozen "
                                        "(flat open=high=low=close) -- confirmed the cause "
                                        "for COSUSDT/DUSDT/MBOXUSDT/HIGHUSDT on 2026-10-10.",
                      run_date=str(run_date))
             else:
                 resolve("S2", "risk_per_unit_floored", key=sym, run_date=str(run_date))
-            qty = risk_amount / risk_per_unit
+            qty = risk_amount / risk_per_unit_for_sizing
 
-            # Fix 4: notional cap at LEVERAGE x equity. qty is sizing-only
-            # (pos.risk_amount_usdt and pos.initial_risk_per_unit -- not
-            # qty -- drive every P&L calc at exit, so capping qty changes
-            # reported notional/leverage exposure, never the simulated P&L
-            # of a trade that already has a risk_amount and a stop).
+            # Fix 4: notional cap at LEVERAGE x equity. Both qty-sizing
+            # inputs above are kept OUT of pos.initial_risk_per_unit /
+            # pos.risk_amount_usdt -- the only two fields every exit
+            # branch's gross_r/pnl_usdt actually reads -- so this entire
+            # fix changes reported notional/leverage exposure only, never
+            # the simulated P&L of a trade that already has a risk_amount
+            # and a stop.
             max_notional = equity * LEVERAGE
             notional = qty * sig["close"]
             if notional > max_notional:

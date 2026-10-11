@@ -65,6 +65,7 @@ import numpy as np
 import pandas as pd
 
 import t9b_shared
+from health_emit import emit, resolve
 import spot_data_refresh
 from signal_arbitrator import SignalArbitrator
 
@@ -87,6 +88,10 @@ MIN_ORDER_SIZE_USDT = 15.0    # Fix 2: minimum position notional
 MAX_OPEN_POSITIONS  = None    # uncapped (system rarely fires >5 simultaneous)
 INITIAL_CAPITAL     = 10_000.0
 LEVERAGE            = 1.0
+
+# Shared fix -- see phase_t9b_meanreversion_paper_engine.py's
+# MIN_RISK_PER_UNIT_PCT comment for the confirmed real-world trigger.
+MIN_RISK_PER_UNIT_PCT = 0.001  # stop distance floored at 0.10% of price
 KILL_SWITCH_DD_PCT  = 35.0    # halt new entries if DD from peak exceeds this
 
 MIN_BARS_REQUIRED   = EMA_N + CONSEC_N + 10   # ~215 bars needed
@@ -589,8 +594,40 @@ def run_one_day(run_date: date, symbols: List[str], state: dict) -> dict:
             rw, rv = t9b_shared.get_regime_weight("consecdown", run_date)
             regime_scale = rw * rv * 7
             risk_amount   = equity * RISK_PER_TRADE_PCT * regime_scale
-            risk_per_unit = sig["risk_unit"]
-            qty           = risk_amount / max(risk_per_unit, EPS)
+            risk_per_unit = sig["risk_unit"]  # UNCHANGED -- stored on the position
+                                                # below, drives gross_r at exit.
+            risk_per_unit_for_sizing = max(risk_per_unit, MIN_RISK_PER_UNIT_PCT * sig["close"], EPS)
+            if risk_per_unit_for_sizing > risk_per_unit * 1.0000001:
+                emit("S3", "risk_per_unit_floored", "WARNING",
+                     f"{sym}: ATR-derived stop distance {risk_per_unit:.8g} is below "
+                     f"the {MIN_RISK_PER_UNIT_PCT:.2%} price floor -- sizing input only, "
+                     f"stop_loss and the P&L denominator are both unchanged",
+                     key=sym, evidence={"symbol": sym, "risk_per_unit_raw": risk_per_unit,
+                                         "risk_per_unit_floored": risk_per_unit_for_sizing,
+                                         "close": sig["close"]},
+                     suggested_action="Check whether this symbol's OHLCV feed is frozen "
+                                       "(flat open=high=low=close, e.g. a SETTLING futures "
+                                       "contract).",
+                     run_date=str(run_date))
+            else:
+                resolve("S3", "risk_per_unit_floored", key=sym, run_date=str(run_date))
+            qty = risk_amount / risk_per_unit_for_sizing
+
+            max_notional = equity * LEVERAGE
+            notional = qty * sig["close"]
+            if notional > max_notional:
+                emit("S3", "leverage_cap_bound", "CRITICAL",
+                     f"{sym}: sized notional ${notional:,.2f} ({notional / equity:.2f}x) "
+                     f"exceeds the {LEVERAGE:.2f}x cap -- capping qty to fit",
+                     key=sym, evidence={"symbol": sym, "notional_before": notional,
+                                         "implied_leverage_before": notional / equity,
+                                         "leverage_cap": LEVERAGE, "equity": equity},
+                     suggested_action="Capped automatically -- repeated firing for the "
+                                       "same symbol points at a frozen/flat price feed.",
+                     run_date=str(run_date))
+                qty = max_notional / sig["close"]
+            else:
+                resolve("S3", "leverage_cap_bound", key=sym, run_date=str(run_date))
 
             # Fix 2: minimum order size validation
             if qty * sig["close"] < MIN_ORDER_SIZE_USDT:

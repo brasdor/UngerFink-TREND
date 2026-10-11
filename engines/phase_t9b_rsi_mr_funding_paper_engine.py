@@ -59,6 +59,7 @@ import numpy as np
 import pandas as pd
 
 import t9b_shared
+from health_emit import emit, resolve
 from signal_arbitrator import SignalArbitrator
 
 
@@ -83,6 +84,10 @@ MIN_ORDER_SIZE_USDT = 15.0
 MAX_OPEN_POSITIONS  = None    # uncapped
 INITIAL_CAPITAL     = 10_000.0  # per frozen T8 config (S2/S8 pool split settled at deployment)
 LEVERAGE            = 1.0
+
+# Shared fix -- see phase_t9b_meanreversion_paper_engine.py's
+# MIN_RISK_PER_UNIT_PCT comment for the confirmed real-world trigger.
+MIN_RISK_PER_UNIT_PCT = 0.001  # stop distance floored at 0.10% of price
 KILL_SWITCH_DD_PCT  = 35.0
 
 LIMIT_BARS          = 2000
@@ -660,8 +665,40 @@ def run_one_day(run_date: date, symbols: List[str], state: dict) -> dict:
             rw, rv = t9b_shared.get_regime_weight("rsi_mr_funding", run_date)
             regime_scale  = rw * rv * 7
             risk_amount   = min(equity * RISK_PER_TRADE_PCT * regime_scale, CAPITAL_CEILING)
-            risk_per_unit = sig["risk_unit"]
-            qty           = risk_amount / max(risk_per_unit, EPS)
+            risk_per_unit = sig["risk_unit"]  # UNCHANGED -- stored on the position
+                                                # below, drives gross_r at exit.
+            risk_per_unit_for_sizing = max(risk_per_unit, MIN_RISK_PER_UNIT_PCT * sig["close"], EPS)
+            if risk_per_unit_for_sizing > risk_per_unit * 1.0000001:
+                emit("S8", "risk_per_unit_floored", "WARNING",
+                     f"{sym}: ATR-derived stop distance {risk_per_unit:.8g} is below "
+                     f"the {MIN_RISK_PER_UNIT_PCT:.2%} price floor -- sizing input only, "
+                     f"stop_loss and the P&L denominator are both unchanged",
+                     key=sym, evidence={"symbol": sym, "risk_per_unit_raw": risk_per_unit,
+                                         "risk_per_unit_floored": risk_per_unit_for_sizing,
+                                         "close": sig["close"]},
+                     suggested_action="Check whether this symbol's OHLCV feed is frozen "
+                                       "(flat open=high=low=close, e.g. a SETTLING futures "
+                                       "contract).",
+                     run_date=str(run_date))
+            else:
+                resolve("S8", "risk_per_unit_floored", key=sym, run_date=str(run_date))
+            qty = risk_amount / risk_per_unit_for_sizing
+
+            max_notional = equity * LEVERAGE
+            notional = qty * sig["close"]
+            if notional > max_notional:
+                emit("S8", "leverage_cap_bound", "CRITICAL",
+                     f"{sym}: sized notional ${notional:,.2f} ({notional / equity:.2f}x) "
+                     f"exceeds the {LEVERAGE:.2f}x cap -- capping qty to fit",
+                     key=sym, evidence={"symbol": sym, "notional_before": notional,
+                                         "implied_leverage_before": notional / equity,
+                                         "leverage_cap": LEVERAGE, "equity": equity},
+                     suggested_action="Capped automatically -- repeated firing for the "
+                                       "same symbol points at a frozen/flat price feed.",
+                     run_date=str(run_date))
+                qty = max_notional / sig["close"]
+            else:
+                resolve("S8", "leverage_cap_bound", key=sym, run_date=str(run_date))
 
             if qty * sig["close"] < MIN_ORDER_SIZE_USDT:
                 _log("SIGNAL_SKIPPED", sym,
