@@ -1,2 +1,1 @@
-symbol,signal_date,close,consec,atr,ema200,stop_loss,risk_unit,signal
-SOL/USDT,2026-10-09,109.13,5,4.60928571,97.16050796,99.91142857,9.21857143,BUY_CD
+symbol,signal_date,close,consec,atr,ema200,stop_loss,signal
