@@ -1,11 +1,11 @@
 {
   "system_name": "VolContractionShort_4H_T9B",
   "created_utc": "2026-06-11T19:20:09.618872+00:00",
-  "last_run_date": "2026-10-08",
-  "last_processed_ts_ms": 1791403200000,
-  "paper_equity_usdt": 10189.6449,
+  "last_run_date": "2026-10-10",
+  "last_processed_ts_ms": 1791576000000,
+  "paper_equity_usdt": 10178.1835,
   "peak_equity_usdt": 10393.928400000003,
-  "drawdown_pct": -1.9654,
+  "drawdown_pct": -2.0757,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -18,7 +18,7 @@
       "initial_risk_per_unit": 0.00472571,
       "risk_amount_usdt": 11.4614,
       "qty": 2425.33713539,
-      "bars_held": 3,
+      "bars_held": 15,
       "atr_at_entry": 0.00236286,
       "funding_at_entry": 0.0001,
       "compression_low": 0.12118,
@@ -34,7 +34,7 @@
       "initial_risk_per_unit": 0.13714286,
       "risk_amount_usdt": 11.4614,
       "qty": 83.57299792,
-      "bars_held": 5,
+      "bars_held": 17,
       "atr_at_entry": 0.06857143,
       "funding_at_entry": 0.0001,
       "compression_low": 3.031,
@@ -50,7 +50,7 @@
       "initial_risk_per_unit": 0.000164,
       "risk_amount_usdt": 11.4614,
       "qty": 69886.8289883,
-      "bars_held": 5,
+      "bars_held": 17,
       "atr_at_entry": 8.2e-05,
       "funding_at_entry": 0.0001,
       "compression_low": 0.003051,
@@ -58,5 +58,5 @@
     }
   ],
   "pending_entries": [],
-  "closed_trade_count": 98
+  "closed_trade_count": 99
 }

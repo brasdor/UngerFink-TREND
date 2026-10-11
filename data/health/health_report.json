@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-11T08:38:23.511947+00:00",
+  "generated_at": "2026-10-11T08:40:58.896836+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -16,7 +16,7 @@
     },
     "frozen_value_detection": {
       "status": "fail",
-      "n_findings": 1
+      "n_findings": 2
     },
     "timestamps_1970": {
       "status": "pass",
@@ -39,8 +39,8 @@
       "n_findings": 8
     },
     "missed_run_single_day": {
-      "status": "fail",
-      "n_findings": 6
+      "status": "pass",
+      "n_findings": 0
     },
     "step_failure": {
       "status": "pass",
@@ -75,8 +75,8 @@
       "n_findings": 1
     },
     "equity_reconciliation": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 1
     },
     "stopout_rate_elevated": {
       "status": "fail",
@@ -127,12 +127,12 @@
       "severity": "CRITICAL",
       "system": "S1 Donchian",
       "check": "heartbeat_36h",
-      "message": "41.7h since last real state.json commit (threshold 36h)",
+      "message": "41.8h since last real state.json commit (threshold 36h)",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
-        "age_hours": 41.7
+        "age_hours": 41.8
       },
       "suggested_action": "Check the daily workflow's Actions log.",
       "run_date": "2026-10-11"
@@ -142,12 +142,12 @@
       "severity": "CRITICAL",
       "system": "S2 RSI-MR",
       "check": "heartbeat_36h",
-      "message": "41.7h since last real state.json commit (threshold 36h)",
+      "message": "41.8h since last real state.json commit (threshold 36h)",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
-        "age_hours": 41.7
+        "age_hours": 41.8
       },
       "suggested_action": "Check the daily workflow's Actions log.",
       "run_date": "2026-10-11"
@@ -175,12 +175,12 @@
       "severity": "CRITICAL",
       "system": "S3 ConsecDown",
       "check": "heartbeat_36h",
-      "message": "41.7h since last real state.json commit (threshold 36h)",
+      "message": "41.8h since last real state.json commit (threshold 36h)",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
-        "age_hours": 41.7
+        "age_hours": 41.8
       },
       "suggested_action": "Check the daily workflow's Actions log.",
       "run_date": "2026-10-11"
@@ -190,12 +190,12 @@
       "severity": "CRITICAL",
       "system": "S6 VolContraction",
       "check": "heartbeat_36h",
-      "message": "41.7h since last real state.json commit (threshold 36h)",
+      "message": "41.8h since last real state.json commit (threshold 36h)",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
-        "age_hours": 41.7
+        "age_hours": 41.8
       },
       "suggested_action": "Check the daily workflow's Actions log.",
       "run_date": "2026-10-11"
@@ -205,12 +205,12 @@
       "severity": "CRITICAL",
       "system": "S7 MACross",
       "check": "heartbeat_36h",
-      "message": "41.7h since last real state.json commit (threshold 36h)",
+      "message": "41.8h since last real state.json commit (threshold 36h)",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
-        "age_hours": 41.7
+        "age_hours": 41.8
       },
       "suggested_action": "Check the daily workflow's Actions log.",
       "run_date": "2026-10-11"
@@ -220,12 +220,12 @@
       "severity": "CRITICAL",
       "system": "S8 RSI-MR-Funding",
       "check": "heartbeat_36h",
-      "message": "41.7h since last real state.json commit (threshold 36h)",
+      "message": "41.8h since last real state.json commit (threshold 36h)",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
-        "age_hours": 41.7
+        "age_hours": 41.8
       },
       "suggested_action": "Check the daily workflow's Actions log.",
       "run_date": "2026-10-11"
@@ -484,19 +484,20 @@
       "run_date": "2026-10-11"
     },
     {
-      "id": "S1:missed_run_single_day",
+      "id": "Candidate12:equity_reconciliation",
       "severity": "WARNING",
-      "system": "S1",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-10-08, expected 2026-10-09 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
+      "system": "Candidate12",
+      "check": "equity_reconciliation",
+      "message": "state.json paper_equity_usdt=$63,948.38 vs. equity_curve.csv's last paper_equity=$63,359.98 (diff $588.40)",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
-        "last_run_date": "2026-10-08",
-        "expected": "2026-10-09"
+        "state_equity": 63948.3794,
+        "curve_equity": 63359.98,
+        "diff": 588.3993999999948
       },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
+      "suggested_action": "Check whether equity_curve.csv and state.json are being written by the same run, or one is stale.",
       "run_date": "2026-10-11"
     },
     {
@@ -516,22 +517,6 @@
       "run_date": "2026-10-11"
     },
     {
-      "id": "S2:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S2",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-10-08, expected 2026-10-09 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-11",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-10-08",
-        "expected": "2026-10-09"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-10-11"
-    },
-    {
       "id": "S3:csv_not_pandas_parseable:daily_log.csv",
       "severity": "WARNING",
       "system": "S3",
@@ -545,22 +530,6 @@
         "error": "Error tokenizing data. C error: Expected 4 fields in line 101, saw 8\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-11"
-    },
-    {
-      "id": "S3:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S3",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-10-08, expected 2026-10-09 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-11",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-10-08",
-        "expected": "2026-10-09"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
       "run_date": "2026-10-11"
     },
     {
@@ -580,52 +549,20 @@
       "run_date": "2026-10-11"
     },
     {
-      "id": "S6:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S6",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-10-08, expected 2026-10-09 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-11",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-10-08",
-        "expected": "2026-10-09"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-10-11"
-    },
-    {
       "id": "S6:stopout_rate_elevated",
       "severity": "WARNING",
       "system": "S6",
       "check": "stopout_rate_elevated",
-      "message": "14/20 of the last 20 exits were stop-outs (70%) -- the S7 rally-whipsaw pattern",
+      "message": "15/20 of the last 20 exits were stop-outs (75%) -- the S7 rally-whipsaw pattern",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
-        "n_stop": 14,
+        "n_stop": 15,
         "n_window": 20,
-        "fraction": 0.7
+        "fraction": 0.75
       },
       "suggested_action": "Shadow-replay this system's recent entries against current (non-stale) funding/regime data before changing any stop rule.",
-      "run_date": "2026-10-11"
-    },
-    {
-      "id": "S7:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S7",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-10-08, expected 2026-10-09 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-11",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-10-08",
-        "expected": "2026-10-09"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
       "run_date": "2026-10-11"
     },
     {
@@ -633,14 +570,14 @@
       "severity": "WARNING",
       "system": "S7",
       "check": "stopout_rate_elevated",
-      "message": "16/20 of the last 20 exits were stop-outs (80%) -- the S7 rally-whipsaw pattern",
+      "message": "17/20 of the last 20 exits were stop-outs (85%) -- the S7 rally-whipsaw pattern",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
-        "n_stop": 16,
+        "n_stop": 17,
         "n_window": 20,
-        "fraction": 0.8
+        "fraction": 0.85
       },
       "suggested_action": "Shadow-replay this system's recent entries against current (non-stale) funding/regime data before changing any stop rule.",
       "run_date": "2026-10-11"
@@ -659,22 +596,6 @@
         "error": "Error tokenizing data. C error: Expected 4 fields in line 1237, saw 6\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-11"
-    },
-    {
-      "id": "S8:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S8",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-10-08, expected 2026-10-09 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-11",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-10-08",
-        "expected": "2026-10-09"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
       "run_date": "2026-10-11"
     },
     {
@@ -714,14 +635,31 @@
       "severity": "WARNING",
       "system": "data/regime_history.csv",
       "check": "frozen_value_detection",
-      "message": "regime_history.funding_avg has been exactly 6.73e-06 for the last 21 rows -- check the upstream feed, not just this file",
+      "message": "regime_history.funding_avg has been exactly 6.73e-06 for the last 23 rows -- check the upstream feed, not just this file",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "column": "funding_avg",
         "value": 6.73e-06,
-        "run_length": 21
+        "run_length": 23
+      },
+      "suggested_action": "Check whether the upstream source (e.g. funding cache) is stale.",
+      "run_date": "2026-10-11"
+    },
+    {
+      "id": "data/regime_history.csv:frozen_value_detection:vol_mult",
+      "severity": "WARNING",
+      "system": "data/regime_history.csv",
+      "check": "frozen_value_detection",
+      "message": "regime_history.vol_mult has been exactly 0.75 for the last 6 rows -- check the upstream feed, not just this file",
+      "first_seen": "2026-10-10",
+      "last_seen": "2026-10-11",
+      "status": "open",
+      "evidence": {
+        "column": "vol_mult",
+        "value": 0.75,
+        "run_length": 6
       },
       "suggested_action": "Check whether the upstream source (e.g. funding cache) is stale.",
       "run_date": "2026-10-11"
@@ -731,13 +669,13 @@
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "ACXUSDT: 62 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "ACXUSDT: 64 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "ACXUSDT",
-        "streak_days": 62
+        "streak_days": 64
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
       "run_date": "2026-10-11"
@@ -747,13 +685,13 @@
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "COSUSDT: 115 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "COSUSDT: 117 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "COSUSDT",
-        "streak_days": 115
+        "streak_days": 117
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
       "run_date": "2026-10-11"
@@ -763,13 +701,13 @@
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "DUSDT: 115 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "DUSDT: 117 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "DUSDT",
-        "streak_days": 115
+        "streak_days": 117
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
       "run_date": "2026-10-11"
@@ -779,13 +717,13 @@
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "HFTUSDT: 62 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "HFTUSDT: 64 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "HFTUSDT",
-        "streak_days": 62
+        "streak_days": 64
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
       "run_date": "2026-10-11"
@@ -795,13 +733,13 @@
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "HIGHUSDT: 115 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "HIGHUSDT: 117 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "HIGHUSDT",
-        "streak_days": 115
+        "streak_days": 117
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
       "run_date": "2026-10-11"
@@ -811,13 +749,13 @@
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "ICXUSDT: 43 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "ICXUSDT: 45 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "ICXUSDT",
-        "streak_days": 43
+        "streak_days": 45
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
       "run_date": "2026-10-11"
@@ -827,13 +765,13 @@
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "MBOXUSDT: 114 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "MBOXUSDT: 116 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "MBOXUSDT",
-        "streak_days": 114
+        "streak_days": 116
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
       "run_date": "2026-10-11"
@@ -843,13 +781,13 @@
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "NFPUSDT: 92 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "NFPUSDT: 94 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "NFPUSDT",
-        "streak_days": 92
+        "streak_days": 94
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
       "run_date": "2026-10-11"
@@ -859,13 +797,13 @@
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "SCRTUSDT: 43 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "SCRTUSDT: 45 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "SCRTUSDT",
-        "streak_days": 43
+        "streak_days": 45
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
       "run_date": "2026-10-11"
@@ -875,13 +813,13 @@
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "STGUSDT: 14 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "STGUSDT: 16 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "STGUSDT",
-        "streak_days": 14
+        "streak_days": 16
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
       "run_date": "2026-10-11"
@@ -891,13 +829,13 @@
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "STORJUSDT: 43 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "STORJUSDT: 45 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "STORJUSDT",
-        "streak_days": 43
+        "streak_days": 45
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
       "run_date": "2026-10-11"
@@ -907,13 +845,13 @@
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "TONUSDT: 103 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "TONUSDT: 105 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "TONUSDT",
-        "streak_days": 103
+        "streak_days": 105
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
       "run_date": "2026-10-11"
@@ -923,13 +861,13 @@
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "VANRYUSDT: 62 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "VANRYUSDT: 64 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
       "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "VANRYUSDT",
-        "streak_days": 62
+        "streak_days": 64
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
       "run_date": "2026-10-11"
