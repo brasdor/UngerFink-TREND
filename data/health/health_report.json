@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-11T08:10:27.219821+00:00",
+  "generated_at": "2026-10-11T08:12:33.310835+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -67,8 +67,8 @@
       "n_findings": 1
     },
     "equity_reconciliation": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 1
     },
     "stopout_rate_elevated": {
       "status": "fail",
@@ -119,6 +119,23 @@
         "n_checked": 290
       },
       "suggested_action": "Funding refresh needs a reachable (non-US) host -- GH runners are geo-blocked from fapi.binance.com. Feeds S6/S7 gates, S8's filter, and the regime funding axis.",
+      "run_date": "2026-10-11"
+    },
+    {
+      "id": "Candidate12:equity_reconciliation",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "equity_reconciliation",
+      "message": "state.json paper_equity_usdt=$63,948.38 vs. equity_curve.csv's last paper_equity=$63,359.98 (diff $588.40)",
+      "first_seen": "2026-10-11",
+      "last_seen": "2026-10-11",
+      "status": "open",
+      "evidence": {
+        "state_equity": 63948.3794,
+        "curve_equity": 63359.98,
+        "diff": 588.3993999999948
+      },
+      "suggested_action": "Check whether equity_curve.csv and state.json are being written by the same run, or one is stale.",
       "run_date": "2026-10-11"
     },
     {
