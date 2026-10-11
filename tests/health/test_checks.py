@@ -146,6 +146,36 @@ class TestDuplicateHeader(TempRootTestCase):
         self.assertEqual(dup[0]["system"], "TEST1")
 
 
+class TestFundingRefreshJobAlive(TempRootTestCase):
+    """Dead-runner/cron detector: independent of whether the DATA looks
+    fresh, this only asks whether the job that refreshes it has committed
+    anything recently."""
+
+    def test_old_commit_flagged_dead(self):
+        import datetime as _dt
+        old_ts = _dt.datetime.now(_dt.timezone.utc) - _dt.timedelta(hours=30)
+        orig = run_checks.heartbeat.last_commit_time
+        run_checks.heartbeat.last_commit_time = lambda path: old_ts
+        try:
+            findings = run_checks.check_funding_refresh_job_alive()
+        finally:
+            run_checks.heartbeat.last_commit_time = orig
+        self.assertEqual(len(findings), 1)
+        self.assertEqual(findings[0]["check"], "funding_refresh_job_dead")
+        self.assertEqual(findings[0]["severity"], "CRITICAL")
+
+    def test_recent_commit_not_flagged(self):
+        import datetime as _dt
+        recent_ts = _dt.datetime.now(_dt.timezone.utc) - _dt.timedelta(hours=2)
+        orig = run_checks.heartbeat.last_commit_time
+        run_checks.heartbeat.last_commit_time = lambda path: recent_ts
+        try:
+            findings = run_checks.check_funding_refresh_job_alive()
+        finally:
+            run_checks.heartbeat.last_commit_time = orig
+        self.assertEqual(findings, [])
+
+
 class TestSkippedRunDate(TempRootTestCase):
     """missed_run_single_day: last_run_date sitting two days behind the
     safe (ad-hoc) floor must be flagged; sitting at exactly the floor

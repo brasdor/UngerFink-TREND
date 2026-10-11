@@ -1123,6 +1123,45 @@ def check_suppression_list_stale() -> list[dict]:
     return out
 
 
+MAX_FUNDING_REFRESH_JOB_STALE_HOURS = 26  # dead-runner/cron detector (2026-10-11):
+                                           # whichever mechanism runs the funding
+                                           # refresh (self-hosted runner workflow
+                                           # or a host cron job), its only visible
+                                           # trace in this repo is a commit
+                                           # touching funding_rates/ -- same
+                                           # detection regardless of which one.
+
+
+def check_funding_refresh_job_alive() -> list[dict]:
+    """Independent of check_funding_staleness(): that one looks at whether the
+    DATA is current; this one looks at whether the JOB that's supposed to keep
+    it current is still running at all. The two can disagree in either
+    direction -- data can still look fresh for a day or two after the job
+    dies (funding only settles every 8h), and a job that's merely slow but
+    alive isn't the same failure as one that's dead."""
+    ts = heartbeat.last_commit_time("data/futures_universe/funding_rates")
+    if ts is None:
+        return [finding("funding_refresh_job", "funding_refresh_job_dead", "CRITICAL",
+                         "no commit history found for data/futures_universe/funding_rates/ "
+                         "at all",
+                         suggested_action="Confirm the funding refresh runner/cron has "
+                                           "ever run successfully.")]
+    age_hours = (datetime.now(timezone.utc) - ts).total_seconds() / 3600.0
+    if age_hours > MAX_FUNDING_REFRESH_JOB_STALE_HOURS:
+        return [finding(
+            "funding_refresh_job", "funding_refresh_job_dead", "CRITICAL",
+            f"no commit to funding_rates/ in {age_hours:.1f}h (threshold "
+            f"{MAX_FUNDING_REFRESH_JOB_STALE_HOURS}h) -- the self-hosted runner or "
+            f"cron job that refreshes funding appears to be dead, not just "
+            f"serving stale data",
+            evidence={"age_hours": round(age_hours, 1)},
+            suggested_action="Check the funding refresh host: is the self-hosted "
+                              "runner online (Settings -> Actions -> Runners) or is "
+                              "the cron job still scheduled and succeeding?",
+        )]
+    return []
+
+
 # ---------------------------------------------------------------------------
 # Registry + runner
 # ---------------------------------------------------------------------------
@@ -1150,6 +1189,7 @@ REGISTRY: list[tuple[str, Callable[[], list[dict]]]] = [
     ("stopout_rate_elevated", check_stopout_rate_elevated),
     ("no_entries_exits_despite_signals", check_no_entries_exits_despite_signals),
     ("suppression_list_stale", check_suppression_list_stale),
+    ("funding_refresh_job_alive", check_funding_refresh_job_alive),
 ]
 
 # check names this runner can authoritatively resolve, because it has a
