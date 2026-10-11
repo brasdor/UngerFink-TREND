@@ -1,0 +1,7 @@
+episode,window,btc_max_drawdown_in_window_pct,BTC_10pct_10d,EW_BASKET_10pct_10d,BTC_7pct_10d,BTC_15pct_10d
+May 2021 (China mining ban / 19-May crash),2021-05-10..2021-05-25,-38.9,11/16 days flagged,13/16 days flagged,13/16 days flagged,9/16 days flagged
+May 2022 (Terra/LUNA),2022-05-04..2022-05-14,-26.9,5/11 days flagged,7/11 days flagged,6/11 days flagged,5/11 days flagged
+Nov 2022 (FTX),2022-11-05..2022-11-11,-25.3,4/7 days flagged,5/7 days flagged,6/7 days flagged,3/7 days flagged
+"Aug 2024 (yen carry unwind, 5-Aug)",2024-07-30..2024-08-06,-18.4,5/8 days flagged,5/8 days flagged,6/8 days flagged,3/8 days flagged
+2025-26 decline (6-Oct-25 peak -> Feb-26),2025-10-06..2026-02-06,-49.6,31/124 days flagged,57/124 days flagged,53/124 days flagged,15/124 days flagged
+Sep 2026 dip (as seen in our data),2026-09-01..2026-10-08,-6.9,0/28 days flagged,0/28 days flagged,0/28 days flagged,0/28 days flagged

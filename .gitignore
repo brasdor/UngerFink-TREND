@@ -63,3 +63,6 @@ data/futures_universe/ohlcv_8h/
 
 # Backup files
 *.csv.bak
+
+# Risk-off research: raw vendor downloads (regenerate with tools/riskoff/stage1_fetch.py)
+data/riskoff/raw/
