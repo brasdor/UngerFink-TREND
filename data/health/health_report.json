@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-10T14:12:18.141130+00:00",
+  "generated_at": "2026-10-11T08:10:27.219821+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -67,8 +67,8 @@
       "n_findings": 1
     },
     "equity_reconciliation": {
-      "status": "fail",
-      "n_findings": 1
+      "status": "pass",
+      "n_findings": 0
     },
     "stopout_rate_elevated": {
       "status": "fail",
@@ -91,7 +91,7 @@
       "check": "leverage_cap_breach",
       "message": "implied leverage 39.48x exceeds configured cap 1.00x (notional $400,838 / equity $10,152)",
       "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
+      "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "implied_leverage": 39.485,
@@ -100,43 +100,26 @@
         "equity": 10151.735099999996
       },
       "suggested_action": "Check position sizing -- a leverage breach is a direct liquidation-risk increase versus the T6 sweep this cap was set from.",
-      "run_date": "2026-10-10"
+      "run_date": "2026-10-11"
     },
     {
       "id": "data/futures_universe/funding_rates:funding_staleness",
       "severity": "CRITICAL",
       "system": "data/futures_universe/funding_rates",
       "check": "funding_staleness",
-      "message": "funding_rates: 278/290 symbols are 43d behind (a mass freeze, not a few stragglers); worst is DUSDT at 121d",
+      "message": "funding_rates: 278/290 symbols are 44d behind (a mass freeze, not a few stragglers); worst is DUSDT at 122d",
       "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
+      "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "worst_symbol": "DUSDT",
-        "worst_days": 121,
-        "median_days": 43,
+        "worst_days": 122,
+        "median_days": 44,
         "n_at_median": 278,
         "n_checked": 290
       },
       "suggested_action": "Funding refresh needs a reachable (non-US) host -- GH runners are geo-blocked from fapi.binance.com. Feeds S6/S7 gates, S8's filter, and the regime funding axis.",
-      "run_date": "2026-10-10"
-    },
-    {
-      "id": "Candidate19:equity_reconciliation",
-      "severity": "WARNING",
-      "system": "Candidate19",
-      "check": "equity_reconciliation",
-      "message": "state.json paper_equity_usdt=$66,483.15 vs. equity_curve.csv's last paper_equity=$65,791.74 (diff $691.41)",
-      "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
-      "status": "open",
-      "evidence": {
-        "state_equity": 66483.1463,
-        "curve_equity": 65791.74,
-        "diff": 691.4062999999878
-      },
-      "suggested_action": "Check whether equity_curve.csv and state.json are being written by the same run, or one is stale.",
-      "run_date": "2026-10-10"
+      "run_date": "2026-10-11"
     },
     {
       "id": "S2:csv_not_pandas_parseable:daily_log.csv",
@@ -145,14 +128,14 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 8 fields in line 3, saw 9\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
+      "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 8 fields in line 3, saw 9\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-10"
+      "run_date": "2026-10-11"
     },
     {
       "id": "S3:csv_not_pandas_parseable:daily_log.csv",
@@ -161,14 +144,14 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 4 fields in line 101, saw 8\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
+      "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 4 fields in line 101, saw 8\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-10"
+      "run_date": "2026-10-11"
     },
     {
       "id": "S6:csv_not_pandas_parseable:daily_log.csv",
@@ -177,48 +160,48 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 5 fields in line 74, saw 15\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
+      "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 5 fields in line 74, saw 15\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-10"
+      "run_date": "2026-10-11"
     },
     {
       "id": "S6:stopout_rate_elevated",
       "severity": "WARNING",
       "system": "S6",
       "check": "stopout_rate_elevated",
-      "message": "14/20 of the last 20 exits were stop-outs (70%) -- the S7 rally-whipsaw pattern",
+      "message": "15/20 of the last 20 exits were stop-outs (75%) -- the S7 rally-whipsaw pattern",
       "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
+      "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
-        "n_stop": 14,
+        "n_stop": 15,
         "n_window": 20,
-        "fraction": 0.7
+        "fraction": 0.75
       },
       "suggested_action": "Shadow-replay this system's recent entries against current (non-stale) funding/regime data before changing any stop rule.",
-      "run_date": "2026-10-10"
+      "run_date": "2026-10-11"
     },
     {
       "id": "S7:stopout_rate_elevated",
       "severity": "WARNING",
       "system": "S7",
       "check": "stopout_rate_elevated",
-      "message": "16/20 of the last 20 exits were stop-outs (80%) -- the S7 rally-whipsaw pattern",
+      "message": "17/20 of the last 20 exits were stop-outs (85%) -- the S7 rally-whipsaw pattern",
       "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
+      "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
-        "n_stop": 16,
+        "n_stop": 17,
         "n_window": 20,
-        "fraction": 0.8
+        "fraction": 0.85
       },
       "suggested_action": "Shadow-replay this system's recent entries against current (non-stale) funding/regime data before changing any stop rule.",
-      "run_date": "2026-10-10"
+      "run_date": "2026-10-11"
     },
     {
       "id": "S8:csv_not_pandas_parseable:daily_log.csv",
@@ -227,80 +210,80 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 4 fields in line 1237, saw 6\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
+      "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 4 fields in line 1237, saw 6\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-10"
+      "run_date": "2026-10-11"
     },
     {
       "id": "data/halted_symbols_suppression.json:suppression_list_stale:ARDR_USDT",
       "severity": "WARNING",
       "system": "data/halted_symbols_suppression.json",
       "check": "suppression_list_stale",
-      "message": "ARDR_USDT: last re-verified 47d ago (monthly check appears to have stopped running)",
+      "message": "ARDR_USDT: last re-verified 48d ago (monthly check appears to have stopped running)",
       "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
+      "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "ARDR_USDT",
-        "age_days": 47
+        "age_days": 48
       },
       "suggested_action": "Check monthly_halted_symbol_check.yml's recent runs.",
-      "run_date": "2026-10-10"
+      "run_date": "2026-10-11"
     },
     {
       "id": "data/halted_symbols_suppression.json:suppression_list_stale:TON_USDT",
       "severity": "WARNING",
       "system": "data/halted_symbols_suppression.json",
       "check": "suppression_list_stale",
-      "message": "TON_USDT: last re-verified 47d ago (monthly check appears to have stopped running)",
+      "message": "TON_USDT: last re-verified 48d ago (monthly check appears to have stopped running)",
       "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
+      "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "TON_USDT",
-        "age_days": 47
+        "age_days": 48
       },
       "suggested_action": "Check monthly_halted_symbol_check.yml's recent runs.",
-      "run_date": "2026-10-10"
+      "run_date": "2026-10-11"
     },
     {
       "id": "data/regime_history.csv:frozen_value_detection:funding_avg",
       "severity": "WARNING",
       "system": "data/regime_history.csv",
       "check": "frozen_value_detection",
-      "message": "regime_history.funding_avg has been exactly 6.73e-06 for the last 22 rows -- check the upstream feed, not just this file",
+      "message": "regime_history.funding_avg has been exactly 6.73e-06 for the last 23 rows -- check the upstream feed, not just this file",
       "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
+      "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "column": "funding_avg",
         "value": 6.73e-06,
-        "run_length": 22
+        "run_length": 23
       },
       "suggested_action": "Check whether the upstream source (e.g. funding cache) is stale.",
-      "run_date": "2026-10-10"
+      "run_date": "2026-10-11"
     },
     {
       "id": "data/regime_history.csv:frozen_value_detection:vol_mult",
       "severity": "WARNING",
       "system": "data/regime_history.csv",
       "check": "frozen_value_detection",
-      "message": "regime_history.vol_mult has been exactly 0.75 for the last 5 rows -- check the upstream feed, not just this file",
+      "message": "regime_history.vol_mult has been exactly 0.75 for the last 6 rows -- check the upstream feed, not just this file",
       "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
+      "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "column": "vol_mult",
         "value": 0.75,
-        "run_length": 5
+        "run_length": 6
       },
       "suggested_action": "Check whether the upstream source (e.g. funding cache) is stale.",
-      "run_date": "2026-10-10"
+      "run_date": "2026-10-11"
     },
     {
       "id": "futures_universe:symbol_gaps:ZRXUSDT_1d",
@@ -309,14 +292,14 @@
       "check": "symbol_gaps",
       "message": "futures universe: ZRXUSDT_1d has 7 missing calendar day(s) inside its own covered history",
       "first_seen": "2026-10-10",
-      "last_seen": "2026-10-10",
+      "last_seen": "2026-10-11",
       "status": "open",
       "evidence": {
         "symbol": "ZRXUSDT_1d",
         "n_gaps": 7
       },
       "suggested_action": "Re-backfill this symbol from the CDN; check for an exchange halt around the gap date(s).",
-      "run_date": "2026-10-10"
+      "run_date": "2026-10-11"
     }
   ]
 }
