@@ -44,7 +44,9 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "engines"))
 sys.path.insert(0, str(ROOT / ".github" / "scripts"))
 
-import check_missed_runs as heartbeat  # noqa: E402 -- reuse OHLCV staleness / suppression
+import check_missed_runs as heartbeat  # noqa: E402
+sys.path.insert(0, str(ROOT / "engines"))
+import tradability  # noqa: E402 -- reuse OHLCV staleness / suppression
 
 HEALTH_DIR = ROOT / "data" / "health"
 REPORT_PATH = HEALTH_DIR / "health_report.json"
@@ -176,31 +178,29 @@ def event_rows(data_dir: Path, filename: str = "daily_log.csv") -> list[dict]:
 
 def check_ohlcv_staleness_spot() -> list[dict]:
     allowlist = heartbeat._spot_universe()
-    suppress = heartbeat._suppressed_symbols()
     result = heartbeat.check_ohlcv_staleness(
         "spot universe (S1/S3)", ROOT / "data" / "universe" / "ohlcv_1d",
-        TODAY, allowlist=allowlist, suppress=suppress)
+        TODAY, allowlist=allowlist, venue="spot")
     if result is None:
         return []
     msg, worst_days = result
     return [finding("data/universe", "ohlcv_staleness_spot", "CRITICAL", msg,
                      evidence={"worst_days": worst_days},
-                     suggested_action="Run engines/spot_data_refresh.py; "
-                                      "check for a halted symbol needing suppression.")]
+                     suggested_action="Run engines/spot_data_refresh.py; symbols the exchange "
+                                      "status cache marks non-tradable are already exempt.")]
 
 
 def check_ohlcv_staleness_futures() -> list[dict]:
-    suppress = heartbeat._suppressed_symbols()
     result = heartbeat.check_ohlcv_staleness(
         "futures universe (S2/S5-S8/candidates)", ROOT / "data" / "futures_universe" / "ohlcv_1d",
-        TODAY, allowlist=None, suppress=suppress)
+        TODAY, allowlist=None, venue="futures")
     if result is None:
         return []
     msg, worst_days = result
     return [finding("data/futures_universe", "ohlcv_staleness_futures", "CRITICAL", msg,
                      evidence={"worst_days": worst_days},
-                     suggested_action="Run .github/scripts/refresh_futures_data.py; "
-                                      "check for a halted symbol needing suppression.")]
+                     suggested_action="Run .github/scripts/refresh_futures_data.py; symbols the exchange "
+                                      "status cache marks non-tradable are already exempt.")]
 
 
 def check_funding_staleness() -> list[dict]:
@@ -209,6 +209,7 @@ def check_funding_staleness() -> list[dict]:
                          f"funding cache dir missing ({FUNDING_DIR})",
                          suggested_action="Check refresh_futures_data.py / the funding refresh job.")]
     ages: dict[str, int] = {}
+    n_untradable = 0
     for f in FUNDING_DIR.glob("*_funding.csv"):
         sym = f.stem.replace("_funding", "")
         try:
@@ -216,6 +217,10 @@ def check_funding_staleness() -> list[dict]:
             last_ms = int(df["funding_time"].iloc[-1])
             last_date = datetime.fromtimestamp(last_ms / 1000, tz=timezone.utc).date()
         except Exception:
+            continue
+        # Settled / non-tradable contracts never update again; that is expected, not staleness.
+        if not tradability.is_tradable(sym, TODAY, "futures"):
+            n_untradable += 1
             continue
         ages[sym] = (TODAY - last_date).days
     if not ages or max(ages.values()) <= MAX_FUNDING_STALE_DAYS:
@@ -240,12 +245,13 @@ def check_funding_staleness() -> list[dict]:
         "data/futures_universe/funding_rates", "funding_staleness", "CRITICAL",
         f"funding_rates: {shape}; worst is {worst_sym} at {worst_days}d",
         evidence={"worst_symbol": worst_sym, "worst_days": worst_days,
-                  "median_days": median_days, "n_stale": n_stale, "n_checked": len(ages)},
+                  "median_days": median_days, "n_stale": n_stale, "n_checked": len(ages),
+                  "n_exempt_untradable": n_untradable},
         suggested_action="Funding refresh needs a reachable (non-US) host -- "
                           "GH runners are geo-blocked from fapi.binance.com. "
                           "Feeds S6/S7 gates, S8's filter, and the regime funding axis. "
-                          "If n_stale matches the SETTLING symbols in "
-                          "data/exchange_status_cache.json, this is expected and benign.",
+                          "Settled/non-tradable contracts are already exempt, so any "
+                          "stale symbol listed here is a tradable one.",
     )]
 
 
@@ -377,7 +383,7 @@ FLAT_PRICE_MIN_STREAK = 3  # confirmed 2026-10-11: COSUSDT/DUSDT/MBOXUSDT/HIGHUS
                            # were all 100+ days flat by the time anyone noticed --
                            # 3 is deliberately tight, not a late warning.
 EXCHANGE_STATUS_CACHE = ROOT / "data" / "exchange_status_cache.json"
-EXCHANGE_STATUS_MAX_AGE_DAYS = 35  # same cadence as the halted-symbol suppression re-check
+EXCHANGE_STATUS_MAX_AGE_DAYS = 3  # the cache now gates trading (engines/tradability.py); a stale one must page
 
 
 def _trailing_zero_range_streak(df: pd.DataFrame) -> int:
@@ -416,8 +422,13 @@ def check_flat_price() -> list[dict]:
     ):
         if not cache_dir.exists():
             continue
+        venue = "futures" if label == "futures_universe" else "spot"
         for f in cache_dir.glob("*_1d.csv"):
             sym = f.stem.replace("_1d", "")
+            # A flat feed is the EXPECTED shape of a settled/halted contract; only a symbol the
+            # exchange still lists as tradable and that is flat is an anomaly worth a finding.
+            if not tradability.is_tradable(sym, TODAY, venue):
+                continue
             try:
                 df = pd.read_csv(f)
             except Exception:
@@ -427,7 +438,7 @@ def check_flat_price() -> list[dict]:
                 out.append(finding(
                     label, "flat_price", "WARNING",
                     f"{sym}: {streak} consecutive zero-range day(s) (open==high==low==close) "
-                    f"-- check exchange status, likely SETTLING/delisted",
+                    f"-- the exchange cache still lists it as tradable, so this is a feed problem",
                     key=sym, evidence={"symbol": sym, "streak_days": streak},
                     suggested_action="Cross-check check_exchange_status's cache; exclude "
                                       "from signals/rankings if confirmed non-TRADING "
@@ -505,8 +516,9 @@ def check_exchange_status() -> list[dict]:
                 df = pd.read_csv(f)
             except Exception:
                 continue
-            if _trailing_zero_range_streak(df) >= FLAT_PRICE_MIN_STREAK:
-                candidates[_normalize_for_cache(sym, venue)] = sym
+            if (_trailing_zero_range_streak(df) >= FLAT_PRICE_MIN_STREAK
+                    and tradability.is_tradable(sym, TODAY, venue)):
+                candidates[_normalize_for_cache(sym, venue)] = sym  # flat but still listed TRADING
 
     for sysconf in SYSTEMS:
         state_path = sysconf["data_dir"] / "state.json"
@@ -1090,36 +1102,49 @@ def check_no_entries_exits_despite_signals(window_days: int = 7) -> list[dict]:
 # Suppression-list meta-check
 # ---------------------------------------------------------------------------
 
-def check_suppression_list_stale() -> list[dict]:
-    path = ROOT / "data" / "halted_symbols_suppression.json"
-    if not path.exists():
-        return []
+MAX_SNAPSHOT_AGE_HOURS = 26  # data-job snapshots (same threshold as the funding job)
+
+
+def check_forward_snapshots_fresh() -> list[dict]:
+    """Replaces check_suppression_list_stale (the manual halted-symbol list is retired: the exchange
+    status cache decides tradability). Watches the funding-host job's restated-series snapshots
+    (stablecoins, EPU, GPR, BTC dominance), the open-interest 5m log and the exchange status cache:
+    any source whose last successful fetch is older than 26h means the job is dead or that source
+    broke, and vintage history for it is being lost day by day."""
+    out: list[dict] = []
+    now = datetime.now(timezone.utc)
+    fwd = ROOT / "data" / "riskoff" / "forward"
+    hb_path = fwd / "snapshot_heartbeat.json"
     try:
-        suppression = json.loads(path.read_text(encoding="utf-8"))
+        hb = json.loads(hb_path.read_text(encoding="utf-8"))
     except Exception:
-        return []
-    out = []
-    for key, entry in suppression.items():
-        if key.startswith("_") or not isinstance(entry, dict):
+        hb = {}
+    for src in ("stablecoins", "epu", "gpr", "dominance"):
+        ent = hb.get(src)
+        if not ent:
+            out.append(finding("forward_snapshots", "snapshot_never_ran", "CRITICAL",
+                               f"no successful '{src}' snapshot on record", key=src,
+                               suggested_action="Run tools/forward_snapshots.py on the funding host."))
             continue
-        last_verified = entry.get("last_verified")
-        if not last_verified:
-            out.append(finding("data/halted_symbols_suppression.json", "suppression_never_verified",
-                                "WARNING", f"{key}: no last_verified timestamp on record",
-                                key=key, suggested_action="Run the monthly re-check."))
-            continue
-        try:
-            age_days = (TODAY - date.fromisoformat(last_verified)).days
-        except Exception:
-            continue
-        if age_days > 40:  # monthly check + buffer
-            out.append(finding(
-                "data/halted_symbols_suppression.json", "suppression_list_stale", "WARNING",
-                f"{key}: last re-verified {age_days}d ago (monthly check appears to have "
-                f"stopped running)",
-                key=key, evidence={"symbol": key, "age_days": age_days},
-                suggested_action="Check monthly_halted_symbol_check.yml's recent runs.",
-            ))
+        age_h = (now - datetime.fromisoformat(ent["last_success_utc"])).total_seconds() / 3600.0
+        if age_h > MAX_SNAPSHOT_AGE_HOURS:
+            out.append(finding("forward_snapshots", "snapshot_stale", "CRITICAL",
+                               f"'{src}' snapshot last succeeded {age_h:.1f}h ago (threshold "
+                               f"{MAX_SNAPSHOT_AGE_HOURS}h) -- vintage history for this series is being lost",
+                               key=src, evidence={"source": src, "age_hours": round(age_h, 1)},
+                               suggested_action="Check the funding-host job log and that source's URL."))
+    oi = fwd / "oi_btcusdt_5m.csv"
+    try:
+        last_ms = int(pd.read_csv(oi, usecols=["bar_time_ms"])["bar_time_ms"].iloc[-1])
+        age_h = (now - datetime.fromtimestamp(last_ms / 1000, tz=timezone.utc)).total_seconds() / 3600.0
+    except Exception:
+        age_h = 9999.0
+    if age_h > MAX_SNAPSHOT_AGE_HOURS:
+        out.append(finding("forward_snapshots", "oi_log_stale", "CRITICAL",
+                           f"open-interest 5m log last bar is {age_h:.1f}h old (threshold {MAX_SNAPSHOT_AGE_HOURS}h); "
+                           f"the API only back-fills ~41h",
+                           evidence={"age_hours": round(age_h, 1)},
+                           suggested_action="Run tools/oi_snapshot.py on the funding host (docs/RISKOFF_OI_FORWARD_PREREG.md)."))
     return out
 
 
@@ -1188,7 +1213,7 @@ REGISTRY: list[tuple[str, Callable[[], list[dict]]]] = [
     ("equity_reconciliation", check_equity_reconciliation),
     ("stopout_rate_elevated", check_stopout_rate_elevated),
     ("no_entries_exits_despite_signals", check_no_entries_exits_despite_signals),
-    ("suppression_list_stale", check_suppression_list_stale),
+    ("forward_snapshots_fresh", check_forward_snapshots_fresh),
     ("funding_refresh_job_alive", check_funding_refresh_job_alive),
 ]
 

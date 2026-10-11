@@ -63,6 +63,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 import engines.t9b_shared as t9b_shared  # noqa: E402
+import engines.tradability as tradability  # noqa: E402
 from engines.health_emit import emit, resolve  # noqa: E402
 from modules.asset_clustering import compute_static_clusters  # noqa: E402
 from signal_generators import candidate_12_cross_sectional_momentum as c12  # noqa: E402
@@ -447,6 +448,40 @@ def main() -> int:
     signal_rows = []
     skipped_rows = []
 
+    # Exchange-faithful tradability pre-pass (engines/tradability.py): an entry dated on/after delivery is
+    # void (annotated in the ledger, no P&L); a position that reached delivery closes at the settlement
+    # price on the delivery date. Inert unless data/tradability_config.json apply_state_fixes=true.
+    _kept = []
+    for pos in open_positions:
+        act = tradability.pending_action(f"C{cid}", pos["symbol"], pos["entry_date"], today,
+                                         f"{pos['symbol']}_{pos['entry_date']}_{pos['combo_idx']}")
+        if act is None:
+            _kept.append(pos)
+            continue
+        if act.kind == "void":
+            tradability.ledger_append(f"C{cid}", "void", pos["symbol"], pos["entry_date"], today,
+                                      f"{pos['side']} {act.reason}; delivery {act.delivery}; entry_price {pos['entry_price']}")
+            _append_log(paths, today, "ENTRY_VOIDED",
+                        f"{pos['symbol']} {pos['side']} entry {pos['entry_date']} not tradable ({act.reason}, "
+                        f"delivery {act.delivery}); position voided, no P&L booked", equity)
+            continue
+        px = act.price if act.price is not None else pos["entry_price"]
+        gross_r = ((px - pos["entry_price"]) / pos["stop_distance_px"] if pos["side"] == "long"
+                   else (pos["entry_price"] - px) / pos["stop_distance_px"])
+        pnl = pos["risk_amount_usdt"] * gross_r
+        equity += pnl
+        closed_rows.append({
+            "timestamp_utc": utc_now_str(), "symbol": pos["symbol"], "side": pos["side"],
+            "combo_idx": pos["combo_idx"], "entry_date": pos["entry_date"], "exit_date": str(act.delivery),
+            "entry_price": pos["entry_price"], "exit_price": px, "net_r": gross_r,
+            "pnl_usdt": pnl, "risk_amount_usdt": pos["risk_amount_usdt"],
+            "notional_usdt": pos["notional_usdt"], "exit_reason": "exchange_settlement",
+        })
+        state["closed_trade_count"] += 1
+        tradability.ledger_append(f"C{cid}", "settle", pos["symbol"], pos["entry_date"], act.delivery,
+                                  f"{pos['side']} settlement price {px}; pnl {pnl:+.4f}", px)
+    open_positions = _kept
+
     # --------------------------------------------------------
     # 1) For each combo whose rebalance day has arrived: compute target basket,
     #    close positions that fell out, propose new entries.
@@ -501,7 +536,7 @@ def main() -> int:
 
         for sym, side in target.items():
             already_open = any(p_["symbol"] == sym and p_["combo_idx"] == combo_idx for p_ in open_positions)
-            if not already_open:
+            if not already_open and tradability.is_tradable(sym, today):
                 proposed_entries.append({"symbol": sym, "side": side, "combo_idx": combo_idx})
 
         state["combo_last_rebalance"][str(combo_idx)] = str(today)

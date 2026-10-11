@@ -52,6 +52,7 @@ import numpy as np
 import pandas as pd
 
 import t9b_shared
+import tradability
 from signal_arbitrator import SignalArbitrator
 from health_emit import emit, resolve
 
@@ -418,6 +419,12 @@ def compute_basket(close: pd.DataFrame, as_of: Date,
 
     ret = (close_t0 / close_tlb - 1).replace([np.inf, -np.inf], np.nan).dropna()
 
+    # Exchange-faithful tradability (engines/tradability.py): a symbol that is delivered, settling,
+    # not yet onboarded or unknown to the exchange cache cannot be ranked into a basket.
+    # (S5's STGUSDT short of 2026-10-09 was placed 15 days after its 2026-09-24 delivery.)
+    _tradable = set(tradability.tradable_universe("S5", ret.index, t0.date()))
+    ret = ret[ret.index.isin(_tradable)]
+
     # Validity guard (2026-10-11, confirmed root cause of S5's STGUSDT
     # entry on 2026-10-09 -- after its own settlement): a flat window
     # gives ret=0 exactly, a perfectly legitimate float that this
@@ -524,6 +531,37 @@ def is_rebal_day(today: Date, state: dict) -> bool:
     if days_since < REBAL_DAYS:
         return False
     return today.weekday() == 4  # 4 = Friday
+
+
+def _apply_tradability(state: dict, today: Date) -> None:
+    """Void entries made after delivery; settle positions that reached delivery.
+    Inert unless data/tradability_config.json apply_state_fixes=true (engines/tradability.py)."""
+    for key, side in (('long_positions', 'LONG'), ('short_positions', 'SHORT')):
+        keep = []
+        for pos in state.get(key, []):
+            act = tradability.pending_action("S5", pos['symbol'], pos['entry_date'], today,
+                                             f"{pos['symbol']}_{pos['entry_date']}_{side}")
+            if act is None:
+                keep.append(pos)
+                continue
+            if act.kind == "void":
+                tradability.ledger_append("S5", "void", pos['symbol'], pos['entry_date'], today,
+                                          f"{side} {act.reason}; delivery {act.delivery}; entry_price {pos['entry_price']}")
+                _log_event(today, 'ENTRY_VOIDED',
+                           f"{pos['symbol']} {side} entry {pos['entry_date']} not tradable ({act.reason}, "
+                           f"delivery {act.delivery}); position voided, no P&L booked",
+                           float(state['paper_equity_usdt']))
+                continue
+            price = act.price if act.price is not None else pos['entry_price']
+            pnl = ((price - pos['entry_price']) if side == 'LONG' else (pos['entry_price'] - price)) * pos['quantity']
+            state['paper_equity_usdt'] = round(float(state['paper_equity_usdt']) + pnl, 4)
+            state['peak_equity_usdt'] = round(max(float(state['peak_equity_usdt']), state['paper_equity_usdt']), 4)
+            tradability.ledger_append("S5", "settle", pos['symbol'], pos['entry_date'], act.delivery,
+                                      f"{side} settlement price {price}; pnl {pnl:+.4f}", price)
+            _log_event(today, 'EXCHANGE_SETTLEMENT',
+                       f"{pos['symbol']} {side} closed at settlement {price} on {act.delivery}  pnl=${pnl:+.2f}",
+                       float(state['paper_equity_usdt']))
+        state[key] = keep
 
 
 def do_rebalance(state: dict, close: pd.DataFrame, today: Date,
@@ -949,6 +987,7 @@ def main() -> None:
 
     # Fix 3: state reconciliation on startup
     _reconcile_state_momentum(state, today)
+    _apply_tradability(state, today)
 
     # Load close matrix
     p("  Loading close matrix...")

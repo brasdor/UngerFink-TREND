@@ -67,6 +67,7 @@ import numpy as np
 import pandas as pd
 
 import t9b_shared
+import tradability
 from health_emit import emit, resolve
 import spot_data_refresh
 from signal_arbitrator import SignalArbitrator
@@ -509,6 +510,32 @@ def update_and_check_exit(
 # DAILY RUN
 # =============================================================================
 
+def _exchange_settlement_exit(pos, act) -> dict:
+    """Close at the exchange settlement price on the delivery date (exit_reason exchange_settlement)."""
+    price = act.price if act.price is not None else pos.entry_price
+    gross_r  = (price - pos.entry_price) / max(pos.initial_risk_per_unit, EPS)
+    pnl_usdt = pos.risk_amount_usdt * gross_r
+    tradability.ledger_append("S1", "settle", pos.symbol, pos.entry_date, act.delivery,
+                              f"settlement price {price}", price)
+    return {
+        "position_id":            pos.position_id,
+        "symbol":                 pos.symbol,
+        "entry_date":             pos.entry_date,
+        "exit_date":              str(act.delivery),
+        "entry_price":            pos.entry_price,
+        "exit_price":             price,
+        "initial_stop":           pos.initial_stop,
+        "final_stop":             pos.current_stop,
+        "qty":                    pos.qty,
+        "gross_r":                round(gross_r, 6),
+        "pnl_usdt":               round(pnl_usdt, 4),
+        "max_favorable_r":        pos.max_favorable_r,
+        "exit_reason":            "exchange_settlement",
+        "chandelier_active":      pos.chandelier_active,
+        "chandelier_activated":   pos.chandelier_activated_date,
+    }
+
+
 def run_one_day(
     run_date: date,
     symbols: List[str],
@@ -541,10 +568,25 @@ def run_one_day(
     # STEP 1: Process exits on all open positions
     # ------------------------------------------------------------------
     closed_ids: List[str] = []
+    void_ids: List[str] = []
 
     for pid, pos in list(positions.items()):
-        df = load_ohlcv(pos.symbol, up_to_date=run_date)
-        exit_rec, pos = update_and_check_exit(pos, df, run_date)
+        # Exchange-faithful tradability (engines/tradability.py): entry after delivery -> void,
+        # position reaching delivery -> close at settlement. Inert unless apply_state_fixes=true.
+        act = tradability.pending_action("S1", pos.symbol, pos.entry_date, run_date, pid, venue="spot")
+        if act is not None and act.kind == "void":
+            tradability.ledger_append("S1", "void", pos.symbol, pos.entry_date, run_date,
+                                      f"{act.reason}; delivery {act.delivery}; entry_price {pos.entry_price}")
+            _log("ENTRY_VOIDED", pos.symbol,
+                 f"entry {pos.entry_date} is not tradable ({act.reason}, delivery {act.delivery}); "
+                 f"position voided, no P&L booked")
+            void_ids.append(pid)
+            continue
+        if act is not None and act.kind == "settle":
+            exit_rec = _exchange_settlement_exit(pos, act)
+        else:
+            df = load_ohlcv(pos.symbol, up_to_date=run_date)
+            exit_rec, pos = update_and_check_exit(pos, df, run_date)
 
         if exit_rec is not None:
             equity += exit_rec["pnl_usdt"]
@@ -577,7 +619,7 @@ def run_one_day(
             # Update chandelier / highest_high state for non-exiting positions
             positions[pid] = pos
 
-    for pid in closed_ids:
+    for pid in closed_ids + void_ids:
         positions.pop(pid, None)
 
     # ------------------------------------------------------------------
@@ -586,7 +628,7 @@ def run_one_day(
     if not kill_sw:
         cross_syms = t9b_shared.get_cross_system_symbols('donchian')  # Fix 1
         arbitrator = SignalArbitrator('donchian', run_date)
-        for sym in symbols:
+        for sym in tradability.tradable_universe("S1", symbols, run_date, venue="spot"):
             # Skip if already holding this symbol
             if any(p.symbol == sym for p in positions.values()):
                 continue

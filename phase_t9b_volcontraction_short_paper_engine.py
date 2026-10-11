@@ -68,6 +68,7 @@ import numpy as np
 import pandas as pd
 
 import t9b_shared
+import tradability
 from health_emit import emit, resolve
 from signal_arbitrator import SignalArbitrator
 
@@ -498,6 +499,11 @@ def add_indicators(df: pd.DataFrame) -> pd.DataFrame:
     prev_c = cls.shift(1)
     tr = pd.concat([hgh - lw, (hgh - prev_c).abs(), (lw - prev_c).abs()], axis=1).max(axis=1)
     atr = tr.rolling(ATR_N).mean()
+    # Validity guard (2026-10-11): zero price range over the whole ATR window means the series is
+    # flat (e.g. a SETTLING contract's forward-filled bars). ATR is then meaningless -> NaN, which
+    # resets the compression counter and blocks any signal; check_signal also refuses flat bars.
+    flat_window = ((hgh.rolling(ATR_N).max() - lw.rolling(ATR_N).min()) <= 0)
+    atr = atr.where(~flat_window)
 
     # ATR 20th percentile over trailing 252 bars (min 50 bars)
     atr_pct20 = atr.rolling(252, min_periods=50).quantile(ATR_PERCENTILE / 100.0)
@@ -537,6 +543,7 @@ def add_indicators(df: pd.DataFrame) -> pd.DataFrame:
             cb_start = max(0, i - COMPRESSION_BARS)
             comp_low[i] = float(np.min(low_vals[cb_start:i]))
 
+    out["flat_window"] = flat_window.values
     out["atr"]       = atr_vals
     out["atr_pct20"] = pct_vals
     out["ema200"]    = ema200.values
@@ -560,6 +567,8 @@ def check_signal(row: pd.Series, funding_rate: float) -> Optional[dict]:
     Entry: at OPEN of the NEXT 4H bar after signal.
     Stop : close + ATR x 2.0  (ABOVE entry for short)
     """
+    if bool(row.get("flat_window", False)):
+        return None  # zero-range window: indicators invalid, never a signal
     consec   = row.get("consec", 0)
     comp_low = row.get("comp_low", np.nan)
     close    = float(row["close"])
@@ -665,6 +674,49 @@ def run_daily(run_date: date, symbols: List[str], state: dict) -> dict:
     cross_syms = t9b_shared.get_cross_system_symbols("volcontraction")
     arbitrator = SignalArbitrator("volcontraction", run_date)
 
+    # Exchange-faithful tradability pre-pass (engines/tradability.py): entry after delivery -> void
+    # (annotated, no P&L); position reaching delivery -> close at settlement. Inert unless
+    # data/tradability_config.json apply_state_fixes=true.
+    for pid, pos in list(positions.items()):
+        act = tradability.pending_action("S6", pos.symbol, pos.entry_date, run_date, pid)
+        if act is None:
+            continue
+        if act.kind == "void":
+            tradability.ledger_append("S6", "void", pos.symbol, pos.entry_date, run_date,
+                                      f"{act.reason}; delivery {act.delivery}; entry_price {pos.entry_price}")
+            _log("ENTRY_VOIDED", pos.symbol,
+                 f"entry {pos.entry_date} is not tradable ({act.reason}, delivery {act.delivery}); "
+                 f"position voided, no P&L booked")
+            positions.pop(pid, None)
+            continue
+        price = act.price if act.price is not None else pos.entry_price
+        ru = max(pos.initial_risk_per_unit, EPS)
+        gross_r = (pos.entry_price - price) / ru            # SHORT
+        pnl_usdt = pos.risk_amount_usdt * gross_r
+        equity += pnl_usdt
+        peak = max(peak, equity)
+        dd_pct = (equity - peak) / max(peak, EPS) * 100.0
+        exit_rec = {"exit_reason": "exchange_settlement", "exit_price": round(price, 8),
+                    "gross_r": round(gross_r, 6), "pnl_usdt": round(pnl_usdt, 4),
+                    "position_id": pid, "symbol": pos.symbol, "entry_date": pos.entry_date,
+                    "exit_date": str(act.delivery), "entry_price": pos.entry_price,
+                    "stop_loss": pos.stop_loss, "bars_held": pos.bars_held,
+                    "equity_after": round(equity, 4), "dd_pct": round(dd_pct, 4)}
+        exits_run.append(exit_rec)
+        tradability.ledger_append("S6", "settle", pos.symbol, pos.entry_date, act.delivery,
+                                  f"settlement price {price}", price)
+        _log("EXIT", pos.symbol,
+             f"reason=exchange_settlement  bars={pos.bars_held}  R={gross_r:.3f}  "
+             f"pnl=${pnl_usdt:.2f}  equity=${equity:,.2f}",
+             gross_r=exit_rec["gross_r"], pnl_usdt=exit_rec["pnl_usdt"],
+             equity=round(equity, 2), dd_pct=round(dd_pct, 4))
+        positions.pop(pid, None)
+        if dd_pct <= -KILL_SWITCH_DD_PCT:
+            kill_sw = True
+            _log("KILL_SWITCH", "", f"DD={dd_pct:.2f}% breached -{KILL_SWITCH_DD_PCT}%", equity=round(equity, 2))
+    # entries pending for a symbol that is no longer tradable can never fill
+    pending = [pe for pe in pending if tradability.is_tradable(pe["symbol"], run_date)]
+
     for sym in symbols:
         df_raw = load_4h_ohlcv(sym, cutoff_ts_ms=cutoff_ts_ms)
         if df_raw.empty or len(df_raw) < MIN_BARS_REQUIRED:
@@ -690,6 +742,10 @@ def run_daily(run_date: date, symbols: List[str], state: dict) -> dict:
                 if pe["signal_ts_ms"] >= bar_ts:
                     continue  # same bar or future -- not ready yet
 
+                if not tradability.is_tradable(sym, pd.Timestamp(bar_ts, unit="ms", tz="UTC").date()):
+                    _log("SIGNAL_SKIPPED", sym, "not_tradable_at_fill")
+                    filled_pids.append(id(pe))
+                    continue
                 entry_price = float(bar["open"])
                 risk_unit   = pe["risk_unit"]
                 stop_loss   = entry_price + ATR_STOP_MULT * float(pe["atr"])
@@ -822,6 +878,8 @@ def run_daily(run_date: date, symbols: List[str], state: dict) -> dict:
                 positions.pop(pid, None)
 
             # ---- 3. Check for new entry signals ----
+            if not tradability.is_tradable(sym, pd.Timestamp(bar_ts, unit="ms", tz="UTC").date()):
+                continue  # delivered / settling / not onboarded / unknown: no new signal
             if kill_sw:
                 continue
             if any(p.symbol == sym for p in positions.values()):
@@ -860,6 +918,15 @@ def run_daily(run_date: date, symbols: List[str], state: dict) -> dict:
             else:
                 resolve("S6", "funding_stale_no_entry", key=sym, run_date=str(run_date))
 
+            if bool(bar.get("flat_window", False)):
+                emit("S6", "flat_window_indicator_invalidated", "WARNING",
+                     f"{sym}: zero price range over the last {ATR_N} 4H bars -- signal evaluation "
+                     f"skipped rather than trusting ATR/compression on constant input",
+                     key=sym, evidence={"symbol": sym, "window_bars": ATR_N},
+                     suggested_action="Likely a SETTLING futures contract; check "
+                                       "data/exchange_status_cache.json.",
+                     run_date=str(run_date))
+                continue
             funding = get_funding_at_ts(sym, bar_ts)
             sig = check_signal(bar, funding)
             if sig is not None:

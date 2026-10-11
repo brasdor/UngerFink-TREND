@@ -102,7 +102,9 @@ OI_DIR = ROOT / "data" / "riskoff" / "forward"
 def commit_and_push(push: bool) -> int:
     paths = [FUND_DIR.relative_to(ROOT).as_posix()]
     if OI_DIR.exists():
-        paths.append(OI_DIR.relative_to(ROOT).as_posix())
+        paths.append(OI_DIR.relative_to(ROOT).as_posix())   # OI log + restated-series snapshots (forward/)
+    if (ROOT / "data" / "exchange_status_cache.json").exists():
+        paths.append("data/exchange_status_cache.json")
     add = git("add", "--force", *paths)
     if add.returncode != 0:
         print(f"[GIT] add failed: {add.stderr.strip()}")
@@ -177,6 +179,25 @@ def main() -> int:
         oi.run()
     except Exception as exc:
         print(f"[OI] snapshot step crashed: {type(exc).__name__}: {exc}")
+
+    # Restated-series snapshots (stablecoins, EPU, GPR, BTC dominance): append-only, dated by fetch day.
+    try:
+        spec = importlib.util.spec_from_file_location("forward_snapshots", ROOT / "tools" / "forward_snapshots.py")
+        fs = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(fs)
+        fs.run()
+    except Exception as exc:
+        print(f"[SNAPSHOT] step crashed: {type(exc).__name__}: {exc}")
+
+    # Exchange status cache (gates every engine's tradability): fapi is reachable here, not in CI.
+    try:
+        spec = importlib.util.spec_from_file_location("refresh_exchange_status_cache",
+                                                      ROOT / "tools" / "health" / "refresh_exchange_status_cache.py")
+        ex = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(ex)
+        ex.main()
+    except Exception as exc:
+        print(f"[EXCHANGE-STATUS] step crashed: {type(exc).__name__}: {exc}")
 
     return commit_and_push(push=not args.no_push)
 

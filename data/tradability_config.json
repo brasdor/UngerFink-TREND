@@ -1,0 +1,4 @@
+{
+  "_comment": "Exchange-faithful tradability (engines/tradability.py). While false, engines never void or settle EXISTING positions (they only record a tradability_state_fix_pending finding); new-entry gating is always on. Set true ONLY after reviewing docs/TRADABILITY_STATE_DIFF.md.",
+  "apply_state_fixes": false
+}

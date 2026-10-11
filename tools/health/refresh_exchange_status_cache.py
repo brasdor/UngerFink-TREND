@@ -72,8 +72,15 @@ def main() -> int:
             # futures symbol keys share the spot namespace (e.g. "BTCUSDT") --
             # prefix to keep them distinct in case a symbol exists on both
             # venues with different statuses.
+            ob = s.get("onboardDate")
+            ob_iso = (datetime.fromtimestamp(ob / 1000, tz=timezone.utc).date().isoformat()
+                      if ob else None)
             cache["symbols"][f"FUT:{s['symbol']}"] = {
                 "status": s.get("status"), "venue": "futures", "delivery_date": dd_iso,
+                # onboard_date / contract_type added 2026-10-11 for date-based
+                # tradability (engines/tradability.py): a bar dated D is tradable
+                # iff onboard_date <= D < delivery_date.
+                "onboard_date": ob_iso, "contract_type": s.get("contractType"),
             }
         print(f"[EXCHANGE-STATUS] futures: {len(fut.get('symbols', []))} symbols")
     except Exception as exc:

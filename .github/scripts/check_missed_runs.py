@@ -82,26 +82,29 @@ def _spot_universe() -> set[str] | None:
         return None
 
 
-SUPPRESSION_FILE = ROOT / "data" / "halted_symbols_suppression.json"
+# Replaces the manual data/halted_symbols_suppression.json list (retired 2026-10-11):
+# a symbol is exempt from staleness alerting iff the exchange status cache says it is not
+# tradable (SETTLING/BREAK/delivered/unknown) -- see engines/tradability.py. Real staleness in
+# a tradable symbol still alerts.
+sys.path.insert(0, str(ROOT / "engines"))
+import tradability  # noqa: E402
 
 
-def _suppressed_symbols() -> set[str]:
-    """Confirmed-exchange-halted symbols (see check_halted_symbols.py) --
-    excluded from staleness alerting so a permanent halt doesn't page
-    forever. Missing/unreadable file just means nothing is suppressed."""
-    if not SUPPRESSION_FILE.exists():
-        return set()
-    try:
-        raw = json.loads(SUPPRESSION_FILE.read_text(encoding="utf-8"))
-        return {k for k in raw if not k.startswith("_")}
-    except Exception as exc:
-        print(f"  [WARN] could not read {SUPPRESSION_FILE} ({exc}); suppressing nothing")
-        return set()
+def _untradable_symbols(cache_dir: Path, venue: str, today) -> set[str]:
+    """Symbol stems (as they appear in cache_dir file names) that are not tradable today."""
+    out = set()
+    if not cache_dir.exists():
+        return out
+    for f in cache_dir.glob("*_1d.csv"):
+        sym = f.stem.replace("_1d", "")
+        if not tradability.is_tradable(sym, today, venue):
+            out.add(sym)
+    return out
 
 
 OHLCV_DIRS = [
-    ("spot universe (S1/S3)", ROOT / "data" / "universe" / "ohlcv_1d", _spot_universe),
-    ("futures universe (S2/S5-S8/candidates)", ROOT / "data" / "futures_universe" / "ohlcv_1d", None),
+    ("spot universe (S1/S3)", ROOT / "data" / "universe" / "ohlcv_1d", _spot_universe, "spot"),
+    ("futures universe (S2/S5-S8/candidates)", ROOT / "data" / "futures_universe" / "ohlcv_1d", None, "futures"),
 ]
 
 SYSTEMS = [
@@ -156,7 +159,8 @@ def _send(token: str, chat_id: str, text: str) -> bool:
 
 def check_ohlcv_staleness(label: str, cache_dir: Path, today,
                           allowlist: set[str] | None = None,
-                          suppress: set[str] | None = None) -> tuple[str, int] | None:
+                          suppress: set[str] | None = None,
+                          venue: str | None = None) -> tuple[str, int] | None:
     """
     Worst-case staleness across every symbol file in cache_dir (or, if
     allowlist is given, just the symbols actually traded -- avoids flagging
@@ -167,10 +171,10 @@ def check_ohlcv_staleness(label: str, cache_dir: Path, today,
     spot-OHLCV freeze -- a missed-run or step-outcome check would not have,
     since that pipeline kept exiting 0 and committing daily throughout.
 
-    suppress excludes confirmed-exchange-halted symbols (see
-    data/halted_symbols_suppression.json) so a real, permanent exchange
-    halt doesn't fire this alert every single day forever. Re-verified
-    monthly, not trusted indefinitely -- see check_halted_symbols.py.
+    venue ("spot"/"futures") excludes symbols the exchange status cache says are not
+    tradable (settled/halted/unknown), so a permanent exchange halt or settlement doesn't fire
+    this alert every day forever (engines/tradability.py; replaces the manual
+    halted_symbols_suppression.json). `suppress` is an optional extra explicit exclusion set.
     """
     if not cache_dir.exists():
         return (f"{label}: cache dir missing ({cache_dir})", 9999)
@@ -183,6 +187,9 @@ def check_ohlcv_staleness(label: str, cache_dir: Path, today,
         if allowlist is not None and sym not in allowlist:
             continue
         if suppress is not None and sym in suppress:
+            n_suppressed += 1
+            continue
+        if venue is not None and not tradability.is_tradable(sym, today, venue):
             n_suppressed += 1
             continue
         try:
@@ -239,16 +246,16 @@ def compute_heartbeat() -> dict:
     print("[HEARTBEAT] checking OHLCV cache staleness (the check that would have "
           "caught the original incident -- a pipeline that keeps exiting 0 while "
           "silently processing frozen data)...")
-    suppressed = _suppressed_symbols()
-    if suppressed:
-        print(f"  (suppressing confirmed-halted symbols: {sorted(suppressed)})")
-
+    suppressed: set[str] = set()
     data_issues: list[str] = []
-    for label, cache_dir, allowlist_fn in OHLCV_DIRS:
+    for label, cache_dir, allowlist_fn, venue in OHLCV_DIRS:
         allowlist = allowlist_fn() if allowlist_fn is not None else None
-        result = check_ohlcv_staleness(label, cache_dir, now.date(), allowlist=allowlist, suppress=suppressed)
+        suppressed |= _untradable_symbols(cache_dir, venue, now.date())
+        result = check_ohlcv_staleness(label, cache_dir, now.date(), allowlist=allowlist, venue=venue)
         if result is not None:
             data_issues.append(result[0])
+    if suppressed:
+        print(f"  (exempt from staleness alerts because the exchange says not tradable: {sorted(suppressed)})")
 
     return {
         "checked_utc": now.isoformat(),

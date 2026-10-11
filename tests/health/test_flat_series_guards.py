@@ -162,5 +162,50 @@ class TestCandidateRankingGuards(unittest.TestCase):
                          "proximity=1.0 on flat data must not win the top decile")
 
 
+class TestShortEngineFlatGuards(unittest.TestCase):
+    """S6 (compression breakdown) and S7 (EMA cross) on 4H data: a flat tail must leave
+    ATR invalid (NaN), flag flat_window, and never yield a signal even with a permissive funding gate."""
+
+    def _df(self, n_real=300, n_flat=40):
+        rng = np.random.default_rng(5)
+        real = 1.0 * np.exp(np.cumsum(rng.normal(-0.002, 0.01, n_real)))
+        close = np.concatenate([real, np.full(n_flat, real[-1])])
+        hi = np.concatenate([real * 1.004, np.full(n_flat, real[-1])])
+        lo = np.concatenate([real * 0.996, np.full(n_flat, real[-1])])
+        return pd.DataFrame({"open": close, "high": hi, "low": lo, "close": close})
+
+    def test_s6_flat_tail_invalidates_atr_and_signal(self):
+        import phase_t9b_volcontraction_short_paper_engine as s6
+        out = s6.add_indicators(self._df())
+        last = out.iloc[-1]
+        self.assertTrue(bool(last["flat_window"]))
+        self.assertTrue(np.isnan(last["atr"]))
+        self.assertIsNone(s6.check_signal(last, funding_rate=1.0))
+        # every bar of the flat tail (incl. the first, partly-real windows) is either invalid or signal-free
+        for i in range(len(out) - 40, len(out)):
+            self.assertIsNone(s6.check_signal(out.iloc[i], funding_rate=1.0))
+
+    def test_s7_flat_tail_invalidates_atr_and_signal(self):
+        import phase_t9b_macross_short_paper_engine as s7
+        out = s7.add_indicators(self._df())
+        last = out.iloc[-1]
+        self.assertTrue(bool(last["flat_window"]))
+        self.assertTrue(np.isnan(last["atr"]))
+        self.assertIsNone(s7.check_signal(last, funding_rate=1.0))
+        flat_rows = out[out["flat_window"]]
+        self.assertGreater(len(flat_rows), 20)
+        for _, row in flat_rows.iterrows():
+            self.assertIsNone(s7.check_signal(row, funding_rate=1.0))
+
+    def test_s6_s7_non_flat_atr_unchanged(self):
+        import phase_t9b_volcontraction_short_paper_engine as s6
+        import phase_t9b_macross_short_paper_engine as s7
+        df = self._df(n_flat=0)
+        for mod in (s6, s7):
+            out = mod.add_indicators(df)
+            self.assertFalse(out["flat_window"].any())
+            self.assertTrue(np.isfinite(out["atr"].iloc[-1]))
+
+
 if __name__ == "__main__":
     unittest.main()
