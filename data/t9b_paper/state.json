@@ -1,7 +1,7 @@
 {
   "system_name": "TREND_1D_DONCHIAN_EXITV2_T9B",
   "created_utc": "2026-05-30T22:46:19.996708+00:00",
-  "last_run_date": "2026-10-10",
+  "last_run_date": "2026-10-11",
   "paper_equity_usdt": 10144.5159,
   "peak_equity_usdt": 10144.9694,
   "drawdown_pct": -0.0045,
@@ -57,6 +57,23 @@
       "chandelier_activated_date": null,
       "atr_at_entry": 0.00023518,
       "donchian_entry_level": 0.002463
+    },
+    {
+      "position_id": "NEAR_USDT_20261011",
+      "symbol": "NEAR/USDT",
+      "entry_date": "2026-10-11",
+      "entry_price": 5.896,
+      "initial_stop": 4.78801458,
+      "current_stop": 4.78801458,
+      "initial_risk_per_unit": 1.10798542,
+      "risk_amount_usdt": 19.026673602693748,
+      "qty": 17.172314056888716,
+      "highest_high_since_entry": 5.896,
+      "max_favorable_r": 0.0,
+      "chandelier_active": false,
+      "chandelier_activated_date": null,
+      "atr_at_entry": 0.55399271,
+      "donchian_entry_level": 5.595
     }
   ],
   "closed_trade_count": 11

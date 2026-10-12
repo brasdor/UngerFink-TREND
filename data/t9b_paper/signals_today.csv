@@ -1,1 +1,2 @@
-symbol,signal_date,close,ema200,don_entry_high,atr,initial_stop,signal
+symbol,signal_date,close,ema200,don_entry_high,don_exit_low,atr,initial_stop,initial_risk_unit,signal
+NEAR/USDT,2026-10-11,5.896,2.50750838,5.595,4.301,0.55399271,4.78801458,1.10798542,BUY
