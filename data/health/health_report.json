@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-12T08:25:48.446523+00:00",
+  "generated_at": "2026-10-12T11:45:36.238021+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -91,8 +91,8 @@
       "n_findings": 2
     },
     "funding_refresh_job_alive": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 1
     }
   },
   "findings": [
@@ -589,6 +589,21 @@
         "n_checked": 290
       },
       "suggested_action": "Funding refresh needs a reachable (non-US) host -- GH runners are geo-blocked from fapi.binance.com. Feeds S6/S7 gates, S8's filter, and the regime funding axis. If n_stale matches the SETTLING symbols in data/exchange_status_cache.json, this is expected and benign.",
+      "run_date": "2026-10-12"
+    },
+    {
+      "id": "funding_refresh_job:funding_refresh_job_dead",
+      "severity": "CRITICAL",
+      "system": "funding_refresh_job",
+      "check": "funding_refresh_job_dead",
+      "message": "no commit to funding_rates/ in 26.4h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
+      "first_seen": "2026-10-12",
+      "last_seen": "2026-10-12",
+      "status": "open",
+      "evidence": {
+        "age_hours": 26.4
+      },
+      "suggested_action": "Check the funding refresh host: is the self-hosted runner online (Settings -> Actions -> Runners) or is the cron job still scheduled and succeeding?",
       "run_date": "2026-10-12"
     },
     {
