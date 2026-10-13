@@ -1,1 +1,2 @@
-symbol,signal_date,close,rsi,atr,stop_loss,signal
+symbol,signal_date,close,rsi,atr,stop_loss,risk_unit,signal
+RVNUSDT,2026-10-12,0.001589,22.7225,0.00019664,0.00099907,0.00058993,BUY_MR
