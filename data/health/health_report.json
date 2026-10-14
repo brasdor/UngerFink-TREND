@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-13T11:44:38.595227+00:00",
+  "generated_at": "2026-10-14T08:12:02.795384+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -35,12 +35,12 @@
       "n_findings": 13
     },
     "heartbeat_36h": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 2
     },
     "missed_run_single_day": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 2
     },
     "step_failure": {
       "status": "pass",
@@ -83,8 +83,8 @@
       "n_findings": 2
     },
     "no_entries_exits_despite_signals": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 1
     },
     "suppression_list_stale": {
       "status": "fail",
@@ -97,246 +97,276 @@
   },
   "findings": [
     {
+      "id": "Candidate 12:heartbeat_36h",
+      "severity": "CRITICAL",
+      "system": "Candidate 12",
+      "check": "heartbeat_36h",
+      "message": "47.8h since last real state.json commit (threshold 36h)",
+      "first_seen": "2026-10-14",
+      "last_seen": "2026-10-14",
+      "status": "open",
+      "evidence": {
+        "age_hours": 47.8
+      },
+      "suggested_action": "Check the daily workflow's Actions log.",
+      "run_date": "2026-10-14"
+    },
+    {
+      "id": "Candidate 19:heartbeat_36h",
+      "severity": "CRITICAL",
+      "system": "Candidate 19",
+      "check": "heartbeat_36h",
+      "message": "47.8h since last real state.json commit (threshold 36h)",
+      "first_seen": "2026-10-14",
+      "last_seen": "2026-10-14",
+      "status": "open",
+      "evidence": {
+        "age_hours": 47.8
+      },
+      "suggested_action": "Check the daily workflow's Actions log.",
+      "run_date": "2026-10-14"
+    },
+    {
       "id": "S2:leverage_cap_breach",
       "severity": "CRITICAL",
       "system": "S2",
       "check": "leverage_cap_breach",
-      "message": "implied leverage 39.49x exceeds configured cap 1.00x (notional $400,934 / equity $10,152)",
+      "message": "implied leverage 39.51x exceeds configured cap 1.00x (notional $401,110 / equity $10,152)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
-        "implied_leverage": 39.494,
+        "implied_leverage": 39.511,
         "leverage_max": 1.0,
-        "total_notional": 400934.1867391843,
+        "total_notional": 401109.9168816233,
         "equity": 10151.735099999996
       },
       "suggested_action": "Check position sizing -- a leverage breach is a direct liquidation-risk increase versus the T6 sweep this cap was set from.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "S6:funding_stale_no_entry:ACXUSDT",
       "severity": "CRITICAL",
       "system": "S6",
       "check": "funding_stale_no_entry",
-      "message": "ACXUSDT: funding data older than 3d as of 2026-10-12 -- no new entry (S6 is funding-gated)",
+      "message": "ACXUSDT: funding data older than 3d as of 2026-10-13 -- no new entry (S6 is funding-gated)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "ACXUSDT",
-        "run_date": "2026-10-12"
+        "run_date": "2026-10-13"
       },
       "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S6:funding_stale_no_entry:HFTUSDT",
       "severity": "CRITICAL",
       "system": "S6",
       "check": "funding_stale_no_entry",
-      "message": "HFTUSDT: funding data older than 3d as of 2026-10-12 -- no new entry (S6 is funding-gated)",
+      "message": "HFTUSDT: funding data older than 3d as of 2026-10-13 -- no new entry (S6 is funding-gated)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "HFTUSDT",
-        "run_date": "2026-10-12"
+        "run_date": "2026-10-13"
       },
       "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S6:funding_stale_no_entry:ICXUSDT",
       "severity": "CRITICAL",
       "system": "S6",
       "check": "funding_stale_no_entry",
-      "message": "ICXUSDT: funding data older than 3d as of 2026-10-12 -- no new entry (S6 is funding-gated)",
+      "message": "ICXUSDT: funding data older than 3d as of 2026-10-13 -- no new entry (S6 is funding-gated)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "ICXUSDT",
-        "run_date": "2026-10-12"
+        "run_date": "2026-10-13"
       },
       "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S6:funding_stale_no_entry:NFPUSDT",
       "severity": "CRITICAL",
       "system": "S6",
       "check": "funding_stale_no_entry",
-      "message": "NFPUSDT: funding data older than 3d as of 2026-10-12 -- no new entry (S6 is funding-gated)",
+      "message": "NFPUSDT: funding data older than 3d as of 2026-10-13 -- no new entry (S6 is funding-gated)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "NFPUSDT",
-        "run_date": "2026-10-12"
+        "run_date": "2026-10-13"
       },
       "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S6:funding_stale_no_entry:STORJUSDT",
       "severity": "CRITICAL",
       "system": "S6",
       "check": "funding_stale_no_entry",
-      "message": "STORJUSDT: funding data older than 3d as of 2026-10-12 -- no new entry (S6 is funding-gated)",
+      "message": "STORJUSDT: funding data older than 3d as of 2026-10-13 -- no new entry (S6 is funding-gated)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "STORJUSDT",
-        "run_date": "2026-10-12"
+        "run_date": "2026-10-13"
       },
       "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S6:funding_stale_no_entry:TONUSDT",
       "severity": "CRITICAL",
       "system": "S6",
       "check": "funding_stale_no_entry",
-      "message": "TONUSDT: funding data older than 3d as of 2026-10-12 -- no new entry (S6 is funding-gated)",
+      "message": "TONUSDT: funding data older than 3d as of 2026-10-13 -- no new entry (S6 is funding-gated)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "TONUSDT",
-        "run_date": "2026-10-12"
+        "run_date": "2026-10-13"
       },
       "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S6:funding_stale_no_entry:VANRYUSDT",
       "severity": "CRITICAL",
       "system": "S6",
       "check": "funding_stale_no_entry",
-      "message": "VANRYUSDT: funding data older than 3d as of 2026-10-12 -- no new entry (S6 is funding-gated)",
+      "message": "VANRYUSDT: funding data older than 3d as of 2026-10-13 -- no new entry (S6 is funding-gated)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "VANRYUSDT",
-        "run_date": "2026-10-12"
+        "run_date": "2026-10-13"
       },
       "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S7:funding_stale_no_entry:ACXUSDT",
       "severity": "CRITICAL",
       "system": "S7",
       "check": "funding_stale_no_entry",
-      "message": "ACXUSDT: funding data older than 3d as of 2026-10-12 -- no new entry (S7 is funding-gated)",
+      "message": "ACXUSDT: funding data older than 3d as of 2026-10-13 -- no new entry (S7 is funding-gated)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "ACXUSDT",
-        "run_date": "2026-10-12"
+        "run_date": "2026-10-13"
       },
       "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S7:funding_stale_no_entry:HFTUSDT",
       "severity": "CRITICAL",
       "system": "S7",
       "check": "funding_stale_no_entry",
-      "message": "HFTUSDT: funding data older than 3d as of 2026-10-12 -- no new entry (S7 is funding-gated)",
+      "message": "HFTUSDT: funding data older than 3d as of 2026-10-13 -- no new entry (S7 is funding-gated)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "HFTUSDT",
-        "run_date": "2026-10-12"
+        "run_date": "2026-10-13"
       },
       "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S7:funding_stale_no_entry:ICXUSDT",
       "severity": "CRITICAL",
       "system": "S7",
       "check": "funding_stale_no_entry",
-      "message": "ICXUSDT: funding data older than 3d as of 2026-10-12 -- no new entry (S7 is funding-gated)",
+      "message": "ICXUSDT: funding data older than 3d as of 2026-10-13 -- no new entry (S7 is funding-gated)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "ICXUSDT",
-        "run_date": "2026-10-12"
+        "run_date": "2026-10-13"
       },
       "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S7:funding_stale_no_entry:NFPUSDT",
       "severity": "CRITICAL",
       "system": "S7",
       "check": "funding_stale_no_entry",
-      "message": "NFPUSDT: funding data older than 3d as of 2026-10-12 -- no new entry (S7 is funding-gated)",
+      "message": "NFPUSDT: funding data older than 3d as of 2026-10-13 -- no new entry (S7 is funding-gated)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "NFPUSDT",
-        "run_date": "2026-10-12"
+        "run_date": "2026-10-13"
       },
       "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S7:funding_stale_no_entry:STORJUSDT",
       "severity": "CRITICAL",
       "system": "S7",
       "check": "funding_stale_no_entry",
-      "message": "STORJUSDT: funding data older than 3d as of 2026-10-12 -- no new entry (S7 is funding-gated)",
+      "message": "STORJUSDT: funding data older than 3d as of 2026-10-13 -- no new entry (S7 is funding-gated)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "STORJUSDT",
-        "run_date": "2026-10-12"
+        "run_date": "2026-10-13"
       },
       "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S7:funding_stale_no_entry:TONUSDT",
       "severity": "CRITICAL",
       "system": "S7",
       "check": "funding_stale_no_entry",
-      "message": "TONUSDT: funding data older than 3d as of 2026-10-12 -- no new entry (S7 is funding-gated)",
+      "message": "TONUSDT: funding data older than 3d as of 2026-10-13 -- no new entry (S7 is funding-gated)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "TONUSDT",
-        "run_date": "2026-10-12"
+        "run_date": "2026-10-13"
       },
       "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S7:funding_stale_no_entry:VANRYUSDT",
       "severity": "CRITICAL",
       "system": "S7",
       "check": "funding_stale_no_entry",
-      "message": "VANRYUSDT: funding data older than 3d as of 2026-10-12 -- no new entry (S7 is funding-gated)",
+      "message": "VANRYUSDT: funding data older than 3d as of 2026-10-13 -- no new entry (S7 is funding-gated)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "VANRYUSDT",
-        "run_date": "2026-10-12"
+        "run_date": "2026-10-13"
       },
       "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:ACXUSDT",
@@ -345,7 +375,7 @@
       "check": "exchange_status_not_trading",
       "message": "ACXUSDT: exchange status is 'SETTLING', not TRADING (delivery: 2026-08-07)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "ACXUSDT",
@@ -354,7 +384,7 @@
         "delivery_date": "2026-08-07"
       },
       "suggested_action": "Confirmed non-tradable -- exclude from new signals/rankings (see docs/HEALTH_CONTRACT.md); any OPEN position in it needs a decision, not an automatic one.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:COSUSDT",
@@ -363,7 +393,7 @@
       "check": "exchange_status_not_trading",
       "message": "COSUSDT: exchange status is 'SETTLING', not TRADING (delivery: 2026-06-11)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "COSUSDT",
@@ -372,7 +402,7 @@
         "delivery_date": "2026-06-11"
       },
       "suggested_action": "Confirmed non-tradable -- exclude from new signals/rankings (see docs/HEALTH_CONTRACT.md); any OPEN position in it needs a decision, not an automatic one.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:DUSDT",
@@ -381,7 +411,7 @@
       "check": "exchange_status_not_trading",
       "message": "DUSDT: exchange status is 'SETTLING', not TRADING (delivery: 2026-06-11)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "DUSDT",
@@ -390,7 +420,7 @@
         "delivery_date": "2026-06-11"
       },
       "suggested_action": "Confirmed non-tradable -- exclude from new signals/rankings (see docs/HEALTH_CONTRACT.md); any OPEN position in it needs a decision, not an automatic one.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:HFTUSDT",
@@ -399,7 +429,7 @@
       "check": "exchange_status_not_trading",
       "message": "HFTUSDT: exchange status is 'SETTLING', not TRADING (delivery: 2026-08-07)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "HFTUSDT",
@@ -408,7 +438,7 @@
         "delivery_date": "2026-08-07"
       },
       "suggested_action": "Confirmed non-tradable -- exclude from new signals/rankings (see docs/HEALTH_CONTRACT.md); any OPEN position in it needs a decision, not an automatic one.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:HIGHUSDT",
@@ -417,7 +447,7 @@
       "check": "exchange_status_not_trading",
       "message": "HIGHUSDT: exchange status is 'SETTLING', not TRADING (delivery: 2026-06-11)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "HIGHUSDT",
@@ -426,7 +456,7 @@
         "delivery_date": "2026-06-11"
       },
       "suggested_action": "Confirmed non-tradable -- exclude from new signals/rankings (see docs/HEALTH_CONTRACT.md); any OPEN position in it needs a decision, not an automatic one.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:ICXUSDT",
@@ -435,7 +465,7 @@
       "check": "exchange_status_not_trading",
       "message": "ICXUSDT: exchange status is 'SETTLING', not TRADING (delivery: 2026-08-26)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "ICXUSDT",
@@ -444,7 +474,7 @@
         "delivery_date": "2026-08-26"
       },
       "suggested_action": "Confirmed non-tradable -- exclude from new signals/rankings (see docs/HEALTH_CONTRACT.md); any OPEN position in it needs a decision, not an automatic one.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:MBOXUSDT",
@@ -453,7 +483,7 @@
       "check": "exchange_status_not_trading",
       "message": "MBOXUSDT: exchange status is 'SETTLING', not TRADING (delivery: 2026-06-11)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "MBOXUSDT",
@@ -462,7 +492,7 @@
         "delivery_date": "2026-06-11"
       },
       "suggested_action": "Confirmed non-tradable -- exclude from new signals/rankings (see docs/HEALTH_CONTRACT.md); any OPEN position in it needs a decision, not an automatic one.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:NFPUSDT",
@@ -471,7 +501,7 @@
       "check": "exchange_status_not_trading",
       "message": "NFPUSDT: exchange status is 'SETTLING', not TRADING (delivery: 2026-07-02)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "NFPUSDT",
@@ -480,7 +510,7 @@
         "delivery_date": "2026-07-02"
       },
       "suggested_action": "Confirmed non-tradable -- exclude from new signals/rankings (see docs/HEALTH_CONTRACT.md); any OPEN position in it needs a decision, not an automatic one.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:SCRTUSDT",
@@ -489,7 +519,7 @@
       "check": "exchange_status_not_trading",
       "message": "SCRTUSDT: exchange status is 'SETTLING', not TRADING (delivery: 2026-08-26)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "SCRTUSDT",
@@ -498,7 +528,7 @@
         "delivery_date": "2026-08-26"
       },
       "suggested_action": "Confirmed non-tradable -- exclude from new signals/rankings (see docs/HEALTH_CONTRACT.md); any OPEN position in it needs a decision, not an automatic one.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:STGUSDT",
@@ -507,7 +537,7 @@
       "check": "exchange_status_not_trading",
       "message": "STGUSDT: exchange status is 'SETTLING', not TRADING (delivery: 2026-09-24)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "STGUSDT",
@@ -516,7 +546,7 @@
         "delivery_date": "2026-09-24"
       },
       "suggested_action": "Confirmed non-tradable -- exclude from new signals/rankings (see docs/HEALTH_CONTRACT.md); any OPEN position in it needs a decision, not an automatic one.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:STORJUSDT",
@@ -525,7 +555,7 @@
       "check": "exchange_status_not_trading",
       "message": "STORJUSDT: exchange status is 'SETTLING', not TRADING (delivery: 2026-08-26)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "STORJUSDT",
@@ -534,7 +564,7 @@
         "delivery_date": "2026-08-26"
       },
       "suggested_action": "Confirmed non-tradable -- exclude from new signals/rankings (see docs/HEALTH_CONTRACT.md); any OPEN position in it needs a decision, not an automatic one.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:TONUSDT",
@@ -543,7 +573,7 @@
       "check": "exchange_status_not_trading",
       "message": "TONUSDT: exchange status is 'SETTLING', not TRADING (delivery: 2026-06-23)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "TONUSDT",
@@ -552,7 +582,7 @@
         "delivery_date": "2026-06-23"
       },
       "suggested_action": "Confirmed non-tradable -- exclude from new signals/rankings (see docs/HEALTH_CONTRACT.md); any OPEN position in it needs a decision, not an automatic one.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:VANRYUSDT",
@@ -561,7 +591,7 @@
       "check": "exchange_status_not_trading",
       "message": "VANRYUSDT: exchange status is 'SETTLING', not TRADING (delivery: 2026-08-07)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "VANRYUSDT",
@@ -570,41 +600,41 @@
         "delivery_date": "2026-08-07"
       },
       "suggested_action": "Confirmed non-tradable -- exclude from new signals/rankings (see docs/HEALTH_CONTRACT.md); any OPEN position in it needs a decision, not an automatic one.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/futures_universe/funding_rates:funding_staleness",
       "severity": "CRITICAL",
       "system": "data/futures_universe/funding_rates",
       "check": "funding_staleness",
-      "message": "funding_rates: 13/290 symbol(s) stale (median across the universe is 2d, fine); worst is DUSDT at 124d",
+      "message": "funding_rates: 13/290 symbol(s) stale (median across the universe is 3d, fine); worst is DUSDT at 125d",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "worst_symbol": "DUSDT",
-        "worst_days": 124,
-        "median_days": 2,
+        "worst_days": 125,
+        "median_days": 3,
         "n_stale": 13,
         "n_checked": 290
       },
       "suggested_action": "Funding refresh needs a reachable (non-US) host -- GH runners are geo-blocked from fapi.binance.com. Feeds S6/S7 gates, S8's filter, and the regime funding axis. If n_stale matches the SETTLING symbols in data/exchange_status_cache.json, this is expected and benign.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "funding_refresh_job:funding_refresh_job_dead",
       "severity": "CRITICAL",
       "system": "funding_refresh_job",
       "check": "funding_refresh_job_dead",
-      "message": "no commit to funding_rates/ in 50.4h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
+      "message": "no commit to funding_rates/ in 70.8h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
       "first_seen": "2026-10-12",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
-        "age_hours": 50.4
+        "age_hours": 70.8
       },
       "suggested_action": "Check the funding refresh host: is the self-hosted runner online (Settings -> Actions -> Runners) or is the cron job still scheduled and succeeding?",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "Candidate12:flat_window_momentum_invalidated:FLATUSDT",
@@ -623,6 +653,22 @@
       "run_date": "2026-09-11"
     },
     {
+      "id": "Candidate12:missed_run_single_day",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "missed_run_single_day",
+      "message": "last_run_date=2026-10-12, expected 2026-10-13 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
+      "first_seen": "2026-10-14",
+      "last_seen": "2026-10-14",
+      "status": "open",
+      "evidence": {
+        "last_run_date": "2026-10-12",
+        "expected": "2026-10-13"
+      },
+      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
+      "run_date": "2026-10-14"
+    },
+    {
       "id": "Candidate19:flat_window_proximity_invalidated:FLATUSDT",
       "severity": "WARNING",
       "system": "Candidate19",
@@ -639,20 +685,36 @@
       "run_date": "2026-09-11"
     },
     {
+      "id": "Candidate19:missed_run_single_day",
+      "severity": "WARNING",
+      "system": "Candidate19",
+      "check": "missed_run_single_day",
+      "message": "last_run_date=2026-10-12, expected 2026-10-13 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
+      "first_seen": "2026-10-14",
+      "last_seen": "2026-10-14",
+      "status": "open",
+      "evidence": {
+        "last_run_date": "2026-10-12",
+        "expected": "2026-10-13"
+      },
+      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
+      "run_date": "2026-10-14"
+    },
+    {
       "id": "S2:csv_not_pandas_parseable:daily_log.csv",
       "severity": "WARNING",
       "system": "S2",
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 8 fields in line 3, saw 9\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 8 fields in line 3, saw 9\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "S2:flat_window_rsi_invalidated:ACXUSDT",
@@ -661,14 +723,14 @@
       "check": "flat_window_rsi_invalidated",
       "message": "ACXUSDT: last 15 closes are identical -- RSI invalidated rather than using a frozen pre-flatline value",
       "first_seen": "2026-10-12",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "ACXUSDT",
         "n_flat_bars": 15
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S2:flat_window_rsi_invalidated:FLATUSDT",
@@ -693,14 +755,14 @@
       "check": "flat_window_rsi_invalidated",
       "message": "HFTUSDT: last 15 closes are identical -- RSI invalidated rather than using a frozen pre-flatline value",
       "first_seen": "2026-10-12",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "HFTUSDT",
         "n_flat_bars": 15
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S2:flat_window_rsi_invalidated:ICXUSDT",
@@ -709,14 +771,14 @@
       "check": "flat_window_rsi_invalidated",
       "message": "ICXUSDT: last 15 closes are identical -- RSI invalidated rather than using a frozen pre-flatline value",
       "first_seen": "2026-10-12",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "ICXUSDT",
         "n_flat_bars": 15
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S2:flat_window_rsi_invalidated:NFPUSDT",
@@ -725,14 +787,14 @@
       "check": "flat_window_rsi_invalidated",
       "message": "NFPUSDT: last 15 closes are identical -- RSI invalidated rather than using a frozen pre-flatline value",
       "first_seen": "2026-10-12",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "NFPUSDT",
         "n_flat_bars": 15
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S2:flat_window_rsi_invalidated:STORJUSDT",
@@ -741,14 +803,30 @@
       "check": "flat_window_rsi_invalidated",
       "message": "STORJUSDT: last 15 closes are identical -- RSI invalidated rather than using a frozen pre-flatline value",
       "first_seen": "2026-10-12",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "STORJUSDT",
         "n_flat_bars": 15
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
+    },
+    {
+      "id": "S2:flat_window_rsi_invalidated:TONUSDT",
+      "severity": "WARNING",
+      "system": "S2",
+      "check": "flat_window_rsi_invalidated",
+      "message": "TONUSDT: last 15 closes are identical -- RSI invalidated rather than using a frozen pre-flatline value",
+      "first_seen": "2026-10-13",
+      "last_seen": "2026-10-13",
+      "status": "open",
+      "evidence": {
+        "symbol": "TONUSDT",
+        "n_flat_bars": 15
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-13"
     },
     {
       "id": "S2:flat_window_rsi_invalidated:VANRYUSDT",
@@ -757,14 +835,14 @@
       "check": "flat_window_rsi_invalidated",
       "message": "VANRYUSDT: last 15 closes are identical -- RSI invalidated rather than using a frozen pre-flatline value",
       "first_seen": "2026-10-12",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "VANRYUSDT",
         "n_flat_bars": 15
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S3:csv_not_pandas_parseable:daily_log.csv",
@@ -773,14 +851,14 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 4 fields in line 101, saw 8\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 4 fields in line 101, saw 8\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "S5:flat_window_momentum_invalidated:FLATUSDT",
@@ -805,23 +883,40 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 5 fields in line 74, saw 15\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 5 fields in line 74, saw 15\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "S6:stopout_rate_elevated",
       "severity": "WARNING",
       "system": "S6",
       "check": "stopout_rate_elevated",
+      "message": "15/20 of the last 20 exits were stop-outs (75%) -- the S7 rally-whipsaw pattern",
+      "first_seen": "2026-10-11",
+      "last_seen": "2026-10-14",
+      "status": "open",
+      "evidence": {
+        "n_stop": 15,
+        "n_window": 20,
+        "fraction": 0.75
+      },
+      "suggested_action": "Shadow-replay this system's recent entries against current (non-stale) funding/regime data before changing any stop rule.",
+      "run_date": "2026-10-14"
+    },
+    {
+      "id": "S7:stopout_rate_elevated",
+      "severity": "WARNING",
+      "system": "S7",
+      "check": "stopout_rate_elevated",
       "message": "16/20 of the last 20 exits were stop-outs (80%) -- the S7 rally-whipsaw pattern",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "n_stop": 16,
@@ -829,24 +924,7 @@
         "fraction": 0.8
       },
       "suggested_action": "Shadow-replay this system's recent entries against current (non-stale) funding/regime data before changing any stop rule.",
-      "run_date": "2026-10-13"
-    },
-    {
-      "id": "S7:stopout_rate_elevated",
-      "severity": "WARNING",
-      "system": "S7",
-      "check": "stopout_rate_elevated",
-      "message": "17/20 of the last 20 exits were stop-outs (85%) -- the S7 rally-whipsaw pattern",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
-      "status": "open",
-      "evidence": {
-        "n_stop": 17,
-        "n_window": 20,
-        "fraction": 0.85
-      },
-      "suggested_action": "Shadow-replay this system's recent entries against current (non-stale) funding/regime data before changing any stop rule.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "S8:csv_not_pandas_parseable:daily_log.csv",
@@ -855,30 +933,30 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 4 fields in line 1237, saw 6\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 4 fields in line 1237, saw 6\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "S8:flat_window_rsi_invalidated:ACXUSDT",
       "severity": "WARNING",
       "system": "S8",
       "check": "flat_window_rsi_invalidated",
-      "message": "ACXUSDT: last 5 bars have zero volume/range as of 2026-10-12 -- likely delisted; skipping entry signal",
+      "message": "ACXUSDT: last 5 bars have zero volume/range as of 2026-10-13 -- likely delisted; skipping entry signal",
       "first_seen": "2026-10-12",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "ACXUSDT",
         "lookback_bars": 5
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S8:flat_window_rsi_invalidated:FLATUSDT",
@@ -901,320 +979,352 @@
       "severity": "WARNING",
       "system": "S8",
       "check": "flat_window_rsi_invalidated",
-      "message": "HFTUSDT: last 5 bars have zero volume/range as of 2026-10-12 -- likely delisted; skipping entry signal",
+      "message": "HFTUSDT: last 5 bars have zero volume/range as of 2026-10-13 -- likely delisted; skipping entry signal",
       "first_seen": "2026-10-12",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "HFTUSDT",
         "lookback_bars": 5
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S8:flat_window_rsi_invalidated:ICXUSDT",
       "severity": "WARNING",
       "system": "S8",
       "check": "flat_window_rsi_invalidated",
-      "message": "ICXUSDT: last 5 bars have zero volume/range as of 2026-10-12 -- likely delisted; skipping entry signal",
+      "message": "ICXUSDT: last 5 bars have zero volume/range as of 2026-10-13 -- likely delisted; skipping entry signal",
       "first_seen": "2026-10-12",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "ICXUSDT",
         "lookback_bars": 5
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S8:flat_window_rsi_invalidated:NFPUSDT",
       "severity": "WARNING",
       "system": "S8",
       "check": "flat_window_rsi_invalidated",
-      "message": "NFPUSDT: last 5 bars have zero volume/range as of 2026-10-12 -- likely delisted; skipping entry signal",
+      "message": "NFPUSDT: last 5 bars have zero volume/range as of 2026-10-13 -- likely delisted; skipping entry signal",
       "first_seen": "2026-10-12",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "NFPUSDT",
         "lookback_bars": 5
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
     },
     {
       "id": "S8:flat_window_rsi_invalidated:STORJUSDT",
       "severity": "WARNING",
       "system": "S8",
       "check": "flat_window_rsi_invalidated",
-      "message": "STORJUSDT: last 5 bars have zero volume/range as of 2026-10-12 -- likely delisted; skipping entry signal",
+      "message": "STORJUSDT: last 5 bars have zero volume/range as of 2026-10-13 -- likely delisted; skipping entry signal",
       "first_seen": "2026-10-12",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "STORJUSDT",
         "lookback_bars": 5
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
+    },
+    {
+      "id": "S8:flat_window_rsi_invalidated:TONUSDT",
+      "severity": "WARNING",
+      "system": "S8",
+      "check": "flat_window_rsi_invalidated",
+      "message": "TONUSDT: last 5 bars have zero volume/range as of 2026-10-13 -- likely delisted; skipping entry signal",
+      "first_seen": "2026-10-13",
+      "last_seen": "2026-10-13",
+      "status": "open",
+      "evidence": {
+        "symbol": "TONUSDT",
+        "lookback_bars": 5
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-13"
     },
     {
       "id": "S8:flat_window_rsi_invalidated:VANRYUSDT",
       "severity": "WARNING",
       "system": "S8",
       "check": "flat_window_rsi_invalidated",
-      "message": "VANRYUSDT: last 5 bars have zero volume/range as of 2026-10-12 -- likely delisted; skipping entry signal",
+      "message": "VANRYUSDT: last 5 bars have zero volume/range as of 2026-10-13 -- likely delisted; skipping entry signal",
       "first_seen": "2026-10-12",
-      "last_seen": "2026-10-12",
+      "last_seen": "2026-10-13",
       "status": "open",
       "evidence": {
         "symbol": "VANRYUSDT",
         "lookback_bars": 5
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-10-12"
+      "run_date": "2026-10-13"
+    },
+    {
+      "id": "S8:no_entries_exits_despite_signals",
+      "severity": "WARNING",
+      "system": "S8",
+      "check": "no_entries_exits_despite_signals",
+      "message": "355 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
+      "first_seen": "2026-10-14",
+      "last_seen": "2026-10-14",
+      "status": "open",
+      "evidence": {
+        "n_signals": 355,
+        "window_days": 7
+      },
+      "suggested_action": "Check the arbitrator / cross-system suppression and the regime weight for this system -- confirm it isn't being silently zeroed out.",
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/halted_symbols_suppression.json:suppression_list_stale:ARDR_USDT",
       "severity": "WARNING",
       "system": "data/halted_symbols_suppression.json",
       "check": "suppression_list_stale",
-      "message": "ARDR_USDT: last re-verified 50d ago (monthly check appears to have stopped running)",
+      "message": "ARDR_USDT: last re-verified 51d ago (monthly check appears to have stopped running)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "ARDR_USDT",
-        "age_days": 50
+        "age_days": 51
       },
       "suggested_action": "Check monthly_halted_symbol_check.yml's recent runs.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "data/halted_symbols_suppression.json:suppression_list_stale:TON_USDT",
       "severity": "WARNING",
       "system": "data/halted_symbols_suppression.json",
       "check": "suppression_list_stale",
-      "message": "TON_USDT: last re-verified 50d ago (monthly check appears to have stopped running)",
+      "message": "TON_USDT: last re-verified 51d ago (monthly check appears to have stopped running)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "TON_USDT",
-        "age_days": 50
+        "age_days": 51
       },
       "suggested_action": "Check monthly_halted_symbol_check.yml's recent runs.",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "futures_universe:flat_price:ACXUSDT",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "ACXUSDT: 66 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "ACXUSDT: 67 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "ACXUSDT",
-        "streak_days": 66
+        "streak_days": 67
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "futures_universe:flat_price:COSUSDT",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "COSUSDT: 119 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "COSUSDT: 120 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "COSUSDT",
-        "streak_days": 119
+        "streak_days": 120
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "futures_universe:flat_price:DUSDT",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "DUSDT: 119 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "DUSDT: 120 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "DUSDT",
-        "streak_days": 119
+        "streak_days": 120
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "futures_universe:flat_price:HFTUSDT",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "HFTUSDT: 66 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "HFTUSDT: 67 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "HFTUSDT",
-        "streak_days": 66
+        "streak_days": 67
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "futures_universe:flat_price:HIGHUSDT",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "HIGHUSDT: 118 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "HIGHUSDT: 120 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "HIGHUSDT",
-        "streak_days": 118
+        "streak_days": 120
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "futures_universe:flat_price:ICXUSDT",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "ICXUSDT: 47 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "ICXUSDT: 48 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "ICXUSDT",
-        "streak_days": 47
+        "streak_days": 48
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "futures_universe:flat_price:MBOXUSDT",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "MBOXUSDT: 118 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "MBOXUSDT: 119 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "MBOXUSDT",
-        "streak_days": 118
+        "streak_days": 119
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "futures_universe:flat_price:NFPUSDT",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "NFPUSDT: 96 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "NFPUSDT: 97 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "NFPUSDT",
-        "streak_days": 96
+        "streak_days": 97
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "futures_universe:flat_price:SCRTUSDT",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "SCRTUSDT: 46 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "SCRTUSDT: 48 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "SCRTUSDT",
-        "streak_days": 46
+        "streak_days": 48
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "futures_universe:flat_price:STGUSDT",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "STGUSDT: 18 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "STGUSDT: 19 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "STGUSDT",
-        "streak_days": 18
+        "streak_days": 19
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "futures_universe:flat_price:STORJUSDT",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "STORJUSDT: 47 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "STORJUSDT: 48 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "STORJUSDT",
-        "streak_days": 47
+        "streak_days": 48
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "futures_universe:flat_price:TONUSDT",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "TONUSDT: 106 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "TONUSDT: 108 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "TONUSDT",
-        "streak_days": 106
+        "streak_days": 108
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "futures_universe:flat_price:VANRYUSDT",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "flat_price",
-      "message": "VANRYUSDT: 66 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
+      "message": "VANRYUSDT: 67 consecutive zero-range day(s) (open==high==low==close) -- check exchange status, likely SETTLING/delisted",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "VANRYUSDT",
-        "streak_days": 66
+        "streak_days": 67
       },
       "suggested_action": "Cross-check check_exchange_status's cache; exclude from signals/rankings if confirmed non-TRADING (see docs/HEALTH_CONTRACT.md's dead-symbol proposal).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     },
     {
       "id": "futures_universe:symbol_gaps:ZRXUSDT_1d",
@@ -1223,14 +1333,14 @@
       "check": "symbol_gaps",
       "message": "futures universe: ZRXUSDT_1d has 7 missing calendar day(s) inside its own covered history",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-13",
+      "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
         "symbol": "ZRXUSDT_1d",
         "n_gaps": 7
       },
       "suggested_action": "Re-backfill this symbol from the CDN; check for an exchange halt around the gap date(s).",
-      "run_date": "2026-10-13"
+      "run_date": "2026-10-14"
     }
   ]
 }
