@@ -1,1 +1,2 @@
-symbol,run_date,signal_ts_ms,signal_close,comp_low,consec,atr,ema200,funding_rate,stop_loss
+symbol,signal_ts_ms,consec,comp_low,atr,ema200,signal_close,stop_loss,risk_unit,funding_rate,run_date
+XVGUSDT,1791806400000,18,0.002818,7.621e-05,0.00294658,0.0028,0.00295243,0.00015243,0.0001,2026-10-13
