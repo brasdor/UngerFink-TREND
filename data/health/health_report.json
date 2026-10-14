@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-14T08:12:02.795384+00:00",
+  "generated_at": "2026-10-14T08:13:25.595238+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -35,12 +35,12 @@
       "n_findings": 13
     },
     "heartbeat_36h": {
-      "status": "fail",
-      "n_findings": 2
+      "status": "pass",
+      "n_findings": 0
     },
     "missed_run_single_day": {
-      "status": "fail",
-      "n_findings": 2
+      "status": "pass",
+      "n_findings": 0
     },
     "step_failure": {
       "status": "pass",
@@ -96,36 +96,6 @@
     }
   },
   "findings": [
-    {
-      "id": "Candidate 12:heartbeat_36h",
-      "severity": "CRITICAL",
-      "system": "Candidate 12",
-      "check": "heartbeat_36h",
-      "message": "47.8h since last real state.json commit (threshold 36h)",
-      "first_seen": "2026-10-14",
-      "last_seen": "2026-10-14",
-      "status": "open",
-      "evidence": {
-        "age_hours": 47.8
-      },
-      "suggested_action": "Check the daily workflow's Actions log.",
-      "run_date": "2026-10-14"
-    },
-    {
-      "id": "Candidate 19:heartbeat_36h",
-      "severity": "CRITICAL",
-      "system": "Candidate 19",
-      "check": "heartbeat_36h",
-      "message": "47.8h since last real state.json commit (threshold 36h)",
-      "first_seen": "2026-10-14",
-      "last_seen": "2026-10-14",
-      "status": "open",
-      "evidence": {
-        "age_hours": 47.8
-      },
-      "suggested_action": "Check the daily workflow's Actions log.",
-      "run_date": "2026-10-14"
-    },
     {
       "id": "S2:leverage_cap_breach",
       "severity": "CRITICAL",
@@ -626,12 +596,12 @@
       "severity": "CRITICAL",
       "system": "funding_refresh_job",
       "check": "funding_refresh_job_dead",
-      "message": "no commit to funding_rates/ in 70.8h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
+      "message": "no commit to funding_rates/ in 70.9h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
       "first_seen": "2026-10-12",
       "last_seen": "2026-10-14",
       "status": "open",
       "evidence": {
-        "age_hours": 70.8
+        "age_hours": 70.9
       },
       "suggested_action": "Check the funding refresh host: is the self-hosted runner online (Settings -> Actions -> Runners) or is the cron job still scheduled and succeeding?",
       "run_date": "2026-10-14"
@@ -653,22 +623,6 @@
       "run_date": "2026-09-11"
     },
     {
-      "id": "Candidate12:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "Candidate12",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-10-12, expected 2026-10-13 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-10-14",
-      "last_seen": "2026-10-14",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-10-12",
-        "expected": "2026-10-13"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-10-14"
-    },
-    {
       "id": "Candidate19:flat_window_proximity_invalidated:FLATUSDT",
       "severity": "WARNING",
       "system": "Candidate19",
@@ -683,22 +637,6 @@
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
       "run_date": "2026-09-11"
-    },
-    {
-      "id": "Candidate19:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "Candidate19",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-10-12, expected 2026-10-13 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-10-14",
-      "last_seen": "2026-10-14",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-10-12",
-        "expected": "2026-10-13"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-10-14"
     },
     {
       "id": "S2:csv_not_pandas_parseable:daily_log.csv",
