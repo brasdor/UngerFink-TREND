@@ -1,3 +1,1 @@
-symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
-APEUSDT,1791892800000,0.1477,0.15242953,0.15257507,0.14928032,0.00505,0.1578,0.0101,0.0001,2026-10-14
-QTUMUSDT,1791849600000,0.9335,0.96587365,0.96622965,0.94596175,0.0306,0.9947,0.0612,0.0001,2026-10-14
+symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss
