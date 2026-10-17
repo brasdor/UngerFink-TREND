@@ -60,6 +60,9 @@ class _Base(unittest.TestCase):
             mock.patch.object(T, "VOID_LEDGER", t / "ledger.csv"),
             mock.patch.object(health_emit, "EVENTS_PATH", t / "health_events.jsonl"),
             mock.patch.object(health_emit, "HEALTH_DIR", t),
+            mock.patch.object(T, "_now", lambda: datetime(2026, 10, 11, 12, 0, tzinfo=timezone.utc)),
+            mock.patch.object(T, "OHLCV_1D", t / "ohlcv"),
+            mock.patch.object(T, "SPOT_OHLCV_1D", t / "spot"),
         ]
         for p in self.patches:
             p.start()
@@ -257,6 +260,95 @@ class TestS5BasketGate(_Base):
         self.assertNotIn("DEADUSDT", shorts)
         self.assertNotIn("DEADUSDT", longs)
         self.assertTrue(len(shorts) > 0)
+
+
+class TestCacheAgePolicy(_Base):
+    """Cache 1/3/4/7/8/30/31 days old, a new listing, and a symbol that settled after the last refresh.
+    Policy: fresh -> full rule; older -> date-based fallback (status ignored, unknown allowed) with
+    WARNING then CRITICAL; the tradable set never goes empty and nothing here raises."""
+
+    def _age(self, days):
+        fetched = datetime(2026, 10, 11, 12, 0, tzinfo=timezone.utc) - __import__("datetime").timedelta(days=days)
+        c = _cache()
+        c["fetched_at"] = fetched.isoformat()
+        self.cache_path.write_text(json.dumps(c), encoding="utf-8")
+        T.reload(self.cache_path)
+
+    def _severity(self):
+        ev = [e for e in self.events() if e.get("check") == "exchange_status_cache_stale"]
+        return ev[-1]["severity"] if ev else None
+
+    def test_modes_by_age(self):
+        for days, mode in [(1, "fresh"), (3, "fresh"), (4, "stale"), (7, "stale"), (8, "critical"), (30, "critical"), (31, "expired")]:
+            self._age(days)
+            self.assertEqual(T.cache_mode(), mode, days)
+
+    def test_emission_escalates_and_fresh_emits_nothing(self):
+        self._age(2)
+        self.assertIsNone(self._severity())
+        for days, sev in [(4, "WARNING"), (8, "CRITICAL"), (31, "CRITICAL")]:
+            self._age(days)
+            self.assertEqual(self._severity(), sev, days)
+
+    def test_fresh_cache_blocks_unknown_and_non_trading_status(self):
+        self._age(1)
+        self.assertEqual(T.untradable_reason("NEWLISTUSDT", "2026-10-11"), "unknown_symbol")
+        self.assertEqual(T.untradable_reason("SOONUSDT", "2026-10-11"), "status_SETTLING")
+
+    def test_stale_cache_falls_back_to_dates_and_never_blocks_everything(self):
+        universe = ["GOODUSDT", "NEWLISTUSDT", "SOONUSDT", "DEADUSDT"]
+        for days in (4, 7, 8, 30, 31, 400):
+            self._age(days)
+            ok = T.tradable_universe("T", universe, "2026-10-11")
+            self.assertEqual(ok, ["GOODUSDT", "NEWLISTUSDT", "SOONUSDT"], days)   # only DEAD (delivery date known) is out
+            self.assertTrue(len(ok) > 0)
+
+    def test_stale_cache_still_voids_by_known_delivery_date(self):
+        self._age(40)
+        self.assertEqual(T.position_action("DEADUSDT", "2026-09-29", "2026-10-11").kind, "void")
+
+    def test_symbol_settling_after_last_refresh_is_caught_by_flat_feed_backstop(self):
+        """Cache (any age) says TRADING with no delivery date; the feed has gone flat for 3 days."""
+        t = Path(self.tmp.name) / "ohlcv"
+        t.mkdir(exist_ok=True)
+        idx = pd.date_range("2026-09-20", "2026-10-10", freq="D", tz="UTC")
+        n = len(idx)
+        vol = np.where(np.arange(n) < n - 3, 100.0, 0.0)                    # last 3 bars: zero volume
+        px = np.where(np.arange(n) < n - 3, 1.0 + 0.01 * np.arange(n), 1.19)
+        hi = np.where(np.arange(n) < n - 3, px * 1.01, px)
+        lo = np.where(np.arange(n) < n - 3, px * 0.99, px)
+        pd.DataFrame({"timestamp": [int(x.value // 1_000_000) for x in idx], "high": hi, "low": lo, "volume": vol}
+                     ).to_csv(t / "GOODUSDT_1d.csv", index=False)
+        for days in (1, 8, 40):
+            self._age(days)
+            T.reload(self.cache_path)
+            self.assertEqual(T.untradable_reason("GOODUSDT", "2026-10-10"), "flat_zero_volume_feed", days)
+            self.assertIsNone(T.untradable_reason("GOODUSDT", "2026-10-05"), "replay-safe: only bars <= the date count")
+
+    def test_missing_cache_keeps_backstop_and_disables_exchange_gate(self):
+        self.cache_path.write_text("garbage", encoding="utf-8")
+        T.reload(self.cache_path)
+        self.assertEqual(T.cache_mode(), "missing")
+        self.assertTrue(T.is_tradable("DEADUSDT", "2026-10-11"))
+        self.assertEqual(self._severity(), None)
+        self.assertTrue(any(e.get("check") == "exchange_status_cache_unusable" for e in self.events()))
+
+    def test_engine_universe_survives_a_30_day_old_cache(self):
+        import phase_t9b_meanreversion_paper_engine as s2
+        self._age(30)
+        seen = []
+        st = {"system_name": "T", "paper_equity_usdt": 10000.0, "peak_equity_usdt": 10000.0, "kill_switch_triggered": False,
+              "closed_trade_count": 0, "last_run_date": None, "open_positions": []}
+        with mock.patch.object(s2, "check_entry_signal", lambda sym, df, rd: seen.append(sym)),                 mock.patch.object(s2, "load_ohlcv", return_value=pd.DataFrame()):
+            s2.run_one_day(date(2026, 10, 11), ["GOODUSDT", "NEWLISTUSDT", "DEADUSDT"], st)
+        self.assertEqual(seen, ["GOODUSDT", "NEWLISTUSDT"])
+
+
+class TestRegimeSwitch(_Base):
+    def test_default_off_and_reads_flag(self):
+        self.assertFalse(T.regime_exclusion_enabled())
+        self.cfg_path.write_text(json.dumps({"regime_exclude_nontradable": True}), encoding="utf-8")
+        self.assertTrue(T.regime_exclusion_enabled())
 
 
 if __name__ == "__main__":

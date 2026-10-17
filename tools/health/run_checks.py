@@ -485,14 +485,20 @@ def check_exchange_status() -> list[dict]:
     fetched_at = cache.get("fetched_at")
     if fetched_at:
         try:
-            age_days = (datetime.now(timezone.utc) - datetime.fromisoformat(fetched_at)).days
-            if age_days > EXCHANGE_STATUS_MAX_AGE_DAYS:
+            age = (datetime.now(timezone.utc) - datetime.fromisoformat(fetched_at)).total_seconds() / 86400
+            mode = tradability._mode_for_age(age)
+            if mode != "fresh":
+                sev = "WARNING" if mode == "stale" else "CRITICAL"
                 out.append(finding(
-                    "data/exchange_status_cache.json", "exchange_status_cache_stale", "WARNING",
-                    f"cache is {age_days}d old (threshold {EXCHANGE_STATUS_MAX_AGE_DAYS}d)",
-                    evidence={"age_days": age_days},
-                    suggested_action="Re-run tools/health/refresh_exchange_status_cache.py.",
-                ))
+                    "data/exchange_status_cache.json", "exchange_status_cache_stale", sev,
+                    f"cache is {age:.1f}d old (fresh <= {tradability.CACHE_FRESH_DAYS}d, critical > "
+                    f"{tradability.CACHE_CRITICAL_DAYS}d, expired > {tradability.CACHE_EXPIRED_DAYS}d): engines have "
+                    f"fallen back to the date-based tradability rule (status ignored, unknown symbols allowed); "
+                    f"they keep trading, but a symbol that entered SETTLING since the fetch is only caught by the "
+                    f"flat-feed backstop",
+                    evidence={"age_days": round(age, 2), "mode": mode},
+                    suggested_action="Run tools/refresh_funding_local.py on the funding host "
+                                      "(fapi is geo-blocked from CI)."))
         except Exception:
             pass
 

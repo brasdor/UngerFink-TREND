@@ -36,6 +36,7 @@ from pathlib import Path
 from datetime import date as Date
 
 from health_emit import emit, resolve
+import tradability
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_1D = ROOT / "data" / "futures_universe" / "ohlcv_1d"
@@ -108,7 +109,13 @@ def compute_regime(run_date=None):
     # Breadth (% of symbols above their EMA200), as of run_date
     above_count = 0
     total_count = 0
+    # Switch (data/tradability_config.json regime_exclude_nontradable, default OFF): leave settled / delivered /
+    # halted contracts out of the breadth and funding inputs. Their flat feeds count as "below EMA200" forever and
+    # their last funding print never updates.
+    exclude_nt = tradability.regime_exclusion_enabled()
     for f in sorted(DATA_1D.glob("*_1d.csv")):
+        if exclude_nt and not tradability.is_tradable(f.stem.replace("_1d", ""), run_date, "futures"):
+            continue
         try:
             df = pd.read_csv(f, usecols=["timestamp", "close"])
             df["date"] = pd.to_datetime(df["timestamp"], unit="ms")
@@ -132,6 +139,8 @@ def compute_regime(run_date=None):
     funding_rates = []
     funding_gap_days = []
     for f in sorted(FUNDING_DIR.glob("*_funding.csv")):
+        if exclude_nt and not tradability.is_tradable(f.stem.replace("_funding", ""), run_date, "futures"):
+            continue
         try:
             df = pd.read_csv(f)
             if df.empty or "funding_time" not in df.columns:

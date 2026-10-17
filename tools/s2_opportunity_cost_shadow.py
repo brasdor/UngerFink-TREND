@@ -8,6 +8,8 @@ Replays the real S2 engine (run_one_day) day by day from 2026-06-26 twice from t
 Inputs the live engine read from other systems are reconstructed from its own daily_log:
   cross-system duplicate set per date = symbols logged 'duplicate_cross_system' that day;
   the signal arbitrator never rejected in the log (0 'arbitrator:' skips) so it is stubbed to accept.
+NOTE: the log must be read with a tolerant parser (see read_log_tolerant); the first version of this replay used
+pandas on_bad_lines='skip' and lost 401 cross-system rows, which let the replay enter symbols the real engine skipped.
 The baseline is validated against the real ledger (data/t9b_mr_paper/engine_equity_curve.csv).
 """
 import sys, json, tempfile
@@ -23,7 +25,15 @@ import phase_t9b_meanreversion_paper_engine as s2
 
 START, END = date(2026, 6, 26), date(2026, 10, 10)
 START_EQ = 10053.07
-log = pd.read_csv(ROOT/"data/t9b_mr_paper/daily_log.csv", on_bad_lines="skip")
+def read_log_tolerant(path):
+    """daily_log.csv has ragged rows (the column layout drifted for months; fixed 2026-10-10 in append_csv).
+    pd.read_csv(on_bad_lines='skip') silently drops ~490 of 6311 rows, INCLUDING 43 of 55 ENTRY rows and every
+    cross-system skip on 6 dead-symbol entry dates. Keep the first four fields of every row instead."""
+    import csv
+    rows = list(csv.reader(open(path, encoding="utf-8")))
+    return pd.DataFrame([r[:4] for r in rows[1:] if len(r) >= 4], columns=["run_date", "event", "symbol", "detail"])
+
+log = read_log_tolerant(ROOT/"data/t9b_mr_paper/daily_log.csv")
 dup = log[(log.event == "SIGNAL_SKIPPED") & (log.detail == "duplicate_cross_system")]
 CROSS = {d: {s.replace("/", "") for s in g.symbol} for d, g in dup.groupby("run_date")}
 T0 = Path(tempfile.mkdtemp())

@@ -64,24 +64,44 @@ fills) gives
 The 5 open positions are also voided (not counted above). ICXUSDT (entered 08-20, closed 09-09) would settle on 08-26 instead; same frozen
 price, so the same -7.999 USDT, only the slot frees 14 days earlier.
 
-**Opportunity-cost shadow** (`tools/s2_opportunity_cost_shadow.py`): the real S2 `run_one_day` replayed day by day from 2026-06-26 with
-the cross-system duplicate set rebuilt per date from S2's own log. The cap (10) was genuinely binding: 165 `cap 10 reached` skips logged, concentrated in 06-27..07-06 and 07-17..08-12.
+**Opportunity-cost shadow** (`tools/s2_opportunity_cost_shadow.py`, rerun 2026-10-17 with a corrected log parser, see below): the real S2
+`run_one_day` replayed day by day from 2026-06-26 with the cross-system duplicate set rebuilt per date from S2's own log. The cap (10) was
+genuinely binding: 183 `cap 10 reached` skips on 39 days.
 
 | replay | trades | non-flat | hit rate | avg R | P&L |
 |---|---|---|---|---|---|
-| old engine (frozen-RSI bug, no gate) | 44 | 24 | 27.3% | 0.200 | +207.2 |
-| tradability gate only, freed slots refilled by the next valid signals | 34 | 34 | 55.9% | 0.451 | +336.9 |
+| old engine (frozen-RSI bug, no gate) | 43 | 23 | 25.6% | 0.193 | +188.1 |
+| tradability gate only, freed slots refilled by the next valid signals | 33 | 33 | 57.6% | 0.481 | +339.4 |
 | current engine (RSI fix + gate) | 34 | 34 | 55.9% | 0.451 | +336.9 |
 
 The gate removed 28 entries (dead-symbol re-entries and the signals they displaced) and 13 lower-ranked valid signals took the slots
-(e.g. NEO/ONE/SKL/SPELL 06-26, BAT/MOVE 08-11, GRT/HIVE 08-12, KAIA/MTL/POLYX 08-16). **Difference: +129.7 USDT, about +1.3% of S2's
-10,000 start, from refilled slots.** The RSI-freeze fix alone (committed earlier today) already captures all of it; the tradability gate
-adds only SCRTUSDT of 2026-08-26 on top once the RSI fix is in.
+(NEO/SKL/SPELL/S on 06-26, CELR/MOVE 07-27, BAT/MOVE 08-11, GRT/HIVE 08-12, KAIA/MTL/POLYX 08-16). **Difference: +151.3 USDT, about +1.5% of S2's
+10,000 start** (the first run said +129.7 with a defective log parser). The RSI-freeze fix alone captures essentially all of it; the
+tradability gate adds only SCRTUSDT of 2026-08-26 once the RSI fix is in.
 
-**How far to trust the replay.** It does not reproduce the real ledger entry by entry (11 of 36 entries match; 24 non-flat trades each side;
-non-flat hit rate 50% vs 54%, avg R 0.37 vs 0.16). Causes I know: the real engine went through remediation/back-dating in June and a July
-data-gap period, my start equity is approximate, and regime-weight history was rebuilt today. Read the old-vs-gated difference as an
-order-of-magnitude estimate, not an exact P&L restatement.
+### Why the replay matches only 11 of 36 real entries (diagnosed 2026-10-17)
+
+`tools/s2_replay_leak_diagnosis.py`, output `data/tradability/s2_replay_leak_diagnosis.csv`. What it is NOT: the data. All 11 real ENTRY
+rows since 07-12 reproduce from the stored OHLCV exactly (price identical, RSI within 0.05), and with the pre-fix RSI all 25 real entries
+that the replay missed do signal on the stored data. What leaks in:
+
+1. **The real ledger is partly a reconstruction, not a live record.** Commits `6c3219895` ("recover 11 interleaved trades") and `6a4f7c8f4`
+   ("S2: +8 closed trades recovered from a 07-16/08-06 gap", replayed 2026-08-23) rebuilt S2's trade history by date-sliced re-runs. The
+   log shows the same symbol both ENTERED and "cap 10 reached" on the same day (8 cases on 07-15, 07-17, 07-30): the day was run twice
+   against different states. A clean forward replay cannot reproduce that path.
+2. **Start state.** The replay begins 2026-06-26 with zero positions. The real engine was already at the cap that day (it logged
+   `cap 10 reached` for DIAUSDT and KSMUSDT) because it still carried the spot-era positions that the 06-25 remediation closed after the fact.
+3. **Cap occupancy cascades.** Once one entry differs, every later cap decision differs: 19 of the 25 real-only entries fall on days the
+   replay is at the cap, and 15 are symbols the replay already holds; the 20-day dead-symbol batches also run on a different phase
+   (real 07-30/08-20/09-09/09-29, replay 06-26/07-17/08-06/08-26/09-15/10-05).
+4. **Cross-system occupancy** is rebuilt from S2's own skip log, which only lists symbols S2 did not already hold, so it is approximate.
+5. **My own first-version bug (fixed):** `pd.read_csv(on_bad_lines="skip")` silently dropped 490 of 6,311 rows of the ragged
+   `daily_log.csv`, including 43 of 55 ENTRY rows and every cross-system skip on six dead-symbol entry dates. Fixing it did not change
+   the match (11 of 36 both times), which is how I know it was not the main cause. The same drop affected S3's log in the historical scan
+   (now fixed) and any consumer using that option.
+
+Conclusion: read the shadow as a controlled comparison of the same replay with and without the gate (+151 USDT), not as a restatement of
+the real ledger.
 
 ## 5. Flat-data behaviour per engine (zero-range input)
 
@@ -143,18 +163,67 @@ listed and `SETTLING` contracts, so symbols delisted and purged from `exchangeIn
 the 290-symbol universe is survivor-biased by construction; spot symbols have no historical status, so the spot engines' replay can only
 apply today's status.
 
-## 10. Open items needing your decision
+## 10. Stale exchange-status cache: behaviour and policy (added 2026-10-17)
 
-1. **Apply the state diff?** Set `apply_state_fixes` true in `data/tradability_config.json`; the engines then perform exactly section 2 on
-   their next run. Reversible only from git history.
-2. **Regime inputs include dead symbols.** The regime breadth counts the 13 settled contracts as "below EMA200" (2026-10-10: 49.66% with
-   them, 51.62% without), and the funding average includes their last frozen rates (-6.3e-6 with, +8.6e-6 without). Labels are unaffected
-   today (MIXED/LOW either way) but a threshold crossing could differ. Not changed because it moves allocation weights.
-3. **Which host runs the data job** (still open) - until then snapshots, the OI log and the exchange-status cache refresh only when someone
-   runs `tools/refresh_funding_local.py` by hand, and the cache goes stale (WARNING after 3 days).
-4. Push: nothing has been pushed. The CI engines will gate new entries as soon as this lands on the remote.
+Policy implemented in `engines/tradability.py` (`CACHE_FRESH_DAYS=3`, `CACHE_CRITICAL_DAYS=7`, `CACHE_EXPIRED_DAYS=30`): **the cache only refines
+the date rule, so no cache age can halt the engines.** All nine systems read the same module (S1/S3 through the spot entries, the rest through
+the futures entries), so the behaviour is identical for every engine; only the entry gate and the settle/void pre-pass differ in where they sit.
 
-## 11. Concurrency note
+| cache age | rule used | emitted | engines |
+|---|---|---|---|
+| <= 3 d (fresh) | full: dates + status TRADING inside the live window; unknown symbol blocked | nothing (any old finding is resolved) | all gate normally |
+| 3-7 d (stale) | date-based fallback: onboard/delivery dates only, status ignored, unknown symbol allowed | WARNING `shared/tradability:exchange_status_cache_stale` (from the engines) and `exchange_status_cache_stale` (health runner) | no engine blocks anything new; SETTLING symbols with a known delivery date are still blocked once that date passes |
+| 7-30 d | same fallback | same finding escalated to CRITICAL | same |
+| > 30 d | same fallback | CRITICAL, message says EXPIRED | same |
+| missing / unreadable | exchange gate off | CRITICAL `exchange_status_cache_unusable` | all engines keep trading; only the flat-feed backstop below remains |
+
+Tested for 1, 3, 4, 7, 8, 30, 31 and 400 days: the tradable set stays non-empty at every age, a delivered symbol is still voided from its
+known delivery date even with a 40-day-old cache, and S2's entry scan is unchanged at 30 days (`TestCacheAgePolicy`).
+
+**Symbol missing from the cache (a new listing).** Fresh cache: blocked by every futures engine as `unknown_symbol` (the engines print a count,
+no finding), until the next refresh, at most 3 days. Stale cache: allowed, because the cache may simply pre-date the listing. S5/C12/C19 and
+the 4H engines need history windows anyway.
+
+**Symbol that enters SETTLING after the last refresh.** The cache cannot know. Entries are possible until one of two backstops trips:
+(1) new `flat_zero_volume_feed` rule in the tradability module itself: the last 3 daily bars on or before the decision date all have zero
+volume and high == low (what Binance serves after settlement), at any cache age and even with no cache, point-in-time safe; this blocks
+every engine's entries and rankings; (2) the indicator-level flat guards (S2/S8 RSI, S5/C12/C19 rankings, S6/S7 ATR window) once their full
+window is flat. The exposure window for a new entry is therefore at most the first 3 flat bars after delivery. An already open position
+is only voided/settled once the refreshed cache shows the delivery date; its P&L is unaffected because the price is frozen at settlement.
+I assumed Binance puts the delivery date into `exchangeInfo` when the delisting is announced; I have not verified that, and if it does not,
+the backstop is the only protection before the refresh.
+
+**Health check on cache age.** `check_exchange_status` (tools/health/run_checks.py) now uses the same bands: WARNING at 3-7 d, CRITICAL
+beyond 7 d (it was a 35-day WARNING). Beside it: `forward_snapshots_fresh` (any snapshot or the open-interest log older than 26 h) and the
+parallel session's `funding_refresh_job_alive`.
+
+## 11. Regime inputs: exclusion switch and replay (added 2026-10-17)
+
+Switch: `regime_exclude_nontradable` in `data/tradability_config.json`, **default false**; when true `engines/regime_daily.py` leaves
+non-tradable symbols out of the breadth and funding averages. Replay both ways (`tools/regime_exclusion_replay.py`, 2022-01-01 to
+2026-10-10, 1,744 days, survivor-biased because the cache only holds currently listed or settling contracts):
+
+- Validation: the "include" replay reproduces the committed `regime_history.csv` on all 163 overlapping days, trend and funding labels 100%,
+  breadth within 0.18 points on average.
+- Excluding changes **11 trend-label days, all between 2026-09-27 and 2026-10-07 (MIXED -> BULL)**, and no funding-label day. 2022-2025 are
+  identical (few contracts had settled then). BULL occupancy 12.3% -> 13.0%; trend switches 49 -> 51.
+- Cause: the exclusion lifts smoothed breadth by about 2 points (57.9 vs 60.3 on 09-27), across the 58 BULL entry threshold, with BTC
+  above its EMA200. During those 11 days BULL weights (S1 0.25, S5 0.25 vs 0.125 each) would have applied instead of MIXED.
+
+That is the whole difference, and it sits in the most recent two weeks, so it is a real but small behavioural change. Left off, as agreed.
+
+## 12. Open items
+
+1. **Apply the state diff:** decided yes, after the dry run, on a tagged commit. Dry run done (`docs/TRADABILITY_DRYRUN.md`); tag
+   `pre-tradability-apply` is created locally on the commit that carries this report; the flag is still false; nothing pushed.
+2. **Regime inputs:** switch built (section 11); the choice is yours after reading the replay.
+3. **Host:** until you pick one, run `python tools/refresh_funding_local.py --no-push` by hand each day. I did that on 2026-10-17 (funding was
+   6 days old, the exchange cache 6.1 days, snapshots 5.9 days; the CI funding gates had blocked every S6/S7/S8 entry since 10-14). Your
+   own notes (project memory, Blueprint doc) list a Hetzner Nuremberg CPX21 as the planned dev box and an AWS Tokyo t3.small for
+   production; I cannot see either from here, so I do not know whether they exist or are on.
+4. **Push:** not done. The stale-cache behaviour is now tested (section 10), which was the stated condition.
+
+## 13. Concurrency note
 
 Another session was editing the same repo; `docs/SESSION_OWNERSHIP.md` lists the split. I committed only explicit paths. Their commits
 (`253b18bc1`, `39b0bbc30`) are untouched; the contested engine files now contain both lines of work and the full test suite passes.

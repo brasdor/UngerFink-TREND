@@ -1,0 +1,483 @@
+{
+ "base": {
+  "S1": {
+   "system": "S1",
+   "equity": 10215.8963,
+   "closed_equity": 10215.8963,
+   "peak": 10215.8963,
+   "dd_pct": 0.0,
+   "closed_trade_count": 12,
+   "open_n": 4,
+   "open_symbols": "CELR/USDT,DUSK/USDT,NEAR/USDT,ZRX/USDT",
+   "last_run": "2026-10-16"
+  },
+  "S2": {
+   "system": "S2",
+   "equity": 10151.735099999996,
+   "closed_equity": 10151.735099999996,
+   "peak": 10151.735099999996,
+   "dd_pct": 0.0,
+   "closed_trade_count": 45,
+   "open_n": 9,
+   "open_symbols": "1000RATSUSDT,ARCUSDT,BLURUSDT,COSUSDT,DUSDT,HIGHUSDT,MBOXUSDT,RVNUSDT,SCRTUSDT",
+   "last_run": "2026-10-16"
+  },
+  "S3": {
+   "system": "S3",
+   "equity": 9940.0875,
+   "closed_equity": 9940.0875,
+   "peak": 10000.0,
+   "dd_pct": -0.5991,
+   "closed_trade_count": 2,
+   "open_n": 6,
+   "open_symbols": "DASH/USDT,ICP/USDT,MORPHO/USDT,ONDO/USDT,SOL/USDT,WLD/USDT",
+   "last_run": "2026-10-16"
+  },
+  "S5": {
+   "system": "S5",
+   "equity": 10728.8235,
+   "closed_equity": 10728.8235,
+   "peak": 11487.9734,
+   "dd_pct": -6.6082,
+   "closed_trade_count": null,
+   "open_n": 30,
+   "open_symbols": "ARBUSDT,ARKUSDT,BEAMXUSDT,COTIUSDT,FLUXUSDT,GRASSUSDT,GTCUSDT,GUSDT,IMXUSDT,LSKUSDT,MAGICUSDT,MINAUSDT,MOVRUSDT,NMRUSDT,OGNUSDT,ORCAUSDT,PHAUSDT,PYTHUSDT,QNTUSDT,RLCUSDT,SANDUSDT,SEIUSDT,SPXUSDT,STGUSDT,STXUSDT,UNIUSDT,VELODROMEUSDT,ZECUSDT,ZENUSDT,ZROUSDT",
+   "last_run": "2026-10-17"
+  },
+  "S6": {
+   "system": "S6",
+   "equity": 10166.4196,
+   "closed_equity": 10166.4196,
+   "peak": 10393.928400000003,
+   "dd_pct": -2.1889,
+   "closed_trade_count": 102,
+   "open_n": 1,
+   "open_symbols": "XVGUSDT",
+   "last_run": "2026-10-16"
+  },
+  "S7": {
+   "system": "S7",
+   "equity": 9666.6406,
+   "closed_equity": 9666.6406,
+   "peak": 10160.890200000003,
+   "dd_pct": -4.8642,
+   "closed_trade_count": 160,
+   "open_n": 6,
+   "open_symbols": "APEUSDT,BELUSDT,CRVUSDT,MAVUSDT,QTUMUSDT,SNXUSDT",
+   "last_run": "2026-10-16"
+  },
+  "S8": {
+   "system": "S8",
+   "equity": 10396.813099999998,
+   "closed_equity": 10396.813099999998,
+   "peak": 10396.813099999998,
+   "dd_pct": 0.0,
+   "closed_trade_count": 27,
+   "open_n": 0,
+   "open_symbols": "",
+   "last_run": "2026-10-16"
+  },
+  "C12": {
+   "system": "C12",
+   "equity": 63948.3794,
+   "closed_equity": 63948.3794,
+   "peak": 63948.3794,
+   "dd_pct": 0.0,
+   "closed_trade_count": 46,
+   "open_n": 20,
+   "open_symbols": "AAVEUSDT,AEROUSDT,ALCHUSDT,ARBUSDT,ARKUSDT,ARUSDT,AVAXUSDT,BEAMXUSDT,DASHUSDT,EDUUSDT,ENAUSDT,ETHFIUSDT,FETUSDT,FLUXUSDT,GRASSUSDT,GRIFFAINUSDT,GRTUSDT,GTCUSDT,IMXUSDT,INJUSDT",
+   "last_run": "2026-10-17"
+  },
+  "C19": {
+   "system": "C19",
+   "equity": 66483.1463,
+   "closed_equity": 66483.1463,
+   "peak": 66483.1463,
+   "dd_pct": 0.0,
+   "closed_trade_count": 51,
+   "open_n": 20,
+   "open_symbols": "1INCHUSDT,AAVEUSDT,AEROUSDT,AEVOUSDT,ALTUSDT,API3USDT,ARPAUSDT,ASTRUSDT,AVAUSDT,AXLUSDT,BANDUSDT,BEAMXUSDT,BLURUSDT,BNBUSDT,BTCUSDT,CELOUSDT,COMPUSDT,COSUSDT,COWUSDT,CTSIUSDT",
+   "last_run": "2026-10-17"
+  }
+ },
+ "A": {
+  "S1": {
+   "system": "S1",
+   "equity": 10215.8963,
+   "closed_equity": 10215.8963,
+   "peak": 10215.8963,
+   "dd_pct": 0.0,
+   "closed_trade_count": 12,
+   "open_n": 4,
+   "open_symbols": "CELR/USDT,DUSK/USDT,NEAR/USDT,ZRX/USDT",
+   "last_run": "2026-10-16"
+  },
+  "S2": {
+   "system": "S2",
+   "equity": 10151.735099999996,
+   "closed_equity": 10151.735099999996,
+   "peak": 10151.735099999996,
+   "dd_pct": 0.0,
+   "closed_trade_count": 45,
+   "open_n": 9,
+   "open_symbols": "1000RATSUSDT,ARCUSDT,BLURUSDT,COSUSDT,DUSDT,HIGHUSDT,MBOXUSDT,RVNUSDT,SCRTUSDT",
+   "last_run": "2026-10-16"
+  },
+  "S3": {
+   "system": "S3",
+   "equity": 9940.0875,
+   "closed_equity": 9940.0875,
+   "peak": 10000.0,
+   "dd_pct": -0.5991,
+   "closed_trade_count": 2,
+   "open_n": 6,
+   "open_symbols": "DASH/USDT,ICP/USDT,MORPHO/USDT,ONDO/USDT,SOL/USDT,WLD/USDT",
+   "last_run": "2026-10-16"
+  },
+  "S5": {
+   "system": "S5",
+   "equity": 10728.8235,
+   "closed_equity": 10728.8235,
+   "peak": 11487.9734,
+   "dd_pct": -6.6082,
+   "closed_trade_count": null,
+   "open_n": 30,
+   "open_symbols": "ARBUSDT,ARKUSDT,BEAMXUSDT,COTIUSDT,FLUXUSDT,GRASSUSDT,GTCUSDT,GUSDT,IMXUSDT,LSKUSDT,MAGICUSDT,MINAUSDT,MOVRUSDT,NMRUSDT,OGNUSDT,ORCAUSDT,PHAUSDT,PYTHUSDT,QNTUSDT,RLCUSDT,SANDUSDT,SEIUSDT,SPXUSDT,STGUSDT,STXUSDT,UNIUSDT,VELODROMEUSDT,ZECUSDT,ZENUSDT,ZROUSDT",
+   "last_run": "2026-10-16"
+  },
+  "S6": {
+   "system": "S6",
+   "equity": 10166.4196,
+   "closed_equity": 10166.4196,
+   "peak": 10393.928400000003,
+   "dd_pct": -2.1889,
+   "closed_trade_count": 102,
+   "open_n": 1,
+   "open_symbols": "XVGUSDT",
+   "last_run": "2026-10-16"
+  },
+  "S7": {
+   "system": "S7",
+   "equity": 9666.6406,
+   "closed_equity": 9666.6406,
+   "peak": 10160.890200000003,
+   "dd_pct": -4.8642,
+   "closed_trade_count": 160,
+   "open_n": 6,
+   "open_symbols": "APEUSDT,BELUSDT,CRVUSDT,MAVUSDT,QTUMUSDT,SNXUSDT",
+   "last_run": "2026-10-16"
+  },
+  "S8": {
+   "system": "S8",
+   "equity": 10396.813099999998,
+   "closed_equity": 10396.813099999998,
+   "peak": 10396.813099999998,
+   "dd_pct": 0.0,
+   "closed_trade_count": 27,
+   "open_n": 0,
+   "open_symbols": "",
+   "last_run": "2026-10-16"
+  },
+  "C12": {
+   "system": "C12",
+   "equity": 63948.3794,
+   "closed_equity": 63948.3794,
+   "peak": 63948.3794,
+   "dd_pct": 0.0,
+   "closed_trade_count": 46,
+   "open_n": 20,
+   "open_symbols": "AAVEUSDT,AEROUSDT,ALCHUSDT,ARBUSDT,ARKUSDT,ARUSDT,AVAXUSDT,BEAMXUSDT,DASHUSDT,EDUUSDT,ENAUSDT,ETHFIUSDT,FETUSDT,FLUXUSDT,GRASSUSDT,GRIFFAINUSDT,GRTUSDT,GTCUSDT,IMXUSDT,INJUSDT",
+   "last_run": "2026-10-16"
+  },
+  "C19": {
+   "system": "C19",
+   "equity": 66483.1463,
+   "closed_equity": 66483.1463,
+   "peak": 66483.1463,
+   "dd_pct": 0.0,
+   "closed_trade_count": 51,
+   "open_n": 20,
+   "open_symbols": "1INCHUSDT,AAVEUSDT,AEROUSDT,AEVOUSDT,ALTUSDT,API3USDT,ARPAUSDT,ASTRUSDT,AVAUSDT,AXLUSDT,BANDUSDT,BEAMXUSDT,BLURUSDT,BNBUSDT,BTCUSDT,CELOUSDT,COMPUSDT,COSUSDT,COWUSDT,CTSIUSDT",
+   "last_run": "2026-10-16"
+  }
+ },
+ "B": {
+  "S1": {
+   "system": "S1",
+   "equity": 10215.8963,
+   "closed_equity": 10215.8963,
+   "peak": 10215.8963,
+   "dd_pct": 0.0,
+   "closed_trade_count": 12,
+   "open_n": 4,
+   "open_symbols": "CELR/USDT,DUSK/USDT,NEAR/USDT,ZRX/USDT",
+   "last_run": "2026-10-16"
+  },
+  "S2": {
+   "system": "S2",
+   "equity": 10151.735099999996,
+   "closed_equity": 10151.735099999996,
+   "peak": 10151.735099999996,
+   "dd_pct": 0.0,
+   "closed_trade_count": 45,
+   "open_n": 4,
+   "open_symbols": "1000RATSUSDT,ARCUSDT,BLURUSDT,RVNUSDT",
+   "last_run": "2026-10-16"
+  },
+  "S3": {
+   "system": "S3",
+   "equity": 9940.0875,
+   "closed_equity": 9940.0875,
+   "peak": 10000.0,
+   "dd_pct": -0.5991,
+   "closed_trade_count": 2,
+   "open_n": 6,
+   "open_symbols": "DASH/USDT,ICP/USDT,MORPHO/USDT,ONDO/USDT,SOL/USDT,WLD/USDT",
+   "last_run": "2026-10-16"
+  },
+  "S5": {
+   "system": "S5",
+   "equity": 10728.8235,
+   "closed_equity": 10728.8235,
+   "peak": 11487.9734,
+   "dd_pct": -6.6082,
+   "closed_trade_count": null,
+   "open_n": 29,
+   "open_symbols": "ARBUSDT,ARKUSDT,BEAMXUSDT,COTIUSDT,FLUXUSDT,GRASSUSDT,GTCUSDT,GUSDT,IMXUSDT,LSKUSDT,MAGICUSDT,MINAUSDT,MOVRUSDT,NMRUSDT,OGNUSDT,ORCAUSDT,PHAUSDT,PYTHUSDT,QNTUSDT,RLCUSDT,SANDUSDT,SEIUSDT,SPXUSDT,STXUSDT,UNIUSDT,VELODROMEUSDT,ZECUSDT,ZENUSDT,ZROUSDT",
+   "last_run": "2026-10-16"
+  },
+  "S6": {
+   "system": "S6",
+   "equity": 10166.4196,
+   "closed_equity": 10166.4196,
+   "peak": 10393.928400000003,
+   "dd_pct": -2.1889,
+   "closed_trade_count": 102,
+   "open_n": 1,
+   "open_symbols": "XVGUSDT",
+   "last_run": "2026-10-16"
+  },
+  "S7": {
+   "system": "S7",
+   "equity": 9666.6406,
+   "closed_equity": 9666.6406,
+   "peak": 10160.890200000003,
+   "dd_pct": -4.8642,
+   "closed_trade_count": 160,
+   "open_n": 6,
+   "open_symbols": "APEUSDT,BELUSDT,CRVUSDT,MAVUSDT,QTUMUSDT,SNXUSDT",
+   "last_run": "2026-10-16"
+  },
+  "S8": {
+   "system": "S8",
+   "equity": 10396.813099999998,
+   "closed_equity": 10396.813099999998,
+   "peak": 10396.813099999998,
+   "dd_pct": 0.0,
+   "closed_trade_count": 27,
+   "open_n": 0,
+   "open_symbols": "",
+   "last_run": "2026-10-16"
+  },
+  "C12": {
+   "system": "C12",
+   "equity": 63948.3794,
+   "closed_equity": 63948.3794,
+   "peak": 63948.3794,
+   "dd_pct": 0.0,
+   "closed_trade_count": 46,
+   "open_n": 20,
+   "open_symbols": "AAVEUSDT,AEROUSDT,ALCHUSDT,ARBUSDT,ARKUSDT,ARUSDT,AVAXUSDT,BEAMXUSDT,DASHUSDT,EDUUSDT,ENAUSDT,ETHFIUSDT,FETUSDT,FLUXUSDT,GRASSUSDT,GRIFFAINUSDT,GRTUSDT,GTCUSDT,IMXUSDT,INJUSDT",
+   "last_run": "2026-10-16"
+  },
+  "C19": {
+   "system": "C19",
+   "equity": 66483.1463,
+   "closed_equity": 66483.1463,
+   "peak": 66483.1463,
+   "dd_pct": 0.0,
+   "closed_trade_count": 51,
+   "open_n": 19,
+   "open_symbols": "1INCHUSDT,AAVEUSDT,AEROUSDT,AEVOUSDT,ALTUSDT,API3USDT,ARPAUSDT,ASTRUSDT,AVAUSDT,AXLUSDT,BANDUSDT,BEAMXUSDT,BLURUSDT,BNBUSDT,BTCUSDT,CELOUSDT,COMPUSDT,COWUSDT,CTSIUSDT",
+   "last_run": "2026-10-16"
+  }
+ },
+ "hist": {
+  "S1": {
+   "voided_closed_trades": 0,
+   "voided_pnl": 0.0,
+   "detail": []
+  },
+  "S2": {
+   "voided_closed_trades": 12,
+   "voided_pnl": 0.0,
+   "detail": [
+    [
+     "COSUSDT",
+     "2026-07-30",
+     "2026-08-20",
+     0.0
+    ],
+    [
+     "MBOXUSDT",
+     "2026-07-30",
+     "2026-08-20",
+     0.0
+    ],
+    [
+     "COSUSDT",
+     "2026-08-20",
+     "2026-09-09",
+     0.0
+    ],
+    [
+     "DUSDT",
+     "2026-08-20",
+     "2026-09-09",
+     0.0
+    ],
+    [
+     "HIGHUSDT",
+     "2026-08-20",
+     "2026-09-09",
+     0.0
+    ],
+    [
+     "MBOXUSDT",
+     "2026-08-20",
+     "2026-09-09",
+     0.0
+    ],
+    [
+     "SCRTUSDT",
+     "2026-08-26",
+     "2026-09-15",
+     0.0
+    ],
+    [
+     "COSUSDT",
+     "2026-09-09",
+     "2026-09-29",
+     0.0
+    ],
+    [
+     "DUSDT",
+     "2026-09-09",
+     "2026-09-29",
+     0.0
+    ],
+    [
+     "HIGHUSDT",
+     "2026-09-09",
+     "2026-09-29",
+     0.0
+    ],
+    [
+     "MBOXUSDT",
+     "2026-09-09",
+     "2026-09-29",
+     0.0
+    ],
+    [
+     "SCRTUSDT",
+     "2026-09-15",
+     "2026-10-05",
+     0.0
+    ]
+   ]
+  },
+  "S3": {
+   "voided_closed_trades": 0,
+   "voided_pnl": 0.0,
+   "detail": []
+  },
+  "S5": {
+   "voided_closed_trades": 5,
+   "voided_pnl": 0.0,
+   "detail": [
+    [
+     "DUSDT",
+     "2026-06-26",
+     "rebalanced",
+     null
+    ],
+    [
+     "HFTUSDT",
+     "2026-08-14",
+     "rebalanced",
+     null
+    ],
+    [
+     "HIGHUSDT",
+     "2026-06-26",
+     "rebalanced",
+     null
+    ],
+    [
+     "STGUSDT",
+     "2026-09-25",
+     "rebalanced",
+     null
+    ],
+    [
+     "VANRYUSDT",
+     "2026-08-14",
+     "rebalanced",
+     null
+    ]
+   ]
+  },
+  "S6": {
+   "voided_closed_trades": 0,
+   "voided_pnl": 0.0,
+   "detail": []
+  },
+  "S7": {
+   "voided_closed_trades": 0,
+   "voided_pnl": 0.0,
+   "detail": []
+  },
+  "S8": {
+   "voided_closed_trades": 2,
+   "voided_pnl": 0.0,
+   "detail": [
+    [
+     "DUSDT",
+     "2026-07-10",
+     "2026-08-04",
+     0.0
+    ],
+    [
+     "HIGHUSDT",
+     "2026-07-10",
+     "2026-08-04",
+     0.0
+    ]
+   ]
+  },
+  "C12": {
+   "voided_closed_trades": 0,
+   "voided_pnl": 0.0,
+   "detail": []
+  },
+  "C19": {
+   "voided_closed_trades": 1,
+   "voided_pnl": -6.0749,
+   "detail": [
+    [
+     "ACXUSDT",
+     "2026-08-15",
+     "2026-09-12",
+     -6.0749
+    ]
+   ],
+   "curve_peak_before": 66483.15,
+   "curve_peak_after": 66489.22,
+   "curve_dd_before": 0.0,
+   "curve_dd_after": 0.0,
+   "curve_max_dd_before": 0.0,
+   "curve_max_dd_after": 0.0
+  }
+ },
+ "ledger_B": "logged_utc,engine,kind,symbol,entry_date,run_date,price,detail\n2026-10-17T12:15:40+00:00,S2,void,COSUSDT,2026-09-29,2026-10-16,,on_or_after_delivery; delivery 2026-06-11; entry_price 0.000485\n2026-10-17T12:15:40+00:00,S2,void,DUSDT,2026-09-29,2026-10-16,,on_or_after_delivery; delivery 2026-06-11; entry_price 0.005192\n2026-10-17T12:15:40+00:00,S2,void,HIGHUSDT,2026-09-29,2026-10-16,,on_or_after_delivery; delivery 2026-06-11; entry_price 0.0478\n2026-10-17T12:15:40+00:00,S2,void,MBOXUSDT,2026-09-29,2026-10-16,,on_or_after_delivery; delivery 2026-06-11; entry_price 0.0051\n2026-10-17T12:15:40+00:00,S2,void,SCRTUSDT,2026-10-05,2026-10-16,,on_or_after_delivery; delivery 2026-08-26; entry_price 0.01262\n2026-10-17T12:15:51+00:00,S5,void,STGUSDT,2026-10-09,2026-10-16,,SHORT on_or_after_delivery; delivery 2026-09-24; entry_price 0.1283\n2026-10-17T12:16:26+00:00,C19,void,COSUSDT,2026-10-10,2026-10-16,,long on_or_after_delivery; delivery 2026-06-11; entry_price 0.0004862125\n"
+}

@@ -4,11 +4,11 @@ Computed 2026-10-11 against data/exchange_status_cache.json. Apply by setting `a
 **7 open positions affected in total.**
 
 
-## S1 (t9b_paper) - 3 open, 0 affected
+## S1 (t9b_paper) - 4 open, 0 affected
 
 No change.
 
-## S2 (t9b_mr_paper) - 5 open, 5 affected
+## S2 (t9b_mr_paper) - 9 open, 5 affected
 
 | list | symbol | entry | delivery | action | reason | settlement px | entry px | qty | P&L effect |
 |---|---|---|---|---|---|---|---|---|---|
@@ -31,7 +31,7 @@ Equity `10151.735099999996` unchanged by voids; `closed_trade_count` `45` unchan
   "initial_risk_per_unit": 1.5e-07,
   "risk_amount_usdt": 35.53107284999999,
   "qty": 236873818.9999999,
-  "bars_held": 11,
+  "bars_held": 17,
   "atr_at_entry": 5e-08,
   "rsi_at_entry": 16.0674
  }
@@ -46,7 +46,7 @@ Equity `10151.735099999996` unchanged by voids; `closed_trade_count` `45` unchan
   "initial_risk_per_unit": 1.52e-06,
   "risk_amount_usdt": 35.53107284999999,
   "qty": 23375705.822368413,
-  "bars_held": 11,
+  "bars_held": 17,
   "atr_at_entry": 5.1e-07,
   "rsi_at_entry": 21.8912
  }
@@ -61,7 +61,7 @@ Equity `10151.735099999996` unchanged by voids; `closed_trade_count` `45` unchan
   "initial_risk_per_unit": 2.159e-05,
   "risk_amount_usdt": 35.53107284999999,
   "qty": 1645718.983325613,
-  "bars_held": 11,
+  "bars_held": 17,
   "atr_at_entry": 7.2e-06,
   "rsi_at_entry": 17.9655
  }
@@ -76,7 +76,7 @@ Equity `10151.735099999996` unchanged by voids; `closed_trade_count` `45` unchan
   "initial_risk_per_unit": 2.12e-06,
   "risk_amount_usdt": 35.53107284999999,
   "qty": 16759940.023584899,
-  "bars_held": 11,
+  "bars_held": 17,
   "atr_at_entry": 7.1e-07,
   "rsi_at_entry": 23.093
  }
@@ -91,7 +91,7 @@ Equity `10151.735099999996` unchanged by voids; `closed_trade_count` `45` unchan
   "initial_risk_per_unit": 0.00075243,
   "risk_amount_usdt": 26.648304637499997,
   "qty": 35416.323960368405,
-  "bars_held": 5,
+  "bars_held": 11,
   "atr_at_entry": 0.00025081,
   "rsi_at_entry": 23.6459
  }
@@ -123,7 +123,7 @@ Equity `10728.8235` unchanged by voids; `closed_trade_count` `n/a` unchanged (a 
 }
 ```
 
-## S6 (t9b_volcontraction_paper) - 3 open, 0 affected
+## S6 (t9b_volcontraction_paper) - 1 open, 0 affected
 
 No change.
 

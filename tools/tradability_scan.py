@@ -62,7 +62,10 @@ def collect() -> pd.DataFrame:
                              exit_date=str(r.exit_date)[:10], pnl=float(r.pnl_usdt), gross_r=float(r.gross_r), exit_reason=r.exit_reason))
         rows += _open_from_state(eng, D / d / "state.json")
     # S3: daily_log ENTRY/EXIT pairs
-    lg = _csv(D / "t9b_consecdowndays_paper" / "daily_log.csv")
+    # daily_log.csv has ragged rows (column layout drifted); pandas on_bad_lines='skip' drops ENTRY/EXIT rows.
+    import csv
+    _r = list(csv.reader(open(D / "t9b_consecdowndays_paper" / "daily_log.csv", encoding="utf-8")))
+    lg = pd.DataFrame([r[:4] for r in _r[1:] if len(r) >= 4], columns=["run_date", "event", "symbol", "detail"])
     open_e = {}
     for r in lg[lg.event.isin(["ENTRY", "EXIT"])].itertuples():
         sym = T.norm(r.symbol)
@@ -118,7 +121,7 @@ def flag(df: pd.DataFrame) -> pd.DataFrame:
         why = T.untradable_reason(r.symbol, r.entry_date, venue)
         d = T.info(r.symbol, venue).delivery
         dd.append(str(d) if d else "")
-        entry_bad = why in ("on_or_after_delivery", "before_onboard", "unknown_symbol")
+        entry_bad = why in ("on_or_after_delivery", "before_onboard", "unknown_symbol", "flat_zero_volume_feed")
         fl.append(why if entry_bad else "")
         ex = None if (r.exit_date in (None, "rebalanced") or pd.isna(r.exit_date)) else str(r.exit_date)[:10]
         end = ex or str(TODAY)

@@ -1,0 +1,58 @@
+side,date,symbol,pre_migration,signal_on_stored_data,log_events_that_day,log_detail
+actual-only,2026-07-15,ALCHUSDT,False,True,"ENTRY,SIGNAL_SKIPPED",RSI=20.3  price=0.02536  stop=0.00474514
+actual-only,2026-07-17,PHAUSDT,False,True,"ENTRY,SIGNAL_SKIPPED",duplicate_cross_system
+actual-only,2026-07-17,REZUSDT,False,True,"ENTRY,SIGNAL_SKIPPED",duplicate_cross_system
+actual-only,2026-07-30,ATOMUSDT,False,True,"ENTRY,SIGNAL_SKIPPED",RSI=22.6  price=1.281  stop=1.11439  ris
+actual-only,2026-07-30,BIGTIMEUSDT,False,True,"ENTRY,SIGNAL_SKIPPED",RSI=24.9  price=0.005756  stop=0.0046471
+actual-only,2026-07-30,CHZUSDT,False,True,ENTRY,RSI=22.0  price=0.01282  stop=0.0100429 
+actual-only,2026-07-30,COSUSDT,False,True,ENTRY,RSI=16.1  price=0.000485  stop=0.0004708
+actual-only,2026-07-30,MBOXUSDT,False,True,ENTRY,RSI=23.1  price=0.0051  stop=0.00490542 
+actual-only,2026-07-30,MOVEUSDT,False,True,"ENTRY,SIGNAL_SKIPPED",RSI=18.2  price=0.00765  stop=0.0056739 
+actual-only,2026-07-30,SCRTUSDT,False,True,"ENTRY,SIGNAL_SKIPPED",RSI=23.8  price=0.02987  stop=0.017784  
+actual-only,2026-07-30,SCRUSDT,False,True,"ENTRY,SIGNAL_SKIPPED",RSI=23.6  price=0.0188  stop=0.0134416  
+actual-only,2026-07-30,SONICUSDT,False,True,"ENTRY,SIGNAL_SKIPPED",RSI=23.0  price=0.01907  stop=0.014916  
+actual-only,2026-08-05,BBUSDT,False,True,ENTRY,RSI=20.7  price=0.01359  stop=0.0106986 
+actual-only,2026-08-06,MOVEUSDT,False,True,ENTRY,RSI=21.0  price=0.007354  stop=0.0056917
+actual-only,2026-08-11,BATUSDT,False,True,ENTRY,RSI=24.8  price=0.06256  stop=0.0535048 
+actual-only,2026-08-20,BBUSDT,False,True,"ENTRY,EXIT",reason=safety_stop  bars=15  R=-1.000  p
+actual-only,2026-08-20,COSUSDT,False,True,"ENTRY,EXIT",reason=time_exit_20bars  bars=21  R=0.00
+actual-only,2026-08-20,DUSDT,False,True,ENTRY,RSI=21.9  price=0.005192  stop=0.0051625
+actual-only,2026-08-20,HIGHUSDT,False,True,ENTRY,RSI=18.0  price=0.0478  stop=0.0473815  
+actual-only,2026-08-20,ICXUSDT,False,True,ENTRY,RSI=23.9  price=0.01641  stop=0.0124855 
+actual-only,2026-08-20,MBOXUSDT,False,True,"ENTRY,EXIT",reason=time_exit_20bars  bars=21  R=0.00
+actual-only,2026-09-09,COSUSDT,False,True,"ENTRY,EXIT",reason=time_exit_20bars  bars=20  R=0.00
+actual-only,2026-09-09,DUSDT,False,True,"ENTRY,EXIT",reason=time_exit_20bars  bars=20  R=0.00
+actual-only,2026-09-09,HIGHUSDT,False,True,"ENTRY,EXIT",reason=time_exit_20bars  bars=20  R=0.00
+actual-only,2026-09-09,MBOXUSDT,False,True,"ENTRY,EXIT",reason=time_exit_20bars  bars=20  R=0.00
+replay-only,2026-06-26,COSUSDT,True,True,,
+replay-only,2026-06-26,DIAUSDT,True,True,SIGNAL_SKIPPED,cap 10 reached  (RSI=24.8  close=0.1065)
+replay-only,2026-06-26,DUSDT,True,True,,
+replay-only,2026-06-26,HIGHUSDT,True,True,,
+replay-only,2026-06-26,KSMUSDT,True,True,SIGNAL_SKIPPED,cap 10 reached  (RSI=24.3  close=3.13)
+replay-only,2026-06-26,MBOXUSDT,True,True,,
+replay-only,2026-07-17,COSUSDT,False,True,SIGNAL_SKIPPED,cap 10 reached  (RSI=16.1  close=0.00048
+replay-only,2026-07-17,MBOXUSDT,False,True,SIGNAL_SKIPPED,cap 10 reached  (RSI=23.1  close=0.0051)
+replay-only,2026-07-18,1000BONKUSDT,False,True,SIGNAL_SKIPPED,cap 10 reached  (RSI=25.0  close=0.00275
+replay-only,2026-07-19,BIGTIMEUSDT,False,True,SIGNAL_SKIPPED,cap 10 reached  (RSI=24.8  close=0.00653
+replay-only,2026-07-19,SCRUSDT,False,True,SIGNAL_SKIPPED,cap 10 reached  (RSI=23.9  close=0.0225)
+replay-only,2026-07-20,ZILUSDT,False,True,SIGNAL_SKIPPED,cap 10 reached  (RSI=21.4  close=0.00245
+replay-only,2026-07-25,KAIAUSDT,False,True,SIGNAL_SKIPPED,cap 10 reached  (RSI=23.2  close=0.02973
+replay-only,2026-07-27,ATOMUSDT,False,True,SIGNAL_SKIPPED,cap 10 reached  (RSI=22.6  close=1.298)
+replay-only,2026-07-29,AUCTIONUSDT,False,True,SIGNAL_SKIPPED,cap 10 reached  (RSI=24.6  close=2.859)
+replay-only,2026-08-04,BBUSDT,False,True,,
+replay-only,2026-08-06,COSUSDT,False,True,,
+replay-only,2026-08-06,DUSDT,False,True,,
+replay-only,2026-08-06,HIGHUSDT,False,True,,
+replay-only,2026-08-08,MBOXUSDT,False,True,,
+replay-only,2026-08-09,MOVEUSDT,False,True,,
+replay-only,2026-08-16,GRTUSDT,False,True,SIGNAL_SKIPPED,cap 10 reached  (RSI=24.1  close=0.01324
+replay-only,2026-08-16,HIVEUSDT,False,True,SIGNAL_SKIPPED,cap 10 reached  (RSI=23.3  close=0.03876
+replay-only,2026-08-18,ARKUSDT,False,True,SIGNAL_SKIPPED,cap 10 reached  (RSI=24.8  close=0.086)
+replay-only,2026-08-26,COSUSDT,False,True,,
+replay-only,2026-08-26,DUSDT,False,True,,
+replay-only,2026-08-26,HIGHUSDT,False,True,,
+replay-only,2026-08-28,MBOXUSDT,False,True,,
+replay-only,2026-09-15,COSUSDT,False,True,,
+replay-only,2026-09-15,DUSDT,False,True,,
+replay-only,2026-09-15,HIGHUSDT,False,True,,
+replay-only,2026-09-17,MBOXUSDT,False,True,,

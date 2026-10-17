@@ -1,4 +1,4 @@
 mode,trades,nonflat_trades,hit_rate,hit_rate_nonflat,avg_R,avg_R_nonflat,total_pnl,final_equity
 ACTUAL ledger (exits >= 2026-07-01),36,24,0.3611,0.5417,0.1087,0.163,98.67,10151.74
-replay old_baseline,44,24,0.2727,0.5,0.2005,0.3676,207.22,10260.29
-replay old_gated,34,34,0.5588,0.5588,0.4511,0.4511,336.92,10389.99
+replay old_baseline,43,23,0.2558,0.4783,0.1927,0.3603,188.1,10241.17
+replay old_gated,33,33,0.5758,0.5758,0.4811,0.4811,339.44,10392.51

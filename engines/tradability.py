@@ -61,13 +61,30 @@ CACHE_PATH = ROOT / "data" / "exchange_status_cache.json"
 CONFIG_PATH = ROOT / "data" / "tradability_config.json"
 VOID_LEDGER = ROOT / "data" / "tradability_ledger.csv"
 OHLCV_1D = ROOT / "data" / "futures_universe" / "ohlcv_1d"
-CACHE_MAX_AGE_DAYS = 3
+# Cache-age policy (never halts the systems): the exchange-status cache only REFINES the date rule.
+#   <= CACHE_FRESH_DAYS      fresh   : full rule (status + dates; an unknown symbol is blocked)
+#   <= CACHE_CRITICAL_DAYS   stale   : WARNING; fall back to the date-based rule (status ignored, unknown allowed)
+#   <= CACHE_EXPIRED_DAYS    critical: same fallback, CRITICAL finding
+#   >  CACHE_EXPIRED_DAYS    expired : same fallback, CRITICAL "expired" message
+#   missing / unreadable     gate off, CRITICAL (data backstop below still applies)
+# At every age the tradable set stays non-empty, so a stale cache can never stop all engines.
+CACHE_FRESH_DAYS = 3
+CACHE_CRITICAL_DAYS = 7
+CACHE_EXPIRED_DAYS = 30
+CACHE_MAX_AGE_DAYS = CACHE_FRESH_DAYS      # legacy alias
 LIVE_WINDOW_DAYS = 3
+FLAT_BACKSTOP_BARS = 3                     # data backstop: this many trailing flat zero-volume daily bars
+SPOT_OHLCV_1D = ROOT / "data" / "universe" / "ohlcv_1d"
 
 _CACHE: Optional[dict] = None          # futures symbol -> info
 _SPOT: dict = {}                       # spot symbol -> info
 _CACHE_META: dict = {}
 _CACHE_BROKEN = False
+_FLAT_CACHE: dict = {}                 # (venue, symbol) -> numpy arrays for the data backstop
+
+
+def _now() -> datetime:
+    return datetime.now(timezone.utc)
 
 
 def norm(sym: str) -> str:
@@ -86,8 +103,8 @@ def _as_date(d) -> date:
 
 def reload(path: Path | None = None) -> None:
     """Force a re-read (tests, long-running sessions)."""
-    global _CACHE, _SPOT, _CACHE_META, _CACHE_BROKEN
-    _CACHE, _SPOT, _CACHE_META, _CACHE_BROKEN = None, {}, {}, False
+    global _CACHE, _SPOT, _CACHE_META, _CACHE_BROKEN, _FLAT_CACHE
+    _CACHE, _SPOT, _CACHE_META, _CACHE_BROKEN, _FLAT_CACHE = None, {}, {}, False, {}
     _load(path)
 
 
@@ -110,16 +127,21 @@ def _load(path: Path | None = None) -> None:
         _CACHE_META = {"fetched_at": raw.get("fetched_at")}
         resolve("shared/tradability", "exchange_status_cache_unusable")
         try:
-            age = (datetime.now(timezone.utc) - datetime.fromisoformat(raw["fetched_at"])).total_seconds() / 86400
-            if age > CACHE_MAX_AGE_DAYS:
-                emit("shared/tradability", "exchange_status_cache_stale", "WARNING",
-                     f"exchange status cache is {age:.1f}d old (limit {CACHE_MAX_AGE_DAYS}d); "
-                     f"new delistings would not be seen",
-                     evidence={"age_days": round(age, 2), "fetched_at": raw.get("fetched_at")},
-                     suggested_action="Run tools/health/refresh_exchange_status_cache.py on the "
-                                      "funding host (fapi is geo-blocked from CI).")
-            else:
+            age = (_now() - datetime.fromisoformat(raw["fetched_at"])).total_seconds() / 86400
+            mode = _mode_for_age(age)
+            ev = {"age_days": round(age, 2), "fetched_at": raw.get("fetched_at"), "mode": mode}
+            fix = ("Run tools/refresh_funding_local.py (or tools/health/refresh_exchange_status_cache.py) on the "
+                   "funding host (fapi is geo-blocked from CI).")
+            if mode == "fresh":
                 resolve("shared/tradability", "exchange_status_cache_stale")
+            else:
+                sev = "WARNING" if mode == "stale" else "CRITICAL"
+                tail = {"stale": "", "critical": " -- ESCALATED", "expired": " -- EXPIRED"}[mode]
+                emit("shared/tradability", "exchange_status_cache_stale", sev,
+                     f"exchange status cache is {age:.1f}d old (fresh limit {CACHE_FRESH_DAYS}d){tail}: falling back to "
+                     f"the date-based rule (status ignored, unknown symbols allowed); new delistings are not seen "
+                     f"until it is refreshed. Engines keep trading.",
+                     evidence=ev, suggested_action=fix)
         except Exception:
             pass
     except Exception as exc:
@@ -129,6 +151,70 @@ def _load(path: Path | None = None) -> None:
              f"(every symbol treated as tradable) until it is restored",
              evidence={"path": str(p), "error": str(exc)},
              suggested_action="Run tools/health/refresh_exchange_status_cache.py or restore from git.")
+
+
+def _mode_for_age(age: float) -> str:
+    if age <= CACHE_FRESH_DAYS:
+        return "fresh"
+    if age <= CACHE_CRITICAL_DAYS:
+        return "stale"
+    if age <= CACHE_EXPIRED_DAYS:
+        return "critical"
+    return "expired"
+
+
+def cache_age_days() -> Optional[float]:
+    _load()
+    f = _CACHE_META.get("fetched_at")
+    if _CACHE is None or not f:
+        return None
+    try:
+        return (_now() - datetime.fromisoformat(f)).total_seconds() / 86400
+    except Exception:
+        return None
+
+
+def cache_mode() -> str:
+    """fresh | stale | critical | expired | missing"""
+    age = cache_age_days()
+    return "missing" if age is None else _mode_for_age(age)
+
+
+def _flat_feed(symbol: str, on_date, venue: str) -> bool:
+    """Data backstop, independent of the exchange cache and of its age: the last FLAT_BACKSTOP_BARS daily bars on or
+    before on_date all have zero volume and high == low. That is exactly what Binance serves for a contract that has
+    settled/halted after the cache was last refreshed, and nothing can be traded on it. Point-in-time (uses only
+    bars <= on_date), so it is safe in replays."""
+    import numpy as np
+    import pandas as pd
+    key = (venue, norm(symbol))
+    if key not in _FLAT_CACHE:
+        n = norm(symbol)
+        path = (OHLCV_1D / f"{n}_1d.csv") if venue != "spot" else (SPOT_OHLCV_1D / f"{n[:-4]}_USDT_1d.csv")
+        arr = None
+        try:
+            if path.exists():
+                cols = pd.read_csv(path, nrows=0).columns
+                tcol = "timestamp" if "timestamp" in cols else "time"
+                df = pd.read_csv(path, usecols=[tcol, "high", "low", "volume"])
+                if tcol == "timestamp":
+                    d = pd.to_datetime(df[tcol], unit="ms", utc=True)
+                else:
+                    d = pd.to_datetime(df[tcol], utc=True)
+                flat = ((df["volume"].astype(float) == 0) & (df["high"].astype(float) == df["low"].astype(float))).to_numpy()
+                arr = (d.dt.date.to_numpy(), flat)
+        except Exception:
+            arr = None
+        _FLAT_CACHE[key] = arr
+    arr = _FLAT_CACHE[key]
+    if arr is None:
+        return False
+    dates, flat = arr
+    d = _as_date(on_date)
+    idx = int(np.searchsorted(dates, d, side="right"))
+    if idx < FLAT_BACKSTOP_BARS:
+        return False
+    return bool(flat[idx - FLAT_BACKSTOP_BARS:idx].all())
 
 
 @dataclass(frozen=True)
@@ -156,18 +242,29 @@ def delivery_date(symbol: str) -> Optional[date]:
 
 
 def untradable_reason(symbol: str, on_date, venue: str = "futures") -> Optional[str]:
-    """None if tradable, else a short machine-readable reason."""
+    """None if tradable, else a short machine-readable reason. See the cache-age policy at the top.
+    Order: exact delivery/onboard dates (strongest, survive any cache age) -> flat-feed backstop (needs no cache)
+    -> unknown symbol / status (only trusted while the cache is fresh)."""
     _load()
-    if _CACHE is None:  # cache broken -> gate off (finding already emitted)
-        return None
-    i = info(symbol, venue)
-    if not i.known:
-        return "unknown_symbol"
     d = _as_date(on_date)
-    if i.onboard is not None and d < i.onboard:
-        return "before_onboard"
-    if i.delivery is not None and d >= i.delivery:
-        return "on_or_after_delivery"
+    mode = cache_mode()
+    fresh = mode == "fresh"
+    i = info(symbol, venue) if _CACHE is not None else Info(None, None, None, False)
+    if i.known:
+        if i.onboard is not None and d < i.onboard:
+            return "before_onboard"
+        if i.delivery is not None and d >= i.delivery:
+            return "on_or_after_delivery"
+    if _flat_feed(symbol, d, venue):
+        return "flat_zero_volume_feed"          # backstop; needs no cache
+    if _CACHE is None:  # cache missing/unreadable -> exchange gate off (CRITICAL already emitted)
+        return None
+    if not i.known:
+        # a fresh cache that lacks the symbol means 'not (yet) a listed contract': block. A stale cache may simply
+        # pre-date a new listing, so it must not block it.
+        return "unknown_symbol" if fresh else None
+    if not fresh:
+        return None                              # date-based fallback: a stale status is not trusted
     fetched = _CACHE_META.get("fetched_at")
     try:
         fetched_d = datetime.fromisoformat(fetched).date() if fetched else None
@@ -223,7 +320,7 @@ def position_action(symbol: str, entry_date, run_date, venue: str = "futures") -
       none   : nothing to do
     """
     why = untradable_reason(symbol, entry_date, venue)
-    if why in ("on_or_after_delivery", "before_onboard", "unknown_symbol"):
+    if why in ("on_or_after_delivery", "before_onboard", "unknown_symbol", "flat_zero_volume_feed"):
         return Action("void", norm(symbol), info(symbol, venue).delivery, None, why)
     dd = info(symbol, venue).delivery
     if dd is not None and _as_date(run_date) >= dd:
@@ -287,3 +384,11 @@ def tradable_universe(engine: str, symbols: Iterable[str], run_date, venue: str 
         print(f"  [TRADABILITY] {engine}: {len(syms) - len(ok)} of {len(syms)} symbols excluded "
               f"as not tradable on {run_date} (delivered / settling / not onboarded / unknown)", flush=True)
     return ok
+
+
+def regime_exclusion_enabled() -> bool:
+    """Switch (default OFF): exclude non-tradable symbols from the regime classifier's breadth and funding inputs."""
+    try:
+        return bool(json.loads(CONFIG_PATH.read_text(encoding="utf-8")).get("regime_exclude_nontradable", False))
+    except Exception:
+        return False
