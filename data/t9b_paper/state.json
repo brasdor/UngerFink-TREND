@@ -1,29 +1,12 @@
 {
   "system_name": "TREND_1D_DONCHIAN_EXITV2_T9B",
   "created_utc": "2026-05-30T22:46:19.996708+00:00",
-  "last_run_date": "2026-10-10",
-  "paper_equity_usdt": 10144.5159,
-  "peak_equity_usdt": 10144.9694,
-  "drawdown_pct": -0.0045,
+  "last_run_date": "2026-10-16",
+  "paper_equity_usdt": 10215.8963,
+  "peak_equity_usdt": 10215.8963,
+  "drawdown_pct": 0.0,
   "kill_switch_triggered": false,
   "open_positions": [
-    {
-      "position_id": "JST_USDT_20260905",
-      "symbol": "JST/USDT",
-      "entry_date": "2026-09-05",
-      "entry_price": 0.11033,
-      "initial_stop": 0.10292281,
-      "current_stop": 0.10292281,
-      "initial_risk_per_unit": 0.00740719,
-      "risk_amount_usdt": 24.822916391525,
-      "qty": 3351.192070343139,
-      "highest_high_since_entry": 0.1433,
-      "max_favorable_r": 4.451080639216762,
-      "chandelier_active": false,
-      "chandelier_activated_date": null,
-      "atr_at_entry": 0.00370359,
-      "donchian_entry_level": 0.10989
-    },
     {
       "position_id": "ZRX_USDT_20260906",
       "symbol": "ZRX/USDT",
@@ -57,7 +40,41 @@
       "chandelier_activated_date": null,
       "atr_at_entry": 0.00023518,
       "donchian_entry_level": 0.002463
+    },
+    {
+      "position_id": "NEAR_USDT_20261011",
+      "symbol": "NEAR/USDT",
+      "entry_date": "2026-10-11",
+      "entry_price": 5.896,
+      "initial_stop": 4.78801458,
+      "current_stop": 4.78801458,
+      "initial_risk_per_unit": 1.10798542,
+      "risk_amount_usdt": 19.026673602693748,
+      "qty": 17.172314056888716,
+      "highest_high_since_entry": 6.0,
+      "max_favorable_r": 0.09386405102695312,
+      "chandelier_active": false,
+      "chandelier_activated_date": null,
+      "atr_at_entry": 0.55399271,
+      "donchian_entry_level": 5.595
+    },
+    {
+      "position_id": "DUSK_USDT_20261016",
+      "symbol": "DUSK/USDT",
+      "entry_date": "2026-10-16",
+      "entry_price": 0.1237,
+      "initial_stop": 0.10284513,
+      "current_stop": 0.10284513,
+      "initial_risk_per_unit": 0.02085487,
+      "risk_amount_usdt": 25.547402672224997,
+      "qty": 1225.0089630012076,
+      "highest_high_since_entry": 0.1237,
+      "max_favorable_r": 0.0,
+      "chandelier_active": false,
+      "chandelier_activated_date": null,
+      "atr_at_entry": 0.01042743,
+      "donchian_entry_level": 0.1206
     }
   ],
-  "closed_trade_count": 11
+  "closed_trade_count": 12
 }

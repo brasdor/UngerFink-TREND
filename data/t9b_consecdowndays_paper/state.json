@@ -1,25 +1,12 @@
 {
   "system_name": "ConsecDownDaysMR_1D_T9B",
   "created_utc": "2026-06-03T09:15:18.584881+00:00",
-  "last_run_date": "2026-10-10",
-  "paper_equity_usdt": 9975.0,
+  "last_run_date": "2026-10-16",
+  "paper_equity_usdt": 9940.0875,
   "peak_equity_usdt": 10000.0,
-  "drawdown_pct": -0.25,
+  "drawdown_pct": -0.5991,
   "kill_switch_triggered": false,
   "open_positions": [
-    {
-      "position_id": "XRP_USDT_20260930",
-      "symbol": "XRP/USDT",
-      "entry_date": "2026-09-30",
-      "entry_price": 1.49,
-      "stop_loss": 1.3069,
-      "initial_risk_per_unit": 0.1831,
-      "risk_amount_usdt": 34.9125,
-      "qty": 190.67449481157837,
-      "bars_held": 10,
-      "atr_at_entry": 0.09155,
-      "consec_at_entry": 5
-    },
     {
       "position_id": "DASH_USDT_20261001",
       "symbol": "DASH/USDT",
@@ -29,7 +16,7 @@
       "initial_risk_per_unit": 13.01428571,
       "risk_amount_usdt": 34.9125,
       "qty": 2.6826289800272107,
-      "bars_held": 9,
+      "bars_held": 15,
       "atr_at_entry": 6.50714286,
       "consec_at_entry": 5
     },
@@ -42,7 +29,7 @@
       "initial_risk_per_unit": 0.10892857,
       "risk_amount_usdt": 34.9125,
       "qty": 320.50820092469775,
-      "bars_held": 8,
+      "bars_held": 14,
       "atr_at_entry": 0.05446429,
       "consec_at_entry": 5
     },
@@ -55,7 +42,7 @@
       "initial_risk_per_unit": 0.394,
       "risk_amount_usdt": 26.184375000000006,
       "qty": 66.45780456852793,
-      "bars_held": 2,
+      "bars_held": 8,
       "atr_at_entry": 0.197,
       "consec_at_entry": 5
     },
@@ -68,7 +55,7 @@
       "initial_risk_per_unit": 0.12825714,
       "risk_amount_usdt": 26.184375000000006,
       "qty": 204.15530082769666,
-      "bars_held": 2,
+      "bars_held": 8,
       "atr_at_entry": 0.06412857,
       "consec_at_entry": 5
     },
@@ -81,10 +68,23 @@
       "initial_risk_per_unit": 9.21857143,
       "risk_amount_usdt": 26.184375000000006,
       "qty": 2.8403940023492344,
-      "bars_held": 1,
+      "bars_held": 7,
       "atr_at_entry": 4.60928571,
+      "consec_at_entry": 5
+    },
+    {
+      "position_id": "ICP_USDT_20261016",
+      "symbol": "ICP/USDT",
+      "entry_date": "2026-10-16",
+      "entry_price": 3.032,
+      "stop_loss": 2.49328571,
+      "initial_risk_per_unit": 0.53871429,
+      "risk_amount_usdt": 24.857673815625,
+      "qty": 46.14259223683299,
+      "bars_held": 0,
+      "atr_at_entry": 0.26935714,
       "consec_at_entry": 5
     }
   ],
-  "closed_trade_count": 1
+  "closed_trade_count": 2
 }
