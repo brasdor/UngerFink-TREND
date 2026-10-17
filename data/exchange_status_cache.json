@@ -1,6 +1,6 @@
 {
   "_comment": "symbol -> {status, venue, delivery_date, fetched_at}. Refreshed by tools/health/refresh_exchange_status_cache.py, one bulk exchangeInfo call per venue. fapi.binance.com is geo-blocked from CI, so this is a local/manual-run cache, not a daily CI job -- see its docstring. tools/health/run_checks.py's check_exchange_status() only reads this.",
-  "fetched_at": "2026-10-11T09:36:02.926998+00:00",
+  "fetched_at": "2026-10-17T12:01:04.005679+00:00",
   "symbols": {
     "ETHBTC": {
       "status": "TRADING",
@@ -18622,6 +18622,31 @@
       "venue": "spot",
       "delivery_date": null
     },
+    "RWUSDUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "BBBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "MDBBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "PENGBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "UVXYBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
     "FUT:BTCUSDT": {
       "status": "TRADING",
       "venue": "futures",
@@ -19866,13 +19891,6 @@
       "venue": "futures",
       "delivery_date": null,
       "onboard_date": "2023-06-29",
-      "contract_type": "PERPETUAL"
-    },
-    "FUT:MDTUSDT": {
-      "status": "SETTLING",
-      "venue": "futures",
-      "delivery_date": "2024-05-16",
-      "onboard_date": "2023-06-30",
       "contract_type": "PERPETUAL"
     },
     "FUT:XVGUSDT": {
@@ -21236,7 +21254,7 @@
     "FUT:VELODROMEUSDT": {
       "status": "TRADING",
       "venue": "futures",
-      "delivery_date": null,
+      "delivery_date": "2026-10-28",
       "onboard_date": "2024-12-13",
       "contract_type": "PERPETUAL"
     },
@@ -21600,7 +21618,7 @@
     "FUT:EPICUSDT": {
       "status": "TRADING",
       "venue": "futures",
-      "delivery_date": null,
+      "delivery_date": "2026-10-20",
       "onboard_date": "2025-03-13",
       "contract_type": "PERPETUAL"
     },
@@ -25088,6 +25106,34 @@
       "venue": "futures",
       "delivery_date": null,
       "onboard_date": "2026-10-06",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:ZCSHUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-10-12",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:MSTUUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-10-12",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:SNPSUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-10-12",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:RDWUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-10-12",
       "contract_type": "TRADIFI_PERPETUAL"
     }
   }
