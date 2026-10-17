@@ -1821,3 +1821,10 @@ run_date,event,symbol,detail
 2026-10-15,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
 2026-10-15,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
 2026-10-15,SIGNAL_SKIPPED,ZEN/USDT,duplicate_cross_system
+2026-10-16,SIGNAL_SKIPPED,ARB/USDT,duplicate_cross_system
+2026-10-16,ENTRY,ICP/USDT,"consec=5  price=3.032  ema200=2.7429  stop=2.49329  risk=$24.86  bars_to_exit=20  equity=$9,940.09"
+2026-10-16,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
+2026-10-16,SIGNAL_SKIPPED,SEI/USDT,duplicate_cross_system
+2026-10-16,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
+2026-10-16,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-10-16,SIGNAL_SKIPPED,ZEN/USDT,duplicate_cross_system

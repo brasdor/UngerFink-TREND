@@ -1,7 +1,7 @@
 {
   "system_name": "TREND_1D_DONCHIAN_EXITV2_T9B",
   "created_utc": "2026-05-30T22:46:19.996708+00:00",
-  "last_run_date": "2026-10-15",
+  "last_run_date": "2026-10-16",
   "paper_equity_usdt": 10215.8963,
   "peak_equity_usdt": 10215.8963,
   "drawdown_pct": 0.0,
@@ -57,6 +57,23 @@
       "chandelier_activated_date": null,
       "atr_at_entry": 0.55399271,
       "donchian_entry_level": 5.595
+    },
+    {
+      "position_id": "DUSK_USDT_20261016",
+      "symbol": "DUSK/USDT",
+      "entry_date": "2026-10-16",
+      "entry_price": 0.1237,
+      "initial_stop": 0.10284513,
+      "current_stop": 0.10284513,
+      "initial_risk_per_unit": 0.02085487,
+      "risk_amount_usdt": 25.547402672224997,
+      "qty": 1225.0089630012076,
+      "highest_high_since_entry": 0.1237,
+      "max_favorable_r": 0.0,
+      "chandelier_active": false,
+      "chandelier_activated_date": null,
+      "atr_at_entry": 0.01042743,
+      "donchian_entry_level": 0.1206
     }
   ],
   "closed_trade_count": 12
