@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-18T08:09:38.189580+00:00",
+  "generated_at": "2026-10-18T08:11:35.819970+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -75,8 +75,8 @@
       "n_findings": 1
     },
     "equity_reconciliation": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 1
     },
     "stopout_rate_elevated": {
       "status": "fail",
@@ -7983,6 +7983,71 @@
       "run_date": "2026-10-17"
     },
     {
+      "id": "Candidate12:equity_reconciliation",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "equity_reconciliation",
+      "message": "state.json paper_equity_usdt=$63,352.99 vs. equity_curve.csv's last paper_equity=$63,948.38 (diff $595.39)",
+      "first_seen": "2026-10-18",
+      "last_seen": "2026-10-18",
+      "status": "open",
+      "evidence": {
+        "state_equity": 63352.9906,
+        "curve_equity": 63948.38,
+        "diff": 595.3894
+      },
+      "suggested_action": "Check whether equity_curve.csv and state.json are being written by the same run, or one is stale.",
+      "run_date": "2026-10-18"
+    },
+    {
+      "id": "Candidate12:flat_window_momentum_invalidated:ACXUSDT",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "flat_window_momentum_invalidated",
+      "message": "ACXUSDT: zero range over the full 60-bar formation window as of 2026-10-15 -- excluded from ranking",
+      "first_seen": "2026-10-08",
+      "last_seen": "2026-10-15",
+      "status": "open",
+      "evidence": {
+        "symbol": "ACXUSDT",
+        "formation": 60
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-15"
+    },
+    {
+      "id": "Candidate12:flat_window_momentum_invalidated:COSUSDT",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "flat_window_momentum_invalidated",
+      "message": "COSUSDT: zero range over the full 90-bar formation window as of 2026-10-17 -- excluded from ranking",
+      "first_seen": "2026-09-17",
+      "last_seen": "2026-10-17",
+      "status": "open",
+      "evidence": {
+        "symbol": "COSUSDT",
+        "formation": 90
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-17"
+    },
+    {
+      "id": "Candidate12:flat_window_momentum_invalidated:DUSDT",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "flat_window_momentum_invalidated",
+      "message": "DUSDT: zero range over the full 90-bar formation window as of 2026-10-17 -- excluded from ranking",
+      "first_seen": "2026-09-17",
+      "last_seen": "2026-10-17",
+      "status": "open",
+      "evidence": {
+        "symbol": "DUSDT",
+        "formation": 90
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-17"
+    },
+    {
       "id": "Candidate12:flat_window_momentum_invalidated:FLATUSDT",
       "severity": "WARNING",
       "system": "Candidate12",
@@ -7997,6 +8062,102 @@
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
       "run_date": "2026-09-11"
+    },
+    {
+      "id": "Candidate12:flat_window_momentum_invalidated:HFTUSDT",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "flat_window_momentum_invalidated",
+      "message": "HFTUSDT: zero range over the full 60-bar formation window as of 2026-10-15 -- excluded from ranking",
+      "first_seen": "2026-10-08",
+      "last_seen": "2026-10-15",
+      "status": "open",
+      "evidence": {
+        "symbol": "HFTUSDT",
+        "formation": 60
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-15"
+    },
+    {
+      "id": "Candidate12:flat_window_momentum_invalidated:HIGHUSDT",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "flat_window_momentum_invalidated",
+      "message": "HIGHUSDT: zero range over the full 90-bar formation window as of 2026-10-17 -- excluded from ranking",
+      "first_seen": "2026-09-17",
+      "last_seen": "2026-10-17",
+      "status": "open",
+      "evidence": {
+        "symbol": "HIGHUSDT",
+        "formation": 90
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-17"
+    },
+    {
+      "id": "Candidate12:flat_window_momentum_invalidated:MBOXUSDT",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "flat_window_momentum_invalidated",
+      "message": "MBOXUSDT: zero range over the full 90-bar formation window as of 2026-10-17 -- excluded from ranking",
+      "first_seen": "2026-09-17",
+      "last_seen": "2026-10-17",
+      "status": "open",
+      "evidence": {
+        "symbol": "MBOXUSDT",
+        "formation": 90
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-17"
+    },
+    {
+      "id": "Candidate12:flat_window_momentum_invalidated:NFPUSDT",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "flat_window_momentum_invalidated",
+      "message": "NFPUSDT: zero range over the full 90-bar formation window as of 2026-10-17 -- excluded from ranking",
+      "first_seen": "2026-09-17",
+      "last_seen": "2026-10-17",
+      "status": "open",
+      "evidence": {
+        "symbol": "NFPUSDT",
+        "formation": 90
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-17"
+    },
+    {
+      "id": "Candidate12:flat_window_momentum_invalidated:TONUSDT",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "flat_window_momentum_invalidated",
+      "message": "TONUSDT: zero range over the full 90-bar formation window as of 2026-10-17 -- excluded from ranking",
+      "first_seen": "2026-09-17",
+      "last_seen": "2026-10-17",
+      "status": "open",
+      "evidence": {
+        "symbol": "TONUSDT",
+        "formation": 90
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-17"
+    },
+    {
+      "id": "Candidate12:flat_window_momentum_invalidated:VANRYUSDT",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "flat_window_momentum_invalidated",
+      "message": "VANRYUSDT: zero range over the full 60-bar formation window as of 2026-10-15 -- excluded from ranking",
+      "first_seen": "2026-10-08",
+      "last_seen": "2026-10-15",
+      "status": "open",
+      "evidence": {
+        "symbol": "VANRYUSDT",
+        "formation": 60
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-15"
     },
     {
       "id": "Candidate19:flat_window_proximity_invalidated:FLATUSDT",
