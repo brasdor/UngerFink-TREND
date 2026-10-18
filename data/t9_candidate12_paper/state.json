@@ -2,17 +2,17 @@
   "system_name": "T9_CANDIDATE12_MOMENTUM",
   "created_utc": "2026-08-15T20:37:21.392009+00:00",
   "engine_start_date": "2026-08-15",
-  "last_run_date": "2026-10-17",
+  "last_run_date": "2026-10-18",
   "combo_last_rebalance": {
-    "0": "2026-10-11",
+    "0": "2026-10-18",
     "1": "2026-10-10",
     "2": "2026-10-10",
-    "3": "2026-10-11",
+    "3": "2026-10-18",
     "4": "2026-10-10"
   },
-  "closed_equity_usdt": 63948.3794,
+  "closed_equity_usdt": 63352.9906,
   "peak_equity_usdt": 63948.3794,
-  "drawdown_pct": 0.0,
+  "drawdown_pct": -0.931,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -91,36 +91,6 @@
       "liquidity_tier": "tier1"
     },
     {
-      "symbol": "ETHFIUSDT",
-      "side": "long",
-      "combo_idx": 0,
-      "entry_date": "2026-09-20",
-      "entry_price": 0.75180096,
-      "stop_distance_px": 0.126674306367264,
-      "atr_at_entry": 0.063337153183632,
-      "notional_usdt": 916.5235461114775,
-      "notional_pct": 0.01482542161750747,
-      "margin_reserved_usdt": 458.26177305573873,
-      "risk_amount_usdt": 154.55269498527224,
-      "cluster": "cluster_0",
-      "liquidity_tier": "tier2"
-    },
-    {
-      "symbol": "GRIFFAINUSDT",
-      "side": "long",
-      "combo_idx": 0,
-      "entry_date": "2026-09-20",
-      "entry_price": 0.014114282399999997,
-      "stop_distance_px": 0.003253360136237195,
-      "atr_at_entry": 0.0016266800681185975,
-      "notional_usdt": 669.9709119502105,
-      "notional_pct": 0.010837257027676772,
-      "margin_reserved_usdt": 334.98545597510525,
-      "risk_amount_usdt": 154.55269498527224,
-      "cluster": "solo_GRIFFAINUSDT",
-      "liquidity_tier": "tier2"
-    },
-    {
       "symbol": "AEROUSDT",
       "side": "long",
       "combo_idx": 0,
@@ -134,21 +104,6 @@
       "risk_amount_usdt": 157.89067883359547,
       "cluster": "cluster_0",
       "liquidity_tier": "tier2"
-    },
-    {
-      "symbol": "ALCHUSDT",
-      "side": "long",
-      "combo_idx": 0,
-      "entry_date": "2026-09-27",
-      "entry_price": 0.054947025,
-      "stop_distance_px": 0.012012923846223052,
-      "atr_at_entry": 0.006006461923111526,
-      "notional_usdt": 720.389824962575,
-      "notional_pct": 0.011406465382953512,
-      "margin_reserved_usdt": 360.1949124812875,
-      "risk_amount_usdt": 157.89067883359547,
-      "cluster": "solo_ALCHUSDT",
-      "liquidity_tier": "tier3"
     },
     {
       "symbol": "AAVEUSDT",
@@ -179,21 +134,6 @@
       "risk_amount_usdt": 158.39995290685474,
       "cluster": "solo_FLUXUSDT",
       "liquidity_tier": "tier3"
-    },
-    {
-      "symbol": "AVAXUSDT",
-      "side": "long",
-      "combo_idx": 0,
-      "entry_date": "2026-10-11",
-      "entry_price": 10.3580712,
-      "stop_distance_px": 1.3763952709418261,
-      "atr_at_entry": 0.6881976354709131,
-      "notional_usdt": 1202.8692468305358,
-      "notional_pct": 0.018810003598954714,
-      "margin_reserved_usdt": 601.4346234152679,
-      "risk_amount_usdt": 159.87094852248993,
-      "cluster": "cluster_0",
-      "liquidity_tier": "tier1"
     },
     {
       "symbol": "BEAMXUSDT",
@@ -286,21 +226,6 @@
       "liquidity_tier": "tier1"
     },
     {
-      "symbol": "IMXUSDT",
-      "side": "long",
-      "combo_idx": 0,
-      "entry_date": "2026-10-11",
-      "entry_price": 0.19875887999999997,
-      "stop_distance_px": 0.029896883602627315,
-      "atr_at_entry": 0.014948441801313658,
-      "notional_usdt": 1061.9959858885193,
-      "notional_pct": 0.016607082082507354,
-      "margin_reserved_usdt": 530.9979929442596,
-      "risk_amount_usdt": 159.87094852248993,
-      "cluster": "cluster_0",
-      "liquidity_tier": "tier2"
-    },
-    {
       "symbol": "INJUSDT",
       "side": "long",
       "combo_idx": 0,
@@ -314,9 +239,84 @@
       "risk_amount_usdt": 159.87094852248993,
       "cluster": "cluster_0",
       "liquidity_tier": "tier1"
+    },
+    {
+      "symbol": "APTUSDT",
+      "side": "long",
+      "combo_idx": 0,
+      "entry_date": "2026-10-18",
+      "entry_price": 0.79655928,
+      "stop_distance_px": 0.15958428651146384,
+      "atr_at_entry": 0.07979214325573192,
+      "notional_usdt": 790.4024074474477,
+      "notional_pct": 0.012476165689765298,
+      "margin_reserved_usdt": 395.20120372372384,
+      "risk_amount_usdt": 158.38247645585668,
+      "cluster": "cluster_0",
+      "liquidity_tier": "tier1"
+    },
+    {
+      "symbol": "AVAUSDT",
+      "side": "long",
+      "combo_idx": 0,
+      "entry_date": "2026-10-18",
+      "entry_price": 0.3783024,
+      "stop_distance_px": 0.08300996886797432,
+      "atr_at_entry": 0.04150498443398716,
+      "notional_usdt": 721.2215221467386,
+      "notional_pct": 0.01138417485137241,
+      "margin_reserved_usdt": 360.6107610733693,
+      "risk_amount_usdt": 158.38247645585668,
+      "cluster": "solo_AVAUSDT",
+      "liquidity_tier": "tier2"
+    },
+    {
+      "symbol": "BATUSDT",
+      "side": "long",
+      "combo_idx": 0,
+      "entry_date": "2026-10-18",
+      "entry_price": 0.17913582,
+      "stop_distance_px": 0.045920220246067345,
+      "atr_at_entry": 0.022960110123033672,
+      "notional_usdt": 617.7300845083219,
+      "notional_pct": 0.00975060654327645,
+      "margin_reserved_usdt": 308.8650422541609,
+      "risk_amount_usdt": 158.38247645585668,
+      "cluster": "solo_BATUSDT",
+      "liquidity_tier": "tier1"
+    },
+    {
+      "symbol": "CKBUSDT",
+      "side": "long",
+      "combo_idx": 0,
+      "entry_date": "2026-10-18",
+      "entry_price": 0.0015077051999999999,
+      "stop_distance_px": 0.0003368302796994806,
+      "atr_at_entry": 0.0001684151398497403,
+      "notional_usdt": 708.3781214492637,
+      "notional_pct": 0.011181447236157754,
+      "margin_reserved_usdt": 354.1890607246319,
+      "risk_amount_usdt": 158.38247645585668,
+      "cluster": "cluster_0",
+      "liquidity_tier": "tier2"
+    },
+    {
+      "symbol": "FILUSDT",
+      "side": "long",
+      "combo_idx": 0,
+      "entry_date": "2026-10-18",
+      "entry_price": 1.06501296,
+      "stop_distance_px": 0.23796443940435208,
+      "atr_at_entry": 0.11898221970217604,
+      "notional_usdt": 708.701104048708,
+      "notional_pct": 0.011186545379062697,
+      "margin_reserved_usdt": 354.350552024354,
+      "risk_amount_usdt": 158.38247645585668,
+      "cluster": "cluster_5",
+      "liquidity_tier": "tier1"
     }
   ],
-  "closed_trade_count": 46,
+  "closed_trade_count": 51,
   "last_error": null,
-  "paper_equity_usdt": 63948.3794
+  "paper_equity_usdt": 63352.9906
 }
