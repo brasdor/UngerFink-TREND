@@ -1,2 +1,1 @@
-symbol,signal_date,close,consec,atr,ema200,stop_loss,risk_unit,signal
-ICP/USDT,2026-10-16,3.032,5,0.26935714,2.74290474,2.49328571,0.53871429,BUY_CD
+symbol,signal_date,close,consec,atr,ema200,stop_loss,signal
