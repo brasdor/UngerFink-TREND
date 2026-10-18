@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-18T08:11:35.819970+00:00",
+  "generated_at": "2026-10-18T11:38:04.850162+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -7956,12 +7956,12 @@
       "severity": "CRITICAL",
       "system": "funding_refresh_job",
       "check": "funding_refresh_job_dead",
-      "message": "no commit to funding_rates/ in 166.8h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
+      "message": "no commit to funding_rates/ in 170.3h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
       "first_seen": "2026-10-12",
       "last_seen": "2026-10-18",
       "status": "open",
       "evidence": {
-        "age_hours": 166.8
+        "age_hours": 170.3
       },
       "suggested_action": "Check the funding refresh host: is the self-hosted runner online (Settings -> Actions -> Runners) or is the cron job still scheduled and succeeding?",
       "run_date": "2026-10-18"
