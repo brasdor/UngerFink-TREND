@@ -912,3 +912,8 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-10-17,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system
 2026-10-17,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
 2026-10-17,SIGNAL_SKIPPED,QTUM/USDT,duplicate_cross_system
+2026-10-18,EXIT,ZRX/USDT,"reason=donchian_exit  R=-0.021  pnl=$-0.51  equity=$10,215.38",-0.020713,-0.5142,10215.38,-0.01
+2026-10-18,EXIT,CELR/USDT,"reason=donchian_exit  R=-1.750  pnl=$-43.56  equity=$10,171.82",-1.749724,-43.5632,10171.82,-0.43
+2026-10-18,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system,,,,
+2026-10-18,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,
+2026-10-18,SIGNAL_SKIPPED,QTUM/USDT,duplicate_cross_system,,,,

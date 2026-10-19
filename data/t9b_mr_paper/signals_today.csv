@@ -1,1 +1,2 @@
-symbol,signal_date,close,rsi,atr,stop_loss,signal
+symbol,signal_date,close,rsi,atr,stop_loss,risk_unit,signal
+POWRUSDT,2026-10-18,0.05041,24.4056,0.00360634,0.03959098,0.01081902,BUY_MR
