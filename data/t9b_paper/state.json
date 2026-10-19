@@ -1,46 +1,12 @@
 {
   "system_name": "TREND_1D_DONCHIAN_EXITV2_T9B",
   "created_utc": "2026-05-30T22:46:19.996708+00:00",
-  "last_run_date": "2026-10-17",
-  "paper_equity_usdt": 10215.8963,
+  "last_run_date": "2026-10-18",
+  "paper_equity_usdt": 10171.8189,
   "peak_equity_usdt": 10215.8963,
-  "drawdown_pct": 0.0,
+  "drawdown_pct": -0.4315,
   "kill_switch_triggered": false,
   "open_positions": [
-    {
-      "position_id": "ZRX_USDT_20260906",
-      "symbol": "ZRX/USDT",
-      "entry_date": "2026-09-06",
-      "entry_price": 0.1063,
-      "initial_stop": 0.09664434,
-      "current_stop": 0.09664434,
-      "initial_risk_per_unit": 0.00965566,
-      "risk_amount_usdt": 24.822916391525,
-      "qty": 2570.815085817541,
-      "highest_high_since_entry": 0.134,
-      "max_favorable_r": 2.86878369785183,
-      "chandelier_active": false,
-      "chandelier_activated_date": null,
-      "atr_at_entry": 0.00482783,
-      "donchian_entry_level": 0.1058
-    },
-    {
-      "position_id": "CELR_USDT_20260919",
-      "symbol": "CELR/USDT",
-      "entry_date": "2026-09-19",
-      "entry_price": 0.003347,
-      "initial_stop": 0.00287664,
-      "current_stop": 0.00287664,
-      "initial_risk_per_unit": 0.00047036,
-      "risk_amount_usdt": 24.897162158574996,
-      "qty": 52932.14167568457,
-      "highest_high_since_entry": 0.0052,
-      "max_favorable_r": 3.9395356748022783,
-      "chandelier_active": false,
-      "chandelier_activated_date": null,
-      "atr_at_entry": 0.00023518,
-      "donchian_entry_level": 0.002463
-    },
     {
       "position_id": "NEAR_USDT_20261011",
       "symbol": "NEAR/USDT",
@@ -68,13 +34,13 @@
       "initial_risk_per_unit": 0.02085487,
       "risk_amount_usdt": 25.547402672224997,
       "qty": 1225.0089630012076,
-      "highest_high_since_entry": 0.1328,
-      "max_favorable_r": 0.4363489199405221,
+      "highest_high_since_entry": 0.1331,
+      "max_favorable_r": 0.4507340491693303,
       "chandelier_active": false,
       "chandelier_activated_date": null,
       "atr_at_entry": 0.01042743,
       "donchian_entry_level": 0.1206
     }
   ],
-  "closed_trade_count": 12
+  "closed_trade_count": 14
 }
