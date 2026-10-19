@@ -1828,3 +1828,9 @@ run_date,event,symbol,detail
 2026-10-16,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
 2026-10-16,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
 2026-10-16,SIGNAL_SKIPPED,ZEN/USDT,duplicate_cross_system
+2026-10-17,SIGNAL_SKIPPED,ARB/USDT,duplicate_cross_system
+2026-10-17,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
+2026-10-17,SIGNAL_SKIPPED,SEI/USDT,duplicate_cross_system
+2026-10-17,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
+2026-10-17,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-10-17,SIGNAL_SKIPPED,ZEN/USDT,duplicate_cross_system
