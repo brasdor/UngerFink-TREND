@@ -84,6 +84,8 @@ class TestTradableByDate(_Base):
         self.assertTrue(T.is_tradable("GOODUSDT", "2026-10-10"))
 
     def test_delivery_date_itself_is_not_tradable_day_before_is(self):
+        # the pure date rule (announced-delivery window off): the day before delivery is tradable
+        self.cfg_path.write_text(json.dumps({"announced_delivery_block_days": 0}), encoding="utf-8")
         self.assertTrue(T.is_tradable("DEADUSDT", "2026-06-10"))
         self.assertFalse(T.is_tradable("DEADUSDT", "2026-06-11"))
         self.assertEqual(T.untradable_reason("DEADUSDT", "2026-07-30"), "on_or_after_delivery")
@@ -349,6 +351,41 @@ class TestRegimeSwitch(_Base):
         self.assertFalse(T.regime_exclusion_enabled())
         self.cfg_path.write_text(json.dumps({"regime_exclude_nontradable": True}), encoding="utf-8")
         self.assertTrue(T.regime_exclusion_enabled())
+
+
+class TestAnnouncedDeliveryBlock(_Base):
+    def setUp(self):
+        super().setUp()
+        c = _cache()
+        c["symbols"]["FUT:SOONTRDUSDT"] = {"status": "TRADING", "venue": "futures", "delivery_date": "2026-10-18", "onboard_date": "2022-01-01"}
+        self.cache_path.write_text(json.dumps(c), encoding="utf-8")
+        T.reload(self.cache_path)
+
+    def test_blocks_new_entries_within_window_default_7d(self):
+        self.assertEqual(T.announced_delivery_block_days(), 7)
+        self.assertEqual(T.untradable_reason("SOONTRDUSDT", "2026-10-11"), "delivery_within_7d")   # exactly 7 days out
+        self.assertIsNone(T.untradable_reason("SOONTRDUSDT", "2026-10-10"))                        # 8 days out
+
+    def test_switch_off_and_custom_window(self):
+        self.cfg_path.write_text(json.dumps({"announced_delivery_block_days": 0}), encoding="utf-8")
+        self.assertIsNone(T.untradable_reason("SOONTRDUSDT", "2026-10-15"))
+        self.cfg_path.write_text(json.dumps({"announced_delivery_block_days": 3}), encoding="utf-8")
+        import os, time
+        os.utime(self.cfg_path, (time.time() + 5, time.time() + 5))
+        self.assertIsNone(T.untradable_reason("SOONTRDUSDT", "2026-10-14"))
+        self.assertEqual(T.untradable_reason("SOONTRDUSDT", "2026-10-15"), "delivery_within_3d")
+
+    def test_held_position_is_not_voided_and_settles_on_delivery(self):
+        self.assertEqual(T.position_action("SOONTRDUSDT", "2026-10-11", "2026-10-15").kind, "none")
+        with mock.patch.object(T, "settlement_price", return_value=1.0):
+            self.assertEqual(T.position_action("SOONTRDUSDT", "2026-10-11", "2026-10-18").kind, "settle")
+
+    def test_applies_under_a_stale_cache_too(self):
+        c = json.loads(self.cache_path.read_text(encoding="utf-8"))
+        c["fetched_at"] = "2026-09-01T00:00:00+00:00"
+        self.cache_path.write_text(json.dumps(c), encoding="utf-8")
+        T.reload(self.cache_path)
+        self.assertEqual(T.untradable_reason("SOONTRDUSDT", "2026-10-15"), "delivery_within_7d")
 
 
 if __name__ == "__main__":

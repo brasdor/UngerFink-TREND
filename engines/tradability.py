@@ -81,6 +81,7 @@ _SPOT: dict = {}                       # spot symbol -> info
 _CACHE_META: dict = {}
 _CACHE_BROKEN = False
 _FLAT_CACHE: dict = {}                 # (venue, symbol) -> numpy arrays for the data backstop
+_CFG_CACHE = None
 
 
 def _now() -> datetime:
@@ -255,6 +256,9 @@ def untradable_reason(symbol: str, on_date, venue: str = "futures") -> Optional[
             return "before_onboard"
         if i.delivery is not None and d >= i.delivery:
             return "on_or_after_delivery"
+        n = announced_delivery_block_days()
+        if n and i.delivery is not None and (i.delivery - d).days <= n:
+            return f"delivery_within_{n}d"       # announced delisting: no NEW entries (held positions settle normally)
     if _flat_feed(symbol, d, venue):
         return "flat_zero_volume_feed"          # backstop; needs no cache
     if _CACHE is None:  # cache missing/unreadable -> exchange gate off (CRITICAL already emitted)
@@ -384,6 +388,27 @@ def tradable_universe(engine: str, symbols: Iterable[str], run_date, venue: str 
         print(f"  [TRADABILITY] {engine}: {len(syms) - len(ok)} of {len(syms)} symbols excluded "
               f"as not tradable on {run_date} (delivered / settling / not onboarded / unknown)", flush=True)
     return ok
+
+
+def _config() -> dict:
+    """data/tradability_config.json, re-read only when the file changes."""
+    global _CFG_CACHE
+    try:
+        m = CONFIG_PATH.stat().st_mtime
+        if _CFG_CACHE is None or _CFG_CACHE[0] != (str(CONFIG_PATH), m):
+            _CFG_CACHE = ((str(CONFIG_PATH), m), json.loads(CONFIG_PATH.read_text(encoding="utf-8")))
+        return _CFG_CACHE[1]
+    except Exception:
+        return {}
+
+
+def announced_delivery_block_days() -> int:
+    """New entries are refused when the exchange has ANNOUNCED a delivery date within this many days
+    (default 7; 0 = off). Positions already held are not touched: they settle on the delivery date."""
+    try:
+        return max(0, int(_config().get("announced_delivery_block_days", 7)))
+    except Exception:
+        return 7
 
 
 def regime_exclusion_enabled() -> bool:
