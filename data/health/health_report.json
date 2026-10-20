@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-20T08:13:17.913039+00:00",
+  "generated_at": "2026-10-20T11:41:15.445577+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -737,13 +737,13 @@
       "severity": "CRITICAL",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'epu' snapshot last succeeded 68.2h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'epu' snapshot last succeeded 71.7h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-10-20",
       "last_seen": "2026-10-20",
       "status": "open",
       "evidence": {
         "source": "epu",
-        "age_hours": 68.2
+        "age_hours": 71.7
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-10-20"
@@ -1491,16 +1491,16 @@
       "run_date": "2026-10-20"
     },
     {
-      "id": "futures_universe:symbol_gaps:ZRXUSDT_1d",
+      "id": "futures_universe:symbol_gaps:XLMUSDT_1d",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "symbol_gaps",
-      "message": "futures universe: ZRXUSDT_1d has 7 missing calendar day(s) inside its own covered history",
-      "first_seen": "2026-10-11",
+      "message": "futures universe: XLMUSDT_1d has 7 missing calendar day(s) inside its own covered history",
+      "first_seen": "2026-10-20",
       "last_seen": "2026-10-20",
       "status": "open",
       "evidence": {
-        "symbol": "ZRXUSDT_1d",
+        "symbol": "XLMUSDT_1d",
         "n_gaps": 7
       },
       "suggested_action": "Re-backfill this symbol from the CDN; check for an exchange halt around the gap date(s).",
