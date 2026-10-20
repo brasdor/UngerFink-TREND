@@ -1,7 +1,7 @@
 {
-  "generated_utc": "2026-10-19T11:14:29.948823+00:00",
+  "generated_utc": "2026-10-20T11:15:24.068209+00:00",
   "regime": {
-    "date": "2026-10-18",
+    "date": "2026-10-19",
     "trend": "MIXED",
     "funding": "NEUTRAL",
     "vol_multiplier": 1.0,
@@ -22,19 +22,19 @@
       "open_positions": 2,
       "closed_trades": 14,
       "kill_switch": false,
-      "unrealized_pnl": -23.689999999999998,
-      "today_realized_pnl": -44.0774,
-      "last_run_date": "2026-10-18"
+      "unrealized_pnl": -21.810000000000002,
+      "today_realized_pnl": 0.0,
+      "last_run_date": "2026-10-19"
     },
     "S2": {
       "label": "RSI-MR",
       "equity": 10151.7351,
-      "open_positions": 10,
-      "closed_trades": 45,
+      "open_positions": 7,
+      "closed_trades": 49,
       "kill_switch": false,
-      "unrealized_pnl": -6.5699999999999985,
+      "unrealized_pnl": -4.669999999999998,
       "today_realized_pnl": -0.0,
-      "last_run_date": "2026-10-18"
+      "last_run_date": "2026-10-19"
     },
     "S3": {
       "label": "ConsecDown",
@@ -42,9 +42,9 @@
       "open_positions": 6,
       "closed_trades": 2,
       "kill_switch": false,
-      "unrealized_pnl": -61.66,
+      "unrealized_pnl": -38.209999999999994,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-10-18"
+      "last_run_date": "2026-10-19"
     },
     "S5": {
       "label": "Momentum",
@@ -52,9 +52,9 @@
       "open_positions": 30,
       "closed_trades": 8,
       "kill_switch": false,
-      "unrealized_pnl": -82.92599999999997,
+      "unrealized_pnl": -59.675899999999956,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-10-19"
+      "last_run_date": "2026-10-20"
     },
     "S6": {
       "label": "VolContraction",
@@ -63,18 +63,18 @@
       "closed_trades": 103,
       "kill_switch": false,
       "unrealized_pnl": 0.0,
-      "today_realized_pnl": 20.0054,
-      "last_run_date": "2026-10-18"
+      "today_realized_pnl": 0.0,
+      "last_run_date": "2026-10-19"
     },
     "S7": {
       "label": "MACross",
-      "equity": 9666.6406,
-      "open_positions": 6,
-      "closed_trades": 160,
+      "equity": 9753.9962,
+      "open_positions": 2,
+      "closed_trades": 164,
       "kill_switch": false,
-      "unrealized_pnl": 94.7824,
-      "today_realized_pnl": 0.0,
-      "last_run_date": "2026-10-18"
+      "unrealized_pnl": 20.8025,
+      "today_realized_pnl": 87.3556,
+      "last_run_date": "2026-10-19"
     },
     "S8": {
       "label": "RSI-MR-Funding",
@@ -84,7 +84,7 @@
       "kill_switch": false,
       "unrealized_pnl": 0.0,
       "today_realized_pnl": -0.0,
-      "last_run_date": "2026-10-18"
+      "last_run_date": "2026-10-19"
     },
     "Candidate12": {
       "label": "Candidate 12",
@@ -92,9 +92,9 @@
       "open_positions": 20,
       "closed_trades": 51,
       "kill_switch": false,
-      "unrealized_pnl": -57.50999999999995,
+      "unrealized_pnl": 603.17,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-10-19"
+      "last_run_date": "2026-10-20"
     },
     "Candidate19": {
       "label": "Candidate 19",
@@ -102,18 +102,49 @@
       "open_positions": 20,
       "closed_trades": 51,
       "kill_switch": false,
-      "unrealized_pnl": -695.39,
+      "unrealized_pnl": -111.88000000000007,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-10-19"
+      "last_run_date": "2026-10-20"
     }
   },
   "alerts": {
-    "checked_utc": "2026-10-19T11:14:29.968381+00:00",
+    "checked_utc": "2026-10-20T11:15:24.077787+00:00",
     "missed_runs": [],
     "ohlcv_issues": [],
     "suppressed_symbols": [
+      "ACXUSDT",
+      "ACX_USDT",
+      "AEUR_USDT",
+      "ALCX_USDT",
       "ARDR_USDT",
-      "TON_USDT"
+      "COSUSDT",
+      "COS_USDT",
+      "DUSDT",
+      "D_USDT",
+      "HFTUSDT",
+      "HFT_USDT",
+      "HIGHUSDT",
+      "HIGH_USDT",
+      "ICXUSDT",
+      "ICX_USDT",
+      "MBOXUSDT",
+      "MBOX_USDT",
+      "NFPUSDT",
+      "NFP_USDT",
+      "PIVX_USDT",
+      "POND_USDT",
+      "PYR_USDT",
+      "SCRTUSDT",
+      "SCRT_USDT",
+      "STGUSDT",
+      "STG_USDT",
+      "STORJUSDT",
+      "STORJ_USDT",
+      "TONUSDT",
+      "TON_USDT",
+      "VANRYUSDT",
+      "VANRY_USDT",
+      "VIC_USDT"
     ]
   }
 }
