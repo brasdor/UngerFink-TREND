@@ -1,7 +1,7 @@
 {
   "system_name": "TREND_1D_DONCHIAN_EXITV2_T9B",
   "created_utc": "2026-05-30T22:46:19.996708+00:00",
-  "last_run_date": "2026-10-19",
+  "last_run_date": "2026-10-20",
   "paper_equity_usdt": 10171.8189,
   "peak_equity_usdt": 10215.8963,
   "drawdown_pct": -0.4315,
@@ -40,6 +40,23 @@
       "chandelier_activated_date": null,
       "atr_at_entry": 0.01042743,
       "donchian_entry_level": 0.1206
+    },
+    {
+      "position_id": "IOST_USDT_20261020",
+      "symbol": "IOST/USDT",
+      "entry_date": "2026-10-20",
+      "entry_price": 0.001054,
+      "initial_stop": 0.00087738,
+      "current_stop": 0.00087738,
+      "initial_risk_per_unit": 0.00017662,
+      "risk_amount_usdt": 25.437176114175003,
+      "qty": 144022.0593034481,
+      "highest_high_since_entry": 0.001054,
+      "max_favorable_r": 0.0,
+      "chandelier_active": false,
+      "chandelier_activated_date": null,
+      "atr_at_entry": 8.831e-05,
+      "donchian_entry_level": 0.00092
     }
   ],
   "closed_trade_count": 14

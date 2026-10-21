@@ -1,2 +1,1 @@
-symbol,signal_date,close,rsi,atr,stop_loss,risk_unit,signal
-ZILUSDT,2026-10-19,0.00218,24.547,0.00028834,0.00131499,0.00086501,BUY_MR
+symbol,signal_date,close,rsi,atr,stop_loss,signal

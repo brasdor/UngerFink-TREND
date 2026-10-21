@@ -920,3 +920,7 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-10-19,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system
 2026-10-19,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
 2026-10-19,SIGNAL_SKIPPED,QTUM/USDT,duplicate_cross_system
+2026-10-20,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system,,,,
+2026-10-20,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,
+2026-10-20,SIGNAL_SKIPPED,QTUM/USDT,duplicate_cross_system,,,,
+2026-10-20,ENTRY,IOST/USDT,"price=0.001054  stop=0.00087738  risk=$25.44  qty=144022.06  equity=$10,171.82",0.001054,0.00087738,25.4372,10171.82
