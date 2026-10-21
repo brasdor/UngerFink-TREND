@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-21T08:10:26.640411+00:00",
+  "generated_at": "2026-10-21T08:11:52.204724+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -833,7 +833,7 @@
       "check": "tradability_state_fix_pending",
       "message": "COSUSDT (entry 2026-10-10): exchange rules require action 'void' (on_or_after_delivery, delivery 2026-06-11); NOT applied -- apply_state_fixes is off",
       "first_seen": "2026-10-20",
-      "last_seen": "2026-10-20",
+      "last_seen": "2026-10-21",
       "status": "open",
       "evidence": {
         "symbol": "COSUSDT",
@@ -843,7 +843,7 @@
         "reason": "on_or_after_delivery"
       },
       "suggested_action": "Review docs/TRADABILITY_REPORT.md, then set apply_state_fixes=true in data/tradability_config.json.",
-      "run_date": "2026-10-20"
+      "run_date": "2026-10-21"
     },
     {
       "id": "Candidate12:flat_window_momentum_invalidated:ACXUSDT",
