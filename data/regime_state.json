@@ -1,24 +1,24 @@
 {
-  "date": "2026-10-20",
+  "date": "2026-10-21",
   "trend_regime": "MIXED",
-  "funding_regime": "NEUTRAL",
+  "funding_regime": "LOW",
   "vol_multiplier": 1.0,
   "weights": {
     "S1": 0.1429,
-    "S2": 0.1429,
-    "S3": 0.1429,
+    "S2": 0.2,
+    "S3": 0.2,
     "S5": 0.1429,
-    "S6": 0.1429,
-    "S7": 0.1429,
+    "S6": 0.0857,
+    "S7": 0.0857,
     "S8": 0.1429
   },
   "allocator_version": "v4_ci",
-  "breadth_raw": 27.93,
-  "breadth_ema3": 28.3156,
+  "breadth_raw": 33.1,
+  "breadth_ema3": 30.7095,
   "funding_raw": -5.111e-05,
-  "funding_ema5": -3.098e-05,
+  "funding_ema5": -3.769e-05,
   "last_trend_switch": "2026-08-20",
-  "last_funding_switch": "2026-10-16",
+  "last_funding_switch": "2026-10-21",
   "btc_above_ema200": true,
-  "vol_percentile": 32.9
+  "vol_percentile": 33.7
 }

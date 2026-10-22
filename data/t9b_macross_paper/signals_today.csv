@@ -1,2 +1,1 @@
-symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
-TRXUSDT,1792396800000,0.3313,0.33269566,0.33273179,0.33424561,0.00132714,0.33395429,0.00265429,0.0001,2026-10-20
+symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss
