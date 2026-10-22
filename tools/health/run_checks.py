@@ -1109,6 +1109,8 @@ def check_no_entries_exits_despite_signals(window_days: int = 7) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 MAX_SNAPSHOT_AGE_HOURS = 26  # data-job snapshots (same threshold as the funding job)
+SNAPSHOT_SEVERITY = "WARNING"  # research-only series (stablecoins/EPU/GPR/dominance, OI log): nothing trades on them.
+                              # Funding and exchange-status-cache staleness stay CRITICAL (they gate live entries).
 
 
 def check_forward_snapshots_fresh() -> list[dict]:
@@ -1128,13 +1130,13 @@ def check_forward_snapshots_fresh() -> list[dict]:
     for src in ("stablecoins", "epu", "gpr", "dominance"):
         ent = hb.get(src)
         if not ent:
-            out.append(finding("forward_snapshots", "snapshot_never_ran", "CRITICAL",
+            out.append(finding("forward_snapshots", "snapshot_never_ran", SNAPSHOT_SEVERITY,
                                f"no successful '{src}' snapshot on record", key=src,
                                suggested_action="Run tools/forward_snapshots.py on the funding host."))
             continue
         age_h = (now - datetime.fromisoformat(ent["last_success_utc"])).total_seconds() / 3600.0
         if age_h > MAX_SNAPSHOT_AGE_HOURS:
-            out.append(finding("forward_snapshots", "snapshot_stale", "CRITICAL",
+            out.append(finding("forward_snapshots", "snapshot_stale", SNAPSHOT_SEVERITY,
                                f"'{src}' snapshot last succeeded {age_h:.1f}h ago (threshold "
                                f"{MAX_SNAPSHOT_AGE_HOURS}h) -- vintage history for this series is being lost",
                                key=src, evidence={"source": src, "age_hours": round(age_h, 1)},
@@ -1146,7 +1148,7 @@ def check_forward_snapshots_fresh() -> list[dict]:
     except Exception:
         age_h = 9999.0
     if age_h > MAX_SNAPSHOT_AGE_HOURS:
-        out.append(finding("forward_snapshots", "oi_log_stale", "CRITICAL",
+        out.append(finding("forward_snapshots", "oi_log_stale", SNAPSHOT_SEVERITY,
                            f"open-interest 5m log last bar is {age_h:.1f}h old (threshold {MAX_SNAPSHOT_AGE_HOURS}h); "
                            f"the API only back-fills ~41h",
                            evidence={"age_hours": round(age_h, 1)},
