@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-22T11:42:04.954361+00:00",
+  "generated_at": "2026-10-23T08:10:33.346255+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -32,7 +32,7 @@
     },
     "exchange_status": {
       "status": "fail",
-      "n_findings": 3
+      "n_findings": 1
     },
     "heartbeat_36h": {
       "status": "pass",
@@ -87,12 +87,12 @@
       "n_findings": 1
     },
     "forward_snapshots_fresh": {
-      "status": "fail",
-      "n_findings": 5
+      "status": "pass",
+      "n_findings": 0
     },
     "funding_refresh_job_alive": {
-      "status": "fail",
-      "n_findings": 1
+      "status": "pass",
+      "n_findings": 0
     }
   },
   "findings": [
@@ -113,390 +113,6 @@
       },
       "suggested_action": "Check position sizing -- a leverage breach is a direct liquidation-risk increase versus the T6 sweep this cap was set from.",
       "run_date": "2026-10-19"
-    },
-    {
-      "id": "S6:funding_stale_no_entry:ACXUSDT",
-      "severity": "CRITICAL",
-      "system": "S6",
-      "check": "funding_stale_no_entry",
-      "message": "ACXUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S6 is funding-gated)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "ACXUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S6:funding_stale_no_entry:DUSKUSDT",
-      "severity": "CRITICAL",
-      "system": "S6",
-      "check": "funding_stale_no_entry",
-      "message": "DUSKUSDT: funding data older than 3d as of 2026-10-15 -- no new entry (S6 is funding-gated)",
-      "first_seen": "2026-10-15",
-      "last_seen": "2026-10-15",
-      "status": "open",
-      "evidence": {
-        "symbol": "DUSKUSDT",
-        "run_date": "2026-10-15"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-15"
-    },
-    {
-      "id": "S6:funding_stale_no_entry:HFTUSDT",
-      "severity": "CRITICAL",
-      "system": "S6",
-      "check": "funding_stale_no_entry",
-      "message": "HFTUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S6 is funding-gated)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "HFTUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S6:funding_stale_no_entry:ICPUSDT",
-      "severity": "CRITICAL",
-      "system": "S6",
-      "check": "funding_stale_no_entry",
-      "message": "ICPUSDT: funding data older than 3d as of 2026-10-15 -- no new entry (S6 is funding-gated)",
-      "first_seen": "2026-10-15",
-      "last_seen": "2026-10-15",
-      "status": "open",
-      "evidence": {
-        "symbol": "ICPUSDT",
-        "run_date": "2026-10-15"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-15"
-    },
-    {
-      "id": "S6:funding_stale_no_entry:ICXUSDT",
-      "severity": "CRITICAL",
-      "system": "S6",
-      "check": "funding_stale_no_entry",
-      "message": "ICXUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S6 is funding-gated)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "ICXUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S6:funding_stale_no_entry:NFPUSDT",
-      "severity": "CRITICAL",
-      "system": "S6",
-      "check": "funding_stale_no_entry",
-      "message": "NFPUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S6 is funding-gated)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "NFPUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S6:funding_stale_no_entry:POWRUSDT",
-      "severity": "CRITICAL",
-      "system": "S6",
-      "check": "funding_stale_no_entry",
-      "message": "POWRUSDT: funding data older than 3d as of 2026-10-17 -- no new entry (S6 is funding-gated)",
-      "first_seen": "2026-10-15",
-      "last_seen": "2026-10-17",
-      "status": "open",
-      "evidence": {
-        "symbol": "POWRUSDT",
-        "run_date": "2026-10-17"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-17"
-    },
-    {
-      "id": "S6:funding_stale_no_entry:STORJUSDT",
-      "severity": "CRITICAL",
-      "system": "S6",
-      "check": "funding_stale_no_entry",
-      "message": "STORJUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S6 is funding-gated)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "STORJUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S6:funding_stale_no_entry:TONUSDT",
-      "severity": "CRITICAL",
-      "system": "S6",
-      "check": "funding_stale_no_entry",
-      "message": "TONUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S6 is funding-gated)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "TONUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S6:funding_stale_no_entry:VANRYUSDT",
-      "severity": "CRITICAL",
-      "system": "S6",
-      "check": "funding_stale_no_entry",
-      "message": "VANRYUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S6 is funding-gated)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "VANRYUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S6:funding_stale_no_entry:ZILUSDT",
-      "severity": "CRITICAL",
-      "system": "S6",
-      "check": "funding_stale_no_entry",
-      "message": "ZILUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S6 is funding-gated)",
-      "first_seen": "2026-10-15",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "ZILUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S7:funding_stale_no_entry:ACXUSDT",
-      "severity": "CRITICAL",
-      "system": "S7",
-      "check": "funding_stale_no_entry",
-      "message": "ACXUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S7 is funding-gated)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "ACXUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S7:funding_stale_no_entry:DUSKUSDT",
-      "severity": "CRITICAL",
-      "system": "S7",
-      "check": "funding_stale_no_entry",
-      "message": "DUSKUSDT: funding data older than 3d as of 2026-10-15 -- no new entry (S7 is funding-gated)",
-      "first_seen": "2026-10-15",
-      "last_seen": "2026-10-15",
-      "status": "open",
-      "evidence": {
-        "symbol": "DUSKUSDT",
-        "run_date": "2026-10-15"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-15"
-    },
-    {
-      "id": "S7:funding_stale_no_entry:HFTUSDT",
-      "severity": "CRITICAL",
-      "system": "S7",
-      "check": "funding_stale_no_entry",
-      "message": "HFTUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S7 is funding-gated)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "HFTUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S7:funding_stale_no_entry:ICPUSDT",
-      "severity": "CRITICAL",
-      "system": "S7",
-      "check": "funding_stale_no_entry",
-      "message": "ICPUSDT: funding data older than 3d as of 2026-10-15 -- no new entry (S7 is funding-gated)",
-      "first_seen": "2026-10-15",
-      "last_seen": "2026-10-15",
-      "status": "open",
-      "evidence": {
-        "symbol": "ICPUSDT",
-        "run_date": "2026-10-15"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-15"
-    },
-    {
-      "id": "S7:funding_stale_no_entry:ICXUSDT",
-      "severity": "CRITICAL",
-      "system": "S7",
-      "check": "funding_stale_no_entry",
-      "message": "ICXUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S7 is funding-gated)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "ICXUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S7:funding_stale_no_entry:NFPUSDT",
-      "severity": "CRITICAL",
-      "system": "S7",
-      "check": "funding_stale_no_entry",
-      "message": "NFPUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S7 is funding-gated)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "NFPUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S7:funding_stale_no_entry:POWRUSDT",
-      "severity": "CRITICAL",
-      "system": "S7",
-      "check": "funding_stale_no_entry",
-      "message": "POWRUSDT: funding data older than 3d as of 2026-10-17 -- no new entry (S7 is funding-gated)",
-      "first_seen": "2026-10-15",
-      "last_seen": "2026-10-17",
-      "status": "open",
-      "evidence": {
-        "symbol": "POWRUSDT",
-        "run_date": "2026-10-17"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-17"
-    },
-    {
-      "id": "S7:funding_stale_no_entry:STORJUSDT",
-      "severity": "CRITICAL",
-      "system": "S7",
-      "check": "funding_stale_no_entry",
-      "message": "STORJUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S7 is funding-gated)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "STORJUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S7:funding_stale_no_entry:TONUSDT",
-      "severity": "CRITICAL",
-      "system": "S7",
-      "check": "funding_stale_no_entry",
-      "message": "TONUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S7 is funding-gated)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "TONUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S7:funding_stale_no_entry:VANRYUSDT",
-      "severity": "CRITICAL",
-      "system": "S7",
-      "check": "funding_stale_no_entry",
-      "message": "VANRYUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S7 is funding-gated)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "VANRYUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S7:funding_stale_no_entry:ZILUSDT",
-      "severity": "CRITICAL",
-      "system": "S7",
-      "check": "funding_stale_no_entry",
-      "message": "ZILUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S7 is funding-gated)",
-      "first_seen": "2026-10-15",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "ZILUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
-    },
-    {
-      "id": "S8:funding_stale_no_entry:POWRUSDT",
-      "severity": "CRITICAL",
-      "system": "S8",
-      "check": "funding_stale_no_entry",
-      "message": "POWRUSDT: funding data older than 3d as of 2026-10-17 -- no new entry (S8 is funding-gated)",
-      "first_seen": "2026-10-17",
-      "last_seen": "2026-10-17",
-      "status": "open",
-      "evidence": {
-        "symbol": "POWRUSDT",
-        "run_date": "2026-10-17"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-17"
-    },
-    {
-      "id": "S8:funding_stale_no_entry:ZILUSDT",
-      "severity": "CRITICAL",
-      "system": "S8",
-      "check": "funding_stale_no_entry",
-      "message": "ZILUSDT: funding data older than 3d as of 2026-10-18 -- no new entry (S8 is funding-gated)",
-      "first_seen": "2026-10-17",
-      "last_seen": "2026-10-18",
-      "status": "open",
-      "evidence": {
-        "symbol": "ZILUSDT",
-        "run_date": "2026-10-18"
-      },
-      "suggested_action": "Run tools/refresh_funding_local.py (fapi is geo-blocked from CI).",
-      "run_date": "2026-10-18"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:ACXUSDT",
@@ -523,7 +139,7 @@
       "check": "exchange_status_not_trading",
       "message": "COSUSDT: exchange status is 'SETTLING', not TRADING (delivery: 2026-06-11)",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-22",
+      "last_seen": "2026-10-23",
       "status": "open",
       "evidence": {
         "symbol": "COSUSDT",
@@ -532,7 +148,7 @@
         "delivery_date": "2026-06-11"
       },
       "suggested_action": "Confirmed non-tradable -- exclude from new signals/rankings (see docs/HEALTH_CONTRACT.md); any OPEN position in it needs a decision, not an automatic one.",
-      "run_date": "2026-10-22"
+      "run_date": "2026-10-23"
     },
     {
       "id": "data/exchange_status_cache.json:exchange_status_not_trading:FUT:DUSDT",
@@ -1028,14 +644,14 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 8 fields in line 3, saw 9\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-22",
+      "last_seen": "2026-10-23",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 8 fields in line 3, saw 9\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-22"
+      "run_date": "2026-10-23"
     },
     {
       "id": "S2:flat_window_rsi_invalidated:ACXUSDT",
@@ -1267,14 +883,14 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 4 fields in line 101, saw 8\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-22",
+      "last_seen": "2026-10-23",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 4 fields in line 101, saw 8\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-22"
+      "run_date": "2026-10-23"
     },
     {
       "id": "S5:flat_window_momentum_invalidated:FLATUSDT",
@@ -1318,14 +934,14 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 5 fields in line 74, saw 15\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-22",
+      "last_seen": "2026-10-23",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 5 fields in line 74, saw 15\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-22"
+      "run_date": "2026-10-23"
     },
     {
       "id": "S6:stopout_rate_elevated",
@@ -1334,7 +950,7 @@
       "check": "stopout_rate_elevated",
       "message": "15/20 of the last 20 exits were stop-outs (75%) -- the S7 rally-whipsaw pattern",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-22",
+      "last_seen": "2026-10-23",
       "status": "open",
       "evidence": {
         "n_stop": 15,
@@ -1342,7 +958,7 @@
         "fraction": 0.75
       },
       "suggested_action": "Shadow-replay this system's recent entries against current (non-stale) funding/regime data before changing any stop rule.",
-      "run_date": "2026-10-22"
+      "run_date": "2026-10-23"
     },
     {
       "id": "S8:csv_not_pandas_parseable:daily_log.csv",
@@ -1351,14 +967,14 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 4 fields in line 1237, saw 6\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-22",
+      "last_seen": "2026-10-23",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 4 fields in line 1237, saw 6\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-22"
+      "run_date": "2026-10-23"
     },
     {
       "id": "S8:flat_window_rsi_invalidated:ACXUSDT",
@@ -1493,65 +1109,33 @@
       "severity": "WARNING",
       "system": "S8",
       "check": "no_entries_exits_despite_signals",
-      "message": "353 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
+      "message": "341 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
       "first_seen": "2026-10-14",
-      "last_seen": "2026-10-22",
+      "last_seen": "2026-10-23",
       "status": "open",
       "evidence": {
-        "n_signals": 353,
+        "n_signals": 341,
         "window_days": 7
       },
       "suggested_action": "Check the arbitrator / cross-system suppression and the regime weight for this system -- confirm it isn't being silently zeroed out.",
-      "run_date": "2026-10-22"
-    },
-    {
-      "id": "data/halted_symbols_suppression.json:suppression_list_stale:ARDR_USDT",
-      "severity": "WARNING",
-      "system": "data/halted_symbols_suppression.json",
-      "check": "suppression_list_stale",
-      "message": "ARDR_USDT: last re-verified 56d ago (monthly check appears to have stopped running)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-19",
-      "status": "open",
-      "evidence": {
-        "symbol": "ARDR_USDT",
-        "age_days": 56
-      },
-      "suggested_action": "Check monthly_halted_symbol_check.yml's recent runs.",
-      "run_date": "2026-10-19"
-    },
-    {
-      "id": "data/halted_symbols_suppression.json:suppression_list_stale:TON_USDT",
-      "severity": "WARNING",
-      "system": "data/halted_symbols_suppression.json",
-      "check": "suppression_list_stale",
-      "message": "TON_USDT: last re-verified 56d ago (monthly check appears to have stopped running)",
-      "first_seen": "2026-10-11",
-      "last_seen": "2026-10-19",
-      "status": "open",
-      "evidence": {
-        "symbol": "TON_USDT",
-        "age_days": 56
-      },
-      "suggested_action": "Check monthly_halted_symbol_check.yml's recent runs.",
-      "run_date": "2026-10-19"
+      "run_date": "2026-10-23"
     },
     {
       "id": "data/regime_history.csv:frozen_value_detection:vol_mult",
       "severity": "WARNING",
       "system": "data/regime_history.csv",
       "check": "frozen_value_detection",
-      "message": "regime_history.vol_mult has been exactly 1.0 for the last 10 rows -- check the upstream feed, not just this file",
+      "message": "regime_history.vol_mult has been exactly 1.0 for the last 11 rows -- check the upstream feed, not just this file",
       "first_seen": "2026-10-17",
-      "last_seen": "2026-10-22",
+      "last_seen": "2026-10-23",
       "status": "open",
       "evidence": {
         "column": "vol_mult",
         "value": 1.0,
-        "run_length": 10
+        "run_length": 11
       },
       "suggested_action": "Check whether the upstream source (e.g. funding cache) is stale.",
-      "run_date": "2026-10-22"
+      "run_date": "2026-10-23"
     },
     {
       "id": "futures_universe:symbol_gaps:ZRXUSDT_1d",
@@ -1560,14 +1144,14 @@
       "check": "symbol_gaps",
       "message": "futures universe: ZRXUSDT_1d has 7 missing calendar day(s) inside its own covered history",
       "first_seen": "2026-10-22",
-      "last_seen": "2026-10-22",
+      "last_seen": "2026-10-23",
       "status": "open",
       "evidence": {
         "symbol": "ZRXUSDT_1d",
         "n_gaps": 7
       },
       "suggested_action": "Re-backfill this symbol from the CDN; check for an exchange halt around the gap date(s).",
-      "run_date": "2026-10-22"
+      "run_date": "2026-10-23"
     }
   ]
 }
