@@ -2,7 +2,7 @@
   "system_name": "T9_CANDIDATE19_MOMENTUM",
   "created_utc": "2026-08-15T20:37:54.554068+00:00",
   "engine_start_date": "2026-08-15",
-  "last_run_date": "2026-10-22",
+  "last_run_date": "2026-10-23",
   "combo_last_rebalance": {
     "0": "2026-10-10",
     "1": "2026-10-18",
@@ -272,21 +272,6 @@
       "risk_amount_usdt": 166.2078656707824,
       "cluster": "cluster_1",
       "liquidity_tier": "tier2"
-    },
-    {
-      "symbol": "COSUSDT",
-      "side": "long",
-      "combo_idx": 0,
-      "entry_date": "2026-10-10",
-      "entry_price": 0.0004862125,
-      "stop_distance_px": 4.883912210946095e-08,
-      "atr_at_entry": 2.4419561054730473e-08,
-      "notional_usdt": 6648.3146268312985,
-      "notional_pct": 0.1,
-      "margin_reserved_usdt": 3324.1573134156492,
-      "risk_amount_usdt": 0.6694801028493382,
-      "cluster": "solo_COSUSDT",
-      "liquidity_tier": "tier3"
     },
     {
       "symbol": "COWUSDT",

@@ -59,3 +59,5 @@ run_date,event,detail,equity
 2026-10-20,RUN,"closed=0 opened=0 skipped=0 open_now=20 equity=$66,483.15 dd=0.00%",66483.1463
 2026-10-21,RUN,"closed=0 opened=0 skipped=0 open_now=20 equity=$66,483.15 dd=0.00%",66483.1463
 2026-10-22,RUN,"closed=0 opened=0 skipped=0 open_now=20 equity=$66,483.15 dd=0.00%",66483.1463
+2026-10-23,ENTRY_VOIDED,"COSUSDT long entry 2026-10-10 not tradable (on_or_after_delivery, delivery 2026-06-11); position voided, no P&L booked",66483.1463
+2026-10-23,RUN,"closed=0 opened=0 skipped=0 open_now=19 equity=$66,483.15 dd=0.00%",66483.1463
