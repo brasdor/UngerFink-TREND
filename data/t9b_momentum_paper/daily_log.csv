@@ -118,3 +118,5 @@ run_date,event,detail,equity
 2026-10-20,MTM,"MTM  unrealized_pnl=$-59.68  (-0.56%)  mtm_equity=$10,669.15  days_since_rebal=11",10669.1473
 2026-10-21,MTM,"MTM  unrealized_pnl=$-33.99  (-0.32%)  mtm_equity=$10,694.84  days_since_rebal=12",10694.8382
 2026-10-22,MTM,"MTM  unrealized_pnl=$-121.69  (-1.13%)  mtm_equity=$10,607.13  days_since_rebal=13",10607.1308
+2026-10-23,ENTRY_VOIDED,"STGUSDT SHORT entry 2026-10-09 not tradable (on_or_after_delivery, delivery 2026-09-24); position voided, no P&L booked",10728.8235
+2026-10-23,REBAL,"REBAL #9  L=18 (13 new 5 held 15 closed)  S=10 (10 new 0 held 9 closed)  pnl=$-153.44  cost=0.139%  eq=$10,560.72",10560.7204

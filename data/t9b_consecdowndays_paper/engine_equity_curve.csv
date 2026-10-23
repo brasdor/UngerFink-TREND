@@ -1,3 +1,4 @@
 exit_date,symbol,entry_date,bars_held,gross_r,pnl_usdt,equity,dd_pct,exit_reason
 2026-10-15,XRP/USDT,2026-09-30,15,-1.0,-34.9125,9940.0875,-0.5991,safety_stop
 2026-10-21,DASH/USDT,2026-10-01,20,-0.50022,-17.4639,9922.6236,-0.7738,time_exit_20bars
+2026-10-22,ONDO/USDT,2026-10-02,20,-0.587541,-20.5125,9902.1111,-0.9789,time_exit_20bars
