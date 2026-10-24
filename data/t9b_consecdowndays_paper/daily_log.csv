@@ -1868,3 +1868,6 @@ run_date,event,symbol,detail
 2026-10-22,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
 2026-10-22,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
 2026-10-22,SIGNAL_SKIPPED,ZEN/USDT,duplicate_cross_system
+2026-10-23,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-10-23,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
+2026-10-23,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system

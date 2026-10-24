@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-22",
+  "date": "2026-10-23",
   "trend_regime": "MIXED",
   "funding_regime": "LOW",
   "vol_multiplier": 1.0,
@@ -13,12 +13,12 @@
     "S8": 0.1429
   },
   "allocator_version": "v4_ci",
-  "breadth_raw": 30.0,
-  "breadth_ema3": 30.3547,
-  "funding_raw": -7.169e-05,
-  "funding_ema5": -4.902e-05,
+  "breadth_raw": 24.83,
+  "breadth_ema3": 27.5911,
+  "funding_raw": -8.21e-05,
+  "funding_ema5": -6.005e-05,
   "last_trend_switch": "2026-08-20",
   "last_funding_switch": "2026-10-21",
   "btc_above_ema200": true,
-  "vol_percentile": 34.1
+  "vol_percentile": 33.3
 }

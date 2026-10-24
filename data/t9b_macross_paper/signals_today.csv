@@ -1,1 +1,2 @@
-symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss
+symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
+SNXUSDT,1792656000000,0.2172,0.22109504,0.22120786,0.23157071,0.00446429,0.22612857,0.00892857,0.0001,2026-10-23
