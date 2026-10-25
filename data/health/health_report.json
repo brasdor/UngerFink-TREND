@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-25T08:09:59.870786+00:00",
+  "generated_at": "2026-10-25T08:11:53.014997+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -35,12 +35,12 @@
       "n_findings": 0
     },
     "heartbeat_36h": {
-      "status": "fail",
-      "n_findings": 2
+      "status": "pass",
+      "n_findings": 0
     },
     "missed_run_single_day": {
-      "status": "fail",
-      "n_findings": 2
+      "status": "pass",
+      "n_findings": 0
     },
     "step_failure": {
       "status": "pass",
@@ -75,8 +75,8 @@
       "n_findings": 0
     },
     "equity_reconciliation": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 2
     },
     "stopout_rate_elevated": {
       "status": "fail",
@@ -96,36 +96,6 @@
     }
   },
   "findings": [
-    {
-      "id": "Candidate 12:heartbeat_36h",
-      "severity": "CRITICAL",
-      "system": "Candidate 12",
-      "check": "heartbeat_36h",
-      "message": "48.0h since last real state.json commit (threshold 36h)",
-      "first_seen": "2026-10-25",
-      "last_seen": "2026-10-25",
-      "status": "open",
-      "evidence": {
-        "age_hours": 48.0
-      },
-      "suggested_action": "Check the daily workflow's Actions log.",
-      "run_date": "2026-10-25"
-    },
-    {
-      "id": "Candidate 19:heartbeat_36h",
-      "severity": "CRITICAL",
-      "system": "Candidate 19",
-      "check": "heartbeat_36h",
-      "message": "48.0h since last real state.json commit (threshold 36h)",
-      "first_seen": "2026-10-25",
-      "last_seen": "2026-10-25",
-      "status": "open",
-      "evidence": {
-        "age_hours": 48.0
-      },
-      "suggested_action": "Check the daily workflow's Actions log.",
-      "run_date": "2026-10-25"
-    },
     {
       "id": "S2:leverage_cap_breach",
       "severity": "CRITICAL",
@@ -413,6 +383,23 @@
       "run_date": "2026-10-21"
     },
     {
+      "id": "Candidate12:equity_reconciliation",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "equity_reconciliation",
+      "message": "state.json paper_equity_usdt=$62,876.38 vs. equity_curve.csv's last paper_equity=$63,352.99 (diff $476.61)",
+      "first_seen": "2026-10-25",
+      "last_seen": "2026-10-25",
+      "status": "open",
+      "evidence": {
+        "state_equity": 62876.3806,
+        "curve_equity": 63352.99,
+        "diff": 476.6094000000012
+      },
+      "suggested_action": "Check whether equity_curve.csv and state.json are being written by the same run, or one is stale.",
+      "run_date": "2026-10-25"
+    },
+    {
       "id": "Candidate12:flat_window_momentum_invalidated:ACXUSDT",
       "severity": "WARNING",
       "system": "Candidate12",
@@ -573,20 +560,53 @@
       "run_date": "2026-10-15"
     },
     {
-      "id": "Candidate12:missed_run_single_day",
+      "id": "Candidate19:equity_reconciliation",
       "severity": "WARNING",
-      "system": "Candidate12",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-10-23, expected 2026-10-24 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
+      "system": "Candidate19",
+      "check": "equity_reconciliation",
+      "message": "state.json paper_equity_usdt=$65,052.19 vs. equity_curve.csv's last paper_equity=$66,483.15 (diff $1,430.96)",
       "first_seen": "2026-10-25",
       "last_seen": "2026-10-25",
       "status": "open",
       "evidence": {
-        "last_run_date": "2026-10-23",
-        "expected": "2026-10-24"
+        "state_equity": 65052.1915,
+        "curve_equity": 66483.15,
+        "diff": 1430.9584999999934
       },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
+      "suggested_action": "Check whether equity_curve.csv and state.json are being written by the same run, or one is stale.",
       "run_date": "2026-10-25"
+    },
+    {
+      "id": "Candidate19:flat_window_proximity_invalidated:COSUSDT",
+      "severity": "WARNING",
+      "system": "Candidate19",
+      "check": "flat_window_proximity_invalidated",
+      "message": "COSUSDT: zero range over the full 90-bar lookback as of 2026-10-17 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "first_seen": "2026-10-17",
+      "last_seen": "2026-10-17",
+      "status": "open",
+      "evidence": {
+        "symbol": "COSUSDT",
+        "lookback": 90
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-17"
+    },
+    {
+      "id": "Candidate19:flat_window_proximity_invalidated:DUSDT",
+      "severity": "WARNING",
+      "system": "Candidate19",
+      "check": "flat_window_proximity_invalidated",
+      "message": "DUSDT: zero range over the full 90-bar lookback as of 2026-10-17 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "first_seen": "2026-10-17",
+      "last_seen": "2026-10-17",
+      "status": "open",
+      "evidence": {
+        "symbol": "DUSDT",
+        "lookback": 90
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-17"
     },
     {
       "id": "Candidate19:flat_window_proximity_invalidated:FLATUSDT",
@@ -605,20 +625,68 @@
       "run_date": "2026-09-11"
     },
     {
-      "id": "Candidate19:missed_run_single_day",
+      "id": "Candidate19:flat_window_proximity_invalidated:HIGHUSDT",
       "severity": "WARNING",
       "system": "Candidate19",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-10-23, expected 2026-10-24 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-10-25",
-      "last_seen": "2026-10-25",
+      "check": "flat_window_proximity_invalidated",
+      "message": "HIGHUSDT: zero range over the full 90-bar lookback as of 2026-10-17 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "first_seen": "2026-10-17",
+      "last_seen": "2026-10-17",
       "status": "open",
       "evidence": {
-        "last_run_date": "2026-10-23",
-        "expected": "2026-10-24"
+        "symbol": "HIGHUSDT",
+        "lookback": 90
       },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-10-25"
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-17"
+    },
+    {
+      "id": "Candidate19:flat_window_proximity_invalidated:MBOXUSDT",
+      "severity": "WARNING",
+      "system": "Candidate19",
+      "check": "flat_window_proximity_invalidated",
+      "message": "MBOXUSDT: zero range over the full 90-bar lookback as of 2026-10-17 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "first_seen": "2026-10-17",
+      "last_seen": "2026-10-17",
+      "status": "open",
+      "evidence": {
+        "symbol": "MBOXUSDT",
+        "lookback": 90
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-17"
+    },
+    {
+      "id": "Candidate19:flat_window_proximity_invalidated:NFPUSDT",
+      "severity": "WARNING",
+      "system": "Candidate19",
+      "check": "flat_window_proximity_invalidated",
+      "message": "NFPUSDT: zero range over the full 90-bar lookback as of 2026-10-17 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "first_seen": "2026-10-17",
+      "last_seen": "2026-10-17",
+      "status": "open",
+      "evidence": {
+        "symbol": "NFPUSDT",
+        "lookback": 90
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-17"
+    },
+    {
+      "id": "Candidate19:flat_window_proximity_invalidated:TONUSDT",
+      "severity": "WARNING",
+      "system": "Candidate19",
+      "check": "flat_window_proximity_invalidated",
+      "message": "TONUSDT: zero range over the full 90-bar lookback as of 2026-10-17 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "first_seen": "2026-10-17",
+      "last_seen": "2026-10-17",
+      "status": "open",
+      "evidence": {
+        "symbol": "TONUSDT",
+        "lookback": 90
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-10-17"
     },
     {
       "id": "S2:csv_not_pandas_parseable:daily_log.csv",
@@ -1142,12 +1210,12 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "oi_log_stale",
-      "message": "open-interest 5m log last bar is 26.7h old (threshold 26h); the API only back-fills ~41h",
+      "message": "open-interest 5m log last bar is 26.8h old (threshold 26h); the API only back-fills ~41h",
       "first_seen": "2026-10-21",
       "last_seen": "2026-10-25",
       "status": "open",
       "evidence": {
-        "age_hours": 26.7
+        "age_hours": 26.8
       },
       "suggested_action": "Run tools/oi_snapshot.py on the funding host (docs/RISKOFF_OI_FORWARD_PREREG.md).",
       "run_date": "2026-10-25"
@@ -1157,13 +1225,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'dominance' snapshot last succeeded 26.6h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'dominance' snapshot last succeeded 26.7h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-10-21",
       "last_seen": "2026-10-25",
       "status": "open",
       "evidence": {
         "source": "dominance",
-        "age_hours": 26.6
+        "age_hours": 26.7
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-10-25"
@@ -1173,13 +1241,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'epu' snapshot last succeeded 26.6h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'epu' snapshot last succeeded 26.7h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-10-20",
       "last_seen": "2026-10-25",
       "status": "open",
       "evidence": {
         "source": "epu",
-        "age_hours": 26.6
+        "age_hours": 26.7
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-10-25"
@@ -1189,13 +1257,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'gpr' snapshot last succeeded 26.6h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'gpr' snapshot last succeeded 26.7h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-10-21",
       "last_seen": "2026-10-25",
       "status": "open",
       "evidence": {
         "source": "gpr",
-        "age_hours": 26.6
+        "age_hours": 26.7
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-10-25"
@@ -1205,13 +1273,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'stablecoins' snapshot last succeeded 26.6h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'stablecoins' snapshot last succeeded 26.7h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-10-21",
       "last_seen": "2026-10-25",
       "status": "open",
       "evidence": {
         "source": "stablecoins",
-        "age_hours": 26.6
+        "age_hours": 26.7
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-10-25"
