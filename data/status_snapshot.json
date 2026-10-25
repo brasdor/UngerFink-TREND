@@ -1,7 +1,7 @@
 {
-  "generated_utc": "2026-10-24T11:12:32.490044+00:00",
+  "generated_utc": "2026-10-25T11:13:12.648453+00:00",
   "regime": {
-    "date": "2026-10-23",
+    "date": "2026-10-24",
     "trend": "MIXED",
     "funding": "LOW",
     "vol_multiplier": 1.0,
@@ -18,13 +18,13 @@
   "systems": {
     "S1": {
       "label": "Donchian",
-      "equity": 10171.8189,
-      "open_positions": 3,
-      "closed_trades": 14,
+      "equity": 10147.8463,
+      "open_positions": 2,
+      "closed_trades": 15,
       "kill_switch": false,
-      "unrealized_pnl": -70.88,
-      "today_realized_pnl": 0.0,
-      "last_run_date": "2026-10-23"
+      "unrealized_pnl": -61.16,
+      "today_realized_pnl": -23.9726,
+      "last_run_date": "2026-10-24"
     },
     "S2": {
       "label": "RSI-MR",
@@ -32,19 +32,19 @@
       "open_positions": 6,
       "closed_trades": 49,
       "kill_switch": false,
-      "unrealized_pnl": 23.569999999999997,
+      "unrealized_pnl": 18.270000000000003,
       "today_realized_pnl": -0.0,
-      "last_run_date": "2026-10-23"
+      "last_run_date": "2026-10-24"
     },
     "S3": {
       "label": "ConsecDown",
-      "equity": 9902.1111,
-      "open_positions": 4,
-      "closed_trades": 4,
+      "equity": 9875.9267,
+      "open_positions": 3,
+      "closed_trades": 5,
       "kill_switch": false,
-      "unrealized_pnl": -37.72,
-      "today_realized_pnl": -0.0,
-      "last_run_date": "2026-10-23"
+      "unrealized_pnl": -33.75,
+      "today_realized_pnl": -26.1844,
+      "last_run_date": "2026-10-24"
     },
     "S5": {
       "label": "Momentum",
@@ -52,29 +52,29 @@
       "open_positions": 28,
       "closed_trades": 9,
       "kill_switch": false,
-      "unrealized_pnl": -16.348200000000013,
+      "unrealized_pnl": -82.30600000000004,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-10-24"
+      "last_run_date": "2026-10-25"
     },
     "S6": {
       "label": "VolContraction",
-      "equity": 10186.425,
-      "open_positions": 5,
-      "closed_trades": 103,
+      "equity": 10155.8708,
+      "open_positions": 3,
+      "closed_trades": 105,
       "kill_switch": false,
-      "unrealized_pnl": 2.0306,
-      "today_realized_pnl": 0.0,
-      "last_run_date": "2026-10-23"
+      "unrealized_pnl": 14.9646,
+      "today_realized_pnl": -30.5542,
+      "last_run_date": "2026-10-24"
     },
     "S7": {
       "label": "MACross",
       "equity": 9776.6734,
-      "open_positions": 2,
+      "open_positions": 3,
       "closed_trades": 166,
       "kill_switch": false,
-      "unrealized_pnl": 30.8999,
+      "unrealized_pnl": 50.43,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-10-23"
+      "last_run_date": "2026-10-24"
     },
     "S8": {
       "label": "RSI-MR-Funding",
@@ -84,31 +84,31 @@
       "kill_switch": false,
       "unrealized_pnl": 0.0,
       "today_realized_pnl": -0.0,
-      "last_run_date": "2026-10-23"
+      "last_run_date": "2026-10-24"
     },
     "Candidate12": {
       "label": "Candidate 12",
-      "equity": 63352.9906,
+      "equity": 62876.3806,
       "open_positions": 20,
-      "closed_trades": 51,
+      "closed_trades": 56,
       "kill_switch": false,
-      "unrealized_pnl": -59.67000000000007,
-      "today_realized_pnl": 0.0,
-      "last_run_date": "2026-10-23"
+      "unrealized_pnl": -608.79,
+      "today_realized_pnl": -476.61,
+      "last_run_date": "2026-10-25"
     },
     "Candidate19": {
       "label": "Candidate 19",
-      "equity": 66483.1463,
-      "open_positions": 19,
-      "closed_trades": 51,
+      "equity": 65052.1915,
+      "open_positions": 20,
+      "closed_trades": 59,
       "kill_switch": false,
-      "unrealized_pnl": -560.0,
-      "today_realized_pnl": 0.0,
-      "last_run_date": "2026-10-23"
+      "unrealized_pnl": -938.4899999999999,
+      "today_realized_pnl": -1430.9548,
+      "last_run_date": "2026-10-25"
     }
   },
   "alerts": {
-    "checked_utc": "2026-10-24T11:12:32.502093+00:00",
+    "checked_utc": "2026-10-25T11:13:12.670802+00:00",
     "missed_runs": [],
     "ohlcv_issues": [],
     "suppressed_symbols": [
