@@ -2,34 +2,19 @@
   "system_name": "T9_CANDIDATE12_MOMENTUM",
   "created_utc": "2026-08-15T20:37:21.392009+00:00",
   "engine_start_date": "2026-08-15",
-  "last_run_date": "2026-10-23",
+  "last_run_date": "2026-10-25",
   "combo_last_rebalance": {
-    "0": "2026-10-18",
-    "1": "2026-10-10",
-    "2": "2026-10-10",
-    "3": "2026-10-18",
-    "4": "2026-10-10"
+    "0": "2026-10-25",
+    "1": "2026-10-25",
+    "2": "2026-10-25",
+    "3": "2026-10-25",
+    "4": "2026-10-25"
   },
-  "closed_equity_usdt": 63352.9906,
+  "closed_equity_usdt": 62876.3806,
   "peak_equity_usdt": 63948.3794,
-  "drawdown_pct": -0.931,
+  "drawdown_pct": -1.6764,
   "kill_switch_triggered": false,
   "open_positions": [
-    {
-      "symbol": "ENAUSDT",
-      "side": "long",
-      "combo_idx": 0,
-      "entry_date": "2026-08-30",
-      "entry_price": 0.15958191,
-      "stop_distance_px": 0.03168131092760937,
-      "atr_at_entry": 0.015840655463804684,
-      "notional_usdt": 772.68828645709,
-      "notional_pct": 0.012590230275237497,
-      "margin_reserved_usdt": 386.344143228545,
-      "risk_amount_usdt": 153.43013383496563,
-      "cluster": "cluster_6",
-      "liquidity_tier": "tier1"
-    },
     {
       "symbol": "ARBUSDT",
       "side": "long",
@@ -76,21 +61,6 @@
       "liquidity_tier": "tier2"
     },
     {
-      "symbol": "DASHUSDT",
-      "side": "long",
-      "combo_idx": 0,
-      "entry_date": "2026-09-20",
-      "entry_price": 58.66173,
-      "stop_distance_px": 11.871913395728297,
-      "atr_at_entry": 5.935956697864149,
-      "notional_usdt": 763.5260853695053,
-      "notional_pct": 0.012350578639897929,
-      "margin_reserved_usdt": 381.76304268475263,
-      "risk_amount_usdt": 154.55269498527224,
-      "cluster": "solo_DASHUSDT",
-      "liquidity_tier": "tier1"
-    },
-    {
       "symbol": "AEROUSDT",
       "side": "long",
       "combo_idx": 0,
@@ -104,21 +74,6 @@
       "risk_amount_usdt": 157.89067883359547,
       "cluster": "cluster_0",
       "liquidity_tier": "tier2"
-    },
-    {
-      "symbol": "AAVEUSDT",
-      "side": "long",
-      "combo_idx": 0,
-      "entry_date": "2026-10-04",
-      "entry_price": 181.45628399999998,
-      "stop_distance_px": 22.5124737176871,
-      "atr_at_entry": 11.25623685884355,
-      "notional_usdt": 1276.488750935629,
-      "notional_pct": 0.02014660875067074,
-      "margin_reserved_usdt": 638.2443754678145,
-      "risk_amount_usdt": 158.39995290685474,
-      "cluster": "cluster_0",
-      "liquidity_tier": "tier1"
     },
     {
       "symbol": "FLUXUSDT",
@@ -164,21 +119,6 @@
       "risk_amount_usdt": 159.87094852248993,
       "cluster": "solo_EDUUSDT",
       "liquidity_tier": "tier2"
-    },
-    {
-      "symbol": "FETUSDT",
-      "side": "long",
-      "combo_idx": 0,
-      "entry_date": "2026-10-11",
-      "entry_price": 0.225045,
-      "stop_distance_px": 0.04157931524396304,
-      "atr_at_entry": 0.02078965762198152,
-      "notional_usdt": 865.1167823833488,
-      "notional_pct": 0.013528361318592665,
-      "margin_reserved_usdt": 432.5583911916744,
-      "risk_amount_usdt": 159.87094852248993,
-      "cluster": "cluster_0",
-      "liquidity_tier": "tier1"
     },
     {
       "symbol": "GRASSUSDT",
@@ -241,21 +181,6 @@
       "liquidity_tier": "tier1"
     },
     {
-      "symbol": "APTUSDT",
-      "side": "long",
-      "combo_idx": 0,
-      "entry_date": "2026-10-18",
-      "entry_price": 0.79655928,
-      "stop_distance_px": 0.15958428651146384,
-      "atr_at_entry": 0.07979214325573192,
-      "notional_usdt": 790.4024074474477,
-      "notional_pct": 0.012476165689765298,
-      "margin_reserved_usdt": 395.20120372372384,
-      "risk_amount_usdt": 158.38247645585668,
-      "cluster": "cluster_0",
-      "liquidity_tier": "tier1"
-    },
-    {
       "symbol": "AVAUSDT",
       "side": "long",
       "combo_idx": 0,
@@ -314,9 +239,84 @@
       "risk_amount_usdt": 158.38247645585668,
       "cluster": "cluster_5",
       "liquidity_tier": "tier1"
+    },
+    {
+      "symbol": "ALCHUSDT",
+      "side": "long",
+      "combo_idx": 0,
+      "entry_date": "2026-10-25",
+      "entry_price": 0.038004775,
+      "stop_distance_px": 0.006625227320958318,
+      "atr_at_entry": 0.003312613660479159,
+      "notional_usdt": 899.4572833316015,
+      "notional_pct": 0.0143051695298345,
+      "margin_reserved_usdt": 449.72864166580075,
+      "risk_amount_usdt": 157.19095139972234,
+      "cluster": "solo_ALCHUSDT",
+      "liquidity_tier": "tier3"
+    },
+    {
+      "symbol": "DUSKUSDT",
+      "side": "long",
+      "combo_idx": 0,
+      "entry_date": "2026-10-25",
+      "entry_price": 0.10931738399999999,
+      "stop_distance_px": 0.02311429276693863,
+      "atr_at_entry": 0.011557146383469314,
+      "notional_usdt": 742.8290276720305,
+      "notional_pct": 0.011814118768565179,
+      "margin_reserved_usdt": 371.41451383601526,
+      "risk_amount_usdt": 157.19095139972234,
+      "cluster": "solo_DUSKUSDT",
+      "liquidity_tier": "tier2"
+    },
+    {
+      "symbol": "IOSTUSDT",
+      "side": "long",
+      "combo_idx": 0,
+      "entry_date": "2026-10-25",
+      "entry_price": 0.0007454490599999999,
+      "stop_distance_px": 0.0002807078909833699,
+      "atr_at_entry": 0.00014035394549168496,
+      "notional_usdt": 417.35348325193206,
+      "notional_pct": 0.006637683014441461,
+      "margin_reserved_usdt": 208.67674162596603,
+      "risk_amount_usdt": 157.19095139972234,
+      "cluster": "solo_IOSTUSDT",
+      "liquidity_tier": "tier1"
+    },
+    {
+      "symbol": "IOTXUSDT",
+      "side": "long",
+      "combo_idx": 0,
+      "entry_date": "2026-10-25",
+      "entry_price": 0.003747345,
+      "stop_distance_px": 0.0007713110334961341,
+      "atr_at_entry": 0.00038565551674806707,
+      "notional_usdt": 761.7935577413299,
+      "notional_pct": 0.012115734890556104,
+      "margin_reserved_usdt": 380.89677887066495,
+      "risk_amount_usdt": 157.19095139972234,
+      "cluster": "cluster_7",
+      "liquidity_tier": "tier3"
+    },
+    {
+      "symbol": "KASUSDT",
+      "side": "long",
+      "combo_idx": 0,
+      "entry_date": "2026-10-25",
+      "entry_price": 0.0361301,
+      "stop_distance_px": 0.005397226806076904,
+      "atr_at_entry": 0.002698613403038452,
+      "notional_usdt": 1049.643102281233,
+      "notional_pct": 0.01669375833873678,
+      "margin_reserved_usdt": 524.8215511406165,
+      "risk_amount_usdt": 157.19095139972234,
+      "cluster": "cluster_0",
+      "liquidity_tier": "tier3"
     }
   ],
-  "closed_trade_count": 51,
+  "closed_trade_count": 56,
   "last_error": null,
-  "paper_equity_usdt": 63352.9906
+  "paper_equity_usdt": 62876.3806
 }
