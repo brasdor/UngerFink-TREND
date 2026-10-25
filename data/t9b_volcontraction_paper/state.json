@@ -1,11 +1,11 @@
 {
   "system_name": "VolContractionShort_4H_T9B",
   "created_utc": "2026-06-11T19:20:09.618872+00:00",
-  "last_run_date": "2026-10-23",
-  "last_processed_ts_ms": 1792699200000,
-  "paper_equity_usdt": 10186.425,
+  "last_run_date": "2026-10-24",
+  "last_processed_ts_ms": 1792785600000,
+  "paper_equity_usdt": 10155.8708,
   "peak_equity_usdt": 10393.928400000003,
-  "drawdown_pct": -1.9964,
+  "drawdown_pct": -2.2904,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -18,43 +18,11 @@
       "initial_risk_per_unit": 0.00022014,
       "risk_amount_usdt": 15.2771,
       "qty": 69397.16041496,
-      "bars_held": 2,
+      "bars_held": 8,
       "atr_at_entry": 0.00011007,
       "funding_at_entry": 0.0001,
       "compression_low": 0.005248,
       "consec_at_entry": 31
-    },
-    {
-      "position_id": "AGLDUSDT_1792684800000",
-      "symbol": "AGLDUSDT",
-      "entry_ts_ms": 1792684800000,
-      "entry_date": "2026-10-22",
-      "entry_price": 0.1674,
-      "stop_loss": 0.17355714,
-      "initial_risk_per_unit": 0.00615714,
-      "risk_amount_usdt": 15.2771,
-      "qty": 2481.19920836,
-      "bars_held": 2,
-      "atr_at_entry": 0.00307857,
-      "funding_at_entry": 0.0001,
-      "compression_low": 0.1689,
-      "consec_at_entry": 31
-    },
-    {
-      "position_id": "EGLDUSDT_1792699200000",
-      "symbol": "EGLDUSDT",
-      "entry_ts_ms": 1792699200000,
-      "entry_date": "2026-10-22",
-      "entry_price": 3.537,
-      "stop_loss": 3.71157142,
-      "initial_risk_per_unit": 0.17457143,
-      "risk_amount_usdt": 15.2771,
-      "qty": 87.51197658,
-      "bars_held": 1,
-      "atr_at_entry": 0.08728571,
-      "funding_at_entry": 0.0001,
-      "compression_low": 3.542,
-      "consec_at_entry": 36
     },
     {
       "position_id": "KSMUSDT_1792641600000",
@@ -66,7 +34,7 @@
       "initial_risk_per_unit": 0.21185714,
       "risk_amount_usdt": 15.2771,
       "qty": 72.11034235,
-      "bars_held": 5,
+      "bars_held": 11,
       "atr_at_entry": 0.10592857,
       "funding_at_entry": 0.0001,
       "compression_low": 4.056,
@@ -82,13 +50,50 @@
       "initial_risk_per_unit": 0.00013714,
       "risk_amount_usdt": 15.2771,
       "qty": 111397.77522058,
-      "bars_held": 1,
+      "bars_held": 7,
       "atr_at_entry": 6.857e-05,
       "funding_at_entry": 0.0001,
       "compression_low": 0.002468,
       "consec_at_entry": 32
     }
   ],
-  "pending_entries": [],
-  "closed_trade_count": 103
+  "pending_entries": [
+    {
+      "symbol": "JOEUSDT",
+      "signal_ts_ms": 1792785600000,
+      "consec": 18,
+      "comp_low": 0.03062,
+      "atr": 0.00070357,
+      "ema200": 0.03474647,
+      "signal_close": 0.03038,
+      "stop_loss": 0.03178714,
+      "risk_unit": 0.00140714,
+      "funding_rate": 0.0001
+    },
+    {
+      "symbol": "MAVUSDT",
+      "signal_ts_ms": 1792785600000,
+      "consec": 29,
+      "comp_low": 0.009624,
+      "atr": 0.00022493,
+      "ema200": 0.01072577,
+      "signal_close": 0.00929,
+      "stop_loss": 0.00973986,
+      "risk_unit": 0.00044986,
+      "funding_rate": 0.0001
+    },
+    {
+      "symbol": "ROSEUSDT",
+      "signal_ts_ms": 1792785600000,
+      "consec": 26,
+      "comp_low": 0.007137,
+      "atr": 0.00020936,
+      "ema200": 0.00775351,
+      "signal_close": 0.007099,
+      "stop_loss": 0.00751771,
+      "risk_unit": 0.00041871,
+      "funding_rate": 0.0001
+    }
+  ],
+  "closed_trade_count": 105
 }

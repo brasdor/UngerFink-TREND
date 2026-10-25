@@ -1,1 +1,2 @@
 symbol,signal_ts_ms,signal_close,stop_loss,ema_fast,ema_slow,atr,funding_rate
+DOTUSDT,1792785600000,1.0852,1.16131429,1.13676857,1.13845025,0.03805714,0.0001

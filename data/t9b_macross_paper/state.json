@@ -1,8 +1,8 @@
 {
   "system_name": "MACrossShort_4H_T9B",
   "created_utc": "2026-06-12T15:31:43.644778+00:00",
-  "last_run_date": "2026-10-23",
-  "last_processed_ts_ms": 1792699200000,
+  "last_run_date": "2026-10-24",
+  "last_processed_ts_ms": 1792785600000,
   "paper_equity_usdt": 9776.6734,
   "peak_equity_usdt": 10160.890200000003,
   "drawdown_pct": -3.7813,
@@ -18,7 +18,7 @@
       "initial_risk_per_unit": 0.00265428,
       "risk_amount_usdt": 24.449,
       "qty": 9211.16687201,
-      "bars_held": 21,
+      "bars_held": 27,
       "atr_at_entry": 0.00132714,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.33269566,
@@ -34,13 +34,42 @@
       "initial_risk_per_unit": 0.00892858,
       "risk_amount_usdt": 14.6626,
       "qty": 1642.20580783,
-      "bars_held": 3,
+      "bars_held": 9,
       "atr_at_entry": 0.00446429,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.22109504,
       "slow_ema_at_entry": 0.22120786
+    },
+    {
+      "position_id": "RUNEUSDT_1792756800000",
+      "symbol": "RUNEUSDT",
+      "entry_ts_ms": 1792756800000,
+      "entry_date": "2026-10-23",
+      "entry_price": 0.6363,
+      "stop_loss": 0.67508572,
+      "initial_risk_per_unit": 0.03878572,
+      "risk_amount_usdt": 14.6626,
+      "qty": 378.04031823,
+      "bars_held": 3,
+      "atr_at_entry": 0.01939286,
+      "funding_at_entry": 0.0001,
+      "fast_ema_at_entry": 0.65546746,
+      "slow_ema_at_entry": 0.65564387
     }
   ],
-  "pending_entries": [],
+  "pending_entries": [
+    {
+      "symbol": "DOTUSDT",
+      "signal_ts_ms": 1792785600000,
+      "signal_close": 1.0852,
+      "ema_fast": 1.13676857,
+      "ema_slow": 1.13845025,
+      "ema200": 1.13781907,
+      "atr": 0.03805714,
+      "stop_loss": 1.16131429,
+      "risk_unit": 0.07611429,
+      "funding_rate": 0.0001
+    }
+  ],
   "closed_trade_count": 166
 }
