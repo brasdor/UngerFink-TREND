@@ -1,1 +1,3 @@
-symbol,signal_date,close,consec,atr,ema200,stop_loss,signal
+symbol,signal_date,close,consec,atr,ema200,stop_loss,risk_unit,signal
+LTC/USDT,2026-10-25,56.75,5,3.01571429,56.68029379,50.71857143,6.03142857,BUY_CD
+TIA/USDT,2026-10-25,0.5325,5,0.07457857,0.46552678,0.38334286,0.14915714,BUY_CD

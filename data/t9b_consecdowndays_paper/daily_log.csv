@@ -1874,3 +1874,7 @@ run_date,event,symbol,detail
 2026-10-24,EXIT,SOL/USDT,"reason=safety_stop  bars=15  R=-1.000  pnl=$-26.18  equity=$9,875.93"
 2026-10-24,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
 2026-10-24,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
+2026-10-25,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-10-25,ENTRY,LTC/USDT,"consec=5  price=56.75  ema200=56.6803  stop=50.7186  risk=$34.57  bars_to_exit=20  equity=$9,875.93"
+2026-10-25,ENTRY,TIA/USDT,"consec=5  price=0.5325  ema200=0.465527  stop=0.383343  risk=$34.57  bars_to_exit=20  equity=$9,875.93"
+2026-10-25,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
