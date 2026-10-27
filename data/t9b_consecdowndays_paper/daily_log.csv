@@ -1878,3 +1878,12 @@ run_date,event,symbol,detail
 2026-10-25,ENTRY,LTC/USDT,"consec=5  price=56.75  ema200=56.6803  stop=50.7186  risk=$34.57  bars_to_exit=20  equity=$9,875.93"
 2026-10-25,ENTRY,TIA/USDT,"consec=5  price=0.5325  ema200=0.465527  stop=0.383343  risk=$34.57  bars_to_exit=20  equity=$9,875.93"
 2026-10-25,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
+2026-10-26,ENTRY,AAVE/USDT,"consec=5  price=135.85  ema200=126.56  stop=117.564  risk=$34.57  bars_to_exit=20  equity=$9,875.93"
+2026-10-26,ENTRY,BTC/USDT,"consec=5  price=80150.6  ema200=76388.4  stop=76019.5  risk=$34.57  bars_to_exit=20  equity=$9,875.93"
+2026-10-26,SIGNAL_SKIPPED,DOT/USDT,duplicate_cross_system
+2026-10-26,ENTRY,ETH/USDT,"consec=5  price=2324.55  ema200=2321.13  stop=2130.48  risk=$34.57  bars_to_exit=20  equity=$9,875.93"
+2026-10-26,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-10-26,ENTRY,LINK/USDT,"consec=5  price=11.406  ema200=10.9994  stop=10.1259  risk=$34.57  bars_to_exit=20  equity=$9,875.93"
+2026-10-26,ENTRY,PENDLE/USDT,"consec=5  price=1.951  ema200=1.89069  stop=1.658  risk=$34.57  bars_to_exit=20  equity=$9,875.93"
+2026-10-26,ENTRY,SOL/USDT,"consec=5  price=100.95  ema200=98.3757  stop=92.3329  risk=$34.57  bars_to_exit=20  equity=$9,875.93"
+2026-10-26,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system

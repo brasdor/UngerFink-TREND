@@ -1,4 +1,1 @@
-symbol,signal_ts_ms,consec,comp_low,atr,ema200,signal_close,stop_loss,risk_unit,funding_rate,run_date
-ARPAUSDT,1792843200000,21,0.009801,0.00019436,0.0106031,0.009647,0.01003571,0.00038871,0.0001,2026-10-25
-DYDXUSDT,1792843200000,43,0.1095,0.00254286,0.12633992,0.1076,0.11268571,0.00508571,0.0001,2026-10-25
-MINAUSDT,1792814400000,65,0.0671,0.00225214,0.09183078,0.06642,0.07092429,0.00450429,0.0001,2026-10-25
+symbol,run_date,signal_ts_ms,signal_close,comp_low,consec,atr,ema200,funding_rate,stop_loss
