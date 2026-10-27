@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-26T11:46:40.935687+00:00",
+  "generated_at": "2026-10-27T08:11:17.048087+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -84,15 +84,15 @@
     },
     "no_entries_exits_despite_signals": {
       "status": "fail",
-      "n_findings": 1
+      "n_findings": 2
     },
     "forward_snapshots_fresh": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 5
     },
     "funding_refresh_job_alive": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 1
     }
   },
   "findings": [
@@ -353,15 +353,15 @@
       "severity": "CRITICAL",
       "system": "funding_refresh_job",
       "check": "funding_refresh_job_dead",
-      "message": "no commit to funding_rates/ in 30.1h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
+      "message": "no commit to funding_rates/ in 26.6h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
       "first_seen": "2026-10-12",
-      "last_seen": "2026-10-25",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
-        "age_hours": 30.1
+        "age_hours": 26.6
       },
       "suggested_action": "Check the funding refresh host: is the self-hosted runner online (Settings -> Actions -> Runners) or is the cron job still scheduled and succeeding?",
-      "run_date": "2026-10-25"
+      "run_date": "2026-10-27"
     },
     {
       "id": "C19:tradability_state_fix_pending:COSUSDT_2026-10-10_0",
@@ -661,14 +661,14 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 8 fields in line 3, saw 9\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-26",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 8 fields in line 3, saw 9\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-26"
+      "run_date": "2026-10-27"
     },
     {
       "id": "S2:flat_window_rsi_invalidated:ACXUSDT",
@@ -799,6 +799,22 @@
       "run_date": "2026-10-17"
     },
     {
+      "id": "S2:no_entries_exits_despite_signals",
+      "severity": "WARNING",
+      "system": "S2",
+      "check": "no_entries_exits_despite_signals",
+      "message": "279 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
+      "first_seen": "2026-10-27",
+      "last_seen": "2026-10-27",
+      "status": "open",
+      "evidence": {
+        "n_signals": 279,
+        "window_days": 7
+      },
+      "suggested_action": "Check the arbitrator / cross-system suppression and the regime weight for this system -- confirm it isn't being silently zeroed out.",
+      "run_date": "2026-10-27"
+    },
+    {
       "id": "S2:tradability_state_fix_pending:COSUSDT_20260929",
       "severity": "WARNING",
       "system": "S2",
@@ -900,14 +916,14 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 4 fields in line 101, saw 8\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-26",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 4 fields in line 101, saw 8\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-26"
+      "run_date": "2026-10-27"
     },
     {
       "id": "S3:stopout_rate_elevated",
@@ -916,7 +932,7 @@
       "check": "stopout_rate_elevated",
       "message": "3/5 of the last 5 exits were stop-outs (60%) -- the S7 rally-whipsaw pattern",
       "first_seen": "2026-10-25",
-      "last_seen": "2026-10-26",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
         "n_stop": 3,
@@ -924,7 +940,7 @@
         "fraction": 0.6
       },
       "suggested_action": "Shadow-replay this system's recent entries against current (non-stale) funding/regime data before changing any stop rule.",
-      "run_date": "2026-10-26"
+      "run_date": "2026-10-27"
     },
     {
       "id": "S5:flat_window_momentum_invalidated:FLATUSDT",
@@ -968,14 +984,14 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 5 fields in line 74, saw 15\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-26",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 5 fields in line 74, saw 15\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-26"
+      "run_date": "2026-10-27"
     },
     {
       "id": "S6:stopout_rate_elevated",
@@ -984,7 +1000,7 @@
       "check": "stopout_rate_elevated",
       "message": "17/20 of the last 20 exits were stop-outs (85%) -- the S7 rally-whipsaw pattern",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-26",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
         "n_stop": 17,
@@ -992,7 +1008,7 @@
         "fraction": 0.85
       },
       "suggested_action": "Shadow-replay this system's recent entries against current (non-stale) funding/regime data before changing any stop rule.",
-      "run_date": "2026-10-26"
+      "run_date": "2026-10-27"
     },
     {
       "id": "S8:csv_not_pandas_parseable:daily_log.csv",
@@ -1001,14 +1017,14 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 4 fields in line 1237, saw 6\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-26",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 4 fields in line 1237, saw 6\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-26"
+      "run_date": "2026-10-27"
     },
     {
       "id": "S8:flat_window_rsi_invalidated:ACXUSDT",
@@ -1143,112 +1159,112 @@
       "severity": "WARNING",
       "system": "S8",
       "check": "no_entries_exits_despite_signals",
-      "message": "322 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
+      "message": "337 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
       "first_seen": "2026-10-14",
-      "last_seen": "2026-10-26",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
-        "n_signals": 322,
+        "n_signals": 337,
         "window_days": 7
       },
       "suggested_action": "Check the arbitrator / cross-system suppression and the regime weight for this system -- confirm it isn't being silently zeroed out.",
-      "run_date": "2026-10-26"
+      "run_date": "2026-10-27"
     },
     {
       "id": "data/regime_history.csv:frozen_value_detection:vol_mult",
       "severity": "WARNING",
       "system": "data/regime_history.csv",
       "check": "frozen_value_detection",
-      "message": "regime_history.vol_mult has been exactly 1.0 for the last 14 rows -- check the upstream feed, not just this file",
+      "message": "regime_history.vol_mult has been exactly 1.0 for the last 15 rows -- check the upstream feed, not just this file",
       "first_seen": "2026-10-17",
-      "last_seen": "2026-10-26",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
         "column": "vol_mult",
         "value": 1.0,
-        "run_length": 14
+        "run_length": 15
       },
       "suggested_action": "Check whether the upstream source (e.g. funding cache) is stale.",
-      "run_date": "2026-10-26"
+      "run_date": "2026-10-27"
     },
     {
       "id": "forward_snapshots:oi_log_stale",
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "oi_log_stale",
-      "message": "open-interest 5m log last bar is 30.2h old (threshold 26h); the API only back-fills ~41h",
+      "message": "open-interest 5m log last bar is 26.7h old (threshold 26h); the API only back-fills ~41h",
       "first_seen": "2026-10-21",
-      "last_seen": "2026-10-25",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
-        "age_hours": 30.2
+        "age_hours": 26.7
       },
       "suggested_action": "Run tools/oi_snapshot.py on the funding host (docs/RISKOFF_OI_FORWARD_PREREG.md).",
-      "run_date": "2026-10-25"
+      "run_date": "2026-10-27"
     },
     {
       "id": "forward_snapshots:snapshot_stale:dominance",
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'dominance' snapshot last succeeded 30.1h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'dominance' snapshot last succeeded 26.6h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-10-21",
-      "last_seen": "2026-10-25",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
         "source": "dominance",
-        "age_hours": 30.1
+        "age_hours": 26.6
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
-      "run_date": "2026-10-25"
+      "run_date": "2026-10-27"
     },
     {
       "id": "forward_snapshots:snapshot_stale:epu",
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'epu' snapshot last succeeded 30.1h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'epu' snapshot last succeeded 26.6h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-10-20",
-      "last_seen": "2026-10-25",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
         "source": "epu",
-        "age_hours": 30.1
+        "age_hours": 26.6
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
-      "run_date": "2026-10-25"
+      "run_date": "2026-10-27"
     },
     {
       "id": "forward_snapshots:snapshot_stale:gpr",
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'gpr' snapshot last succeeded 30.1h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'gpr' snapshot last succeeded 26.6h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-10-21",
-      "last_seen": "2026-10-25",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
         "source": "gpr",
-        "age_hours": 30.1
+        "age_hours": 26.6
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
-      "run_date": "2026-10-25"
+      "run_date": "2026-10-27"
     },
     {
       "id": "forward_snapshots:snapshot_stale:stablecoins",
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'stablecoins' snapshot last succeeded 30.1h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'stablecoins' snapshot last succeeded 26.6h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-10-21",
-      "last_seen": "2026-10-25",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
         "source": "stablecoins",
-        "age_hours": 30.1
+        "age_hours": 26.6
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
-      "run_date": "2026-10-25"
+      "run_date": "2026-10-27"
     },
     {
       "id": "futures_universe:symbol_gaps:ZRXUSDT_1d",
@@ -1257,14 +1273,14 @@
       "check": "symbol_gaps",
       "message": "futures universe: ZRXUSDT_1d has 7 missing calendar day(s) inside its own covered history",
       "first_seen": "2026-10-22",
-      "last_seen": "2026-10-26",
+      "last_seen": "2026-10-27",
       "status": "open",
       "evidence": {
         "symbol": "ZRXUSDT_1d",
         "n_gaps": 7
       },
       "suggested_action": "Re-backfill this symbol from the CDN; check for an exchange halt around the gap date(s).",
-      "run_date": "2026-10-26"
+      "run_date": "2026-10-27"
     }
   ]
 }
