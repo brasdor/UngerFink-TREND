@@ -1,6 +1,6 @@
 {
   "_comment": "symbol -> {status, venue, delivery_date, fetched_at}. Refreshed by tools/health/refresh_exchange_status_cache.py, one bulk exchangeInfo call per venue. fapi.binance.com is geo-blocked from CI, so this is a local/manual-run cache, not a daily CI job -- see its docstring. tools/health/run_checks.py's check_exchange_status() only reads this.",
-  "fetched_at": "2026-10-27T17:50:41.267851+00:00",
+  "fetched_at": "2026-10-28T19:10:05.399003+00:00",
   "symbols": {
     "ETHBTC": {
       "status": "TRADING",
@@ -7883,7 +7883,7 @@
       "delivery_date": null
     },
     "QUICKUSDT": {
-      "status": "TRADING",
+      "status": "BREAK",
       "venue": "spot",
       "delivery_date": null
     },
@@ -14933,7 +14933,7 @@
       "delivery_date": null
     },
     "EPICUSDT": {
-      "status": "TRADING",
+      "status": "BREAK",
       "venue": "spot",
       "delivery_date": null
     },
@@ -14943,7 +14943,7 @@
       "delivery_date": null
     },
     "EPICUSDC": {
-      "status": "TRADING",
+      "status": "BREAK",
       "venue": "spot",
       "delivery_date": null
     },
@@ -18682,6 +18682,36 @@
       "venue": "spot",
       "delivery_date": null
     },
+    "USDCAED": {
+      "status": "BREAK",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "APPBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "BSPBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "GEVBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "SKDDBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "SKUUBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
     "FUT:BTCUSDT": {
       "status": "TRADING",
       "venue": "futures",
@@ -21287,7 +21317,7 @@
       "contract_type": "PERPETUAL"
     },
     "FUT:VELODROMEUSDT": {
-      "status": "TRADING",
+      "status": "SETTLING",
       "venue": "futures",
       "delivery_date": "2026-10-28",
       "onboard_date": "2024-12-13",
