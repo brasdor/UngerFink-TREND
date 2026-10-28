@@ -1,2 +1,1 @@
 symbol,signal_ts_ms,signal_close,stop_loss,ema_fast,ema_slow,atr,funding_rate
-ARKMUSDT,1792958400000,0.1209,0.13164286,0.12594334,0.12609385,0.00537143,0.0001

@@ -1887,3 +1887,5 @@ run_date,event,symbol,detail
 2026-10-26,ENTRY,PENDLE/USDT,"consec=5  price=1.951  ema200=1.89069  stop=1.658  risk=$34.57  bars_to_exit=20  equity=$9,875.93"
 2026-10-26,ENTRY,SOL/USDT,"consec=5  price=100.95  ema200=98.3757  stop=92.3329  risk=$34.57  bars_to_exit=20  equity=$9,875.93"
 2026-10-26,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
+2026-10-27,SIGNAL_SKIPPED,DOT/USDT,duplicate_cross_system
+2026-10-27,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
