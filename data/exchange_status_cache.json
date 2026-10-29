@@ -1,6 +1,6 @@
 {
   "_comment": "symbol -> {status, venue, delivery_date, fetched_at}. Refreshed by tools/health/refresh_exchange_status_cache.py, one bulk exchangeInfo call per venue. fapi.binance.com is geo-blocked from CI, so this is a local/manual-run cache, not a daily CI job -- see its docstring. tools/health/run_checks.py's check_exchange_status() only reads this.",
-  "fetched_at": "2026-10-28T19:10:05.399003+00:00",
+  "fetched_at": "2026-10-29T19:50:15.532815+00:00",
   "symbols": {
     "ETHBTC": {
       "status": "TRADING",
@@ -25262,6 +25262,48 @@
       "venue": "futures",
       "delivery_date": null,
       "onboard_date": "2026-10-26",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:EWZSUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-10-29",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:SMRUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-10-29",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:OXYUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-10-29",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:AMGNUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-10-29",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:PFEUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-10-29",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:MELIUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-10-29",
       "contract_type": "TRADIFI_PERPETUAL"
     }
   }
