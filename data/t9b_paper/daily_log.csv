@@ -942,3 +942,7 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-10-27,SIGNAL_SKIPPED,VET/USDT,duplicate_cross_system
 2026-10-27,SIGNAL_SKIPPED,ETH/USDT,duplicate_cross_system
 2026-10-27,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system
+2026-10-28,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system
+2026-10-28,SIGNAL_SKIPPED,VET/USDT,duplicate_cross_system
+2026-10-28,SIGNAL_SKIPPED,ETH/USDT,duplicate_cross_system
+2026-10-28,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system

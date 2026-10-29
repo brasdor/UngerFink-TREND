@@ -1,2 +1,1 @@
-symbol,signal_date,close,rsi,atr,stop_loss,risk_unit,signal
-CATIUSDT,2026-10-27,0.04395,24.0453,0.00359101,0.03317696,0.01077304,BUY_MR
+symbol,signal_date,close,rsi,atr,stop_loss,signal

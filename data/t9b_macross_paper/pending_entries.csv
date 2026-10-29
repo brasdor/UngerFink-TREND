@@ -1,1 +1,2 @@
 symbol,signal_ts_ms,signal_close,stop_loss,ema_fast,ema_slow,atr,funding_rate
+BANUSDT,1793131200000,0.05751,0.06009857,0.05778705,0.0577951,0.00129429,0.00016994

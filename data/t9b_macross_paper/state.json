@@ -1,11 +1,11 @@
 {
   "system_name": "MACrossShort_4H_T9B",
   "created_utc": "2026-06-12T15:31:43.644778+00:00",
-  "last_run_date": "2026-10-27",
-  "last_processed_ts_ms": 1793044800000,
-  "paper_equity_usdt": 9797.3064,
+  "last_run_date": "2026-10-28",
+  "last_processed_ts_ms": 1793131200000,
+  "paper_equity_usdt": 9775.2662,
   "peak_equity_usdt": 10160.890200000003,
-  "drawdown_pct": -3.5783,
+  "drawdown_pct": -3.7952,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -18,7 +18,7 @@
       "initial_risk_per_unit": 0.00892858,
       "risk_amount_usdt": 14.6626,
       "qty": 1642.20580783,
-      "bars_held": 27,
+      "bars_held": 33,
       "atr_at_entry": 0.00446429,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.22109504,
@@ -34,7 +34,7 @@
       "initial_risk_per_unit": 0.03878572,
       "risk_amount_usdt": 14.6626,
       "qty": 378.04031823,
-      "bars_held": 21,
+      "bars_held": 27,
       "atr_at_entry": 0.01939286,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.65546746,
@@ -50,7 +50,7 @@
       "initial_risk_per_unit": 0.07611428,
       "risk_amount_usdt": 14.6626,
       "qty": 192.63883113,
-      "bars_held": 18,
+      "bars_held": 24,
       "atr_at_entry": 0.03805714,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 1.13676857,
@@ -66,7 +66,7 @@
       "initial_risk_per_unit": 0.00041686,
       "risk_amount_usdt": 14.6626,
       "qty": 35173.83757533,
-      "bars_held": 13,
+      "bars_held": 19,
       "atr_at_entry": 0.00020843,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.00706949,
@@ -82,27 +82,11 @@
       "initial_risk_per_unit": 0.01025714,
       "risk_amount_usdt": 14.6626,
       "qty": 1429.49846952,
-      "bars_held": 12,
+      "bars_held": 18,
       "atr_at_entry": 0.00512857,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.20391518,
       "slow_ema_at_entry": 0.20398298
-    },
-    {
-      "position_id": "AGLDUSDT_1793044800000",
-      "symbol": "AGLDUSDT",
-      "entry_ts_ms": 1793044800000,
-      "entry_date": "2026-10-26",
-      "entry_price": 0.1711,
-      "stop_loss": 0.18082858,
-      "initial_risk_per_unit": 0.00972858,
-      "risk_amount_usdt": 11.0201,
-      "qty": 1132.75860455,
-      "bars_held": 1,
-      "atr_at_entry": 0.00486429,
-      "funding_at_entry": 0.0001,
-      "fast_ema_at_entry": 0.17303363,
-      "slow_ema_at_entry": 0.17306775
     },
     {
       "position_id": "ARKMUSDT_1792972800000",
@@ -114,29 +98,26 @@
       "initial_risk_per_unit": 0.01074286,
       "risk_amount_usdt": 11.0201,
       "qty": 1025.80995238,
-      "bars_held": 6,
+      "bars_held": 12,
       "atr_at_entry": 0.00537143,
       "funding_at_entry": 0.0001,
       "fast_ema_at_entry": 0.12594334,
       "slow_ema_at_entry": 0.12609385
-    },
-    {
-      "position_id": "GMXUSDT_1793001600000",
-      "symbol": "GMXUSDT",
-      "entry_ts_ms": 1793001600000,
-      "entry_date": "2026-10-26",
-      "entry_price": 8.016,
-      "stop_loss": 8.48914286,
-      "initial_risk_per_unit": 0.47314286,
-      "risk_amount_usdt": 11.0201,
-      "qty": 23.29134314,
-      "bars_held": 4,
-      "atr_at_entry": 0.23657143,
-      "funding_at_entry": 0.0001,
-      "fast_ema_at_entry": 8.24159706,
-      "slow_ema_at_entry": 8.24291898
     }
   ],
-  "pending_entries": [],
-  "closed_trade_count": 167
+  "pending_entries": [
+    {
+      "symbol": "BANUSDT",
+      "signal_ts_ms": 1793131200000,
+      "signal_close": 0.05751,
+      "ema_fast": 0.05778705,
+      "ema_slow": 0.0577951,
+      "ema200": 0.06040733,
+      "atr": 0.00129429,
+      "stop_loss": 0.06009857,
+      "risk_unit": 0.00258857,
+      "funding_rate": 0.00016994
+    }
+  ],
+  "closed_trade_count": 169
 }
