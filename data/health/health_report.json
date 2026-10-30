@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-29T11:38:13.872942+00:00",
+  "generated_at": "2026-10-30T08:10:46.899206+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -48,7 +48,7 @@
     },
     "csv_integrity": {
       "status": "fail",
-      "n_findings": 4
+      "n_findings": 5
     },
     "json_integrity": {
       "status": "pass",
@@ -655,20 +655,36 @@
       "run_date": "2026-10-17"
     },
     {
+      "id": "S1:csv_not_pandas_parseable:daily_log.csv",
+      "severity": "WARNING",
+      "system": "S1",
+      "check": "csv_not_pandas_parseable",
+      "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 8 fields in line 949, saw 11\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
+      "first_seen": "2026-10-30",
+      "last_seen": "2026-10-30",
+      "status": "open",
+      "evidence": {
+        "file": "daily_log.csv",
+        "error": "Error tokenizing data. C error: Expected 8 fields in line 949, saw 11\n"
+      },
+      "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
+      "run_date": "2026-10-30"
+    },
+    {
       "id": "S2:csv_not_pandas_parseable:daily_log.csv",
       "severity": "WARNING",
       "system": "S2",
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 8 fields in line 3, saw 9\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-29",
+      "last_seen": "2026-10-30",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 8 fields in line 3, saw 9\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-29"
+      "run_date": "2026-10-30"
     },
     {
       "id": "S2:flat_window_rsi_invalidated:ACXUSDT",
@@ -900,14 +916,14 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 4 fields in line 101, saw 8\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-29",
+      "last_seen": "2026-10-30",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 4 fields in line 101, saw 8\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-29"
+      "run_date": "2026-10-30"
     },
     {
       "id": "S5:flat_window_momentum_invalidated:FLATUSDT",
@@ -951,14 +967,14 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 5 fields in line 74, saw 15\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-29",
+      "last_seen": "2026-10-30",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 5 fields in line 74, saw 15\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-29"
+      "run_date": "2026-10-30"
     },
     {
       "id": "S6:stopout_rate_elevated",
@@ -967,7 +983,7 @@
       "check": "stopout_rate_elevated",
       "message": "14/20 of the last 20 exits were stop-outs (70%) -- the S7 rally-whipsaw pattern",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-29",
+      "last_seen": "2026-10-30",
       "status": "open",
       "evidence": {
         "n_stop": 14,
@@ -975,7 +991,7 @@
         "fraction": 0.7
       },
       "suggested_action": "Shadow-replay this system's recent entries against current (non-stale) funding/regime data before changing any stop rule.",
-      "run_date": "2026-10-29"
+      "run_date": "2026-10-30"
     },
     {
       "id": "S8:csv_not_pandas_parseable:daily_log.csv",
@@ -984,14 +1000,14 @@
       "check": "csv_not_pandas_parseable",
       "message": "daily_log.csv: plain pd.read_csv() fails (Error tokenizing data. C error: Expected 4 fields in line 1237, saw 6\n) -- any consumer using it without on_bad_lines='skip' silently gets nothing",
       "first_seen": "2026-10-11",
-      "last_seen": "2026-10-29",
+      "last_seen": "2026-10-30",
       "status": "open",
       "evidence": {
         "file": "daily_log.csv",
         "error": "Error tokenizing data. C error: Expected 4 fields in line 1237, saw 6\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-10-29"
+      "run_date": "2026-10-30"
     },
     {
       "id": "S8:flat_window_rsi_invalidated:ACXUSDT",
@@ -1126,16 +1142,16 @@
       "severity": "WARNING",
       "system": "S8",
       "check": "no_entries_exits_despite_signals",
-      "message": "370 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
+      "message": "384 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
       "first_seen": "2026-10-14",
-      "last_seen": "2026-10-29",
+      "last_seen": "2026-10-30",
       "status": "open",
       "evidence": {
-        "n_signals": 370,
+        "n_signals": 384,
         "window_days": 7
       },
       "suggested_action": "Check the arbitrator / cross-system suppression and the regime weight for this system -- confirm it isn't being silently zeroed out.",
-      "run_date": "2026-10-29"
+      "run_date": "2026-10-30"
     },
     {
       "id": "forward_snapshots:oi_log_stale",
@@ -1223,14 +1239,14 @@
       "check": "symbol_gaps",
       "message": "futures universe: XLMUSDT_1d has 7 missing calendar day(s) inside its own covered history",
       "first_seen": "2026-10-29",
-      "last_seen": "2026-10-29",
+      "last_seen": "2026-10-30",
       "status": "open",
       "evidence": {
         "symbol": "XLMUSDT_1d",
         "n_gaps": 7
       },
       "suggested_action": "Re-backfill this symbol from the CDN; check for an exchange halt around the gap date(s).",
-      "run_date": "2026-10-29"
+      "run_date": "2026-10-30"
     }
   ]
 }
