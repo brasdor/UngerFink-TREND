@@ -1894,3 +1894,8 @@ run_date,event,symbol,detail
 2026-10-28,SIGNAL_SKIPPED,ARKM/USDT,duplicate_cross_system
 2026-10-28,SIGNAL_SKIPPED,DOT/USDT,duplicate_cross_system
 2026-10-28,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-10-29,EXIT,ICP/USDT,"reason=safety_stop  bars=13  R=-1.000  pnl=$-24.86  equity=$9,835.87"
+2026-10-29,SIGNAL_SKIPPED,ARKM/USDT,duplicate_cross_system
+2026-10-29,SIGNAL_SKIPPED,DOT/USDT,duplicate_cross_system
+2026-10-29,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-10-29,SIGNAL_SKIPPED,TRX/USDT,duplicate_cross_system
