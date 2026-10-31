@@ -1230,6 +1230,41 @@ REGISTRY: list[tuple[str, Callable[[], list[dict]]]] = [
 # health_events.jsonl (engine-emitted via health_emit.emit()) is left alone.
 REGISTRY_CHECK_NAMES = {name for name, _ in REGISTRY} | {f"{name}_crashed" for name, _ in REGISTRY}
 
+# finding slug (the `check` field on a finding) -> registry check that emits it. Most registry checks emit a
+# slug equal to their own name; these are the ones that emit different slugs. Without this map a finding such as
+# exchange_status_not_trading never auto-resolved, because its slug is not a registry name.
+SLUG_TO_REGISTRY_CHECK = {
+    "exchange_status_cache_missing": "exchange_status",
+    "exchange_status_cache_stale": "exchange_status",
+    "exchange_status_cache_unreadable": "exchange_status",
+    "exchange_status_not_trading": "exchange_status",
+    "csv_duplicate_header": "csv_integrity",
+    "csv_not_pandas_parseable": "csv_integrity",
+    "csv_ragged_rows": "csv_integrity",
+    "equity_curve_unknown_schema": "csv_integrity",
+    "json_missing_field": "json_integrity",
+    "json_not_parseable": "json_integrity",
+    "regime_history_duplicate_dates": "regime_history_integrity",
+    "regime_history_missing": "regime_history_integrity",
+    "regime_history_missing_dates": "regime_history_integrity",
+    "regime_history_unparseable": "regime_history_integrity",
+    "drawdown_approaching_kill_switch": "drawdown_vs_kill_switch",
+    "position_cap_breach": "position_cap",
+    "leverage_cap_breach": "leverage_cap",
+    "oi_log_stale": "forward_snapshots_fresh",
+    "snapshot_never_ran": "forward_snapshots_fresh",
+    "snapshot_stale": "forward_snapshots_fresh",
+    "funding_refresh_job_dead": "funding_refresh_job_alive",
+}
+
+
+def owning_check(slug: str) -> str | None:
+    """The registry check that re-derives findings with this slug, or None if the runner does not own it
+    (engine-emitted findings via health_emit.emit() are left alone)."""
+    if slug in REGISTRY_CHECK_NAMES:
+        return slug[: -len("_crashed")] if slug.endswith("_crashed") else slug
+    return SLUG_TO_REGISTRY_CHECK.get(slug)
+
 
 def _run_one(name: str, fn: Callable[[], list[dict]]) -> tuple[list[dict], str]:
     try:
@@ -1271,8 +1306,12 @@ def _append_events(events: list[dict]) -> None:
             fh.write(json.dumps(e, default=str) + "\n")
 
 
-def _reconcile(prior_events: list[dict], this_run_findings: list[dict]) -> tuple[list[dict], list[dict]]:
-    """Returns (new_events_to_append, current_open_findings_for_report)."""
+def _reconcile(prior_events: list[dict], this_run_findings: list[dict],
+               crashed_checks: set[str] | None = None) -> tuple[list[dict], list[dict]]:
+    """Returns (new_events_to_append, current_open_findings_for_report). A finding auto-resolves when the
+    registry check that owns its slug ran this time without crashing and did not re-raise it."""
+    crashed = set(crashed_checks) if crashed_checks is not None else {
+        f["check"][: -len("_crashed")] for f in this_run_findings if f["check"].endswith("_crashed")}
     now = datetime.now(timezone.utc).isoformat()
 
     # Replay history: per id, track the running "open streak" start and
@@ -1318,7 +1357,8 @@ def _reconcile(prior_events: list[dict], this_run_findings: list[dict]) -> tuple
     # Auto-resolve: ids this runner owns, were open before, not re-opened now.
     for fid in prior_open_ids - this_run_ids:
         check_name = by_id[fid]["latest"].get("check") if by_id[fid]["latest"] else None
-        if check_name in REGISTRY_CHECK_NAMES:
+        owner = owning_check(check_name) if check_name else None
+        if owner is not None and owner not in crashed:
             new_events.append({"schema_version": SCHEMA_VERSION, "event": "resolve",
                                 "id": fid, "run_date": TODAY_STR, "ts": now})
             by_id[fid]["open"] = False
