@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Register: replace {USER_SID} (whoami /user), save as UTF-16 (Out-File -Encoding Unicode), then
+     schtasks /Create /TN "UngerFink Funding Refresh" /XML <file> /F
+     Remove: schtasks /Delete /TN "UngerFink Funding Refresh" /F -->
+<Task version="1.3" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <Description>Daily funding/OI/snapshot/exchange-cache refresh in push mode (tools/refresh_funding_local.py). 07:30 local wall-clock (follows DST), also at logon; runs a missed run when the laptop wakes.</Description>
+    <URI>\UngerFink Funding Refresh</URI>
+  </RegistrationInfo>
+  <Principals>
+    <Principal id="Author">
+      <UserId>{USER_SID}</UserId>
+      <LogonType>InteractiveToken</LogonType>
+    </Principal>
+  </Principals>
+  <Settings>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+    <ExecutionTimeLimit>PT30M</ExecutionTimeLimit>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+    <StartWhenAvailable>true</StartWhenAvailable>
+    <WakeToRun>true</WakeToRun>
+    <IdleSettings>
+      <Duration>PT10M</Duration>
+      <WaitTimeout>PT1H</WaitTimeout>
+      <StopOnIdleEnd>true</StopOnIdleEnd>
+      <RestartOnIdle>false</RestartOnIdle>
+    </IdleSettings>
+    <UseUnifiedSchedulingEngine>true</UseUnifiedSchedulingEngine>
+  </Settings>
+  <Triggers>
+    <CalendarTrigger>
+      <StartBoundary>2026-11-01T07:30:00</StartBoundary>
+      <ScheduleByDay><DaysInterval>1</DaysInterval></ScheduleByDay>
+    </CalendarTrigger>
+    <LogonTrigger>
+      <UserId>{USER_SID}</UserId>
+      <Delay>PT3M</Delay>
+    </LogonTrigger>
+  </Triggers>
+  <Actions Context="Author">
+    <Exec>
+      <Command>cmd.exe</Command>
+      <Arguments>/c "C:\Users\Jean\UngerFink-TREND\run_funding_refresh.bat"</Arguments>
+      <WorkingDirectory>C:\Users\Jean\UngerFink-TREND</WorkingDirectory>
+    </Exec>
+  </Actions>
+</Task>
