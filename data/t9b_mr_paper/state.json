@@ -1,7 +1,7 @@
 {
   "system_name": "MR_RSI14_1D_T9B",
   "created_utc": "2026-06-01T09:28:48.389060+00:00",
-  "last_run_date": "2026-10-29",
+  "last_run_date": "2026-10-30",
   "paper_equity_usdt": 10151.735099999996,
   "peak_equity_usdt": 10151.735099999996,
   "drawdown_pct": 0.0,
@@ -16,7 +16,7 @@
       "initial_risk_per_unit": 0.00058993,
       "risk_amount_usdt": 35.53107284999999,
       "qty": 60229.303222416194,
-      "bars_held": 17,
+      "bars_held": 18,
       "atr_at_entry": 0.00019664,
       "rsi_at_entry": 22.7225
     },
@@ -29,7 +29,7 @@
       "initial_risk_per_unit": 0.01159336,
       "risk_amount_usdt": 35.53107284999999,
       "qty": 3064.77784266166,
-      "bars_held": 16,
+      "bars_held": 17,
       "atr_at_entry": 0.00386445,
       "rsi_at_entry": 15.3465
     },
@@ -42,7 +42,7 @@
       "initial_risk_per_unit": 0.02332259,
       "risk_amount_usdt": 35.53107284999999,
       "qty": 1523.4617102988984,
-      "bars_held": 16,
+      "bars_held": 17,
       "atr_at_entry": 0.0077742,
       "rsi_at_entry": 20.4654
     },
@@ -55,7 +55,7 @@
       "initial_risk_per_unit": 0.00521274,
       "risk_amount_usdt": 35.53107284999999,
       "qty": 6816.19893760287,
-      "bars_held": 16,
+      "bars_held": 17,
       "atr_at_entry": 0.00173758,
       "rsi_at_entry": 23.7321
     },
@@ -68,7 +68,7 @@
       "initial_risk_per_unit": 0.01081902,
       "risk_amount_usdt": 25.38695155132499,
       "qty": 2346.51119522147,
-      "bars_held": 11,
+      "bars_held": 12,
       "atr_at_entry": 0.00360634,
       "rsi_at_entry": 24.4056
     },
@@ -81,7 +81,7 @@
       "initial_risk_per_unit": 0.00086501,
       "risk_amount_usdt": 25.38695155132499,
       "qty": 29348.73764618327,
-      "bars_held": 10,
+      "bars_held": 11,
       "atr_at_entry": 0.00028834,
       "rsi_at_entry": 24.547
     },
@@ -94,7 +94,7 @@
       "initial_risk_per_unit": 0.01077304,
       "risk_amount_usdt": 26.648304637499997,
       "qty": 2473.6104792611927,
-      "bars_held": 2,
+      "bars_held": 3,
       "atr_at_entry": 0.00359101,
       "rsi_at_entry": 24.0453
     }

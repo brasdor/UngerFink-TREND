@@ -1,10 +1,10 @@
 {
   "system_name": "TREND_1D_DONCHIAN_EXITV2_T9B",
   "created_utc": "2026-05-30T22:46:19.996708+00:00",
-  "last_run_date": "2026-10-29",
-  "paper_equity_usdt": 10110.238500000001,
+  "last_run_date": "2026-10-30",
+  "paper_equity_usdt": 10068.494700000001,
   "peak_equity_usdt": 10215.8963,
-  "drawdown_pct": -1.0342,
+  "drawdown_pct": -1.4429,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -23,24 +23,7 @@
       "chandelier_activated_date": null,
       "atr_at_entry": 8.831e-05,
       "donchian_entry_level": 0.00092
-    },
-    {
-      "position_id": "TRX_USDT_20261029",
-      "symbol": "TRX/USDT",
-      "entry_date": "2026-10-29",
-      "entry_price": 0.3524,
-      "initial_stop": 0.34095275,
-      "current_stop": 0.34095275,
-      "initial_risk_per_unit": 0.01144725,
-      "risk_amount_usdt": 18.96238419665625,
-      "qty": 1656.5012729394612,
-      "highest_high_since_entry": 0.3524,
-      "max_favorable_r": 0.0,
-      "chandelier_active": false,
-      "chandelier_activated_date": null,
-      "atr_at_entry": 0.00572362,
-      "donchian_entry_level": 0.3372
     }
   ],
-  "closed_trade_count": 16
+  "closed_trade_count": 17
 }

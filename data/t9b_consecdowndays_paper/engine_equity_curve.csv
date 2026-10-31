@@ -6,3 +6,5 @@ exit_date,symbol,entry_date,bars_held,gross_r,pnl_usdt,equity,dd_pct,exit_reason
 2026-10-28,MORPHO/USDT,2026-10-08,20,-0.253807,-6.6458,9869.2809,-1.3072,time_exit_20bars
 2026-10-28,WLD/USDT,2026-10-08,20,-0.326687,-8.5541,9860.7268,-1.3927,time_exit_20bars
 2026-10-29,ICP/USDT,2026-10-16,13,-1.0,-24.8577,9835.8691,-1.6413,safety_stop
+2026-10-30,AAVE/USDT,2026-10-26,4,-1.0,-34.5657,9801.3034,-1.987,safety_stop
+2026-10-30,PENDLE/USDT,2026-10-26,4,-1.0,-34.5657,9766.7377,-2.3326,safety_stop

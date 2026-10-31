@@ -952,3 +952,8 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-10-29,ENTRY,TRX/USDT,"price=0.3524  stop=0.340953  risk=$18.96  qty=1656.5013  equity=$10,110.24",,,10110.24,,0.3524,0.34095275,18.9624
 2026-10-29,SIGNAL_SKIPPED,ETH/USDT,duplicate_cross_system,,,,,,,
 2026-10-29,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system,,,,,,,
+2026-10-30,EXIT,TRX/USDT,"reason=donchian_exit  R=-2.201  pnl=$-41.74  equity=$10,068.49",-2.201402,-41.7438,10068.49,-1.44
+2026-10-30,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system,,,,
+2026-10-30,SIGNAL_SKIPPED,VET/USDT,duplicate_cross_system,,,,
+2026-10-30,SIGNAL_SKIPPED,ETH/USDT,duplicate_cross_system,,,,
+2026-10-30,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system,,,,
