@@ -2,17 +2,17 @@
   "system_name": "T9_CANDIDATE12_MOMENTUM",
   "created_utc": "2026-08-15T20:37:21.392009+00:00",
   "engine_start_date": "2026-08-15",
-  "last_run_date": "2026-10-31",
+  "last_run_date": "2026-11-01",
   "combo_last_rebalance": {
-    "0": "2026-10-25",
+    "0": "2026-11-01",
     "1": "2026-10-25",
     "2": "2026-10-25",
-    "3": "2026-10-25",
+    "3": "2026-11-01",
     "4": "2026-10-25"
   },
-  "closed_equity_usdt": 62876.3806,
+  "closed_equity_usdt": 62388.0833,
   "peak_equity_usdt": 63948.3794,
-  "drawdown_pct": -1.6764,
+  "drawdown_pct": -2.4399,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -76,21 +76,6 @@
       "liquidity_tier": "tier2"
     },
     {
-      "symbol": "FLUXUSDT",
-      "side": "long",
-      "combo_idx": 0,
-      "entry_date": "2026-10-04",
-      "entry_price": 0.0750672,
-      "stop_distance_px": 0.009957004958632392,
-      "atr_at_entry": 0.004978502479316196,
-      "notional_usdt": 1191.2205048549463,
-      "notional_pct": 0.01880083426469561,
-      "margin_reserved_usdt": 595.6102524274731,
-      "risk_amount_usdt": 158.39995290685474,
-      "cluster": "solo_FLUXUSDT",
-      "liquidity_tier": "tier3"
-    },
-    {
       "symbol": "BEAMXUSDT",
       "side": "long",
       "combo_idx": 0,
@@ -103,21 +88,6 @@
       "margin_reserved_usdt": 504.2381431563375,
       "risk_amount_usdt": 159.87094852248993,
       "cluster": "cluster_0",
-      "liquidity_tier": "tier2"
-    },
-    {
-      "symbol": "EDUUSDT",
-      "side": "long",
-      "combo_idx": 0,
-      "entry_date": "2026-10-11",
-      "entry_price": 0.07230779999999999,
-      "stop_distance_px": 0.010808651727322255,
-      "atr_at_entry": 0.005404325863661128,
-      "notional_usdt": 1068.6509587085632,
-      "notional_pct": 0.016711149971037894,
-      "margin_reserved_usdt": 534.3254793542816,
-      "risk_amount_usdt": 159.87094852248993,
-      "cluster": "solo_EDUUSDT",
       "liquidity_tier": "tier2"
     },
     {
@@ -314,9 +284,39 @@
       "risk_amount_usdt": 157.19095139972234,
       "cluster": "cluster_0",
       "liquidity_tier": "tier3"
+    },
+    {
+      "symbol": "1000PEPEUSDT",
+      "side": "long",
+      "combo_idx": 0,
+      "entry_date": "2026-11-01",
+      "entry_price": 0.00492338448,
+      "stop_distance_px": 0.0009109329844940227,
+      "atr_at_entry": 0.00045546649224701135,
+      "notional_usdt": 842.8147467075808,
+      "notional_pct": 0.013509226484794997,
+      "margin_reserved_usdt": 421.4073733537904,
+      "risk_amount_usdt": 155.97020814925855,
+      "cluster": "cluster_0",
+      "liquidity_tier": "tier1"
+    },
+    {
+      "symbol": "AKTUSDT",
+      "side": "long",
+      "combo_idx": 0,
+      "entry_date": "2026-11-01",
+      "entry_price": 0.6329784999999999,
+      "stop_distance_px": 0.11692242393204265,
+      "atr_at_entry": 0.058461211966021324,
+      "notional_usdt": 842.264350272792,
+      "notional_pct": 0.013500404344315096,
+      "margin_reserved_usdt": 421.132175136396,
+      "risk_amount_usdt": 155.97020814925855,
+      "cluster": "solo_AKTUSDT",
+      "liquidity_tier": "tier3"
     }
   ],
-  "closed_trade_count": 56,
+  "closed_trade_count": 58,
   "last_error": null,
-  "paper_equity_usdt": 62876.3806
+  "paper_equity_usdt": 62388.0833
 }
