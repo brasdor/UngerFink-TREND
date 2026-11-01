@@ -1,2 +1,2 @@
 position_id,symbol,entry_date,as_of_date,entry_price,initial_stop,current_stop,initial_risk_per_unit,risk_amount_usdt,qty,atr_at_entry,donchian_entry_level,highest_high,max_favorable_r,chandelier_active,chandelier_activated
-IOST_USDT_20261020,IOST/USDT,2026-10-20,2026-10-30,0.001054,0.00087738,0.00087738,0.00017662,25.4372,144022.0593034481,8.831e-05,0.00092,0.001908,4.8352,False,
+IOST_USDT_20261020,IOST/USDT,2026-10-20,2026-10-31,0.001054,0.00087738,0.00087738,0.00017662,25.4372,144022.0593034481,8.831e-05,0.00092,0.001908,4.8352,False,
