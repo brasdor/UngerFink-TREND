@@ -1,7 +1,7 @@
 {
   "system_name": "ConsecDownDaysMR_1D_T9B",
   "created_utc": "2026-06-03T09:15:18.584881+00:00",
-  "last_run_date": "2026-10-31",
+  "last_run_date": "2026-11-01",
   "paper_equity_usdt": 9766.7377,
   "peak_equity_usdt": 10000.0,
   "drawdown_pct": -2.3326,
@@ -16,7 +16,7 @@
       "initial_risk_per_unit": 6.03142857,
       "risk_amount_usdt": 34.56574345,
       "qty": 5.730938043754367,
-      "bars_held": 6,
+      "bars_held": 7,
       "atr_at_entry": 3.01571429,
       "consec_at_entry": 5
     },
@@ -29,7 +29,7 @@
       "initial_risk_per_unit": 0.14915714,
       "risk_amount_usdt": 34.56574345,
       "qty": 231.74045473116473,
-      "bars_held": 6,
+      "bars_held": 7,
       "atr_at_entry": 0.07457857,
       "consec_at_entry": 5
     },
@@ -42,7 +42,7 @@
       "initial_risk_per_unit": 4131.01428571,
       "risk_amount_usdt": 34.56574345,
       "qty": 0.00836737446529047,
-      "bars_held": 5,
+      "bars_held": 6,
       "atr_at_entry": 2065.50714286,
       "consec_at_entry": 5
     },
@@ -55,7 +55,7 @@
       "initial_risk_per_unit": 194.06571429,
       "risk_amount_usdt": 34.56574345,
       "qty": 0.1781136022736456,
-      "bars_held": 5,
+      "bars_held": 6,
       "atr_at_entry": 97.03285714,
       "consec_at_entry": 5
     },
@@ -68,7 +68,7 @@
       "initial_risk_per_unit": 1.28014286,
       "risk_amount_usdt": 34.56574345,
       "qty": 27.00147345273636,
-      "bars_held": 5,
+      "bars_held": 6,
       "atr_at_entry": 0.64007143,
       "consec_at_entry": 5
     },
@@ -81,7 +81,7 @@
       "initial_risk_per_unit": 8.61714286,
       "risk_amount_usdt": 34.56574345,
       "qty": 4.011276592668675,
-      "bars_held": 5,
+      "bars_held": 6,
       "atr_at_entry": 4.30857143,
       "consec_at_entry": 5
     }

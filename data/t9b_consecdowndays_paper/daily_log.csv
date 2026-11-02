@@ -1908,3 +1908,12 @@ run_date,event,symbol,detail
 2026-10-31,SIGNAL_SKIPPED,DOT/USDT,duplicate_cross_system
 2026-10-31,SIGNAL_SKIPPED,HBAR/USDT,duplicate_cross_system
 2026-10-31,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-11-01,SIGNAL_SKIPPED,APT/USDT,duplicate_cross_system
+2026-11-01,SIGNAL_SKIPPED,ARKM/USDT,duplicate_cross_system
+2026-11-01,SIGNAL_SKIPPED,CHZ/USDT,duplicate_cross_system
+2026-11-01,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system
+2026-11-01,SIGNAL_SKIPPED,FIL/USDT,duplicate_cross_system
+2026-11-01,SIGNAL_SKIPPED,HBAR/USDT,duplicate_cross_system
+2026-11-01,SIGNAL_SKIPPED,ICP/USDT,duplicate_cross_system
+2026-11-01,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-11-01,SIGNAL_SKIPPED,SUI/USDT,duplicate_cross_system

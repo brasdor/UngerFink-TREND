@@ -39,3 +39,4 @@ exit_date,symbol,entry_date,bars_held,gross_r,pnl_usdt,equity,dd_pct,exit_reason
 2026-10-19,DUSDT,2026-09-29,20,0.0,0.0,10151.7351,0.0,time_exit_20bars
 2026-10-19,HIGHUSDT,2026-09-29,20,0.0,0.0,10151.7351,0.0,time_exit_20bars
 2026-10-19,MBOXUSDT,2026-09-29,20,0.0,0.0,10151.7351,0.0,time_exit_20bars
+2026-11-01,RVNUSDT,2026-10-12,20,-0.350889,-12.4675,10139.2676,-0.1228,time_exit_20bars
