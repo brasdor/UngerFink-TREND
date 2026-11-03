@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-03T15:46:12.643877+00:00",
+  "generated_at": "2026-11-03T18:39:57.051659+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -87,8 +87,8 @@
       "n_findings": 0
     },
     "forward_snapshots_fresh": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 4
     },
     "funding_refresh_job_alive": {
       "status": "pass",
@@ -934,6 +934,70 @@
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
       "run_date": "2026-10-17"
+    },
+    {
+      "id": "forward_snapshots:snapshot_stale:dominance",
+      "severity": "WARNING",
+      "system": "forward_snapshots",
+      "check": "snapshot_stale",
+      "message": "'dominance' snapshot last succeeded 26.9h ago (threshold 26h) -- vintage history for this series is being lost",
+      "first_seen": "2026-11-03",
+      "last_seen": "2026-11-03",
+      "status": "open",
+      "evidence": {
+        "source": "dominance",
+        "age_hours": 26.9
+      },
+      "suggested_action": "Check the funding-host job log and that source's URL.",
+      "run_date": "2026-11-03"
+    },
+    {
+      "id": "forward_snapshots:snapshot_stale:epu",
+      "severity": "WARNING",
+      "system": "forward_snapshots",
+      "check": "snapshot_stale",
+      "message": "'epu' snapshot last succeeded 26.9h ago (threshold 26h) -- vintage history for this series is being lost",
+      "first_seen": "2026-11-03",
+      "last_seen": "2026-11-03",
+      "status": "open",
+      "evidence": {
+        "source": "epu",
+        "age_hours": 26.9
+      },
+      "suggested_action": "Check the funding-host job log and that source's URL.",
+      "run_date": "2026-11-03"
+    },
+    {
+      "id": "forward_snapshots:snapshot_stale:gpr",
+      "severity": "WARNING",
+      "system": "forward_snapshots",
+      "check": "snapshot_stale",
+      "message": "'gpr' snapshot last succeeded 26.9h ago (threshold 26h) -- vintage history for this series is being lost",
+      "first_seen": "2026-11-03",
+      "last_seen": "2026-11-03",
+      "status": "open",
+      "evidence": {
+        "source": "gpr",
+        "age_hours": 26.9
+      },
+      "suggested_action": "Check the funding-host job log and that source's URL.",
+      "run_date": "2026-11-03"
+    },
+    {
+      "id": "forward_snapshots:snapshot_stale:stablecoins",
+      "severity": "WARNING",
+      "system": "forward_snapshots",
+      "check": "snapshot_stale",
+      "message": "'stablecoins' snapshot last succeeded 26.9h ago (threshold 26h) -- vintage history for this series is being lost",
+      "first_seen": "2026-11-03",
+      "last_seen": "2026-11-03",
+      "status": "open",
+      "evidence": {
+        "source": "stablecoins",
+        "age_hours": 26.9
+      },
+      "suggested_action": "Check the funding-host job log and that source's URL.",
+      "run_date": "2026-11-03"
     },
     {
       "id": "futures_universe:symbol_gaps:XLMUSDT_1d",
