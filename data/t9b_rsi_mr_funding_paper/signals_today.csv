@@ -1,2 +1,1 @@
-symbol,signal_date,close,rsi,atr,funding,stop_loss,risk_unit,signal
-IMXUSDT,2026-11-01,0.1227,19.2452,0.0109551,-8.959e-05,0.1007898,0.0219102,BUY_MR_FUNDING
+symbol,signal_date,close,rsi,atr,funding,stop_loss,signal

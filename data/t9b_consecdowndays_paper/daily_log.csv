@@ -1917,3 +1917,12 @@ run_date,event,symbol,detail
 2026-11-01,SIGNAL_SKIPPED,ICP/USDT,duplicate_cross_system
 2026-11-01,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
 2026-11-01,SIGNAL_SKIPPED,SUI/USDT,duplicate_cross_system
+2026-11-02,EXIT,SOL/USDT,"reason=safety_stop  bars=7  R=-1.000  pnl=$-34.57  equity=$9,732.17"
+2026-11-02,SIGNAL_SKIPPED,APT/USDT,duplicate_cross_system
+2026-11-02,SIGNAL_SKIPPED,ARKM/USDT,duplicate_cross_system
+2026-11-02,SIGNAL_SKIPPED,CHZ/USDT,duplicate_cross_system
+2026-11-02,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system
+2026-11-02,SIGNAL_SKIPPED,HBAR/USDT,duplicate_cross_system
+2026-11-02,SIGNAL_SKIPPED,ICP/USDT,duplicate_cross_system
+2026-11-02,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-11-02,SIGNAL_SKIPPED,SUI/USDT,duplicate_cross_system

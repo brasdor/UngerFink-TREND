@@ -969,3 +969,10 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-11-01,SIGNAL_SKIPPED,ETH/USDT,duplicate_cross_system
 2026-11-01,SIGNAL_SKIPPED,HBAR/USDT,duplicate_cross_system
 2026-11-01,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system
+2026-11-02,EXIT,IOST/USDT,"reason=donchian_exit  R=-2.061  pnl=$-52.42  equity=$10,016.07",-2.060922,-52.424,10016.07,-1.96
+2026-11-02,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system,,,,
+2026-11-02,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system,,,,
+2026-11-02,SIGNAL_SKIPPED,QTUM/USDT,duplicate_cross_system,,,,
+2026-11-02,SIGNAL_SKIPPED,ETH/USDT,duplicate_cross_system,,,,
+2026-11-02,SIGNAL_SKIPPED,HBAR/USDT,duplicate_cross_system,,,,
+2026-11-02,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system,,,,

@@ -8,3 +8,4 @@ exit_date,symbol,entry_date,bars_held,gross_r,pnl_usdt,equity,dd_pct,exit_reason
 2026-10-29,ICP/USDT,2026-10-16,13,-1.0,-24.8577,9835.8691,-1.6413,safety_stop
 2026-10-30,AAVE/USDT,2026-10-26,4,-1.0,-34.5657,9801.3034,-1.987,safety_stop
 2026-10-30,PENDLE/USDT,2026-10-26,4,-1.0,-34.5657,9766.7377,-2.3326,safety_stop
+2026-11-02,SOL/USDT,2026-10-26,7,-1.0,-34.5657,9732.172,-2.6783,safety_stop
