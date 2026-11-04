@@ -1,7 +1,7 @@
 {
   "system_name": "MR_RSI14_1D_T9B",
   "created_utc": "2026-06-01T09:28:48.389060+00:00",
-  "last_run_date": "2026-11-02",
+  "last_run_date": "2026-11-03",
   "paper_equity_usdt": 10119.720499999996,
   "peak_equity_usdt": 10151.735099999996,
   "drawdown_pct": -0.3154,
@@ -16,7 +16,7 @@
       "initial_risk_per_unit": 0.01081902,
       "risk_amount_usdt": 25.38695155132499,
       "qty": 2346.51119522147,
-      "bars_held": 15,
+      "bars_held": 16,
       "atr_at_entry": 0.00360634,
       "rsi_at_entry": 24.4056
     },
@@ -29,7 +29,7 @@
       "initial_risk_per_unit": 0.00086501,
       "risk_amount_usdt": 25.38695155132499,
       "qty": 29348.73764618327,
-      "bars_held": 14,
+      "bars_held": 15,
       "atr_at_entry": 0.00028834,
       "rsi_at_entry": 24.547
     },
@@ -42,7 +42,7 @@
       "initial_risk_per_unit": 0.01077304,
       "risk_amount_usdt": 26.648304637499997,
       "qty": 2473.6104792611927,
-      "bars_held": 6,
+      "bars_held": 7,
       "atr_at_entry": 0.00359101,
       "rsi_at_entry": 24.0453
     },
@@ -55,7 +55,7 @@
       "initial_risk_per_unit": 0.500866,
       "risk_amount_usdt": 26.564266312499996,
       "qty": 53.03667310717835,
-      "bars_held": 0,
+      "bars_held": 1,
       "atr_at_entry": 0.16695533,
       "rsi_at_entry": 24.6758
     },
@@ -68,7 +68,7 @@
       "initial_risk_per_unit": 0.28521849,
       "risk_amount_usdt": 26.564266312499996,
       "qty": 93.13655055287613,
-      "bars_held": 0,
+      "bars_held": 1,
       "atr_at_entry": 0.09507283,
       "rsi_at_entry": 22.1379
     },
@@ -81,7 +81,7 @@
       "initial_risk_per_unit": 0.01161047,
       "risk_amount_usdt": 26.564266312499996,
       "qty": 2287.9578787508167,
-      "bars_held": 0,
+      "bars_held": 1,
       "atr_at_entry": 0.00387016,
       "rsi_at_entry": 24.1565
     },
@@ -94,7 +94,7 @@
       "initial_risk_per_unit": 0.07460059,
       "risk_amount_usdt": 26.564266312499996,
       "qty": 356.08654452330734,
-      "bars_held": 0,
+      "bars_held": 1,
       "atr_at_entry": 0.02486686,
       "rsi_at_entry": 23.6126
     },
@@ -107,9 +107,22 @@
       "initial_risk_per_unit": 0.04120558,
       "risk_amount_usdt": 26.564266312499996,
       "qty": 644.6764324758927,
-      "bars_held": 0,
+      "bars_held": 1,
       "atr_at_entry": 0.01373519,
       "rsi_at_entry": 24.7701
+    },
+    {
+      "position_id": "1000CHEEMSUSDT_20261103",
+      "symbol": "1000CHEEMSUSDT",
+      "entry_date": "2026-11-03",
+      "entry_price": 0.0003766,
+      "stop_loss": 0.00030742,
+      "initial_risk_per_unit": 6.918e-05,
+      "risk_amount_usdt": 26.564266312499996,
+      "qty": 383987.65990893316,
+      "bars_held": 0,
+      "atr_at_entry": 2.306e-05,
+      "rsi_at_entry": 22.7212
     }
   ],
   "closed_trade_count": 53
