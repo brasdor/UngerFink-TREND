@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-04T15:57:02.834223+00:00",
+  "generated_at": "2026-11-04T15:57:34.159019+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
