@@ -1,2 +1,1 @@
-symbol,signal_date,close,rsi,atr,stop_loss,risk_unit,signal
-1000CHEEMSUSDT,2026-11-03,0.0003766,22.7212,2.306e-05,0.00030742,6.918e-05,BUY_MR
+symbol,signal_date,close,rsi,atr,stop_loss,signal
