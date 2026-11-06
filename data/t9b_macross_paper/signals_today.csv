@@ -1,1 +1,3 @@
-symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss
+symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
+AGLDUSDT,1793750400000,0.1707,0.18112051,0.18139627,0.18336598,0.00482857,0.18035714,0.00965714,0.0001,2026-11-05
+SONICUSDT,1793750400000,0.02077,0.02148555,0.0214984,0.02250242,0.00056714,0.02190429,0.00113429,0.00031713,2026-11-05

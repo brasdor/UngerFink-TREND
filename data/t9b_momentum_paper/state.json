@@ -1,240 +1,256 @@
 {
   "system_name": "MomentumFactor_Lb20_L20_S10_Biweekly_T9B",
   "created_utc": "2026-06-07T14:05:11.980206",
-  "last_run_date": "2026-11-05",
-  "last_rebal_date": "2026-10-23",
-  "paper_equity_usdt": 10560.7204,
+  "last_run_date": "2026-11-06",
+  "last_rebal_date": "2026-11-06",
+  "paper_equity_usdt": 10585.9953,
   "peak_equity_usdt": 11487.9734,
-  "drawdown_pct": -8.0715,
+  "drawdown_pct": -7.8515,
   "kill_switch_triggered": false,
-  "total_rebal_count": 9,
+  "total_rebal_count": 10,
   "long_positions": [
-    {
-      "symbol": "GTCUSDT",
-      "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.31774,
-      "quantity": 923.52662912,
-      "notional": 293.4414
-    },
-    {
-      "symbol": "BATUSDT",
-      "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.1727,
-      "quantity": 1699.13926541,
-      "notional": 293.4414
-    },
-    {
-      "symbol": "MAGICUSDT",
-      "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.08992,
-      "quantity": 3263.36022172,
-      "notional": 293.4414
-    },
     {
       "symbol": "BEAMXUSDT",
       "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.003063,
-      "quantity": 95801.94291121,
-      "notional": 293.4414
-    },
-    {
-      "symbol": "AVAUSDT",
-      "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.3601,
-      "quantity": 814.88850635,
-      "notional": 293.4414
-    },
-    {
-      "symbol": "OGNUSDT",
-      "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.02864,
-      "quantity": 10245.85723244,
-      "notional": 293.4414
-    },
-    {
-      "symbol": "SUSDT",
-      "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.05112,
-      "quantity": 5740.24552303,
-      "notional": 293.4414
-    },
-    {
-      "symbol": "EDUUSDT",
-      "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.06588,
-      "quantity": 4454.17958617,
-      "notional": 293.4414
-    },
-    {
-      "symbol": "DODOXUSDT",
-      "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.022368,
-      "quantity": 13118.80146357,
-      "notional": 293.4414
-    },
-    {
-      "symbol": "CKBUSDT",
-      "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.0014973,
-      "quantity": 195980.33202233,
-      "notional": 293.4414
-    },
-    {
-      "symbol": "BTCDOMUSDT",
-      "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 5572.3,
-      "quantity": 0.05266072,
-      "notional": 293.4414
-    },
-    {
-      "symbol": "INJUSDT",
-      "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 7.906,
-      "quantity": 37.11628524,
-      "notional": 293.4414
-    },
-    {
-      "symbol": "RSRUSDT",
-      "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.001779,
-      "quantity": 164947.35870548,
-      "notional": 293.4414
-    },
-    {
-      "symbol": "ORCAUSDT",
-      "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 1.815,
-      "quantity": 161.67567556,
-      "notional": 293.4414
+      "entry_date": "2026-11-06",
+      "entry_price": 0.004166,
+      "quantity": 83378.05367073,
+      "notional": 347.353
     },
     {
       "symbol": "1000PEPEUSDT",
       "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.004393,
-      "quantity": 66797.48489348,
-      "notional": 293.4414
+      "entry_date": "2026-11-06",
+      "entry_price": 0.0047927,
+      "quantity": 72475.42545794,
+      "notional": 347.353
     },
     {
-      "symbol": "AKTUSDT",
+      "symbol": "XMRUSDT",
       "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.6793,
-      "quantity": 431.97607999,
-      "notional": 293.4414
+      "entry_date": "2026-11-06",
+      "entry_price": 618.86,
+      "quantity": 0.56127876,
+      "notional": 347.353
+    },
+    {
+      "symbol": "ZECUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 1281.22,
+      "quantity": 0.27111111,
+      "notional": 347.353
+    },
+    {
+      "symbol": "DODOXUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 0.021953,
+      "quantity": 15822.57420818,
+      "notional": 347.353
+    },
+    {
+      "symbol": "GTCUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 0.20368,
+      "quantity": 1705.38575998,
+      "notional": 347.353
+    },
+    {
+      "symbol": "BTCDOMUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 5625.0,
+      "quantity": 0.06175164,
+      "notional": 347.353
     },
     {
       "symbol": "KAVAUSDT",
       "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.0703,
-      "quantity": 4174.13017265,
-      "notional": 293.4414
+      "entry_date": "2026-11-06",
+      "entry_price": 0.06833,
+      "quantity": 5083.46219219,
+      "notional": 347.353
     },
     {
-      "symbol": "COMPUSDT",
+      "symbol": "GMXUSDT",
       "side": "LONG",
-      "entry_date": "2026-10-23",
-      "entry_price": 24.44,
-      "quantity": 12.00660193,
-      "notional": 293.4414
+      "entry_date": "2026-11-06",
+      "entry_price": 8.335,
+      "quantity": 41.67402179,
+      "notional": 347.353
+    },
+    {
+      "symbol": "INJUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 8.15,
+      "quantity": 42.61999651,
+      "notional": 347.353
+    },
+    {
+      "symbol": "PROMUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 5.325,
+      "quantity": 65.23060499,
+      "notional": 347.353
+    },
+    {
+      "symbol": "LSKUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 0.18754,
+      "quantity": 1852.15405563,
+      "notional": 347.353
+    },
+    {
+      "symbol": "RUNEUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 0.602,
+      "quantity": 576.99829168,
+      "notional": 347.353
+    },
+    {
+      "symbol": "AVAUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 0.2639,
+      "quantity": 1316.22952479,
+      "notional": 347.353
+    },
+    {
+      "symbol": "QNTUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 188.67,
+      "quantity": 1.84106096,
+      "notional": 347.353
+    },
+    {
+      "symbol": "RAYSOLUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 1.6776,
+      "quantity": 207.05351192,
+      "notional": 347.353
+    },
+    {
+      "symbol": "UNIUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 6.811,
+      "quantity": 50.99882126,
+      "notional": 347.353
+    },
+    {
+      "symbol": "KMNOUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 0.03386,
+      "quantity": 10258.50477236,
+      "notional": 347.353
+    },
+    {
+      "symbol": "CAKEUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 1.8945,
+      "quantity": 183.34809796,
+      "notional": 347.353
+    },
+    {
+      "symbol": "SYNUSDT",
+      "side": "LONG",
+      "entry_date": "2026-11-06",
+      "entry_price": 0.1424,
+      "quantity": 2439.2764859,
+      "notional": 347.353
     }
   ],
   "short_positions": [
     {
-      "symbol": "BOMEUSDT",
+      "symbol": "ZEREBROUSDT",
       "side": "SHORT",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.0006017,
-      "quantity": 877836.84900561,
-      "notional": 528.1944
+      "entry_date": "2026-11-06",
+      "entry_price": 0.023565,
+      "quantity": 29480.41345999,
+      "notional": 694.7059
     },
     {
-      "symbol": "MOVRUSDT",
+      "symbol": "STRKUSDT",
       "side": "SHORT",
-      "entry_date": "2026-10-23",
-      "entry_price": 1.1705,
-      "quantity": 451.25538834,
-      "notional": 528.1944
+      "entry_date": "2026-11-06",
+      "entry_price": 0.03929,
+      "quantity": 17681.49511796,
+      "notional": 694.7059
     },
     {
-      "symbol": "ONEUSDT",
+      "symbol": "RLCUSDT",
       "side": "SHORT",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.001425,
-      "quantity": 370662.759331,
-      "notional": 528.1944
+      "entry_date": "2026-11-06",
+      "entry_price": 0.4269,
+      "quantity": 1627.32710983,
+      "notional": 694.7059
     },
     {
-      "symbol": "COOKIEUSDT",
+      "symbol": "ZKUSDT",
       "side": "SHORT",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.008963,
-      "quantity": 58930.54022612,
-      "notional": 528.1944
+      "entry_date": "2026-11-06",
+      "entry_price": 0.009268,
+      "quantity": 74957.48200092,
+      "notional": 694.7059
     },
     {
-      "symbol": "GALAUSDT",
+      "symbol": "BATUSDT",
       "side": "SHORT",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.001857,
-      "quantity": 284434.2660456,
-      "notional": 528.1944
+      "entry_date": "2026-11-06",
+      "entry_price": 0.12781,
+      "quantity": 5435.45843975,
+      "notional": 694.7059
     },
     {
-      "symbol": "BIGTIMEUSDT",
+      "symbol": "TRUMPUSDT",
       "side": "SHORT",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.006452,
-      "quantity": 81865.22505373,
-      "notional": 528.1944
+      "entry_date": "2026-11-06",
+      "entry_price": 1.182,
+      "quantity": 587.73768459,
+      "notional": 694.7059
     },
     {
-      "symbol": "MOVEUSDT",
+      "symbol": "AEROUSDT",
       "side": "SHORT",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.007052,
-      "quantity": 74899.94782284,
-      "notional": 528.1944
+      "entry_date": "2026-11-06",
+      "entry_price": 0.5989,
+      "quantity": 1159.96985003,
+      "notional": 694.7059
     },
     {
-      "symbol": "CHILLGUYUSDT",
+      "symbol": "DUSKUSDT",
       "side": "SHORT",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.009552,
-      "quantity": 55296.73702331,
-      "notional": 528.1944
+      "entry_date": "2026-11-06",
+      "entry_price": 0.07081,
+      "quantity": 9810.84512335,
+      "notional": 694.7059
     },
     {
-      "symbol": "BICOUSDT",
+      "symbol": "THEUSDT",
       "side": "SHORT",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.0159,
-      "quantity": 33219.77560042,
-      "notional": 528.1944
+      "entry_date": "2026-11-06",
+      "entry_price": 0.03675,
+      "quantity": 18903.56307985,
+      "notional": 694.7059
     },
     {
-      "symbol": "DRIFTUSDT",
+      "symbol": "EDUUSDT",
       "side": "SHORT",
-      "entry_date": "2026-10-23",
-      "entry_price": 0.01467,
-      "quantity": 36005.07375915,
-      "notional": 528.1944
+      "entry_date": "2026-11-06",
+      "entry_price": 0.04853,
+      "quantity": 14314.97925375,
+      "notional": 694.7059
     }
   ],
-  "_last_rebal_equity": 10560.720424806072
+  "_last_rebal_equity": 10585.995324716969
 }

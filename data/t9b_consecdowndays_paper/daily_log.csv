@@ -1942,3 +1942,9 @@ run_date,event,symbol,detail
 2026-11-04,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
 2026-11-04,SIGNAL_SKIPPED,SUI/USDT,duplicate_cross_system
 2026-11-04,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-11-05,SIGNAL_SKIPPED,APT/USDT,duplicate_cross_system
+2026-11-05,SIGNAL_SKIPPED,BCH/USDT,duplicate_cross_system
+2026-11-05,SIGNAL_SKIPPED,CHZ/USDT,duplicate_cross_system
+2026-11-05,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system
+2026-11-05,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-11-05,SIGNAL_SKIPPED,SUI/USDT,duplicate_cross_system
