@@ -1,18 +1,18 @@
 {
-  "generated_utc": "2026-11-05T18:35:01.905692+00:00",
+  "generated_utc": "2026-11-06T17:51:49.134329+00:00",
   "regime": {
-    "date": "2026-11-04",
-    "trend": "MIXED",
+    "date": "2026-11-05",
+    "trend": "BEAR",
     "funding": "LOW",
-    "vol_multiplier": 1.0,
+    "vol_multiplier": 1.25,
     "weights": {
-      "S1": 0.1429,
-      "S2": 0.2,
-      "S3": 0.2,
-      "S5": 0.1429,
-      "S6": 0.0857,
-      "S7": 0.0857,
-      "S8": 0.1429
+      "S1": 0.05,
+      "S2": 0.15,
+      "S3": 0.1,
+      "S5": 0.15,
+      "S6": 0.2,
+      "S7": 0.2,
+      "S8": 0.15
     }
   },
   "systems": {
@@ -24,17 +24,17 @@
       "kill_switch": false,
       "unrealized_pnl": 0.0,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-11-04"
+      "last_run_date": "2026-11-05"
     },
     "S2": {
       "label": "RSI-MR",
       "equity": 10119.7205,
-      "open_positions": 9,
+      "open_positions": 10,
       "closed_trades": 53,
       "kill_switch": false,
-      "unrealized_pnl": 30.63,
+      "unrealized_pnl": -55.14,
       "today_realized_pnl": -0.0,
-      "last_run_date": "2026-11-04"
+      "last_run_date": "2026-11-05"
     },
     "S3": {
       "label": "ConsecDown",
@@ -42,39 +42,39 @@
       "open_positions": 4,
       "closed_trades": 12,
       "kill_switch": false,
-      "unrealized_pnl": -1.9100000000000028,
-      "today_realized_pnl": -34.5657,
-      "last_run_date": "2026-11-04"
-    },
-    "S5": {
-      "label": "Momentum",
-      "equity": 10560.7204,
-      "open_positions": 28,
-      "closed_trades": 9,
-      "kill_switch": false,
-      "unrealized_pnl": -96.72200000000004,
+      "unrealized_pnl": -92.28999999999999,
       "today_realized_pnl": 0.0,
       "last_run_date": "2026-11-05"
     },
+    "S5": {
+      "label": "Momentum",
+      "equity": 10585.9953,
+      "open_positions": 30,
+      "closed_trades": 10,
+      "kill_switch": false,
+      "unrealized_pnl": 0.0,
+      "today_realized_pnl": 25.2749,
+      "last_run_date": "2026-11-06"
+    },
     "S6": {
       "label": "VolContraction",
-      "equity": 10118.1939,
-      "open_positions": 11,
-      "closed_trades": 131,
+      "equity": 9905.6647,
+      "open_positions": 0,
+      "closed_trades": 149,
       "kill_switch": false,
-      "unrealized_pnl": -38.7475,
-      "today_realized_pnl": 71.219,
-      "last_run_date": "2026-11-04"
+      "unrealized_pnl": 0.0,
+      "today_realized_pnl": -212.5292,
+      "last_run_date": "2026-11-05"
     },
     "S7": {
       "label": "MACross",
-      "equity": 9852.1105,
-      "open_positions": 7,
-      "closed_trades": 180,
+      "equity": 9768.5003,
+      "open_positions": 5,
+      "closed_trades": 184,
       "kill_switch": false,
-      "unrealized_pnl": -10.0372,
-      "today_realized_pnl": 12.7525,
-      "last_run_date": "2026-11-04"
+      "unrealized_pnl": 116.5877,
+      "today_realized_pnl": -83.6102,
+      "last_run_date": "2026-11-05"
     },
     "S8": {
       "label": "RSI-MR-Funding",
@@ -82,9 +82,9 @@
       "open_positions": 1,
       "closed_trades": 27,
       "kill_switch": false,
-      "unrealized_pnl": -0.089,
+      "unrealized_pnl": -7.8319,
       "today_realized_pnl": -0.0,
-      "last_run_date": "2026-11-04"
+      "last_run_date": "2026-11-05"
     },
     "Candidate12": {
       "label": "Candidate 12",
@@ -92,9 +92,9 @@
       "open_positions": 20,
       "closed_trades": 58,
       "kill_switch": false,
-      "unrealized_pnl": -700.2199999999999,
+      "unrealized_pnl": -1732.3599999999997,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-11-05"
+      "last_run_date": "2026-11-06"
     },
     "Candidate19": {
       "label": "Candidate 19",
@@ -102,13 +102,13 @@
       "open_positions": 20,
       "closed_trades": 59,
       "kill_switch": false,
-      "unrealized_pnl": -992.7700000000001,
+      "unrealized_pnl": -2317.6399999999994,
       "today_realized_pnl": 0.0,
-      "last_run_date": "2026-11-05"
+      "last_run_date": "2026-11-06"
     }
   },
   "alerts": {
-    "checked_utc": "2026-11-05T18:35:01.925496+00:00",
+    "checked_utc": "2026-11-06T17:51:49.153587+00:00",
     "missed_runs": [],
     "ohlcv_issues": [],
     "suppressed_symbols": [
