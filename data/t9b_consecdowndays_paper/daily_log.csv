@@ -1948,3 +1948,8 @@ run_date,event,symbol,detail
 2026-11-05,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system
 2026-11-05,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
 2026-11-05,SIGNAL_SKIPPED,SUI/USDT,duplicate_cross_system
+2026-11-06,EXIT,TIA/USDT,"reason=safety_stop  bars=12  R=-1.000  pnl=$-34.57  equity=$9,663.04"
+2026-11-06,SIGNAL_SKIPPED,BCH/USDT,duplicate_cross_system
+2026-11-06,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-11-06,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
+2026-11-06,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system

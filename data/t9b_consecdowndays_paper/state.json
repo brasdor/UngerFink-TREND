@@ -1,10 +1,10 @@
 {
   "system_name": "ConsecDownDaysMR_1D_T9B",
   "created_utc": "2026-06-03T09:15:18.584881+00:00",
-  "last_run_date": "2026-11-05",
-  "paper_equity_usdt": 9697.606300000001,
+  "last_run_date": "2026-11-06",
+  "paper_equity_usdt": 9663.040600000002,
   "peak_equity_usdt": 10000.0,
-  "drawdown_pct": -3.0239,
+  "drawdown_pct": -3.3696,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -16,21 +16,8 @@
       "initial_risk_per_unit": 6.03142857,
       "risk_amount_usdt": 34.56574345,
       "qty": 5.730938043754367,
-      "bars_held": 11,
+      "bars_held": 12,
       "atr_at_entry": 3.01571429,
-      "consec_at_entry": 5
-    },
-    {
-      "position_id": "TIA_USDT_20261025",
-      "symbol": "TIA/USDT",
-      "entry_date": "2026-10-25",
-      "entry_price": 0.5325,
-      "stop_loss": 0.38334286,
-      "initial_risk_per_unit": 0.14915714,
-      "risk_amount_usdt": 34.56574345,
-      "qty": 231.74045473116473,
-      "bars_held": 11,
-      "atr_at_entry": 0.07457857,
       "consec_at_entry": 5
     },
     {
@@ -42,7 +29,7 @@
       "initial_risk_per_unit": 194.06571429,
       "risk_amount_usdt": 34.56574345,
       "qty": 0.1781136022736456,
-      "bars_held": 10,
+      "bars_held": 11,
       "atr_at_entry": 97.03285714,
       "consec_at_entry": 5
     },
@@ -55,10 +42,10 @@
       "initial_risk_per_unit": 1.28014286,
       "risk_amount_usdt": 34.56574345,
       "qty": 27.00147345273636,
-      "bars_held": 10,
+      "bars_held": 11,
       "atr_at_entry": 0.64007143,
       "consec_at_entry": 5
     }
   ],
-  "closed_trade_count": 12
+  "closed_trade_count": 13
 }
