@@ -1,2 +1,2 @@
 position_id,symbol,entry_date,as_of_date,entry_price,stop_loss,bars_held,bars_remaining,rsi_at_entry,funding_at_entry,atr_at_entry,risk_amount_usdt,qty
-IMXUSDT_20261101,IMXUSDT,2026-11-01,2026-11-06,0.1227,0.1007898,5,20,19.2452,-8.959e-05,0.0109551,19.4999,889.9906331237844
+IMXUSDT_20261101,IMXUSDT,2026-11-01,2026-11-07,0.1227,0.1007898,6,19,19.2452,-8.959e-05,0.0109551,19.4999,889.9906331237844

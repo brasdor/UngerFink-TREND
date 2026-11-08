@@ -43,3 +43,4 @@ exit_date,symbol,entry_date,bars_held,gross_r,pnl_usdt,equity,dd_pct,exit_reason
 2026-11-02,1000RATSUSDT,2026-10-13,20,-0.1751,-6.2215,10133.0461,-0.1841,time_exit_20bars
 2026-11-02,ARCUSDT,2026-10-13,20,0.423195,15.0366,10148.0827,-0.036,time_exit_20bars
 2026-11-02,BLURUSDT,2026-10-13,20,-0.798237,-28.3622,10119.7205,-0.3154,time_exit_20bars
+2026-11-07,POWRUSDT,2026-10-18,20,0.244015,6.1948,10125.9153,-0.2543,time_exit_20bars
