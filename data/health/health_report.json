@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-09T18:03:08.456645+00:00",
+  "generated_at": "2026-11-09T18:06:56.281055+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -119,12 +119,12 @@
       "severity": "CRITICAL",
       "system": "funding_refresh_job",
       "check": "funding_refresh_job_dead",
-      "message": "no commit to funding_rates/ in 35.5h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
+      "message": "no commit to funding_rates/ in 35.6h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
       "first_seen": "2026-11-09",
       "last_seen": "2026-11-09",
       "status": "open",
       "evidence": {
-        "age_hours": 35.5
+        "age_hours": 35.6
       },
       "suggested_action": "Check the funding refresh host: is the self-hosted runner online (Settings -> Actions -> Runners) or is the cron job still scheduled and succeeding?",
       "run_date": "2026-11-09"
@@ -1021,13 +1021,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'dominance' snapshot last succeeded 35.5h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'dominance' snapshot last succeeded 35.6h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-11-09",
       "last_seen": "2026-11-09",
       "status": "open",
       "evidence": {
         "source": "dominance",
-        "age_hours": 35.5
+        "age_hours": 35.6
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-11-09"
@@ -1037,13 +1037,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'epu' snapshot last succeeded 35.5h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'epu' snapshot last succeeded 35.6h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-11-09",
       "last_seen": "2026-11-09",
       "status": "open",
       "evidence": {
         "source": "epu",
-        "age_hours": 35.5
+        "age_hours": 35.6
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-11-09"
@@ -1053,13 +1053,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'gpr' snapshot last succeeded 35.5h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'gpr' snapshot last succeeded 35.6h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-11-09",
       "last_seen": "2026-11-09",
       "status": "open",
       "evidence": {
         "source": "gpr",
-        "age_hours": 35.5
+        "age_hours": 35.6
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-11-09"
@@ -1069,13 +1069,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'stablecoins' snapshot last succeeded 35.5h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'stablecoins' snapshot last succeeded 35.6h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-11-09",
       "last_seen": "2026-11-09",
       "status": "open",
       "evidence": {
         "source": "stablecoins",
-        "age_hours": 35.5
+        "age_hours": 35.6
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-11-09"
