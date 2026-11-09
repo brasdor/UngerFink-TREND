@@ -1,2 +1,1 @@
-symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
-XRPUSDT,1793923200000,1.2057,1.26513112,1.26704861,1.32338038,0.03094286,1.26758571,0.06188571,0.0001,2026-11-07
+symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss

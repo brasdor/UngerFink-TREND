@@ -1961,3 +1961,15 @@ run_date,event,symbol,detail
 2026-11-07,SIGNAL_SKIPPED,SEI/USDT,duplicate_cross_system
 2026-11-07,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
 2026-11-07,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-11-08,EXIT,LTC/USDT,"reason=safety_stop  bars=14  R=-1.000  pnl=$-34.57  equity=$9,628.47"
+2026-11-08,EXIT,ETH/USDT,"reason=safety_stop  bars=13  R=-1.000  pnl=$-34.57  equity=$9,593.91"
+2026-11-08,SIGNAL_SKIPPED,APT/USDT,duplicate_cross_system
+2026-11-08,SIGNAL_SKIPPED,ARKM/USDT,duplicate_cross_system
+2026-11-08,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system
+2026-11-08,SIGNAL_SKIPPED,DOGE/USDT,duplicate_cross_system
+2026-11-08,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system
+2026-11-08,SIGNAL_SKIPPED,ICP/USDT,duplicate_cross_system
+2026-11-08,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-11-08,SIGNAL_SKIPPED,SEI/USDT,duplicate_cross_system
+2026-11-08,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
+2026-11-08,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
