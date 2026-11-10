@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-10T08:09:54.897178+00:00",
+  "generated_at": "2026-11-10T08:12:04.294213+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -39,8 +39,8 @@
       "n_findings": 0
     },
     "missed_run_single_day": {
-      "status": "fail",
-      "n_findings": 6
+      "status": "pass",
+      "n_findings": 0
     },
     "step_failure": {
       "status": "pass",
@@ -84,7 +84,7 @@
     },
     "no_entries_exits_despite_signals": {
       "status": "fail",
-      "n_findings": 2
+      "n_findings": 1
     },
     "forward_snapshots_fresh": {
       "status": "pass",
@@ -101,14 +101,14 @@
       "severity": "CRITICAL",
       "system": "S5",
       "check": "leverage_cap_breach",
-      "message": "implied leverage 1.26x exceeds configured cap 1.00x (notional $13,298 / equity $10,586)",
+      "message": "implied leverage 1.27x exceeds configured cap 1.00x (notional $13,428 / equity $10,586)",
       "first_seen": "2026-11-06",
       "last_seen": "2026-11-10",
       "status": "open",
       "evidence": {
-        "implied_leverage": 1.256,
+        "implied_leverage": 1.268,
         "leverage_max": 1.0,
-        "total_notional": 13298.1759,
+        "total_notional": 13428.119000000002,
         "equity": 10585.9953
       },
       "suggested_action": "Check position sizing -- a leverage breach is a direct liquidation-risk increase versus the T6 sweep this cap was set from.",
@@ -470,38 +470,6 @@
       "run_date": "2026-11-10"
     },
     {
-      "id": "S1:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S1",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-11-08, expected 2026-11-09 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-11-10",
-      "last_seen": "2026-11-10",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-11-08",
-        "expected": "2026-11-09"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-11-10"
-    },
-    {
-      "id": "S1:no_entries_exits_despite_signals",
-      "severity": "WARNING",
-      "system": "S1",
-      "check": "no_entries_exits_despite_signals",
-      "message": "38 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
-      "first_seen": "2026-11-10",
-      "last_seen": "2026-11-10",
-      "status": "open",
-      "evidence": {
-        "n_signals": 38,
-        "window_days": 7
-      },
-      "suggested_action": "Check the arbitrator / cross-system suppression and the regime weight for this system -- confirm it isn't being silently zeroed out.",
-      "run_date": "2026-11-10"
-    },
-    {
       "id": "S2:csv_not_pandas_parseable:daily_log.csv",
       "severity": "WARNING",
       "system": "S2",
@@ -646,22 +614,6 @@
       "run_date": "2026-10-17"
     },
     {
-      "id": "S2:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S2",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-11-08, expected 2026-11-09 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-11-10",
-      "last_seen": "2026-11-10",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-11-08",
-        "expected": "2026-11-09"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-11-10"
-    },
-    {
       "id": "S2:tradability_state_fix_pending:COSUSDT_20260929",
       "severity": "WARNING",
       "system": "S2",
@@ -773,22 +725,6 @@
       "run_date": "2026-11-10"
     },
     {
-      "id": "S3:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S3",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-11-08, expected 2026-11-09 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-11-10",
-      "last_seen": "2026-11-10",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-11-08",
-        "expected": "2026-11-09"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-11-10"
-    },
-    {
       "id": "S3:stopout_rate_elevated",
       "severity": "WARNING",
       "system": "S3",
@@ -857,22 +793,6 @@
       "run_date": "2026-11-10"
     },
     {
-      "id": "S6:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S6",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-11-08, expected 2026-11-09 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-11-10",
-      "last_seen": "2026-11-10",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-11-08",
-        "expected": "2026-11-09"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-11-10"
-    },
-    {
       "id": "S6:stopout_rate_elevated",
       "severity": "WARNING",
       "system": "S6",
@@ -890,34 +810,18 @@
       "run_date": "2026-11-10"
     },
     {
-      "id": "S7:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S7",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-11-08, expected 2026-11-09 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-11-10",
-      "last_seen": "2026-11-10",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-11-08",
-        "expected": "2026-11-09"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-11-10"
-    },
-    {
       "id": "S7:stopout_rate_elevated",
       "severity": "WARNING",
       "system": "S7",
       "check": "stopout_rate_elevated",
-      "message": "14/20 of the last 20 exits were stop-outs (70%) -- the S7 rally-whipsaw pattern",
+      "message": "13/20 of the last 20 exits were stop-outs (65%) -- the S7 rally-whipsaw pattern",
       "first_seen": "2026-11-07",
       "last_seen": "2026-11-10",
       "status": "open",
       "evidence": {
-        "n_stop": 14,
+        "n_stop": 13,
         "n_window": 20,
-        "fraction": 0.7
+        "fraction": 0.65
       },
       "suggested_action": "Shadow-replay this system's recent entries against current (non-stale) funding/regime data before changing any stop rule.",
       "run_date": "2026-11-10"
@@ -1067,32 +971,16 @@
       "run_date": "2026-10-17"
     },
     {
-      "id": "S8:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S8",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-11-08, expected 2026-11-09 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-11-10",
-      "last_seen": "2026-11-10",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-11-08",
-        "expected": "2026-11-09"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-11-10"
-    },
-    {
       "id": "S8:no_entries_exits_despite_signals",
       "severity": "WARNING",
       "system": "S8",
       "check": "no_entries_exits_despite_signals",
-      "message": "362 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
+      "message": "422 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
       "first_seen": "2026-11-09",
       "last_seen": "2026-11-10",
       "status": "open",
       "evidence": {
-        "n_signals": 362,
+        "n_signals": 422,
         "window_days": 7
       },
       "suggested_action": "Check the arbitrator / cross-system suppression and the regime weight for this system -- confirm it isn't being silently zeroed out.",
