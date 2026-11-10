@@ -1,11 +1,29 @@
 {
   "system_name": "TREND_1D_DONCHIAN_EXITV2_T9B",
   "created_utc": "2026-05-30T22:46:19.996708+00:00",
-  "last_run_date": "2026-11-08",
+  "last_run_date": "2026-11-09",
   "paper_equity_usdt": 10016.0707,
   "peak_equity_usdt": 10215.8963,
   "drawdown_pct": -1.956,
   "kill_switch_triggered": false,
-  "open_positions": [],
+  "open_positions": [
+    {
+      "position_id": "JST_USDT_20261109",
+      "symbol": "JST/USDT",
+      "entry_date": "2026-11-09",
+      "entry_price": 0.14505,
+      "initial_stop": 0.137142,
+      "current_stop": 0.137142,
+      "initial_risk_per_unit": 0.007908,
+      "risk_amount_usdt": 8.7640618625,
+      "qty": 1108.2526381512394,
+      "highest_high_since_entry": 0.14505,
+      "max_favorable_r": 0.0,
+      "chandelier_active": false,
+      "chandelier_activated_date": null,
+      "atr_at_entry": 0.003954,
+      "donchian_entry_level": 0.14462
+    }
+  ],
   "closed_trade_count": 18
 }
