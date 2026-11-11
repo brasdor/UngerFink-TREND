@@ -1022,3 +1022,11 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-11-09,ENTRY,JST/USDT,"price=0.14505  stop=0.137142  risk=$8.76  qty=1108.2526  equity=$10,016.07",0.14505,0.137142,8.7641,10016.07
 2026-11-09,SIGNAL_SKIPPED,DUSK/USDT,duplicate_cross_system,,,,
 2026-11-09,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system,,,,
+2026-11-10,SIGNAL_SKIPPED,FET/USDT,duplicate_cross_system
+2026-11-10,SIGNAL_SKIPPED,VET/USDT,duplicate_cross_system
+2026-11-10,SIGNAL_SKIPPED,DEXE/USDT,duplicate_cross_system
+2026-11-10,SIGNAL_SKIPPED,ETC/USDT,duplicate_cross_system
+2026-11-10,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-11-10,SIGNAL_SKIPPED,DUSK/USDT,duplicate_cross_system
+2026-11-10,SIGNAL_SKIPPED,CELR/USDT,duplicate_cross_system
+2026-11-10,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system
