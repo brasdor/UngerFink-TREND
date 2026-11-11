@@ -77,3 +77,4 @@ run_date,event,detail,equity
 2026-11-08,RUN,"closed=8 opened=8 skipped=222 open_now=20 equity=$61,012.46 dd=-4.59%",61012.4571
 2026-11-09,RUN,"closed=0 opened=0 skipped=0 open_now=20 equity=$61,012.46 dd=-4.59%",61012.4571
 2026-11-10,RUN,"closed=0 opened=0 skipped=0 open_now=20 equity=$61,012.46 dd=-4.59%",61012.4571
+2026-11-11,RUN,"closed=0 opened=0 skipped=0 open_now=20 equity=$61,012.46 dd=-4.59%",61012.4571
