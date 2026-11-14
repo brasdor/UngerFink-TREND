@@ -1,2 +1,2 @@
 position_id,symbol,entry_date,as_of_date,entry_price,initial_stop,current_stop,initial_risk_per_unit,risk_amount_usdt,qty,atr_at_entry,donchian_entry_level,highest_high,max_favorable_r,chandelier_active,chandelier_activated
-JST_USDT_20261109,JST/USDT,2026-11-09,2026-11-12,0.14505,0.137142,0.137142,0.007908,8.7641,1108.2526381512394,0.003954,0.14462,0.14699,0.2453,False,
+JST_USDT_20261109,JST/USDT,2026-11-09,2026-11-13,0.14505,0.137142,0.137142,0.007908,8.7641,1108.2526381512394,0.003954,0.14462,0.14716,0.2668,False,

@@ -1,2 +1,1 @@
-symbol,signal_date,close,rsi,atr,funding,stop_loss,risk_unit,signal
-SOLUSDT,2026-11-12,81.68,17.8693,4.44748152,-1.71e-06,72.78503695,8.89496305,BUY_MR_FUNDING
+symbol,signal_date,close,rsi,atr,funding,stop_loss,signal
