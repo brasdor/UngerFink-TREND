@@ -1,11 +1,11 @@
 {
   "system_name": "VolContractionShort_4H_T9B",
   "created_utc": "2026-06-11T19:20:09.618872+00:00",
-  "last_run_date": "2026-11-13",
-  "last_processed_ts_ms": 1794513600000,
-  "paper_equity_usdt": 9888.9123,
+  "last_run_date": "2026-11-14",
+  "last_processed_ts_ms": 1794600000000,
+  "paper_equity_usdt": 9759.687300000001,
   "peak_equity_usdt": 10393.928400000003,
-  "drawdown_pct": -4.8588,
+  "drawdown_pct": -6.102,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -18,7 +18,7 @@
       "initial_risk_per_unit": 0.000139,
       "risk_amount_usdt": 34.6112,
       "qty": 249001.38884892,
-      "bars_held": 7,
+      "bars_held": 13,
       "atr_at_entry": 6.95e-05,
       "funding_at_entry": 0.0001,
       "compression_low": 0.002823,
@@ -34,13 +34,26 @@
       "initial_risk_per_unit": 0.27271429,
       "risk_amount_usdt": 43.264,
       "qty": 158.64218671,
-      "bars_held": 3,
+      "bars_held": 9,
       "atr_at_entry": 0.13635714,
       "funding_at_entry": 0.0001,
       "compression_low": 3.469,
       "consec_at_entry": 36
     }
   ],
-  "pending_entries": [],
-  "closed_trade_count": 163
+  "pending_entries": [
+    {
+      "symbol": "COMPUSDT",
+      "signal_ts_ms": 1794600000000,
+      "consec": 16,
+      "comp_low": 19.3,
+      "atr": 0.38,
+      "ema200": 21.14409363,
+      "signal_close": 19.26,
+      "stop_loss": 20.02,
+      "risk_unit": 0.76,
+      "funding_rate": 0.0001
+    }
+  ],
+  "closed_trade_count": 166
 }

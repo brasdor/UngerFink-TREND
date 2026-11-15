@@ -1,1 +1,2 @@
 symbol,signal_ts_ms,signal_close,stop_loss,comp_low,consec,atr,funding_rate
+COMPUSDT,1794600000000,19.26,20.02,19.3,16,0.38,0.0001
