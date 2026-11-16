@@ -8659,3 +8659,56 @@ run_date,event,symbol,detail
 2026-11-14,SIGNAL_SKIPPED,ZECUSDT,duplicate_cross_system
 2026-11-14,SIGNAL_SKIPPED,ZEREBROUSDT,duplicate_cross_system
 2026-11-14,SIGNAL_SKIPPED,ZKUSDT,duplicate_cross_system
+2026-11-15,EXIT,IMXUSDT,"reason=safety_stop  bars=14  R=-1.000  pnl=$-19.50  equity=$10,377.31"
+2026-11-15,EXIT,SOLUSDT,"reason=safety_stop  bars=3  R=-1.000  pnl=$-27.29  equity=$10,350.02"
+2026-11-15,SIGNAL_SKIPPED,1000CHEEMSUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,1000PEPEUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,1000RATSUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,1MBABYDOGEUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,AEROUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,APEUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,AVAUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,BATUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,BEAMXUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,BICOUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,BIGTIMEUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,BNTUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,BTCDOMUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,BTCUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,CAKEUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,COMPUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,DODOXUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,DUSKUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,EDUUSDT,duplicate_cross_system
+2026-11-15,ENTRY,FILUSDT,"RSI=17.8  funding=-0.000009  price=0.6129  stop=0.478663  risk=$33.96  equity=$10,350.02"
+2026-11-15,SIGNAL_SKIPPED,FLOWUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,GMXUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,GTCUSDT,duplicate_cross_system
+2026-11-15,ENTRY,IDUSDT,"RSI=19.4  funding=-0.000039  price=0.02125  stop=0.01724  risk=$33.96  equity=$10,350.02"
+2026-11-15,SIGNAL_SKIPPED,INJUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,IOTXUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,KAVAUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,KMNOUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,LSKUSDT,duplicate_cross_system
+2026-11-15,ENTRY,MELANIAUSDT,"RSI=18.0  funding=-0.000432  price=0.04677  stop=0.0360909  risk=$33.96  equity=$10,350.02"
+2026-11-15,ENTRY,MOVEUSDT,"RSI=18.2  funding=-0.000033  price=0.004882  stop=0.00401269  risk=$33.96  equity=$10,350.02"
+2026-11-15,SIGNAL_SKIPPED,NEARUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,PEOPLEUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,PROMUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,QNTUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,RAYSOLUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,RLCUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,RUNEUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,SANTOSUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,SFPUSDT,duplicate_cross_system
+2026-11-15,ENTRY,SOLUSDT,"RSI=18.9  funding=-0.000021  price=72.71  stop=62.7844  risk=$33.96  equity=$10,350.02"
+2026-11-15,SIGNAL_SKIPPED,STRKUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,SYNUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,THEUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,TRUMPUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,UNIUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,XMRUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,ZECUSDT,duplicate_cross_system
+2026-11-15,SIGNAL_SKIPPED,ZEREBROUSDT,duplicate_cross_system
+2026-11-15,ENTRY,ZILUSDT,"RSI=13.5  funding=-0.000300  price=0.001151  stop=0.00077651  risk=$33.96  equity=$10,350.02"
+2026-11-15,SIGNAL_SKIPPED,ZKUSDT,duplicate_cross_system

@@ -1,64 +1,12 @@
 {
   "system_name": "MR_RSI14_1D_T9B",
   "created_utc": "2026-06-01T09:28:48.389060+00:00",
-  "last_run_date": "2026-11-14",
-  "paper_equity_usdt": 10109.890899999995,
+  "last_run_date": "2026-11-15",
+  "paper_equity_usdt": 10003.549699999994,
   "peak_equity_usdt": 10151.735099999996,
-  "drawdown_pct": -0.4122,
+  "drawdown_pct": -1.4597,
   "kill_switch_triggered": false,
   "open_positions": [
-    {
-      "position_id": "CATIUSDT_20261027",
-      "symbol": "CATIUSDT",
-      "entry_date": "2026-10-27",
-      "entry_price": 0.04395,
-      "stop_loss": 0.03317696,
-      "initial_risk_per_unit": 0.01077304,
-      "risk_amount_usdt": 26.648304637499997,
-      "qty": 2473.6104792611927,
-      "bars_held": 18,
-      "atr_at_entry": 0.00359101,
-      "rsi_at_entry": 24.0453
-    },
-    {
-      "position_id": "BANANAUSDT_20261102",
-      "symbol": "BANANAUSDT",
-      "entry_date": "2026-11-02",
-      "entry_price": 3.083,
-      "stop_loss": 2.582134,
-      "initial_risk_per_unit": 0.500866,
-      "risk_amount_usdt": 26.564266312499996,
-      "qty": 53.03667310717835,
-      "bars_held": 12,
-      "atr_at_entry": 0.16695533,
-      "rsi_at_entry": 24.6758
-    },
-    {
-      "position_id": "DEXEUSDT_20261102",
-      "symbol": "DEXEUSDT",
-      "entry_date": "2026-11-02",
-      "entry_price": 1.378,
-      "stop_loss": 1.09278151,
-      "initial_risk_per_unit": 0.28521849,
-      "risk_amount_usdt": 26.564266312499996,
-      "qty": 93.13655055287613,
-      "bars_held": 12,
-      "atr_at_entry": 0.09507283,
-      "rsi_at_entry": 22.1379
-    },
-    {
-      "position_id": "RIFUSDT_20261102",
-      "symbol": "RIFUSDT",
-      "entry_date": "2026-11-02",
-      "entry_price": 0.06225,
-      "stop_loss": 0.05063953,
-      "initial_risk_per_unit": 0.01161047,
-      "risk_amount_usdt": 26.564266312499996,
-      "qty": 2287.9578787508167,
-      "bars_held": 12,
-      "atr_at_entry": 0.00387016,
-      "rsi_at_entry": 24.1565
-    },
     {
       "position_id": "SANTOSUSDT_20261102",
       "symbol": "SANTOSUSDT",
@@ -68,7 +16,7 @@
       "initial_risk_per_unit": 0.07460059,
       "risk_amount_usdt": 26.564266312499996,
       "qty": 356.08654452330734,
-      "bars_held": 12,
+      "bars_held": 13,
       "atr_at_entry": 0.02486686,
       "rsi_at_entry": 23.6126
     },
@@ -81,7 +29,7 @@
       "initial_risk_per_unit": 0.04120558,
       "risk_amount_usdt": 26.564266312499996,
       "qty": 644.6764324758927,
-      "bars_held": 12,
+      "bars_held": 13,
       "atr_at_entry": 0.01373519,
       "rsi_at_entry": 24.7701
     },
@@ -94,7 +42,7 @@
       "initial_risk_per_unit": 6.918e-05,
       "risk_amount_usdt": 26.564266312499996,
       "qty": 383987.65990893316,
-      "bars_held": 11,
+      "bars_held": 12,
       "atr_at_entry": 2.306e-05,
       "rsi_at_entry": 22.7212
     },
@@ -107,7 +55,7 @@
       "initial_risk_per_unit": 0.00632474,
       "risk_amount_usdt": 33.20533289062499,
       "qty": 5250.070815658033,
-      "bars_held": 9,
+      "bars_held": 10,
       "atr_at_entry": 0.00210825,
       "rsi_at_entry": 24.6642
     },
@@ -120,7 +68,7 @@
       "initial_risk_per_unit": 0.00159133,
       "risk_amount_usdt": 26.53846361249999,
       "qty": 16676.907751691975,
-      "bars_held": 6,
+      "bars_held": 7,
       "atr_at_entry": 0.00053044,
       "rsi_at_entry": 24.0881
     },
@@ -133,10 +81,62 @@
       "initial_risk_per_unit": 0.0056577,
       "risk_amount_usdt": 26.53846361249999,
       "qty": 4690.680596797283,
-      "bars_held": 6,
+      "bars_held": 7,
       "atr_at_entry": 0.0018859,
       "rsi_at_entry": 24.6198
+    },
+    {
+      "position_id": "1MBABYDOGEUSDT_20261115",
+      "symbol": "1MBABYDOGEUSDT",
+      "entry_date": "2026-11-15",
+      "entry_price": 0.0002596,
+      "stop_loss": 0.00020766,
+      "initial_risk_per_unit": 5.194e-05,
+      "risk_amount_usdt": 32.824147453124986,
+      "qty": 631962.7927055253,
+      "bars_held": 0,
+      "atr_at_entry": 1.731e-05,
+      "rsi_at_entry": 24.5874
+    },
+    {
+      "position_id": "APEUSDT_20261115",
+      "symbol": "APEUSDT",
+      "entry_date": "2026-11-15",
+      "entry_price": 0.0801,
+      "stop_loss": 0.05407601,
+      "initial_risk_per_unit": 0.02602399,
+      "risk_amount_usdt": 32.824147453124986,
+      "qty": 1261.3034147770954,
+      "bars_held": 0,
+      "atr_at_entry": 0.00867466,
+      "rsi_at_entry": 21.9428
+    },
+    {
+      "position_id": "BNTUSDT_20261115",
+      "symbol": "BNTUSDT",
+      "entry_date": "2026-11-15",
+      "entry_price": 0.2302,
+      "stop_loss": 0.18792078,
+      "initial_risk_per_unit": 0.04227922,
+      "risk_amount_usdt": 32.824147453124986,
+      "qty": 776.3659654346742,
+      "bars_held": 0,
+      "atr_at_entry": 0.01409307,
+      "rsi_at_entry": 24.2868
+    },
+    {
+      "position_id": "BTCUSDT_20261115",
+      "symbol": "BTCUSDT",
+      "entry_date": "2026-11-15",
+      "entry_price": 65309.8,
+      "stop_loss": 57023.25554056,
+      "initial_risk_per_unit": 8286.54445944,
+      "risk_amount_usdt": 32.824147453124986,
+      "qty": 0.003961138157622729,
+      "bars_held": 0,
+      "atr_at_entry": 2762.18148648,
+      "rsi_at_entry": 24.1348
     }
   ],
-  "closed_trade_count": 55
+  "closed_trade_count": 59
 }

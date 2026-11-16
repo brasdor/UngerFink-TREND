@@ -26,3 +26,5 @@ exit_date,symbol,entry_date,bars_held,gross_r,pnl_usdt,equity,dd_pct,exit_reason
 2026-09-12,GALAUSDT,2026-08-18,25,1.382217,27.2044,10337.2946,0.0,time_exit_25bars
 2026-09-12,KAIAUSDT,2026-08-18,25,2.791185,54.9353,10392.2299,0.0,time_exit_25bars
 2026-10-06,RVNUSDT,2026-09-11,25,0.177759,4.5832,10396.8131,0.0,time_exit_25bars
+2026-11-15,IMXUSDT,2026-11-01,14,-1.0,-19.4999,10377.3132,-0.1876,safety_stop
+2026-11-15,SOLUSDT,2026-11-12,3,-1.0,-27.2916,10350.0216,-0.4501,safety_stop
