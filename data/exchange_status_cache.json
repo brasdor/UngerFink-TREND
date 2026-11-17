@@ -1,6 +1,6 @@
 {
   "_comment": "symbol -> {status, venue, delivery_date, fetched_at}. Refreshed by tools/health/refresh_exchange_status_cache.py, one bulk exchangeInfo call per venue. fapi.binance.com is geo-blocked from CI, so this is a local/manual-run cache, not a daily CI job -- see its docstring. tools/health/run_checks.py's check_exchange_status() only reads this.",
-  "fetched_at": "2026-11-15T20:06:29.503965+00:00",
+  "fetched_at": "2026-11-17T17:46:06.022789+00:00",
   "symbols": {
     "ETHBTC": {
       "status": "TRADING",
@@ -18712,6 +18712,11 @@
       "venue": "spot",
       "delivery_date": null
     },
+    "USDCTHB": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
     "FUT:BTCUSDT": {
       "status": "TRADING",
       "venue": "futures",
@@ -23970,9 +23975,9 @@
       "contract_type": "TRADIFI_PERPETUAL"
     },
     "FUT:ANTHROPICUSDT": {
-      "status": "TRADING",
+      "status": "SETTLING",
       "venue": "futures",
-      "delivery_date": null,
+      "delivery_date": "2026-11-17",
       "onboard_date": "2026-06-02",
       "contract_type": "TRADIFI_PERPETUAL"
     },
@@ -25307,14 +25312,14 @@
       "contract_type": "TRADIFI_PERPETUAL"
     },
     "FUT:HYPEUSDC": {
-      "status": "PENDING_TRADING",
+      "status": "TRADING",
       "venue": "futures",
       "delivery_date": null,
       "onboard_date": "2026-11-16",
       "contract_type": "PERPETUAL"
     },
     "FUT:TRXUSDC": {
-      "status": "PENDING_TRADING",
+      "status": "TRADING",
       "venue": "futures",
       "delivery_date": null,
       "onboard_date": "2026-11-16",
@@ -25332,6 +25337,13 @@
       "venue": "futures",
       "delivery_date": null,
       "onboard_date": "2026-11-12",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:ANTUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-11-17",
       "contract_type": "TRADIFI_PERPETUAL"
     }
   }
