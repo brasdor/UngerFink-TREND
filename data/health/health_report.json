@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-17T08:09:00.114595+00:00",
+  "generated_at": "2026-11-17T11:36:10.604055+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -119,12 +119,12 @@
       "severity": "CRITICAL",
       "system": "funding_refresh_job",
       "check": "funding_refresh_job_dead",
-      "message": "no commit to funding_rates/ in 36.0h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
+      "message": "no commit to funding_rates/ in 39.4h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
       "first_seen": "2026-11-17",
       "last_seen": "2026-11-17",
       "status": "open",
       "evidence": {
-        "age_hours": 36.0
+        "age_hours": 39.4
       },
       "suggested_action": "Check the funding refresh host: is the self-hosted runner online (Settings -> Actions -> Runners) or is the cron job still scheduled and succeeding?",
       "run_date": "2026-11-17"
@@ -972,12 +972,12 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "oi_log_stale",
-      "message": "open-interest 5m log last bar is 36.1h old (threshold 26h); the API only back-fills ~41h",
+      "message": "open-interest 5m log last bar is 39.5h old (threshold 26h); the API only back-fills ~41h",
       "first_seen": "2026-11-17",
       "last_seen": "2026-11-17",
       "status": "open",
       "evidence": {
-        "age_hours": 36.1
+        "age_hours": 39.5
       },
       "suggested_action": "Run tools/oi_snapshot.py on the funding host (docs/RISKOFF_OI_FORWARD_PREREG.md).",
       "run_date": "2026-11-17"
@@ -987,13 +987,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'dominance' snapshot last succeeded 36.0h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'dominance' snapshot last succeeded 39.5h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-11-17",
       "last_seen": "2026-11-17",
       "status": "open",
       "evidence": {
         "source": "dominance",
-        "age_hours": 36.0
+        "age_hours": 39.5
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-11-17"
@@ -1003,13 +1003,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'epu' snapshot last succeeded 36.0h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'epu' snapshot last succeeded 39.5h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-11-17",
       "last_seen": "2026-11-17",
       "status": "open",
       "evidence": {
         "source": "epu",
-        "age_hours": 36.0
+        "age_hours": 39.5
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-11-17"
@@ -1019,13 +1019,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'gpr' snapshot last succeeded 36.0h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'gpr' snapshot last succeeded 39.5h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-11-17",
       "last_seen": "2026-11-17",
       "status": "open",
       "evidence": {
         "source": "gpr",
-        "age_hours": 36.0
+        "age_hours": 39.5
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-11-17"
@@ -1035,28 +1035,28 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'stablecoins' snapshot last succeeded 36.0h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'stablecoins' snapshot last succeeded 39.5h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-11-17",
       "last_seen": "2026-11-17",
       "status": "open",
       "evidence": {
         "source": "stablecoins",
-        "age_hours": 36.0
+        "age_hours": 39.5
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-11-17"
     },
     {
-      "id": "futures_universe:symbol_gaps:ZRXUSDT_1d",
+      "id": "futures_universe:symbol_gaps:XTZUSDT_1d",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "symbol_gaps",
-      "message": "futures universe: ZRXUSDT_1d has 8 missing calendar day(s) inside its own covered history",
+      "message": "futures universe: XTZUSDT_1d has 8 missing calendar day(s) inside its own covered history",
       "first_seen": "2026-11-17",
       "last_seen": "2026-11-17",
       "status": "open",
       "evidence": {
-        "symbol": "ZRXUSDT_1d",
+        "symbol": "XTZUSDT_1d",
         "n_gaps": 8
       },
       "suggested_action": "Re-backfill this symbol from the CDN; check for an exchange halt around the gap date(s).",
