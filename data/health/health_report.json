@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-17T08:07:44.651372+00:00",
+  "generated_at": "2026-11-17T08:09:00.114595+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -972,12 +972,12 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "oi_log_stale",
-      "message": "open-interest 5m log last bar is 36.0h old (threshold 26h); the API only back-fills ~41h",
+      "message": "open-interest 5m log last bar is 36.1h old (threshold 26h); the API only back-fills ~41h",
       "first_seen": "2026-11-17",
       "last_seen": "2026-11-17",
       "status": "open",
       "evidence": {
-        "age_hours": 36.0
+        "age_hours": 36.1
       },
       "suggested_action": "Run tools/oi_snapshot.py on the funding host (docs/RISKOFF_OI_FORWARD_PREREG.md).",
       "run_date": "2026-11-17"
@@ -1047,16 +1047,16 @@
       "run_date": "2026-11-17"
     },
     {
-      "id": "futures_universe:symbol_gaps:XTZUSDT_1d",
+      "id": "futures_universe:symbol_gaps:ZRXUSDT_1d",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "symbol_gaps",
-      "message": "futures universe: XTZUSDT_1d has 8 missing calendar day(s) inside its own covered history",
+      "message": "futures universe: ZRXUSDT_1d has 8 missing calendar day(s) inside its own covered history",
       "first_seen": "2026-11-17",
       "last_seen": "2026-11-17",
       "status": "open",
       "evidence": {
-        "symbol": "XTZUSDT_1d",
+        "symbol": "ZRXUSDT_1d",
         "n_gaps": 8
       },
       "suggested_action": "Re-backfill this symbol from the CDN; check for an exchange halt around the gap date(s).",
