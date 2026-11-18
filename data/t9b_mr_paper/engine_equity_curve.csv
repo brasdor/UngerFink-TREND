@@ -49,3 +49,4 @@ exit_date,symbol,entry_date,bars_held,gross_r,pnl_usdt,equity,dd_pct,exit_reason
 2026-11-15,BANANAUSDT,2026-11-02,13,-1.0,-26.5643,10056.6783,-0.9364,safety_stop
 2026-11-15,DEXEUSDT,2026-11-02,13,-1.0,-26.5643,10030.114,-1.198,safety_stop
 2026-11-15,RIFUSDT,2026-11-02,13,-1.0,-26.5643,10003.5497,-1.4597,safety_stop
+2026-11-17,1000CHEEMSUSDT,2026-11-03,14,-1.0,-26.5643,9976.9854,-1.7214,safety_stop
