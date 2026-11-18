@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-18T08:11:05.222972+00:00",
+  "generated_at": "2026-11-18T08:11:46.220648+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -15,8 +15,8 @@
       "n_findings": 0
     },
     "frozen_value_detection": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 1
     },
     "timestamps_1970": {
       "status": "pass",
@@ -39,8 +39,8 @@
       "n_findings": 0
     },
     "missed_run_single_day": {
-      "status": "fail",
-      "n_findings": 6
+      "status": "pass",
+      "n_findings": 0
     },
     "step_failure": {
       "status": "pass",
@@ -101,14 +101,14 @@
       "severity": "CRITICAL",
       "system": "S5",
       "check": "leverage_cap_breach",
-      "message": "implied leverage 1.10x exceeds configured cap 1.00x (notional $11,695 / equity $10,586)",
+      "message": "implied leverage 1.12x exceeds configured cap 1.00x (notional $11,855 / equity $10,586)",
       "first_seen": "2026-11-06",
       "last_seen": "2026-11-18",
       "status": "open",
       "evidence": {
-        "implied_leverage": 1.105,
+        "implied_leverage": 1.12,
         "leverage_max": 1.0,
-        "total_notional": 11694.6816,
+        "total_notional": 11854.6705,
         "equity": 10585.9953
       },
       "suggested_action": "Check position sizing -- a leverage breach is a direct liquidation-risk increase versus the T6 sweep this cap was set from.",
@@ -470,32 +470,16 @@
       "run_date": "2026-11-18"
     },
     {
-      "id": "S1:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S1",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-11-16, expected 2026-11-17 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-11-18",
-      "last_seen": "2026-11-18",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-11-16",
-        "expected": "2026-11-17"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-11-18"
-    },
-    {
       "id": "S1:no_entries_exits_despite_signals",
       "severity": "WARNING",
       "system": "S1",
       "check": "no_entries_exits_despite_signals",
-      "message": "36 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
+      "message": "41 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
       "first_seen": "2026-11-17",
       "last_seen": "2026-11-18",
       "status": "open",
       "evidence": {
-        "n_signals": 36,
+        "n_signals": 41,
         "window_days": 7
       },
       "suggested_action": "Check the arbitrator / cross-system suppression and the regime weight for this system -- confirm it isn't being silently zeroed out.",
@@ -646,22 +630,6 @@
       "run_date": "2026-10-17"
     },
     {
-      "id": "S2:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S2",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-11-16, expected 2026-11-17 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-11-18",
-      "last_seen": "2026-11-18",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-11-16",
-        "expected": "2026-11-17"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-11-18"
-    },
-    {
       "id": "S2:tradability_state_fix_pending:COSUSDT_20260929",
       "severity": "WARNING",
       "system": "S2",
@@ -773,32 +741,16 @@
       "run_date": "2026-11-18"
     },
     {
-      "id": "S3:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S3",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-11-16, expected 2026-11-17 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-11-18",
-      "last_seen": "2026-11-18",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-11-16",
-        "expected": "2026-11-17"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-11-18"
-    },
-    {
       "id": "S3:no_entries_exits_despite_signals",
       "severity": "WARNING",
       "system": "S3",
       "check": "no_entries_exits_despite_signals",
-      "message": "38 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
+      "message": "45 signal(s) seen in the last 7d but zero ENTRY/EXIT/REBAL events logged",
       "first_seen": "2026-11-18",
       "last_seen": "2026-11-18",
       "status": "open",
       "evidence": {
-        "n_signals": 38,
+        "n_signals": 45,
         "window_days": 7
       },
       "suggested_action": "Check the arbitrator / cross-system suppression and the regime weight for this system -- confirm it isn't being silently zeroed out.",
@@ -870,38 +822,6 @@
         "error": "Error tokenizing data. C error: Expected 5 fields in line 74, saw 15\n"
       },
       "suggested_action": "Confirm every reader of this file passes on_bad_lines='skip' (auto_execute.py already does; send_telegram.py / create_signal_issues.py now do too).",
-      "run_date": "2026-11-18"
-    },
-    {
-      "id": "S6:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S6",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-11-16, expected 2026-11-17 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-11-18",
-      "last_seen": "2026-11-18",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-11-16",
-        "expected": "2026-11-17"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-11-18"
-    },
-    {
-      "id": "S7:missed_run_single_day",
-      "severity": "WARNING",
-      "system": "S7",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-11-16, expected 2026-11-17 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-11-18",
-      "last_seen": "2026-11-18",
-      "status": "open",
-      "evidence": {
-        "last_run_date": "2026-11-16",
-        "expected": "2026-11-17"
-      },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
       "run_date": "2026-11-18"
     },
     {
@@ -1049,19 +969,20 @@
       "run_date": "2026-10-17"
     },
     {
-      "id": "S8:missed_run_single_day",
+      "id": "data/regime_history.csv:frozen_value_detection:vol_mult",
       "severity": "WARNING",
-      "system": "S8",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-11-16, expected 2026-11-17 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
+      "system": "data/regime_history.csv",
+      "check": "frozen_value_detection",
+      "message": "regime_history.vol_mult has been exactly 1.25 for the last 5 rows -- check the upstream feed, not just this file",
       "first_seen": "2026-11-18",
       "last_seen": "2026-11-18",
       "status": "open",
       "evidence": {
-        "last_run_date": "2026-11-16",
-        "expected": "2026-11-17"
+        "column": "vol_mult",
+        "value": 1.25,
+        "run_length": 5
       },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
+      "suggested_action": "Check whether the upstream source (e.g. funding cache) is stale.",
       "run_date": "2026-11-18"
     },
     {
