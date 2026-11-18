@@ -1,6 +1,6 @@
 {
   "_comment": "symbol -> {status, venue, delivery_date, fetched_at}. Refreshed by tools/health/refresh_exchange_status_cache.py, one bulk exchangeInfo call per venue. fapi.binance.com is geo-blocked from CI, so this is a local/manual-run cache, not a daily CI job -- see its docstring. tools/health/run_checks.py's check_exchange_status() only reads this.",
-  "fetched_at": "2026-11-17T17:46:06.022789+00:00",
+  "fetched_at": "2026-11-18T19:07:08.219713+00:00",
   "symbols": {
     "ETHBTC": {
       "status": "TRADING",
@@ -18717,6 +18717,41 @@
       "venue": "spot",
       "delivery_date": null
     },
+    "EWJBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "EWTBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "EWZBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "EWZSBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "IWMBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "MELIBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
+    "NUBUSDT": {
+      "status": "TRADING",
+      "venue": "spot",
+      "delivery_date": null
+    },
     "FUT:BTCUSDT": {
       "status": "TRADING",
       "venue": "futures",
@@ -25344,6 +25379,48 @@
       "venue": "futures",
       "delivery_date": null,
       "onboard_date": "2026-11-17",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:SOXXUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-11-18",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:IGVUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-11-18",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:ARTYUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-11-18",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:IBITUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-11-18",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:CCJUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-11-18",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:ETNUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-11-18",
       "contract_type": "TRADIFI_PERPETUAL"
     }
   }
