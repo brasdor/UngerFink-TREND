@@ -1,1 +1,2 @@
-symbol,signal_date,close,rsi,atr,funding,stop_loss,signal
+symbol,signal_date,close,rsi,atr,funding,stop_loss,risk_unit,signal
+APTUSDT,2026-11-18,0.4317,19.0122,0.04833763,-8.278e-05,0.33502475,0.09667525,BUY_MR_FUNDING

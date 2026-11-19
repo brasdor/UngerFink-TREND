@@ -1,7 +1,7 @@
 {
   "system_name": "RSI_MR_Futures_FundingGate_1D_T9B",
   "created_utc": "2026-07-11T00:25:51.899513+00:00",
-  "last_run_date": "2026-11-17",
+  "last_run_date": "2026-11-18",
   "paper_equity_usdt": 10350.021599999996,
   "peak_equity_usdt": 10396.813099999998,
   "drawdown_pct": -0.4501,
@@ -16,7 +16,7 @@
       "initial_risk_per_unit": 0.13423729,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 252.99235685553538,
-      "bars_held": 2,
+      "bars_held": 3,
       "atr_at_entry": 0.06711864,
       "rsi_at_entry": 17.8451,
       "funding_at_entry": -8.96e-06
@@ -30,7 +30,7 @@
       "initial_risk_per_unit": 0.00400999,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 8469.100515213253,
-      "bars_held": 2,
+      "bars_held": 3,
       "atr_at_entry": 0.002005,
       "rsi_at_entry": 19.3922,
       "funding_at_entry": -3.851e-05
@@ -44,7 +44,7 @@
       "initial_risk_per_unit": 0.01067913,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 3180.1287534658713,
-      "bars_held": 2,
+      "bars_held": 3,
       "atr_at_entry": 0.00533956,
       "rsi_at_entry": 17.9582,
       "funding_at_entry": -0.00043195
@@ -58,7 +58,7 @@
       "initial_risk_per_unit": 0.00086931,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 39066.6256858888,
-      "bars_held": 2,
+      "bars_held": 3,
       "atr_at_entry": 0.00043466,
       "rsi_at_entry": 18.2472,
       "funding_at_entry": -3.256e-05
@@ -72,7 +72,7 @@
       "initial_risk_per_unit": 9.92563186,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 3.42154624048287,
-      "bars_held": 2,
+      "bars_held": 3,
       "atr_at_entry": 4.96281593,
       "rsi_at_entry": 18.8743,
       "funding_at_entry": -2.128e-05
@@ -86,10 +86,24 @@
       "initial_risk_per_unit": 0.00037449,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 90686.02198990625,
-      "bars_held": 2,
+      "bars_held": 3,
       "atr_at_entry": 0.00018724,
       "rsi_at_entry": 13.4566,
       "funding_at_entry": -0.00029985
+    },
+    {
+      "position_id": "APTUSDT_20261118",
+      "symbol": "APTUSDT",
+      "entry_date": "2026-11-18",
+      "entry_price": 0.4317,
+      "stop_loss": 0.33502475,
+      "initial_risk_per_unit": 0.09667525,
+      "risk_amount_usdt": 33.96100837499999,
+      "qty": 351.28958420071314,
+      "bars_held": 0,
+      "atr_at_entry": 0.04833763,
+      "rsi_at_entry": 19.0122,
+      "funding_at_entry": -8.278e-05
     }
   ],
   "closed_trade_count": 29
