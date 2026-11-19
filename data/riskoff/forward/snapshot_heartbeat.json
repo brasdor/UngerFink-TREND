@@ -1,18 +1,18 @@
 {
   "stablecoins": {
-    "last_success_utc": "2026-11-18T19:07:07+00:00",
+    "last_success_utc": "2026-11-19T21:05:01+00:00",
     "detail": "135 rows"
   },
   "epu": {
-    "last_success_utc": "2026-11-18T19:07:07+00:00",
-    "detail": "15296 rows total, sha e4f576293b"
+    "last_success_utc": "2026-11-19T21:05:01+00:00",
+    "detail": "15297 rows total, sha aa71be9f76"
   },
   "gpr": {
-    "last_success_utc": "2026-11-18T19:07:08+00:00",
+    "last_success_utc": "2026-11-19T21:05:04+00:00",
     "detail": "15295 rows, sha c3644e06ef"
   },
   "dominance": {
-    "last_success_utc": "2026-11-18T19:07:08+00:00",
-    "detail": "btc 58.11%"
+    "last_success_utc": "2026-11-19T21:05:07+00:00",
+    "detail": "btc 57.93%"
   }
 }
