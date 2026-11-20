@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-20T08:08:41.935661+00:00",
+  "generated_at": "2026-11-20T08:11:21.460534+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -986,16 +986,16 @@
       "run_date": "2026-11-20"
     },
     {
-      "id": "futures_universe:symbol_gaps:ZRXUSDT_1d",
+      "id": "futures_universe:symbol_gaps:XTZUSDT_1d",
       "severity": "WARNING",
       "system": "futures_universe",
       "check": "symbol_gaps",
-      "message": "futures universe: ZRXUSDT_1d has 8 missing calendar day(s) inside its own covered history",
+      "message": "futures universe: XTZUSDT_1d has 8 missing calendar day(s) inside its own covered history",
       "first_seen": "2026-11-20",
       "last_seen": "2026-11-20",
       "status": "open",
       "evidence": {
-        "symbol": "ZRXUSDT_1d",
+        "symbol": "XTZUSDT_1d",
         "n_gaps": 8
       },
       "suggested_action": "Re-backfill this symbol from the CDN; check for an exchange halt around the gap date(s).",
