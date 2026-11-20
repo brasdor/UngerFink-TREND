@@ -2046,3 +2046,10 @@ run_date,event,symbol,detail
 2026-11-18,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system
 2026-11-18,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
 2026-11-18,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-11-19,SIGNAL_SKIPPED,APT/USDT,duplicate_cross_system
+2026-11-19,SIGNAL_SKIPPED,BTC/USDT,duplicate_cross_system
+2026-11-19,SIGNAL_SKIPPED,FIL/USDT,duplicate_cross_system
+2026-11-19,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-11-19,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system
+2026-11-19,SIGNAL_SKIPPED,UNI/USDT,duplicate_cross_system
+2026-11-19,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
