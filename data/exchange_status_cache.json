@@ -1,6 +1,6 @@
 {
   "_comment": "symbol -> {status, venue, delivery_date, fetched_at}. Refreshed by tools/health/refresh_exchange_status_cache.py, one bulk exchangeInfo call per venue. fapi.binance.com is geo-blocked from CI, so this is a local/manual-run cache, not a daily CI job -- see its docstring. tools/health/run_checks.py's check_exchange_status() only reads this.",
-  "fetched_at": "2026-11-19T21:05:07.490110+00:00",
+  "fetched_at": "2026-11-21T06:31:54.248398+00:00",
   "symbols": {
     "ETHBTC": {
       "status": "TRADING",
@@ -3128,7 +3128,7 @@
       "delivery_date": null
     },
     "HBARBNB": {
-      "status": "TRADING",
+      "status": "BREAK",
       "venue": "spot",
       "delivery_date": null
     },
@@ -11793,7 +11793,7 @@
       "delivery_date": null
     },
     "GASTRY": {
-      "status": "TRADING",
+      "status": "BREAK",
       "venue": "spot",
       "delivery_date": null
     },
@@ -14218,7 +14218,7 @@
       "delivery_date": null
     },
     "KSMTRY": {
-      "status": "TRADING",
+      "status": "BREAK",
       "venue": "spot",
       "delivery_date": null
     },
@@ -14373,7 +14373,7 @@
       "delivery_date": null
     },
     "HIVETRY": {
-      "status": "TRADING",
+      "status": "BREAK",
       "venue": "spot",
       "delivery_date": null
     },
@@ -17468,7 +17468,7 @@
       "delivery_date": null
     },
     "ZAMATRY": {
-      "status": "TRADING",
+      "status": "BREAK",
       "venue": "spot",
       "delivery_date": null
     },
@@ -25426,6 +25426,27 @@
       "venue": "futures",
       "delivery_date": null,
       "onboard_date": "2026-11-18",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:JNJUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-11-20",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:AMDLUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-11-20",
+      "contract_type": "TRADIFI_PERPETUAL"
+    },
+    "FUT:NIOUSDT": {
+      "status": "TRADING",
+      "venue": "futures",
+      "delivery_date": null,
+      "onboard_date": "2026-11-20",
       "contract_type": "TRADIFI_PERPETUAL"
     }
   }
