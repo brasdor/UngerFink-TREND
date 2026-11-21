@@ -1,3 +1,1 @@
-symbol,signal_date,close,rsi,atr,funding,stop_loss,risk_unit,signal
-API3USDT,2026-11-19,0.1674,18.3496,0.01550256,-3.947e-05,0.13639488,0.03100512,BUY_MR_FUNDING
-LPTUSDT,2026-11-19,1.055,19.0779,0.08337131,-7.682e-05,0.88825738,0.16674262,BUY_MR_FUNDING
+symbol,signal_date,close,rsi,atr,funding,stop_loss,signal
