@@ -8921,3 +8921,63 @@ run_date,event,symbol,detail
 2026-11-20,SIGNAL_SKIPPED,XMRUSDT,duplicate_cross_system
 2026-11-20,SIGNAL_SKIPPED,XVGUSDT,duplicate_cross_system
 2026-11-20,SIGNAL_SKIPPED,ZECUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,1000CHEEMSUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,1000FLOKIUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,1000RATSUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,1INCHUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,1MBABYDOGEUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,ACEUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,AGLDUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,AKTUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,APEUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,ARBUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,ARCUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,ARKMUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,AVAAIUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,AVAUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,BANDUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,BATUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,BEAMXUSDT,duplicate_cross_system
+2026-11-21,ENTRY,BICOUSDT,"RSI=18.5  funding=-0.000039  price=0.01005  stop=0.00803258  risk=$33.96  equity=$10,350.02"
+2026-11-21,SIGNAL_SKIPPED,BIGTIMEUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,BNTUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,BTCDOMUSDT,duplicate_cross_system
+2026-11-21,ENTRY,C98USDT,"RSI=19.5  funding=-0.000039  price=0.00882  stop=0.00699857  risk=$33.96  equity=$10,350.02"
+2026-11-21,ENTRY,CFXUSDT,"RSI=18.0  funding=-0.000039  price=0.03043  stop=0.0247445  risk=$33.96  equity=$10,350.02"
+2026-11-21,ENTRY,CHZUSDT,"RSI=16.7  funding=-0.000266  price=0.00892  stop=0.00760156  risk=$33.96  equity=$10,350.02"
+2026-11-21,SIGNAL_SKIPPED,CKBUSDT,duplicate_cross_system
+2026-11-21,ENTRY,CRVUSDT,"RSI=17.3  funding=-0.000035  price=0.1788  stop=0.139615  risk=$33.96  equity=$10,350.02"
+2026-11-21,SIGNAL_SKIPPED,DODOXUSDT,duplicate_cross_system
+2026-11-21,ENTRY,DOTUSDT,"RSI=16.9  funding=-0.000182  price=0.654  stop=0.538589  risk=$33.96  equity=$10,350.02"
+2026-11-21,SIGNAL_SKIPPED,EGLDUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,EIGENUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,ENAUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,GTCUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,IMXUSDT,arbitrator: system_heat_exceeded  sys_heat=509  adding=34  limit=518
+2026-11-21,SIGNAL_SKIPPED,INJUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,IOTXUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,KAVAUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,KSMUSDT,arbitrator: system_heat_exceeded  sys_heat=509  adding=34  limit=518
+2026-11-21,SIGNAL_SKIPPED,LDOUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,LTCUSDT,arbitrator: system_heat_exceeded  sys_heat=509  adding=34  limit=518
+2026-11-21,SIGNAL_SKIPPED,MAGICUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,MANAUSDT,arbitrator: system_heat_exceeded  sys_heat=509  adding=34  limit=518
+2026-11-21,SIGNAL_SKIPPED,MEMEUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,NEARUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,OPUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,PENGUUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,PNUTUSDT,arbitrator: system_heat_exceeded  sys_heat=509  adding=34  limit=518
+2026-11-21,SIGNAL_SKIPPED,POPCATUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,PROMUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,QNTUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,RAYSOLUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,SSVUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,THEUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,TNSRUSDT,arbitrator: system_heat_exceeded  sys_heat=509  adding=34  limit=518
+2026-11-21,SIGNAL_SKIPPED,TRUMPUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,TURBOUSDT,arbitrator: system_heat_exceeded  sys_heat=509  adding=34  limit=518
+2026-11-21,SIGNAL_SKIPPED,WIFUSDT,arbitrator: system_heat_exceeded  sys_heat=509  adding=34  limit=518
+2026-11-21,SIGNAL_SKIPPED,XMRUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,XVGUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,ZECUSDT,duplicate_cross_system
+2026-11-21,SIGNAL_SKIPPED,ZKUSDT,arbitrator: system_heat_exceeded  sys_heat=509  adding=34  limit=518
