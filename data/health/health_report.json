@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-23T08:09:47.589760+00:00",
+  "generated_at": "2026-11-23T08:12:19.720123+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -35,12 +35,12 @@
       "n_findings": 0
     },
     "heartbeat_36h": {
-      "status": "fail",
-      "n_findings": 2
+      "status": "pass",
+      "n_findings": 0
     },
     "missed_run_single_day": {
-      "status": "fail",
-      "n_findings": 2
+      "status": "pass",
+      "n_findings": 0
     },
     "step_failure": {
       "status": "pass",
@@ -75,8 +75,8 @@
       "n_findings": 1
     },
     "equity_reconciliation": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 2
     },
     "stopout_rate_elevated": {
       "status": "fail",
@@ -96,36 +96,6 @@
     }
   },
   "findings": [
-    {
-      "id": "Candidate 12:heartbeat_36h",
-      "severity": "CRITICAL",
-      "system": "Candidate 12",
-      "check": "heartbeat_36h",
-      "message": "48.0h since last real state.json commit (threshold 36h)",
-      "first_seen": "2026-11-23",
-      "last_seen": "2026-11-23",
-      "status": "open",
-      "evidence": {
-        "age_hours": 48.0
-      },
-      "suggested_action": "Check the daily workflow's Actions log.",
-      "run_date": "2026-11-23"
-    },
-    {
-      "id": "Candidate 19:heartbeat_36h",
-      "severity": "CRITICAL",
-      "system": "Candidate 19",
-      "check": "heartbeat_36h",
-      "message": "48.0h since last real state.json commit (threshold 36h)",
-      "first_seen": "2026-11-23",
-      "last_seen": "2026-11-23",
-      "status": "open",
-      "evidence": {
-        "age_hours": 48.0
-      },
-      "suggested_action": "Check the daily workflow's Actions log.",
-      "run_date": "2026-11-23"
-    },
     {
       "id": "S5:leverage_cap_breach",
       "severity": "CRITICAL",
@@ -162,6 +132,23 @@
       },
       "suggested_action": "Review docs/TRADABILITY_REPORT.md, then set apply_state_fixes=true in data/tradability_config.json.",
       "run_date": "2026-10-21"
+    },
+    {
+      "id": "Candidate12:equity_reconciliation",
+      "severity": "WARNING",
+      "system": "Candidate12",
+      "check": "equity_reconciliation",
+      "message": "state.json paper_equity_usdt=$59,083.13 vs. equity_curve.csv's last paper_equity=$59,970.65 (diff $887.52)",
+      "first_seen": "2026-11-23",
+      "last_seen": "2026-11-23",
+      "status": "open",
+      "evidence": {
+        "state_equity": 59083.1255,
+        "curve_equity": 59970.65,
+        "diff": 887.5244999999995
+      },
+      "suggested_action": "Check whether equity_curve.csv and state.json are being written by the same run, or one is stale.",
+      "run_date": "2026-11-23"
     },
     {
       "id": "Candidate12:flat_window_momentum_invalidated:ACXUSDT",
@@ -372,52 +359,69 @@
       "run_date": "2026-11-15"
     },
     {
-      "id": "Candidate12:missed_run_single_day",
+      "id": "Candidate19:equity_reconciliation",
       "severity": "WARNING",
-      "system": "Candidate12",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-11-21, expected 2026-11-22 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
+      "system": "Candidate19",
+      "check": "equity_reconciliation",
+      "message": "state.json paper_equity_usdt=$62,175.55 vs. equity_curve.csv's last paper_equity=$63,073.40 (diff $897.85)",
       "first_seen": "2026-11-23",
       "last_seen": "2026-11-23",
       "status": "open",
       "evidence": {
-        "last_run_date": "2026-11-21",
-        "expected": "2026-11-22"
+        "state_equity": 62175.5507,
+        "curve_equity": 63073.4,
+        "diff": 897.8493000000017
       },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
+      "suggested_action": "Check whether equity_curve.csv and state.json are being written by the same run, or one is stale.",
       "run_date": "2026-11-23"
+    },
+    {
+      "id": "Candidate19:flat_window_proximity_invalidated:ACXUSDT",
+      "severity": "WARNING",
+      "system": "Candidate19",
+      "check": "flat_window_proximity_invalidated",
+      "message": "ACXUSDT: zero range over the full 90-bar lookback as of 2026-11-15 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "first_seen": "2026-11-15",
+      "last_seen": "2026-11-15",
+      "status": "open",
+      "evidence": {
+        "symbol": "ACXUSDT",
+        "lookback": 90
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-11-15"
     },
     {
       "id": "Candidate19:flat_window_proximity_invalidated:COSUSDT",
       "severity": "WARNING",
       "system": "Candidate19",
       "check": "flat_window_proximity_invalidated",
-      "message": "COSUSDT: zero range over the full 90-bar lookback as of 2026-11-01 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "message": "COSUSDT: zero range over the full 90-bar lookback as of 2026-11-15 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
       "first_seen": "2026-10-17",
-      "last_seen": "2026-11-01",
+      "last_seen": "2026-11-15",
       "status": "open",
       "evidence": {
         "symbol": "COSUSDT",
         "lookback": 90
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-11-01"
+      "run_date": "2026-11-15"
     },
     {
       "id": "Candidate19:flat_window_proximity_invalidated:DUSDT",
       "severity": "WARNING",
       "system": "Candidate19",
       "check": "flat_window_proximity_invalidated",
-      "message": "DUSDT: zero range over the full 90-bar lookback as of 2026-11-01 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "message": "DUSDT: zero range over the full 90-bar lookback as of 2026-11-15 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
       "first_seen": "2026-10-17",
-      "last_seen": "2026-11-01",
+      "last_seen": "2026-11-15",
       "status": "open",
       "evidence": {
         "symbol": "DUSDT",
         "lookback": 90
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-11-01"
+      "run_date": "2026-11-15"
     },
     {
       "id": "Candidate19:flat_window_proximity_invalidated:FLATUSDT",
@@ -436,84 +440,100 @@
       "run_date": "2026-09-11"
     },
     {
+      "id": "Candidate19:flat_window_proximity_invalidated:HFTUSDT",
+      "severity": "WARNING",
+      "system": "Candidate19",
+      "check": "flat_window_proximity_invalidated",
+      "message": "HFTUSDT: zero range over the full 90-bar lookback as of 2026-11-15 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "first_seen": "2026-11-15",
+      "last_seen": "2026-11-15",
+      "status": "open",
+      "evidence": {
+        "symbol": "HFTUSDT",
+        "lookback": 90
+      },
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-11-15"
+    },
+    {
       "id": "Candidate19:flat_window_proximity_invalidated:HIGHUSDT",
       "severity": "WARNING",
       "system": "Candidate19",
       "check": "flat_window_proximity_invalidated",
-      "message": "HIGHUSDT: zero range over the full 90-bar lookback as of 2026-11-01 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "message": "HIGHUSDT: zero range over the full 90-bar lookback as of 2026-11-15 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
       "first_seen": "2026-10-17",
-      "last_seen": "2026-11-01",
+      "last_seen": "2026-11-15",
       "status": "open",
       "evidence": {
         "symbol": "HIGHUSDT",
         "lookback": 90
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-11-01"
+      "run_date": "2026-11-15"
     },
     {
       "id": "Candidate19:flat_window_proximity_invalidated:MBOXUSDT",
       "severity": "WARNING",
       "system": "Candidate19",
       "check": "flat_window_proximity_invalidated",
-      "message": "MBOXUSDT: zero range over the full 90-bar lookback as of 2026-11-01 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "message": "MBOXUSDT: zero range over the full 90-bar lookback as of 2026-11-15 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
       "first_seen": "2026-10-17",
-      "last_seen": "2026-11-01",
+      "last_seen": "2026-11-15",
       "status": "open",
       "evidence": {
         "symbol": "MBOXUSDT",
         "lookback": 90
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-11-01"
+      "run_date": "2026-11-15"
     },
     {
       "id": "Candidate19:flat_window_proximity_invalidated:NFPUSDT",
       "severity": "WARNING",
       "system": "Candidate19",
       "check": "flat_window_proximity_invalidated",
-      "message": "NFPUSDT: zero range over the full 90-bar lookback as of 2026-11-01 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "message": "NFPUSDT: zero range over the full 90-bar lookback as of 2026-11-15 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
       "first_seen": "2026-10-17",
-      "last_seen": "2026-11-01",
+      "last_seen": "2026-11-15",
       "status": "open",
       "evidence": {
         "symbol": "NFPUSDT",
         "lookback": 90
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-11-01"
+      "run_date": "2026-11-15"
     },
     {
       "id": "Candidate19:flat_window_proximity_invalidated:TONUSDT",
       "severity": "WARNING",
       "system": "Candidate19",
       "check": "flat_window_proximity_invalidated",
-      "message": "TONUSDT: zero range over the full 90-bar lookback as of 2026-11-01 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "message": "TONUSDT: zero range over the full 90-bar lookback as of 2026-11-15 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
       "first_seen": "2026-10-17",
-      "last_seen": "2026-11-01",
+      "last_seen": "2026-11-15",
       "status": "open",
       "evidence": {
         "symbol": "TONUSDT",
         "lookback": 90
       },
       "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
-      "run_date": "2026-11-01"
+      "run_date": "2026-11-15"
     },
     {
-      "id": "Candidate19:missed_run_single_day",
+      "id": "Candidate19:flat_window_proximity_invalidated:VANRYUSDT",
       "severity": "WARNING",
       "system": "Candidate19",
-      "check": "missed_run_single_day",
-      "message": "last_run_date=2026-11-21, expected 2026-11-22 -- one day appears to have been skipped (not yet 36h stale, so heartbeat_36h won't catch it)",
-      "first_seen": "2026-11-23",
-      "last_seen": "2026-11-23",
+      "check": "flat_window_proximity_invalidated",
+      "message": "VANRYUSDT: zero range over the full 90-bar lookback as of 2026-11-15 -- proximity would read 1.0 (the metric's maximum) -- excluded from ranking",
+      "first_seen": "2026-11-15",
+      "last_seen": "2026-11-15",
       "status": "open",
       "evidence": {
-        "last_run_date": "2026-11-21",
-        "expected": "2026-11-22"
+        "symbol": "VANRYUSDT",
+        "lookback": 90
       },
-      "suggested_action": "Check this workflow's Actions log for the missed date; the engine will NOT automatically backfill it (see catch-up proposal in docs/HEALTH_CONTRACT.md follow-ups).",
-      "run_date": "2026-11-23"
+      "suggested_action": "Likely a SETTLING futures contract; check data/exchange_status_cache.json.",
+      "run_date": "2026-11-15"
     },
     {
       "id": "S1:csv_not_pandas_parseable:daily_log.csv",
