@@ -54,3 +54,4 @@ exit_date,symbol,entry_date,bars_held,gross_r,pnl_usdt,equity,dd_pct,exit_reason
 2026-11-21,SFPUSDT,2026-11-02,19,-1.0,-26.5643,9923.8568,-2.2447,safety_stop
 2026-11-21,FLOWUSDT,2026-11-08,13,-1.0,-26.5385,9897.3183,-2.5061,safety_stop
 2026-11-21,BTCUSDT,2026-11-15,6,-1.0,-32.8241,9864.4942,-2.8295,safety_stop
+2026-11-22,ACEUSDT,2026-11-21,1,-1.0,-32.3679,9832.1263,-3.1483,safety_stop

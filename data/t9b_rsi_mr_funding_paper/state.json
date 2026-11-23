@@ -1,10 +1,10 @@
 {
   "system_name": "RSI_MR_Futures_FundingGate_1D_T9B",
   "created_utc": "2026-07-11T00:25:51.899513+00:00",
-  "last_run_date": "2026-11-21",
-  "paper_equity_usdt": 10350.021599999996,
+  "last_run_date": "2026-11-22",
+  "paper_equity_usdt": 10316.060599999997,
   "peak_equity_usdt": 10396.813099999998,
-  "drawdown_pct": -0.4501,
+  "drawdown_pct": -0.7767,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -16,7 +16,7 @@
       "initial_risk_per_unit": 0.13423729,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 252.99235685553538,
-      "bars_held": 6,
+      "bars_held": 7,
       "atr_at_entry": 0.06711864,
       "rsi_at_entry": 17.8451,
       "funding_at_entry": -8.96e-06
@@ -30,7 +30,7 @@
       "initial_risk_per_unit": 0.00400999,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 8469.100515213253,
-      "bars_held": 6,
+      "bars_held": 7,
       "atr_at_entry": 0.002005,
       "rsi_at_entry": 19.3922,
       "funding_at_entry": -3.851e-05
@@ -44,7 +44,7 @@
       "initial_risk_per_unit": 0.01067913,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 3180.1287534658713,
-      "bars_held": 6,
+      "bars_held": 7,
       "atr_at_entry": 0.00533956,
       "rsi_at_entry": 17.9582,
       "funding_at_entry": -0.00043195
@@ -58,7 +58,7 @@
       "initial_risk_per_unit": 0.00086931,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 39066.6256858888,
-      "bars_held": 6,
+      "bars_held": 7,
       "atr_at_entry": 0.00043466,
       "rsi_at_entry": 18.2472,
       "funding_at_entry": -3.256e-05
@@ -72,24 +72,10 @@
       "initial_risk_per_unit": 9.92563186,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 3.42154624048287,
-      "bars_held": 6,
+      "bars_held": 7,
       "atr_at_entry": 4.96281593,
       "rsi_at_entry": 18.8743,
       "funding_at_entry": -2.128e-05
-    },
-    {
-      "position_id": "ZILUSDT_20261115",
-      "symbol": "ZILUSDT",
-      "entry_date": "2026-11-15",
-      "entry_price": 0.001151,
-      "stop_loss": 0.00077651,
-      "initial_risk_per_unit": 0.00037449,
-      "risk_amount_usdt": 33.96100837499999,
-      "qty": 90686.02198990625,
-      "bars_held": 6,
-      "atr_at_entry": 0.00018724,
-      "rsi_at_entry": 13.4566,
-      "funding_at_entry": -0.00029985
     },
     {
       "position_id": "APTUSDT_20261118",
@@ -100,7 +86,7 @@
       "initial_risk_per_unit": 0.09667525,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 351.28958420071314,
-      "bars_held": 3,
+      "bars_held": 4,
       "atr_at_entry": 0.04833763,
       "rsi_at_entry": 19.0122,
       "funding_at_entry": -8.278e-05
@@ -114,7 +100,7 @@
       "initial_risk_per_unit": 0.03100512,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 1095.335492170325,
-      "bars_held": 2,
+      "bars_held": 3,
       "atr_at_entry": 0.01550256,
       "rsi_at_entry": 18.3496,
       "funding_at_entry": -3.947e-05
@@ -128,7 +114,7 @@
       "initial_risk_per_unit": 0.16674262,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 203.6732322845832,
-      "bars_held": 2,
+      "bars_held": 3,
       "atr_at_entry": 0.08337131,
       "rsi_at_entry": 19.0779,
       "funding_at_entry": -7.682e-05
@@ -142,7 +128,7 @@
       "initial_risk_per_unit": 0.00201742,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 16833.88108326476,
-      "bars_held": 0,
+      "bars_held": 1,
       "atr_at_entry": 0.00100871,
       "rsi_at_entry": 18.493,
       "funding_at_entry": -3.927e-05
@@ -156,7 +142,7 @@
       "initial_risk_per_unit": 0.00182143,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 18645.244876278524,
-      "bars_held": 0,
+      "bars_held": 1,
       "atr_at_entry": 0.00091072,
       "rsi_at_entry": 19.4919,
       "funding_at_entry": -3.872e-05
@@ -170,7 +156,7 @@
       "initial_risk_per_unit": 0.00568549,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 5973.27730327553,
-      "bars_held": 0,
+      "bars_held": 1,
       "atr_at_entry": 0.00284275,
       "rsi_at_entry": 17.965,
       "funding_at_entry": -3.885e-05
@@ -184,7 +170,7 @@
       "initial_risk_per_unit": 0.00131844,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 25758.47848593792,
-      "bars_held": 0,
+      "bars_held": 1,
       "atr_at_entry": 0.00065922,
       "rsi_at_entry": 16.7301,
       "funding_at_entry": -0.00026646
@@ -198,7 +184,7 @@
       "initial_risk_per_unit": 0.03918529,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 866.6774796103332,
-      "bars_held": 0,
+      "bars_held": 1,
       "atr_at_entry": 0.01959265,
       "rsi_at_entry": 17.277,
       "funding_at_entry": -3.478e-05
@@ -212,11 +198,11 @@
       "initial_risk_per_unit": 0.11541125,
       "risk_amount_usdt": 33.96100837499999,
       "qty": 294.2608140454244,
-      "bars_held": 0,
+      "bars_held": 1,
       "atr_at_entry": 0.05770563,
       "rsi_at_entry": 16.9202,
       "funding_at_entry": -0.00018171
     }
   ],
-  "closed_trade_count": 29
+  "closed_trade_count": 30
 }

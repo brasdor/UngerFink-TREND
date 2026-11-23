@@ -150,3 +150,4 @@ run_date,event,detail,equity
 2026-11-20,REBAL,"REBAL #11  L=12 (2 new 10 held 10 closed)  S=10 (8 new 2 held 8 closed)  pnl=$+112.08  cost=0.108%  eq=$10,686.56",10686.5635
 2026-11-21,MTM,"MTM  unrealized_pnl=$+0.00  (+0.00%)  mtm_equity=$10,686.56  days_since_rebal=1",10686.5635
 2026-11-22,MTM,"MTM  unrealized_pnl=$+210.64  (+1.97%)  mtm_equity=$10,897.21  days_since_rebal=2",10897.2080
+2026-11-23,MTM,"MTM  unrealized_pnl=$+240.37  (+2.25%)  mtm_equity=$10,926.93  days_since_rebal=3",10926.9314
