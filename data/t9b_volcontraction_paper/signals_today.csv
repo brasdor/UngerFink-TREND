@@ -1,2 +1,1 @@
-symbol,signal_ts_ms,consec,comp_low,atr,ema200,signal_close,stop_loss,risk_unit,funding_rate,run_date
-CHRUSDT,1795219200000,18,0.0121,0.000365,0.01534346,0.01193,0.01266,0.00073,0.0001,2026-11-22
+symbol,run_date,signal_ts_ms,signal_close,comp_low,consec,atr,ema200,funding_rate,stop_loss

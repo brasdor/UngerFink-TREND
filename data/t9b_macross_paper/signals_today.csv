@@ -1,2 +1,1 @@
-symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
-EDUUSDT,1795248000000,0.04401,0.04526223,0.04530293,0.0506518,0.001515,0.04704,0.00303,0.0001,2026-11-22
+symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss
