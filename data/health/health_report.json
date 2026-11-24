@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-24T08:10:41.637364+00:00",
+  "generated_at": "2026-11-24T11:37:38.062368+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -87,12 +87,12 @@
       "n_findings": 2
     },
     "forward_snapshots_fresh": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 5
     },
     "funding_refresh_job_alive": {
-      "status": "pass",
-      "n_findings": 0
+      "status": "fail",
+      "n_findings": 1
     }
   },
   "findings": [
@@ -112,6 +112,21 @@
         "equity": 10686.5635
       },
       "suggested_action": "Check position sizing -- a leverage breach is a direct liquidation-risk increase versus the T6 sweep this cap was set from.",
+      "run_date": "2026-11-24"
+    },
+    {
+      "id": "funding_refresh_job:funding_refresh_job_dead",
+      "severity": "CRITICAL",
+      "system": "funding_refresh_job",
+      "check": "funding_refresh_job_dead",
+      "message": "no commit to funding_rates/ in 29.2h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
+      "first_seen": "2026-11-24",
+      "last_seen": "2026-11-24",
+      "status": "open",
+      "evidence": {
+        "age_hours": 29.2
+      },
+      "suggested_action": "Check the funding refresh host: is the self-hosted runner online (Settings -> Actions -> Runners) or is the cron job still scheduled and succeeding?",
       "run_date": "2026-11-24"
     },
     {
@@ -1031,6 +1046,85 @@
         "run_length": 11
       },
       "suggested_action": "Check whether the upstream source (e.g. funding cache) is stale.",
+      "run_date": "2026-11-24"
+    },
+    {
+      "id": "forward_snapshots:oi_log_stale",
+      "severity": "WARNING",
+      "system": "forward_snapshots",
+      "check": "oi_log_stale",
+      "message": "open-interest 5m log last bar is 29.1h old (threshold 26h); the API only back-fills ~41h",
+      "first_seen": "2026-11-24",
+      "last_seen": "2026-11-24",
+      "status": "open",
+      "evidence": {
+        "age_hours": 29.1
+      },
+      "suggested_action": "Run tools/oi_snapshot.py on the funding host (docs/RISKOFF_OI_FORWARD_PREREG.md).",
+      "run_date": "2026-11-24"
+    },
+    {
+      "id": "forward_snapshots:snapshot_stale:dominance",
+      "severity": "WARNING",
+      "system": "forward_snapshots",
+      "check": "snapshot_stale",
+      "message": "'dominance' snapshot last succeeded 29.2h ago (threshold 26h) -- vintage history for this series is being lost",
+      "first_seen": "2026-11-24",
+      "last_seen": "2026-11-24",
+      "status": "open",
+      "evidence": {
+        "source": "dominance",
+        "age_hours": 29.2
+      },
+      "suggested_action": "Check the funding-host job log and that source's URL.",
+      "run_date": "2026-11-24"
+    },
+    {
+      "id": "forward_snapshots:snapshot_stale:epu",
+      "severity": "WARNING",
+      "system": "forward_snapshots",
+      "check": "snapshot_stale",
+      "message": "'epu' snapshot last succeeded 29.2h ago (threshold 26h) -- vintage history for this series is being lost",
+      "first_seen": "2026-11-24",
+      "last_seen": "2026-11-24",
+      "status": "open",
+      "evidence": {
+        "source": "epu",
+        "age_hours": 29.2
+      },
+      "suggested_action": "Check the funding-host job log and that source's URL.",
+      "run_date": "2026-11-24"
+    },
+    {
+      "id": "forward_snapshots:snapshot_stale:gpr",
+      "severity": "WARNING",
+      "system": "forward_snapshots",
+      "check": "snapshot_stale",
+      "message": "'gpr' snapshot last succeeded 29.2h ago (threshold 26h) -- vintage history for this series is being lost",
+      "first_seen": "2026-11-24",
+      "last_seen": "2026-11-24",
+      "status": "open",
+      "evidence": {
+        "source": "gpr",
+        "age_hours": 29.2
+      },
+      "suggested_action": "Check the funding-host job log and that source's URL.",
+      "run_date": "2026-11-24"
+    },
+    {
+      "id": "forward_snapshots:snapshot_stale:stablecoins",
+      "severity": "WARNING",
+      "system": "forward_snapshots",
+      "check": "snapshot_stale",
+      "message": "'stablecoins' snapshot last succeeded 29.2h ago (threshold 26h) -- vintage history for this series is being lost",
+      "first_seen": "2026-11-24",
+      "last_seen": "2026-11-24",
+      "status": "open",
+      "evidence": {
+        "source": "stablecoins",
+        "age_hours": 29.2
+      },
+      "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-11-24"
     },
     {
