@@ -1,15 +1,15 @@
 {
   "system_name": "T9_CANDIDATE19_MOMENTUM",
-  "timestamp_utc": "2026-11-23T08:11:51.379313+00:00",
+  "timestamp_utc": "2026-11-24T08:09:54.581606+00:00",
   "status": "OK",
   "candidate_id": "19",
   "open_positions": 20,
-  "closed_equity_usdt": 62175.55073998901,
-  "drawdown_pct": -6.479229398339985,
-  "portfolio_heat_pct": 5.155358886606194,
-  "reserved_margin_pct": 24.182641894399712,
-  "entries_this_run": 4,
-  "closes_this_run": 4,
-  "skipped_this_run": 325,
+  "closed_equity_usdt": 62175.5507,
+  "drawdown_pct": -6.4792294584890815,
+  "portfolio_heat_pct": 5.1553588899219305,
+  "reserved_margin_pct": 24.18264190995309,
+  "entries_this_run": 0,
+  "closes_this_run": 0,
+  "skipped_this_run": 0,
   "paper_only": true
 }
