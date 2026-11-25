@@ -1,11 +1,11 @@
 {
   "system_name": "MACrossShort_4H_T9B",
   "created_utc": "2026-06-12T15:31:43.644778+00:00",
-  "last_run_date": "2026-11-23",
-  "last_processed_ts_ms": 1795377600000,
-  "paper_equity_usdt": 9997.703300000001,
+  "last_run_date": "2026-11-24",
+  "last_processed_ts_ms": 1795464000000,
+  "paper_equity_usdt": 9953.771100000002,
   "peak_equity_usdt": 10160.890200000003,
-  "drawdown_pct": -1.606,
+  "drawdown_pct": -2.0384,
   "kill_switch_triggered": false,
   "open_positions": [
     {
@@ -18,29 +18,13 @@
       "initial_risk_per_unit": 0.03998572,
       "risk_amount_usdt": 43.9322,
       "qty": 1098.69611733,
-      "bars_held": 14,
+      "bars_held": 20,
       "atr_at_entry": 0.01999286,
       "funding_at_entry": 0.00010562,
       "fast_ema_at_entry": 0.52136109,
       "slow_ema_at_entry": 0.52189263
-    },
-    {
-      "position_id": "AVAAIUSDT_1795147200000",
-      "symbol": "AVAAIUSDT",
-      "entry_ts_ms": 1795147200000,
-      "entry_date": "2026-11-20",
-      "entry_price": 0.005656,
-      "stop_loss": 0.00614586,
-      "initial_risk_per_unit": 0.00048986,
-      "risk_amount_usdt": 43.9322,
-      "qty": 89683.08355959,
-      "bars_held": 17,
-      "atr_at_entry": 0.00024493,
-      "funding_at_entry": 0.00031371,
-      "fast_ema_at_entry": 0.00603672,
-      "slow_ema_at_entry": 0.00604872
     }
   ],
   "pending_entries": [],
-  "closed_trade_count": 204
+  "closed_trade_count": 205
 }
