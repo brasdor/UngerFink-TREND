@@ -1,7 +1,7 @@
 {
   "system_name": "TREND_1D_DONCHIAN_EXITV2_T9B",
   "created_utc": "2026-05-30T22:46:19.996708+00:00",
-  "last_run_date": "2026-11-24",
+  "last_run_date": "2026-11-25",
   "paper_equity_usdt": 10016.0707,
   "peak_equity_usdt": 10215.8963,
   "drawdown_pct": -1.956,
@@ -17,12 +17,29 @@
       "initial_risk_per_unit": 0.007908,
       "risk_amount_usdt": 8.7640618625,
       "qty": 1108.2526381512394,
-      "highest_high_since_entry": 0.14853,
-      "max_favorable_r": 0.44006069802731196,
+      "highest_high_since_entry": 0.14855,
+      "max_favorable_r": 0.4425897824987323,
       "chandelier_active": false,
       "chandelier_activated_date": null,
       "atr_at_entry": 0.003954,
       "donchian_entry_level": 0.14462
+    },
+    {
+      "position_id": "ICX_USDT_20261125",
+      "symbol": "ICX/USDT",
+      "entry_date": "2026-11-25",
+      "entry_price": 0.107331,
+      "initial_stop": 0.09966847,
+      "current_stop": 0.09966847,
+      "initial_risk_per_unit": 0.00766253,
+      "risk_amount_usdt": 10.955077328125,
+      "qty": 1429.694543202441,
+      "highest_high_since_entry": 0.107331,
+      "max_favorable_r": 0.0,
+      "chandelier_active": false,
+      "chandelier_activated_date": null,
+      "atr_at_entry": 0.00383127,
+      "donchian_entry_level": 0.1071
     }
   ],
   "closed_trade_count": 18
