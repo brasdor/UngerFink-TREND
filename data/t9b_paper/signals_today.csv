@@ -1,2 +1,1 @@
-symbol,signal_date,close,ema200,don_entry_high,don_exit_low,atr,initial_stop,initial_risk_unit,signal
-ICX/USDT,2026-11-25,0.107331,0.03936876,0.1071,0.104892,0.00383127,0.09966847,0.00766253,BUY
+symbol,signal_date,close,ema200,don_entry_high,atr,initial_stop,signal

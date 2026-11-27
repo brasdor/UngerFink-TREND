@@ -1,1 +1,3 @@
-symbol,run_date,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,funding_rate,stop_loss
+symbol,signal_ts_ms,signal_close,ema_fast,ema_slow,ema200,atr,stop_loss,risk_unit,funding_rate,run_date
+1000RATSUSDT,1795593600000,0.01084,0.01131916,0.0113245,0.0151633,0.0005,0.01184,0.001,0.00011164,2026-11-26
+BANUSDT,1795608000000,0.03901,0.04092242,0.04097887,0.04632238,0.00109071,0.04119143,0.00218143,0.00114048,2026-11-26

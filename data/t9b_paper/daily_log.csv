@@ -1101,3 +1101,6 @@ run_date,event,symbol,detail,entry_price,initial_stop,risk_amount,equity
 2026-11-25,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system,,,,
 2026-11-25,ENTRY,ICX/USDT,"price=0.107331  stop=0.0996685  risk=$10.96  qty=1429.6945  equity=$10,016.07",0.107331,0.09966847,10.9551,10016.07
 2026-11-25,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system,,,,
+2026-11-26,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system
+2026-11-26,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-11-26,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
