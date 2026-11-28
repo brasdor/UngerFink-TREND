@@ -1,7 +1,7 @@
 {
   "system_name": "MR_RSI14_1D_T9B",
   "created_utc": "2026-06-01T09:28:48.389060+00:00",
-  "last_run_date": "2026-11-26",
+  "last_run_date": "2026-11-27",
   "paper_equity_usdt": 9821.836199999994,
   "peak_equity_usdt": 10151.735099999996,
   "drawdown_pct": -3.2497,
@@ -16,7 +16,7 @@
       "initial_risk_per_unit": 0.00159133,
       "risk_amount_usdt": 26.53846361249999,
       "qty": 16676.907751691975,
-      "bars_held": 18,
+      "bars_held": 19,
       "atr_at_entry": 0.00053044,
       "rsi_at_entry": 24.0881
     },
@@ -29,7 +29,7 @@
       "initial_risk_per_unit": 5.194e-05,
       "risk_amount_usdt": 32.824147453124986,
       "qty": 631962.7927055253,
-      "bars_held": 11,
+      "bars_held": 12,
       "atr_at_entry": 1.731e-05,
       "rsi_at_entry": 24.5874
     },
@@ -42,7 +42,7 @@
       "initial_risk_per_unit": 0.02602399,
       "risk_amount_usdt": 32.824147453124986,
       "qty": 1261.3034147770954,
-      "bars_held": 11,
+      "bars_held": 12,
       "atr_at_entry": 0.00867466,
       "rsi_at_entry": 21.9428
     },
@@ -55,7 +55,7 @@
       "initial_risk_per_unit": 0.04227922,
       "risk_amount_usdt": 32.824147453124986,
       "qty": 776.3659654346742,
-      "bars_held": 11,
+      "bars_held": 12,
       "atr_at_entry": 0.01409307,
       "rsi_at_entry": 24.2868
     },
@@ -68,7 +68,7 @@
       "initial_risk_per_unit": 8.578e-05,
       "risk_amount_usdt": 32.736983343749976,
       "qty": 381638.88253380713,
-      "bars_held": 9,
+      "bars_held": 10,
       "atr_at_entry": 2.859e-05,
       "rsi_at_entry": 24.401
     },
@@ -81,7 +81,7 @@
       "initial_risk_per_unit": 7.355e-05,
       "risk_amount_usdt": 32.36787159374998,
       "qty": 440079.8313222295,
-      "bars_held": 5,
+      "bars_held": 6,
       "atr_at_entry": 2.452e-05,
       "rsi_at_entry": 23.1612
     },
@@ -94,7 +94,7 @@
       "initial_risk_per_unit": 0.00413936,
       "risk_amount_usdt": 32.36787159374998,
       "qty": 7819.535288969788,
-      "bars_held": 5,
+      "bars_held": 6,
       "atr_at_entry": 0.00137979,
       "rsi_at_entry": 23.8178
     },
@@ -107,7 +107,7 @@
       "initial_risk_per_unit": 0.01241922,
       "risk_amount_usdt": 32.36787159374998,
       "qty": 2606.2725029228873,
-      "bars_held": 5,
+      "bars_held": 6,
       "atr_at_entry": 0.00413974,
       "rsi_at_entry": 21.7132
     },
@@ -120,7 +120,7 @@
       "initial_risk_per_unit": 0.00068238,
       "risk_amount_usdt": 32.26166442187498,
       "qty": 47278.150622636924,
-      "bars_held": 4,
+      "bars_held": 5,
       "atr_at_entry": 0.00022746,
       "rsi_at_entry": 24.7927
     },
@@ -133,7 +133,7 @@
       "initial_risk_per_unit": 0.86175108,
       "risk_amount_usdt": 32.22790003124998,
       "qty": 37.39815450100739,
-      "bars_held": 1,
+      "bars_held": 2,
       "atr_at_entry": 0.28725036,
       "rsi_at_entry": 24.2283
     }

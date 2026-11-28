@@ -1,2 +1,1 @@
-symbol,signal_date,close,rsi,atr,funding,stop_loss,risk_unit,signal
-RIFUSDT,2026-11-26,0.03897,16.0118,0.00381925,-5.195e-05,0.03133151,0.00763849,BUY_MR_FUNDING
+symbol,signal_date,close,rsi,atr,funding,stop_loss,signal

@@ -2142,3 +2142,15 @@ run_date,event,symbol,detail
 2026-11-26,SIGNAL_SKIPPED,PENGU/USDT,duplicate_cross_system
 2026-11-26,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system
 2026-11-26,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
+2026-11-27,SIGNAL_SKIPPED,APT/USDT,duplicate_cross_system
+2026-11-27,SIGNAL_SKIPPED,CHZ/USDT,duplicate_cross_system
+2026-11-27,SIGNAL_SKIPPED,DOT/USDT,duplicate_cross_system
+2026-11-27,SIGNAL_SKIPPED,EIGEN/USDT,duplicate_cross_system
+2026-11-27,SIGNAL_SKIPPED,ENA/USDT,duplicate_cross_system
+2026-11-27,SIGNAL_SKIPPED,FIL/USDT,duplicate_cross_system
+2026-11-27,SIGNAL_SKIPPED,INJ/USDT,duplicate_cross_system
+2026-11-27,SIGNAL_SKIPPED,LPT/USDT,duplicate_cross_system
+2026-11-27,SIGNAL_SKIPPED,NEAR/USDT,duplicate_cross_system
+2026-11-27,SIGNAL_SKIPPED,PENGU/USDT,duplicate_cross_system
+2026-11-27,SIGNAL_SKIPPED,SOL/USDT,duplicate_cross_system
+2026-11-27,SIGNAL_SKIPPED,ZEC/USDT,duplicate_cross_system
