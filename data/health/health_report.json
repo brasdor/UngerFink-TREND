@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-28T08:09:51.364701+00:00",
+  "generated_at": "2026-11-28T11:37:08.047953+00:00",
   "checks": {
     "ohlcv_staleness_spot": {
       "status": "pass",
@@ -7421,12 +7421,12 @@
       "severity": "CRITICAL",
       "system": "funding_refresh_job",
       "check": "funding_refresh_job_dead",
-      "message": "no commit to funding_rates/ in 121.8h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
+      "message": "no commit to funding_rates/ in 125.2h (threshold 26h) -- the self-hosted runner or cron job that refreshes funding appears to be dead, not just serving stale data",
       "first_seen": "2026-11-24",
       "last_seen": "2026-11-28",
       "status": "open",
       "evidence": {
-        "age_hours": 121.8
+        "age_hours": 125.2
       },
       "suggested_action": "Check the funding refresh host: is the self-hosted runner online (Settings -> Actions -> Runners) or is the cron job still scheduled and succeeding?",
       "run_date": "2026-11-28"
@@ -8322,12 +8322,12 @@
       "severity": "WARNING",
       "system": "data/exchange_status_cache.json",
       "check": "exchange_status_cache_stale",
-      "message": "cache is 5.1d old (fresh <= 3d, critical > 7d, expired > 30d): engines have fallen back to the date-based tradability rule (status ignored, unknown symbols allowed); they keep trading, but a symbol that entered SETTLING since the fetch is only caught by the flat-feed backstop",
+      "message": "cache is 5.2d old (fresh <= 3d, critical > 7d, expired > 30d): engines have fallen back to the date-based tradability rule (status ignored, unknown symbols allowed); they keep trading, but a symbol that entered SETTLING since the fetch is only caught by the flat-feed backstop",
       "first_seen": "2026-11-26",
       "last_seen": "2026-11-28",
       "status": "open",
       "evidence": {
-        "age_days": 5.07,
+        "age_days": 5.21,
         "mode": "stale"
       },
       "suggested_action": "Run tools/refresh_funding_local.py on the funding host (fapi is geo-blocked from CI).",
@@ -8355,12 +8355,12 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "oi_log_stale",
-      "message": "open-interest 5m log last bar is 121.7h old (threshold 26h); the API only back-fills ~41h",
+      "message": "open-interest 5m log last bar is 125.1h old (threshold 26h); the API only back-fills ~41h",
       "first_seen": "2026-11-24",
       "last_seen": "2026-11-28",
       "status": "open",
       "evidence": {
-        "age_hours": 121.7
+        "age_hours": 125.1
       },
       "suggested_action": "Run tools/oi_snapshot.py on the funding host (docs/RISKOFF_OI_FORWARD_PREREG.md).",
       "run_date": "2026-11-28"
@@ -8370,13 +8370,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'dominance' snapshot last succeeded 121.8h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'dominance' snapshot last succeeded 125.2h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-11-24",
       "last_seen": "2026-11-28",
       "status": "open",
       "evidence": {
         "source": "dominance",
-        "age_hours": 121.8
+        "age_hours": 125.2
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-11-28"
@@ -8386,13 +8386,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'epu' snapshot last succeeded 121.8h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'epu' snapshot last succeeded 125.2h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-11-24",
       "last_seen": "2026-11-28",
       "status": "open",
       "evidence": {
         "source": "epu",
-        "age_hours": 121.8
+        "age_hours": 125.2
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-11-28"
@@ -8402,13 +8402,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'gpr' snapshot last succeeded 121.8h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'gpr' snapshot last succeeded 125.2h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-11-24",
       "last_seen": "2026-11-28",
       "status": "open",
       "evidence": {
         "source": "gpr",
-        "age_hours": 121.8
+        "age_hours": 125.2
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-11-28"
@@ -8418,13 +8418,13 @@
       "severity": "WARNING",
       "system": "forward_snapshots",
       "check": "snapshot_stale",
-      "message": "'stablecoins' snapshot last succeeded 121.8h ago (threshold 26h) -- vintage history for this series is being lost",
+      "message": "'stablecoins' snapshot last succeeded 125.2h ago (threshold 26h) -- vintage history for this series is being lost",
       "first_seen": "2026-11-24",
       "last_seen": "2026-11-28",
       "status": "open",
       "evidence": {
         "source": "stablecoins",
-        "age_hours": 121.8
+        "age_hours": 125.2
       },
       "suggested_action": "Check the funding-host job log and that source's URL.",
       "run_date": "2026-11-28"
